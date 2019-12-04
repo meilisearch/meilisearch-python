@@ -1,0 +1,1 @@
+from meilisearch._meilisearch import my_awesome_function
