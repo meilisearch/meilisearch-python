@@ -10,78 +10,16 @@ You can also use MeiliSearch as a service by registering on [meilisearch.com](ht
 
 ## 🔧 Installation
 
-
-
-## 🚀 Getting started
-
-Here is a quickstart to create an index and add documents.
-
+```bash
+pipenv run python meilisearch/client.py
+```
+or 
+```bash
+pipenv run python 
+```
 ```python
-
-```
-
-## 🎬 Examples
-
-You can check out [the API documentation](https://docs.meilisearch.com/references/).
-
-### Search
-
-#### Basic search
-
-```python
-
-```
-
-```json
-{
-    "hits": [
-        {
-            "id": 456,
-            "title": "Le Petit Prince",
-            "_formatted": {
-                "id": 456,
-                "title": "Le Petit Prince"
-            }
-        },
-        {
-            "id": 4,
-            "title": "Harry Potter and the Half-Blood Prince",
-            "_formatted": {
-                "id": 4,
-                "title": "Harry Potter and the Half-Blood Prince"
-            }
-        }
-    ],
-    "offset": 0,
-    "limit": 20,
-    "processingTimeMs": 13,
-    "query": "prince"
-}
-```
-
-#### Custom search
-
-All the supported options are described in [this documentation section](https://docs.meilisearch.com/references/search.html#search-in-an-index).
-
-```python
-
-```
-
-```json
-{
-    "hits": [
-        {
-            "id": 456,
-            "title": "Le Petit Prince",
-            "_formatted": {
-                "id": 456,
-                "title": "Le Petit Prince"
-            }
-        }
-    ],
-    "offset": 0,
-    "limit": 1,
-    "processingTimeMs": 10,
-    "query": "prince"
-}
+>>> from meilisearch import Client
+>>> clienta = Client("url","apikey")
+>>>print(clienta.config.url)
+url
 ```
