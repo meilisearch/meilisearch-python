@@ -3,14 +3,20 @@ current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfra
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir) 
 import meilisearch
+import pytest
 
 class TestIndexes: 
     client = meilisearch.Client("http://127.0.0.1:7700", None)
 
-    def test_create_index(self):
+    # @pytest.mark.parametrize("test_input,expected", [("3+5", 8), ("2+4", 6), ("6*9", 42)])
+    # @pytest.mark.parametrize("test_input,expected", [("3+5", 8), ("2+4", 6), ("6*9", 42)])
+    def test_create_index(self, test_input, expected):
         """Tests an API call to create an in meiliSearch""" 
         index = self.client.create_index(name="movies",uid="movies_uid")
+        print(index)
         assert isinstance(index, object)
+        assert index.name == "movies"
+        assert index.uid == "movies_uid"
 
     def test_get_all_indexes(self):
         """Tests an API call to get all indexes in meiliSearch"""

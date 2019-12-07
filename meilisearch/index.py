@@ -1,6 +1,5 @@
 from ._httprequests import HttpRequests
-
-class Index:
+class Index():
     path = '/indexes'
 
     def __init__(self, config, uid=None, name=None):
@@ -24,6 +23,20 @@ class Index:
     def info(self):
         return HttpRequests.get(self.config, '{}/{}'.format(Index.path, self.uid)).json()
     
+    def get_schema(self, schema):
+        return HttpRequests.get(self.config, '{}/{}/{}'.format(Index.path, self.uid, '/schema')).json()
+    
+    def update_schema(self, schema):
+        return HttpRequests.put(self.config, '{}/{}/{}'.format(Index.path, self.uid, '/schema')).json()
+    
+    def get_document(self, id):
+        return HttpRequests.put(self.config, '{}/{}/{}/{}'.format(Index.path, self.uid, '/documents', id)).json()
+
+    # TODO stringify params
+    def get_documents(self, parameters):
+        return HttpRequests.put(self.config, '{}/{}/{}?{}'.format(Index.path, self.uid, '/documents', parameters)).json()
+
+
     @staticmethod
     def create(config, **body):
         payload = {}
