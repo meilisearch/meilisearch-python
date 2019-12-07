@@ -11,15 +11,7 @@ You can also use MeiliSearch as a service by registering on [meilisearch.com](ht
 ## 🔧 Installation
 
 ```bash
-pipenv run python meilisearch/client.py
-```
-or 
-```bash
-pipenv run python 
-```
-```python
->>> from meilisearch import Client
->>> clienta = Client("url","apikey")
->>>print(clienta.config.url)
-url
+pipenv install
+pipenv shell
+pytest
 ```
