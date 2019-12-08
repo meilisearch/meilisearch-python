@@ -9,15 +9,18 @@ class HttpRequests:
         return r
       except requests.exceptions.HTTPError as err:
         raise Exception(err)
+      except requests.exceptions.ConnectionError as err:
+        raise Exception(err)
           
     @staticmethod
-    def post(config, path, body): 
+    def post(config, path, body={}): 
       try:
         r = requests.post(config.url + path, json=body)
-        print(r.url)
         r.raise_for_status()
         return r
       except requests.exceptions.HTTPError as err:
+        raise Exception(err)
+      except requests.exceptions.ConnectionError as err:
         raise Exception(err)
 
     @staticmethod
@@ -28,6 +31,8 @@ class HttpRequests:
         return r
       except requests.exceptions.HTTPError as err:
         raise Exception(err)
+      except requests.exceptions.ConnectionError as err:
+        raise Exception(err)
     
     @staticmethod
     def patch(config, path, body={}): 
@@ -37,6 +42,8 @@ class HttpRequests:
         return r
       except requests.exceptions.HTTPError as err:
         raise Exception(err)
+      except requests.exceptions.ConnectionError as err:
+        raise Exception(err)
 
     @staticmethod
     def delete(config, path, body={}): 
@@ -45,4 +52,6 @@ class HttpRequests:
         r.raise_for_status()
         return r
       except requests.exceptions.HTTPError as err:
+        raise Exception(err)
+      except requests.exceptions.ConnectionError as err:
         raise Exception(err)
