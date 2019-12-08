@@ -1,9 +1,16 @@
 from ._httprequests import HttpRequests
+from .schema import Schema
+from .update import Update
+from .document import Document
+import urllib
 
-class Index:
-    path = '/indexes'
+class Index(Schema, Update, Document):
+    index_path = '/indexes'
 
     def __init__(self, config, uid=None, name=None):
+        Schema.__init__(self, Index.index_path, config, name, uid)
+        Update.__init__(self, Index.index_path, config, name, uid)
+        Document.__init__(self, Index.index_path, config, name, uid)
         self.config = config
         self.name = name
         self.uid = uid
@@ -11,19 +18,19 @@ class Index:
     
 
     def delete(self):
-        return HttpRequests.delete(self.config, '{}/{}'.format(Index.path, self.uid))
+        return HttpRequests.delete(self.config, '{}/{}'.format(self.index_path, self.uid))
     
     def update(self, **body):
         payload = {}
         name = body.get("name", None)
         if name is not None:
             payload["name"] = name
-        return HttpRequests.put(self.config, '{}/{}'.format(Index.path, self.uid), payload).json()
+        return HttpRequests.put(self.config, '{}/{}'.format(self.index_path, self.uid), payload).json()
 
     # TODO : should this be called get or info
     def info(self):
-        return HttpRequests.get(self.config, '{}/{}'.format(Index.path, self.uid)).json()
-    
+        return HttpRequests.get(self.config, '{}/{}'.format(self.index_path, self.uid)).json()
+        
     @staticmethod
     def create(config, **body):
         payload = {}
@@ -33,12 +40,12 @@ class Index:
             payload["name"] = name
         if uid is not None:
             payload["uid"] = uid
-        response = HttpRequests.post(config, Index.path, payload)
+        response = HttpRequests.post(config, Index.index_path, payload)
         return  response.json()
 
     @staticmethod
     def get_all_indexes(config):
-        return HttpRequests.get(config, Index.path).json()
+        return HttpRequests.get(config, Index.index_path).json()
 
     @staticmethod
     def get_index(config, **params):
@@ -53,7 +60,3 @@ class Index:
                 raise Exception('Index not found')
             index = index[0]
             return Index(config, name=index["name"], uid=index["uid"])
-
-    def add_documents(self):
-            print("qweqwe")
-        # create add_documents request
