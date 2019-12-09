@@ -7,7 +7,6 @@ class Schema:
         self.name = name
         self.uid = uid
         self.index_path = parent_path
-        pass
 
     def get_schema(self):
         return HttpRequests.get(self.config, '{}/{}/{}'.format(

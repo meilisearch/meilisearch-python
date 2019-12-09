@@ -1,5 +1,5 @@
-from ._httprequests import HttpRequests
 import urllib
+from ._httprequests import HttpRequests
 
 class Search:
     search_path = 'search'

@@ -1,5 +1,5 @@
-from ._httprequests import HttpRequests
 import urllib
+from ._httprequests import HttpRequests
 
 class Document:
     document_path = 'documents'
@@ -9,15 +9,14 @@ class Document:
         self.name = name
         self.uid = uid
         self.index_path = parent_path
-        pass
     
         
-    def get_one_document(self, id):
+    def get_one_document(self, document_id):
         return HttpRequests.put(self.config, '{}/{}/{}/{}'.format(
             self.index_path,
             self.uid,
             self.document_path,
-            id
+            document_id
             )).json()
 
     def get_documents(self, parameters):
@@ -48,12 +47,12 @@ class Document:
             documents
             ).json()
 
-    def delete_one_document(self, id):
+    def delete_one_document(self, document_id):
         return HttpRequests.delete(self.config, '{}/{}/{}/{}'.format(
             self.index_path,
             self.uid,
             self.document_path,
-            id
+            document_id
         )).json()
     
     def delete_multiple_documents(self, ids):
