@@ -11,10 +11,20 @@ import meilisearch
 class TestIndexes: 
     client = meilisearch.Client("http://127.0.0.1:7700", None)
 
+    def test_get_client(self):
+        client = meilisearch.Client("http://127.0.0.1:7700", None)
+        assert client.config
+    
+    def test_get_health(self):
+        """Tests an API call to check the health of meilisearch"""     
+        self.client.get_health()
+        assert 1
+
     def test_create_index(self):
         """Tests an API call to create an in meiliSearch""" 
-        index = self.client.create_index(name="movies",uid="movies_uid")
+        index = self.client.create_index(name="movies", uid="movies_uid")
         print(index)
+        # TODO : test creating index with schema
         assert isinstance(index, object)
         assert index.name == "movies"
         assert index.uid == "movies_uid"
