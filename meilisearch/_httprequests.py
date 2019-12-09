@@ -5,6 +5,7 @@ class HttpRequests:
     def get(config, path): 
       try:
         r = requests.get(config.url + path)
+        print(r.url)
         r.raise_for_status()
         return r
       except requests.exceptions.HTTPError as err:

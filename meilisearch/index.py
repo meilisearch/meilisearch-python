@@ -2,15 +2,19 @@ from ._httprequests import HttpRequests
 from .schema import Schema
 from .update import Update
 from .document import Document
+from .synonym import Synonym
+from .search import Search
 import urllib
 
-class Index(Schema, Update, Document):
+class Index(Schema, Update, Document, Search, Synonym):
     index_path = '/indexes'
 
     def __init__(self, config, uid=None, name=None):
         Schema.__init__(self, Index.index_path, config, name, uid)
         Update.__init__(self, Index.index_path, config, name, uid)
+        Search.__init__(self, Index.index_path, config, name, uid)
         Document.__init__(self, Index.index_path, config, name, uid)
+        Synonym.__init__(self, Index.index_path, config, name, uid)
         self.config = config
         self.name = name
         self.uid = uid

@@ -20,9 +20,7 @@ class Document:
             id
             )).json()
 
-    # TODO stringify params
-    def get_documents(self, **parameters):
-        # maybe quote_plus
+    def get_documents(self, parameters):
         return HttpRequests.get(
             self.config, 
             '{}/{}/{}?{}'.format(
