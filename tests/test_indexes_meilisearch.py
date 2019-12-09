@@ -5,6 +5,7 @@ sys.path.insert(0, parent_dir)
 import meilisearch
 import pytest
 import json
+import time 
 
 class TestIndexes: 
     client = meilisearch.Client("http://127.0.0.1:7700", None)
@@ -94,11 +95,27 @@ class TestIndexes:
         assert isinstance(response, object)
         assert 'updateId' in response
 
-
     def test_get_documents(self):
         index = self.client.get_index(uid="movies_uid")
-        response = index.get_documents()
+        time.sleep(1)
+        response = index.get_documents({
+            'offset': 1,
+            'limit': 5,
+            'attributesToRetrieve': 'title'
+        })
         assert isinstance(response, list)
+        assert 'title' in response[0] 
+        assert 'overview' not in response[0] 
+
+    def test_search_documents(self):
+        index = self.client.get_index(uid="movies_uid")
+        response = index.search({
+            'q': 'How to Train Your Dragon'
+        })
+        print(response["hits"][0]["id"])
+        assert isinstance(response, object)
+        assert response["hits"][0]["id"] == '166428'
+
 
     # DIfference between two routes ?
     def test_update_documents(self):
