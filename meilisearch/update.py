@@ -7,13 +7,13 @@ class Update:
         self.name = name
         self.uid = uid
         self.index_path = parent_path
-        pass
     
     def get_updates(self):
         return HttpRequests.get(self.config, '{}/{}/{}'.format(
             self.index_path,
             self.uid,
             self.update_path)).json()
+
     def get_one_update(self, updateId):
         return HttpRequests.get(self.config, '{}/{}/{}/{}'.format(
             self.index_path,

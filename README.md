@@ -15,3 +15,9 @@ pipenv install
 pipenv shell
 pytest
 ```
+
+## Linting
+```bash
+pylint meilisearch
+pylint tests/*
+```

@@ -1,5 +1,5 @@
-from ._httprequests import HttpRequests
-import urllib
+# from ._httprequests import HttpRequests
+# import urllib
 
 class Synonym:
     synonym_path = 'search'

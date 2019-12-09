@@ -4,7 +4,6 @@ from .update import Update
 from .document import Document
 from .synonym import Synonym
 from .search import Search
-import urllib
 
 class Index(Schema, Update, Document, Search, Synonym):
     index_path = '/indexes'
@@ -31,7 +30,6 @@ class Index(Schema, Update, Document, Search, Synonym):
             payload["name"] = name
         return HttpRequests.put(self.config, '{}/{}'.format(self.index_path, self.uid), payload).json()
 
-    # TODO : should this be called get or info
     def info(self):
         return HttpRequests.get(self.config, '{}/{}'.format(self.index_path, self.uid)).json()
         
@@ -57,10 +55,11 @@ class Index(Schema, Update, Document, Search, Synonym):
         uid = params.get("uid", None)
         if uid is not None:
             return Index(config, uid=uid, name=name)
-        elif name is not None:
-            indexes = Index.get_all_indexes(config)
-            index = list(filter(lambda index: index["name"] == name, indexes))
-            if len(index) == 0:
-                raise Exception('Index not found')
-            index = index[0]
-            return Index(config, name=index["name"], uid=index["uid"])
+        if name is None:
+            raise Exception('Name or Uid is needed to find index')
+        indexes = Index.get_all_indexes(config)
+        index = list(filter(lambda index: index["name"] == name, indexes))
+        if len(index) == 0:
+            raise Exception('Index not found')
+        index = index[0]
+        return Index(config, name=index["name"], uid=index["uid"])

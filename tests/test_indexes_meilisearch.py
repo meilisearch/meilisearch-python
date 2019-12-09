@@ -1,17 +1,16 @@
-import os,sys,inspect
+import json
+import time 
+import os
+import sys
+import inspect
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir) 
 import meilisearch
-import pytest
-import json
-import time 
 
 class TestIndexes: 
     client = meilisearch.Client("http://127.0.0.1:7700", None)
 
-    # @pytest.mark.parametrize("test_input,expected", [("3+5", 8), ("2+4", 6), ("6*9", 42)])
-    # @pytest.mark.parametrize("test_input,expected", [("3+5", 8), ("2+4", 6), ("6*9", 42)])
     def test_create_index(self):
         """Tests an API call to create an in meiliSearch""" 
         index = self.client.create_index(name="movies",uid="movies_uid")
@@ -126,18 +125,19 @@ class TestIndexes:
         assert isinstance(response, object)
         assert 'updateId' in response
 
-    # Captain Marvel
     def test_delete_one_document(self):
         index = self.client.get_index(uid="movies_uid")
+        # DELETE element Captain Marvel
         response = index.delete_one_document(299537);
         assert isinstance(response, object)
         assert 'updateId' in response
 
-    # Escape Room, 522681
-    # Glass, 450465
-    # Dumbo, 329996 
     def test_delete_multiple_documents(self):
         index = self.client.get_index(uid="movies_uid")
+        # Deleted element
+        # Escape Room, 522681
+        # Glass, 450465
+        # Dumbo, 329996 
         response = index.delete_multiple_documents([522681, 450465, 329996]);
         assert isinstance(response, object)
         assert 'updateId' in response

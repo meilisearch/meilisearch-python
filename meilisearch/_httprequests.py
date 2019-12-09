@@ -14,8 +14,10 @@ class HttpRequests:
         raise Exception(err)
           
     @staticmethod
-    def post(config, path, body={}): 
+    def post(config, path, body=None): 
       try:
+        if body is None:
+          body = {}
         r = requests.post(config.url + path, json=body)
         r.raise_for_status()
         return r
@@ -25,8 +27,10 @@ class HttpRequests:
         raise Exception(err)
 
     @staticmethod
-    def put(config, path, body={}): 
+    def put(config, path, body=None): 
       try:
+        if body is None:
+          body = {}
         r = requests.put(config.url + path, json=body)
         r.raise_for_status()
         return r
@@ -36,8 +40,10 @@ class HttpRequests:
         raise Exception(err)
     
     @staticmethod
-    def patch(config, path, body={}): 
+    def patch(config, path, body=None): 
       try:
+        if body is None:
+          body = {}
         r = requests.patch(config.url + path, json=body)
         r.raise_for_status()
         return r
@@ -47,8 +53,10 @@ class HttpRequests:
         raise Exception(err)
 
     @staticmethod
-    def delete(config, path, body={}): 
+    def delete(config, path, body=None): 
       try:
+        if body is None:
+          body = {}
         r = requests.delete(config.url + path, json=body)
         r.raise_for_status()
         return r

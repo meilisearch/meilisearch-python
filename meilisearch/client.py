@@ -1,9 +1,5 @@
-import requests
 from .index import Index
 from .config import Config
-# from meilisearch._http_request import HttpRequest
-
-
 
 class Client:
     def __init__(self, url, apikey):
