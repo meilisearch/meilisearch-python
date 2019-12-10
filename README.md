@@ -21,3 +21,8 @@ pytest
 pylint meilisearch
 pylint tests/*
 ```
+
+## Generate documentation
+```bash
+doc3 meilisearch --html
+```

@@ -1,8 +1,9 @@
 from .index import Index
 from .health import Health
+from .key import Key
 from .config import Config
 
-class Client(Health):
+class Client(Health, Key):
     """
     A client for the meilisearch API
 
@@ -29,6 +30,7 @@ class Client(Health):
         """
         config = Config(url, apikey)
         Health.__init__(self, config)
+        Key.__init__(self, config)
         self.config = config
     
     def create_index(self, name, uid=None, schema=None):
