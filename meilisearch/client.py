@@ -1,9 +1,37 @@
 from .index import Index
+from .health import Health
+from .key import Key
 from .config import Config
 
-class Client:
+class Client(Health, Key):
+    """
+    A client for the meilisearch API
+
+    A client instance is needed for every meilisearch API method to know the location of 
+    meilisearch and his permissions.
+
+    Attributes
+    ----------
+    url : str
+        The url to the meilisearch API (ex: http://localhost:8080)
+    apikey : str
+        The optionnal apikey to access the meilisearch api 
+
+    """
+
     def __init__(self, url, apikey):
-        self.config = Config(url, apikey)
+        """
+        Parameters
+        ----------
+        url : str
+            The url to the meilisearch API (ex: http://localhost:8080)
+        apikey : str
+            The optionnal apikey to access the meilisearch api 
+        """
+        config = Config(url, apikey)
+        Health.__init__(self, config)
+        Key.__init__(self, config)
+        self.config = config
     
     def create_index(self, **body):
         name = body.get("name", None)

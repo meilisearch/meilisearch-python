@@ -4,7 +4,13 @@ class HttpRequests:
     @staticmethod
     def get(config, path): 
       try:
-        r = requests.get(config.url + path)
+        r = requests.get(
+          config.url + '/' + path,
+          headers={
+            'x-meili-api-key': config.apikey,
+            'content-type': 'application/json'
+          }
+        )
         print(r.url)
         r.raise_for_status()
         return r
@@ -18,7 +24,14 @@ class HttpRequests:
       try:
         if body is None:
           body = {}
-        r = requests.post(config.url + path, json=body)
+        r = requests.post(
+          config.url + '/' + path,
+          headers={
+          'x-meili-api-key': config.apikey,
+          'content-type': 'application/json'
+          },
+          json=body
+        )
         r.raise_for_status()
         return r
       except requests.exceptions.HTTPError as err:
@@ -31,7 +44,14 @@ class HttpRequests:
       try:
         if body is None:
           body = {}
-        r = requests.put(config.url + path, json=body)
+        r = requests.put(
+          config.url + '/' + path,
+          headers={
+            'x-meili-api-key': config.apikey,
+            'content-type': 'application/json'
+          },
+          json=body
+        )
         r.raise_for_status()
         return r
       except requests.exceptions.HTTPError as err:
@@ -44,7 +64,14 @@ class HttpRequests:
       try:
         if body is None:
           body = {}
-        r = requests.patch(config.url + path, json=body)
+        r = requests.patch(
+          config.url + '/' + path,
+          headers={
+            'x-meili-api-key': config.apikey,
+            'content-type': 'application/json'
+          },
+          json=body
+        )
         r.raise_for_status()
         return r
       except requests.exceptions.HTTPError as err:
@@ -56,8 +83,15 @@ class HttpRequests:
     def delete(config, path, body=None): 
       try:
         if body is None:
-          body = {}
-        r = requests.delete(config.url + path, json=body)
+              body = {}
+        r = requests.delete(
+          config.url + '/' + path,
+          headers={
+            'x-meili-api-key': config.apikey,
+            'content-type': 'application/json'
+          },
+          json=body
+        )
         r.raise_for_status()
         return r
       except requests.exceptions.HTTPError as err:

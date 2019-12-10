@@ -9,11 +9,20 @@ sys.path.insert(0, parent_dir)
 import meilisearch
 
 class TestIndexes: 
-    client = meilisearch.Client("http://127.0.0.1:7700", None)
+    client = meilisearch.Client("http://127.0.0.1:7700", "123")
+
+    def test_get_client(self):
+        client = meilisearch.Client("http://127.0.0.1:7700", "123")
+        assert client.config
+    
+    def test_get_health(self):
+        """Tests an API call to check the health of meilisearch"""     
+        self.client.get_health()
+        assert 1
 
     def test_create_index(self):
-        """Tests an API call to create an in meiliSearch""" 
-        index = self.client.create_index(name="movies",uid="movies_uid")
+        """Tests an API call to create an in meiliSearch"""
+        index = self.client.create_index(name="movies", uid="movies_uid")
         print(index)
         assert isinstance(index, object)
         assert index.name == "movies"
@@ -115,6 +124,44 @@ class TestIndexes:
         assert isinstance(response, object)
         assert response["hits"][0]["id"] == '166428'
 
+    def test_create_key(self):
+        response = self.client.create_key({
+            "expiresAt": 1575985008 ,
+            "description": "search key",
+            "acl": ["documentsRead"],
+            "indexes": ["movies"]
+        })
+        assert 'key' in response
+        assert response['description'] == "search key"
+    
+    def test_get_keys(self):
+        response = self.client.get_keys()
+        print(response)
+        assert isinstance(response, list)
+        assert response[0]['description'] == "search key"
+
+    def test_update_key(self):
+        keys = self.client.get_keys()
+        response = self.client.update_key(keys[0]["key"], {
+            "description": "search key updated",
+            "acl": ["documentsRead"],
+            "indexes": ["movies"]
+        })
+        assert 'key' in response
+        assert response['description'] == "search key updated"
+    
+    
+    def test_get_key(self):
+        keys = self.client.get_keys()
+        response = self.client.get_key(keys[0]["key"])
+        assert isinstance(response, object)
+        assert keys[0]['description'] == "search key updated"
+
+    def test_delete_key(self):
+        keys = self.client.get_keys()
+        response = self.client.delete_key(keys[0]["key"])
+        print(response)
+        assert response
 
     # DIfference between two routes ?
     def test_update_documents(self):
