@@ -33,15 +33,58 @@ class Client(Health, Key):
         Key.__init__(self, config)
         self.config = config
     
-    def create_index(self, **body):
-        name = body.get("name", None)
-        uid = body.get("uid", None)
-        index = Index.create(self.config, name=name, uid=uid)
-        return Index(self.config, name=index["name"], uid=index["uid"])
+    def create_index(self, name, uid=None, schema=None):
+        """Create an index.
+
+        If the argument `uid` isn't passed in, it will be generated
+        by meilisearch.
+
+        Parameters
+        ----------
+        name: str
+            Name of the index
+        uid: str, optional
+            uid of the index
+        schema: dict, optional
+            dict containing the schema of the index.
+            https://docs.meilisearch.com/main_concepts/indexes.html#schema-definition
+        Returns
+        -------
+        index : Index
+            an instance of Index containing the information of the newly created index
+        Raises
+        ------
+        HTTPError
+            In case of any other error found here https://docs.meilisearch.com/references/#errors-status-code
+        """
+        index = Index.create(self.config, name=name, uid=uid, schema=schema)
+        return Index(self.config, name=index["name"], uid=index["uid"], schema=schema)
 
     def get_all_indexes(self):
+        """Get all indexes.
+
+        Raises
+        ------
+        HTTPError
+            In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
+        Returns
+        -------
+        list
+            List of indexes in dictionnary format. (e.g [{ 'name': 'movies' 'uid': '12345678' }])
+        """
         return Index.get_all_indexes(self.config)
+        
 
     def get_index(self, uid=None, name=None):
-        print('Client', uid, name)
+        """Get an index.
+
+        Raises
+        ------
+        HTTPError
+            In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
+        Returns
+        -------
+        index : Index
+            an instance of Index containing the information of the index found
+        """
         return Index.get_index(self.config, uid=uid, name=name)

@@ -6,9 +6,41 @@ from .synonym import Synonym
 from .search import Search
 
 class Index(Schema, Update, Document, Search, Synonym):
-    index_path = '/indexes'
+    """
+    Indexes routes wrapper
 
-    def __init__(self, config, uid=None, name=None):
+    Index class gives access to all indexes routes and child routes (herited).
+    https://docs.meilisearch.com/references/indexes.html
+
+    Attributes
+    ----------
+    config : Config
+        Config object containing permission and location of meilisearch
+    name: str
+        Name of the index on which to perform the index actions.
+    uid:     
+        Uid of the index on which to perform the index actions.
+    index_path:
+        Index url path
+
+    """
+    index_path = 'indexes'
+
+    def __init__(self, config, uid=None, name=None, schema=None):
+        """
+        Attributes
+        ----------
+        config : Config
+            Config object containing permission and location of meilisearch
+        name: str
+            Name of the index on which to perform the index actions.
+        uid:     
+            Uid of the index on which to perform the index actions.
+        schema:
+            Schema definition of index.
+        index_path:
+            Index url path
+        """
         Schema.__init__(self, Index.index_path, config, name, uid)
         Update.__init__(self, Index.index_path, config, name, uid)
         Search.__init__(self, Index.index_path, config, name, uid)
@@ -17,13 +49,34 @@ class Index(Schema, Update, Document, Search, Synonym):
         self.config = config
         self.name = name
         self.uid = uid
-        print('name is {} and uid is {}'.format(self.name, self.uid))
+        self.schema = schema
     
 
     def delete(self):
+        """Delete an index from meilisearch
+
+        Returns
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
+            https://docs.meilisearch.com/references/updates.html#get-an-update-status 
+        """
         return HttpRequests.delete(self.config, '{}/{}'.format(self.index_path, self.uid))
     
     def update(self, **body):
+        """Update an index from meilisearch
+
+        Parameters
+        ----------
+        body: **kwargs
+            Accepts name as an updatable parameter.
+
+        Returns
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
+            https://docs.meilisearch.com/references/updates.html#get-an-update-status 
+        """
         payload = {}
         name = body.get("name", None)
         if name is not None:
@@ -31,28 +84,82 @@ class Index(Schema, Update, Document, Search, Synonym):
         return HttpRequests.put(self.config, '{}/{}'.format(self.index_path, self.uid), payload).json()
 
     def info(self):
+        """Get info of index
+
+        Returns
+        ----------
+        index: `dict`
+            Dictionnary containing index information.
+        """
         return HttpRequests.get(self.config, '{}/{}'.format(self.index_path, self.uid)).json()
         
     @staticmethod
-    def create(config, **body):
+    def create(config, name, uid=None, schema=None):
+        """Create an index.
+
+        If the argument `uid` isn't passed in, it will be generated
+        by meilisearch.
+        If the argument `name` isn't passed in, it will raise an error.
+
+        Parameters
+        ----------
+        name: str
+            Name of the index
+        uid: str, optional
+            uid of the index
+        schema: dict, optional
+            dict containing the schema of the index.
+            https://docs.meilisearch.com/main_concepts/indexes.html#schema-definition
+        Returns
+        -------
+        index : Index
+            an instance of Index containing the information of the newly created index
+        Raises
+        ------
+        HTTPError
+            In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
+        """
         payload = {}
-        name = body.get("name", None)
-        uid = body.get("uid", None)
         if name is not None:
             payload["name"] = name
         if uid is not None:
             payload["uid"] = uid
+        if schema is not None:
+            payload["schema"] = schema
         response = HttpRequests.post(config, Index.index_path, payload)
         return  response.json()
 
     @staticmethod
     def get_all_indexes(config):
+        """Get all indexes from meilisearch.
+
+        Returns
+        -------
+        indexes : list
+            List of indexes (dict)
+        Raises
+        ------
+        HTTPError
+            In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
+        """
         return HttpRequests.get(config, Index.index_path).json()
 
     @staticmethod
-    def get_index(config, **params):
-        name = params.get("name", None)
-        uid = params.get("uid", None)
+    def get_index(config, name=None, uid=None):
+        """Get Index instance from given index
+
+        If the arguments `name` and `uid` aren't passed in, it
+        will raise an exception.
+
+        Returns
+        -------
+        index : Index
+            Instance of Index with the given index.
+        Raises
+        ------
+        HTTPError
+            In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
+        """
         if uid is not None:
             return Index(config, uid=uid, name=name)
         if name is None:

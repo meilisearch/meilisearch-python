@@ -17,13 +17,14 @@ class TestIndexes:
     
     def test_get_health(self):
         """Tests an API call to check the health of meilisearch"""     
-        self.client.get_health()
-        assert 1
+        response = self.client.get_health()
+        assert response.status_code == 204
 
     def test_create_index(self):
-        """Tests an API call to create an in meiliSearch"""
+        """Tests an API call to create an index in meiliSearch"""
         index = self.client.create_index(name="movies", uid="movies_uid")
         print(index)
+        # TODO : test creating index with schema
         assert isinstance(index, object)
         assert index.name == "movies"
         assert index.uid == "movies_uid"
@@ -161,7 +162,7 @@ class TestIndexes:
         keys = self.client.get_keys()
         response = self.client.delete_key(keys[0]["key"])
         print(response)
-        assert response
+        assert response.status_code == 204
 
     # DIfference between two routes ?
     def test_update_documents(self):
@@ -200,3 +201,4 @@ class TestIndexes:
         index = self.client.get_index(uid="movies_uid")
         response = index.delete()
         assert isinstance(response, object)
+        assert response.status_code == 204
