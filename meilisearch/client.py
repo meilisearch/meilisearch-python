@@ -60,7 +60,7 @@ class Client(Health, Key):
         index = Index.create(self.config, name=name, uid=uid, schema=schema)
         return Index(self.config, name=index["name"], uid=index["uid"], schema=schema)
 
-    def get_all_indexes(self):
+    def get_indexes(self):
         """Get all indexes.
 
         Raises
@@ -72,7 +72,7 @@ class Client(Health, Key):
         list
             List of indexes in dictionnary format. (e.g [{ 'name': 'movies' 'uid': '12345678' }])
         """
-        return Index.get_all_indexes(self.config)
+        return Index.get_indexes(self.config)
         
 
     def get_index(self, uid=None, name=None):

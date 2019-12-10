@@ -6,12 +6,10 @@ verify_ssl = true
 [dev-packages]
 pylint = "*"
 pytest = "*"
+pdoc3 = "*"
 
 [packages]
 requests = "*"
-vcrpy = "*"
-pylint = "*"
-pdoc3 = "*"
 
 [requires]
 python_version = "3.7"

@@ -15,9 +15,9 @@ class TestIndexes:
         client = meilisearch.Client("http://127.0.0.1:7700", "123")
         assert client.config
     
-    def test_get_health(self):
+    def test_health(self):
         """Tests an API call to check the health of meilisearch"""     
-        response = self.client.get_health()
+        response = self.client.health()
         assert response.status_code == 204
 
     def test_create_index(self):
@@ -29,9 +29,9 @@ class TestIndexes:
         assert index.name == "movies"
         assert index.uid == "movies_uid"
 
-    def test_get_all_indexes(self):
+    def test_get_indexes(self):
         """Tests an API call to get all indexes in meiliSearch"""
-        response = self.client.get_all_indexes()
+        response = self.client.get_indexes()
         assert isinstance(response, list)
     
     def test_get_index_with_name(self):
@@ -89,9 +89,9 @@ class TestIndexes:
         assert isinstance(response, list)
         assert 'status' in response[0]
     
-    def test_get_one_update(self):
+    def test_get_update(self):
         index = self.client.get_index(uid="movies_uid")
-        response = index.get_one_update(0)
+        response = index.get_update(0)
         assert isinstance(response, object)
         assert 'status' in response
         assert response['status'] == 'processed'
@@ -115,6 +115,14 @@ class TestIndexes:
         assert isinstance(response, list)
         assert 'title' in response[0] 
         assert 'overview' not in response[0] 
+
+    def test_get_document(self):
+        time.sleep(1)
+        index = self.client.get_index(uid="movies_uid")
+        response = index.get_document(500682)
+        assert isinstance(response, object)
+        assert 'title' in response 
+        assert response['title'] == "The Highwaymen"
 
     def test_search_documents(self):
         index = self.client.get_index(uid="movies_uid")
@@ -173,20 +181,20 @@ class TestIndexes:
         assert isinstance(response, object)
         assert 'updateId' in response
 
-    def test_delete_one_document(self):
+    def test_delete_document(self):
         index = self.client.get_index(uid="movies_uid")
         # DELETE element Captain Marvel
-        response = index.delete_one_document(299537);
+        response = index.delete_document(299537);
         assert isinstance(response, object)
         assert 'updateId' in response
 
-    def test_delete_multiple_documents(self):
+    def test_delete_documents(self):
         index = self.client.get_index(uid="movies_uid")
         # Deleted element
         # Escape Room, 522681
         # Glass, 450465
         # Dumbo, 329996 
-        response = index.delete_multiple_documents([522681, 450465, 329996]);
+        response = index.delete_documents([522681, 450465, 329996]);
         assert isinstance(response, object)
         assert 'updateId' in response
 

@@ -54,7 +54,7 @@ class Update:
             self.uid,
             self.update_path)).json()
 
-    def get_one_update(self, updateId):
+    def get_update(self, updateId):
         """Get one update from meilisearch
 
         Parameters

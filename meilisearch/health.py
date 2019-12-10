@@ -25,7 +25,7 @@ class Health:
         """
         self.config = config
 
-    def get_health(self):
+    def health(self):
         """Get health of meilisearch 
 
         `204` http status response when meilisearch is healthy.

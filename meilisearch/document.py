@@ -42,7 +42,7 @@ class Document:
         self.index_path = parent_path
     
         
-    def get_one_document(self, document_id):
+    def get_document(self, document_id):
         """Get one document with given document identifier
 
         Parameters
@@ -54,7 +54,7 @@ class Document:
         document: `dict`
             Dictionnary containing the documents information
         """
-        return HttpRequests.put(self.config, '{}/{}/{}/{}'.format(
+        return HttpRequests.get(self.config, '{}/{}/{}/{}'.format(
             self.index_path,
             self.uid,
             self.document_path,
@@ -124,7 +124,7 @@ class Document:
             documents
             ).json()
 
-    def delete_one_document(self, document_id):
+    def delete_document(self, document_id):
         """Add documents to the index
 
         Parameters
@@ -144,7 +144,7 @@ class Document:
             document_id
         )).json()
     
-    def delete_multiple_documents(self, ids):
+    def delete_documents(self, ids):
         """Delete multiple documents of the index
 
         Parameters
