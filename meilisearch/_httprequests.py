@@ -4,7 +4,7 @@ class HttpRequests:
     @staticmethod
     def get(config, path): 
       try:
-        r = requests.get(config.url + path)
+        r = requests.get(config.url + '/' + path)
         print(r.url)
         r.raise_for_status()
         return r
@@ -18,7 +18,7 @@ class HttpRequests:
       try:
         if body is None:
           body = {}
-        r = requests.post(config.url + path, json=body)
+        r = requests.post(config.url + '/' + path, json=body)
         r.raise_for_status()
         return r
       except requests.exceptions.HTTPError as err:
@@ -31,7 +31,7 @@ class HttpRequests:
       try:
         if body is None:
           body = {}
-        r = requests.put(config.url + path, json=body)
+        r = requests.put(config.url + '/' + path, json=body)
         r.raise_for_status()
         return r
       except requests.exceptions.HTTPError as err:
@@ -44,7 +44,7 @@ class HttpRequests:
       try:
         if body is None:
           body = {}
-        r = requests.patch(config.url + path, json=body)
+        r = requests.patch(config.url + '/' + path, json=body)
         r.raise_for_status()
         return r
       except requests.exceptions.HTTPError as err:
@@ -57,7 +57,7 @@ class HttpRequests:
       try:
         if body is None:
           body = {}
-        r = requests.delete(config.url + path, json=body)
+        r = requests.delete(config.url + '/' + path, json=body)
         r.raise_for_status()
         return r
       except requests.exceptions.HTTPError as err:

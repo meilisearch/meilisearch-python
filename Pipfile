@@ -11,6 +11,7 @@ pytest = "*"
 requests = "*"
 vcrpy = "*"
 pylint = "*"
+pdoc3 = "*"
 
 [requires]
 python_version = "3.7"
