@@ -9,12 +9,6 @@ class Key:
 
     Attributes
     ----------
-    config : Config
-        Config object containing permission and location of meilisearch
-    name: str
-        Name of the index on which to perform the key actions.
-    uid:     
-        Uid of the index on which to perform the key actions.
     index_path:
         Index url path
     """
