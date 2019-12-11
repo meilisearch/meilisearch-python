@@ -46,5 +46,5 @@ pylint tests/*
 
 ## Generate documentation
 ```bash
-doc3 meilisearch --html
+pdoc3 meilisearch --html
 ```
