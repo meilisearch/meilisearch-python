@@ -130,7 +130,7 @@ class Index(Schema, Update, Document, Search, Synonym):
         return  response.json()
 
     @staticmethod
-    def get_all_indexes(config):
+    def get_indexes(config):
         """Get all indexes from meilisearch.
 
         Returns
@@ -164,7 +164,7 @@ class Index(Schema, Update, Document, Search, Synonym):
             return Index(config, uid=uid, name=name)
         if name is None:
             raise Exception('Name or Uid is needed to find index')
-        indexes = Index.get_all_indexes(config)
+        indexes = Index.get_indexes(config)
         index = list(filter(lambda index: index["name"] == name, indexes))
         if len(index) == 0:
             raise Exception('Index not found')

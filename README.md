@@ -8,6 +8,22 @@ MeiliSearch provides an ultra relevant and instant full-text search. Our solutio
 You can also use MeiliSearch as a service by registering on [meilisearch.com](https://www.meilisearch.com/) and use our hosted solution.
 
 
+
+# Using alpha release
+
+## pipenv
+```bash
+pipenv install --pypi-mirror 'https://test.pypi.org/simple/' meilisearch==0.0.5
+```
+## pip
+```bash
+python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps meilisearch==0.0.5
+
+```
+
+
+# Contributing 
+
 ## 🔧 Installation
 
 ```bash
