@@ -20,6 +20,11 @@ class TestIndexes:
         response = self.client.get_health()
         assert response.status_code == 204
 
+    def test_get_sys_info(self):
+        """Tests an API call to check the system information of meilisearch"""
+        response = self.client.get_sys_info()
+        assert 'memoryUsage' in response
+
     def test_create_index(self):
         """Tests an API call to create an index in meiliSearch"""
         index = self.client.create_index(name="movies", uid="movies_uid")
