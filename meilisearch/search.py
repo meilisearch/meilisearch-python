@@ -10,14 +10,6 @@ class Search:
 
     Attributes
     ----------
-    config : Config
-        Config object containing permission and location of meilisearch
-    name: str
-        Name of the index on which to perform the search actions.
-    uid:     
-        Uid of the index on which to perform the search actions.
-    index_path:
-        Index url path
     search_path:
         Search url path
     """
@@ -25,7 +17,7 @@ class Search:
 
     def __init__(self, parent_path, config, uid=None, name=None):
         """
-        Attributes
+        Parameters
         ----------
         config : Config
             Config object containing permission and location of meilisearch

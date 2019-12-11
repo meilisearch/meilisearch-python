@@ -9,21 +9,13 @@ class Schema:
 
     Attributes
     ----------
-    config : Config
-        Config object containing permission and location of meilisearch
-    name: str
-        Name of the index on which to perform the schema actions.
-    uid:     
-        Uid of the index on which to perform the schema actions.
-    index_path:
-        Index url path
     schema_path:
         Schema url path
     """
     schema_path = 'schema'
     def __init__(self, parent_path, config, uid=None, name=None):
         """
-        Attributes
+        Parameters
         ----------
         config : Config
             Config object containing permission and location of meilisearch

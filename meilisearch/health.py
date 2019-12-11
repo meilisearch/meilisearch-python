@@ -9,8 +9,6 @@ class Health:
 
     Attributes
     ----------
-    config : Config
-        Config object containing permission and location of meilisearch
     health_path:
         Health url path
     """
@@ -18,7 +16,7 @@ class Health:
 
     def __init__(self, config):
         """
-        Attributes
+        Parameters
         ----------
         config : Config
             Config object containing permission and location of meilisearch

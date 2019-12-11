@@ -14,12 +14,6 @@ class Index(Schema, Update, Document, Search, Synonym):
 
     Attributes
     ----------
-    config : Config
-        Config object containing permission and location of meilisearch
-    name: str
-        Name of the index on which to perform the index actions.
-    uid:     
-        Uid of the index on which to perform the index actions.
     index_path:
         Index url path
 
@@ -28,7 +22,7 @@ class Index(Schema, Update, Document, Search, Synonym):
 
     def __init__(self, config, uid=None, name=None, schema=None):
         """
-        Attributes
+        Parameters
         ----------
         config : Config
             Config object containing permission and location of meilisearch

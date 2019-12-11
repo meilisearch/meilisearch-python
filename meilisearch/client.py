@@ -9,14 +9,6 @@ class Client(Health, Key):
 
     A client instance is needed for every meilisearch API method to know the location of 
     meilisearch and his permissions.
-
-    Attributes
-    ----------
-    url : str
-        The url to the meilisearch API (ex: http://localhost:8080)
-    apikey : str
-        The optionnal apikey to access the meilisearch api 
-
     """
 
     def __init__(self, url, apikey):
