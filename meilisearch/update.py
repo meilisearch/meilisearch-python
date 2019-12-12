@@ -21,11 +21,11 @@ class Update:
             Config object containing permission and location of meilisearch
         name: str
             Name of the index on which to perform the index actions.
-        uid:     
+        uid: str
             Uid of the index on which to perform the index actions.
-        schema:
+        schema: dict
             Schema definition of index.
-        index_path:
+        index_path: str
             Index url path
         """
         self.config = config
