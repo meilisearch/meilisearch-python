@@ -5,8 +5,9 @@ from .document import Document
 from .synonym import Synonym
 from .search import Search
 from .stat import Stat
+from .setting import Setting
 
-class Index(Schema, Update, Document, Search, Synonym, Stat):
+class Index(Schema, Update, Document, Search, Synonym, Stat, Setting):
     """
     Indexes routes wrapper
 
@@ -42,6 +43,7 @@ class Index(Schema, Update, Document, Search, Synonym, Stat):
         Document.__init__(self, Index.index_path, config, name, uid)
         Synonym.__init__(self, Index.index_path, config, name, uid)
         Stat.__init__(self, Index.index_path, config, name, uid)
+        Setting.__init__(self, Index.index_path, config, name, uid)
         self.config = config
         self.name = name
         self.uid = uid

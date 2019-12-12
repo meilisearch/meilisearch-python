@@ -12,6 +12,7 @@ class TestIndexes:
     client = meilisearch.Client("http://127.0.0.1:7700", "123")
 
     def test_get_client(self):
+        """Tests a call to get a client instance of meilisearch"""     
         client = meilisearch.Client("http://127.0.0.1:7700", "123")
         assert client.config
     
@@ -94,12 +95,14 @@ class TestIndexes:
         assert 'updateId' in response
     
     def test_get_updates(self):
+        """Tests a call to get updates of a given index"""
         index = self.client.get_index(uid="movies_uid")
         response = index.get_updates()
         assert isinstance(response, list)
         assert 'status' in response[0]
     
     def test_get_update(self):
+        """Tests a call to get an update of a given operation"""
         index = self.client.get_index(uid="movies_uid")
         response = index.get_update(0)
         assert isinstance(response, object)
@@ -107,6 +110,7 @@ class TestIndexes:
         assert response['status'] == 'processed'
 
     def test_add_documents(self):
+        """Tests a call to add documents"""
         json_file = open('./datasets/small_movies.json')
         data = json.load(json_file)
         index = self.client.get_index(uid="movies_uid")
@@ -115,6 +119,7 @@ class TestIndexes:
         assert 'updateId' in response
 
     def test_get_documents(self):
+        
         index = self.client.get_index(uid="movies_uid")
         time.sleep(1)
         response = index.get_documents({
@@ -194,7 +199,57 @@ class TestIndexes:
         print(response)
         assert response.status_code == 204
 
-    # DIfference between two routes ?
+
+    def test_add_settings(self):
+        """Tests an API call to add setting to an index in meiliSearch"""
+        index = self.client.get_index(uid="movies_uid")
+        response = index.add_settings({
+            "rankingOrder": [
+                "_sum_of_typos",
+                "_number_of_words",
+                "_word_proximity",
+                "_sum_of_words_attribute",
+                "_sum_of_words_position",
+                "_exact",
+                "release_date"
+            ],
+            "distinctField": "",
+            "rankingRules": {
+                "release_date": "dsc"
+            }
+        })
+        assert isinstance(response, object)
+        assert 'updateId' in response
+
+    def test_update_settings(self):
+        """Tests an API call to update settings of an index in meiliSearch"""
+        index = self.client.get_index(uid="movies_uid")
+        response = index.replace_settings({
+            "rankingOrder": [
+                "_sum_of_typos",
+                "_number_of_words",
+                "_word_proximity",
+                "_sum_of_words_attribute",
+                "_sum_of_words_position",
+                "_exact",
+                "release_date"
+            ],
+            "distinctField": "",
+            "rankingRules": {
+                "release_date": "dsc"
+            }
+        })
+        assert isinstance(response, object)
+        assert 'updateId' in response
+        
+    
+    def test_get_settings(self):
+        """Tests an API call to get settings of an index in meiliSearch"""
+        index = self.client.get_index(uid="movies_uid")
+        response = index.get_settings()
+        assert isinstance(response, object)
+        assert 'rankingOrder' in response
+
     def test_update_documents(self):
         json_file = open('./datasets/small_movies.json')
         data = json.load(json_file)
