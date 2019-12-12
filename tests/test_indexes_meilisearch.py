@@ -143,6 +143,18 @@ class TestIndexes:
         assert isinstance(response, object)
         assert response["hits"][0]["id"] == '166428'
 
+    def test_get_all_stats(self):
+        response = self.client.get_all_stats()
+        assert isinstance(response, object)
+        assert 'databaseSize' in response
+
+    def test_get_stats(self):
+        index = self.client.get_index(uid="movies_uid")
+        response = index.get_stats()
+        assert isinstance(response, object)
+        assert 'numberOfDocuments' in response
+        assert response['numberOfDocuments'] == 30
+
     def test_create_key(self):
         response = self.client.create_key({
             "expiresAt": 1575985008 ,

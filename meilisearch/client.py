@@ -3,6 +3,7 @@ from .health import Health
 from .key import Key
 from .config import Config
 from .sys_info import SysInfo
+from .stat import Stat
 from .version import Version
 
 class Client(Health, Key, SysInfo, Version):
@@ -84,3 +85,14 @@ class Client(Health, Key, SysInfo, Version):
             an instance of Index containing the information of the index found
         """
         return Index.get_index(self.config, uid=uid, name=name)
+    
+    def get_all_stats(self):
+        """Get statistics about indexes, database size and update date.
+
+        Returns
+        -------
+        stats : dict
+            Dictionnary with information about indexes, database size and update date.
+        """
+        return Stat.get_all_stats(self.config)
+        
