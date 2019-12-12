@@ -3,11 +3,8 @@ from .health import Health
 from .key import Key
 from .config import Config
 from .sys_info import SysInfo
-<<<<<<< HEAD
 from .stat import Stat
-=======
 from .version import Version
->>>>>>> 81830d24abe2a5037e0d13ab148bf3d1f62a8a0c
 
 class Client(Health, Key, SysInfo, Version):
     """
