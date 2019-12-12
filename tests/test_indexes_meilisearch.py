@@ -25,6 +25,11 @@ class TestIndexes:
         response = self.client.get_sys_info()
         assert 'memoryUsage' in response
 
+    def test_get_version(self):
+        """Tests an API call to get the version of meilisearch"""
+        response = self.client.get_version()
+        assert 'pkgVersion' in response   
+
     def test_create_index(self):
         """Tests an API call to create an index in meiliSearch"""
         index = self.client.create_index(name="movies", uid="movies_uid")
