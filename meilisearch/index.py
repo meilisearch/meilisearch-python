@@ -28,11 +28,11 @@ class Index(Schema, Update, Document, Search, Synonym):
             Config object containing permission and location of meilisearch
         name: str
             Name of the index on which to perform the index actions.
-        uid:     
+        uid: str
             Uid of the index on which to perform the index actions.
-        schema:
+        schema: dict
             Schema definition of index.
-        index_path:
+        index_path: str
             Index url path
         """
         Schema.__init__(self, Index.index_path, config, name, uid)
