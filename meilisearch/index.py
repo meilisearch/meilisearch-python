@@ -4,8 +4,9 @@ from .update import Update
 from .document import Document
 from .synonym import Synonym
 from .search import Search
+from .stat import Stat
 
-class Index(Schema, Update, Document, Search, Synonym):
+class Index(Schema, Update, Document, Search, Synonym, Stat):
     """
     Indexes routes wrapper
 
@@ -40,6 +41,7 @@ class Index(Schema, Update, Document, Search, Synonym):
         Search.__init__(self, Index.index_path, config, name, uid)
         Document.__init__(self, Index.index_path, config, name, uid)
         Synonym.__init__(self, Index.index_path, config, name, uid)
+        Stat.__init__(self, Index.index_path, config, name, uid)
         self.config = config
         self.name = name
         self.uid = uid
