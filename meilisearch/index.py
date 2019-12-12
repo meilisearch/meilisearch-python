@@ -5,8 +5,9 @@ from .document import Document
 from .synonym import Synonym
 from .search import Search
 from .stat import Stat
+from .setting import Setting
 
-class Index(Schema, Update, Document, Search, Synonym, Stat):
+class Index(Schema, Update, Document, Search, Synonym, Stat, Setting):
     """
     Indexes routes wrapper
 
@@ -29,11 +30,11 @@ class Index(Schema, Update, Document, Search, Synonym, Stat):
             Config object containing permission and location of meilisearch
         name: str
             Name of the index on which to perform the index actions.
-        uid:     
+        uid: str
             Uid of the index on which to perform the index actions.
-        schema:
+        schema: dict
             Schema definition of index.
-        index_path:
+        index_path: str
             Index url path
         """
         Schema.__init__(self, Index.index_path, config, name, uid)
@@ -42,6 +43,7 @@ class Index(Schema, Update, Document, Search, Synonym, Stat):
         Document.__init__(self, Index.index_path, config, name, uid)
         Synonym.__init__(self, Index.index_path, config, name, uid)
         Stat.__init__(self, Index.index_path, config, name, uid)
+        Setting.__init__(self, Index.index_path, config, name, uid)
         self.config = config
         self.name = name
         self.uid = uid

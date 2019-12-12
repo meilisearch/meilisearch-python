@@ -23,9 +23,9 @@ class Document:
             Config object containing permission and location of meilisearch
         name: str
             Name of the index on which to perform the document actions.
-        uid:     
+        uid: str
             Uid of the index on which to perform the document actions.
-        index_path:
+        index_path: str
             Index url path
         """
         self.config = config
