@@ -13,11 +13,11 @@ You can also use MeiliSearch as a service by registering on [meilisearch.com](ht
 
 ### pipenv
 ```bash
-pipenv install --pypi-mirror 'https://test.pypi.org/simple/' meilisearch==0.0.5
+pipenv install --pypi-mirror 'https://test.pypi.org/simple/' meilisearch==0.0.7
 ```
 ### pip
 ```bash
-python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps meilisearch==0.0.5
+python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps meilisearch==0.0.7
 
 ```
 
@@ -25,7 +25,7 @@ python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps meili
 ```bash
 import meilisearch
 client = meilisearch.Client("http://127.0.0.1:7700", "123")
-indexes = client.get_all_indexes()
+indexes = client.get_indexes()
 ```
 
 # Contributing 
