@@ -6,8 +6,9 @@ from .synonym import Synonym
 from .search import Search
 from .stat import Stat
 from .setting import Setting
+from .stop_word import StopWord
 
-class Index(Schema, Update, Document, Search, Synonym, Stat, Setting):
+class Index(Schema, Update, Document, Search, Synonym, Stat, Setting, StopWord):
     """
     Indexes routes wrapper
 
@@ -44,11 +45,12 @@ class Index(Schema, Update, Document, Search, Synonym, Stat, Setting):
         Synonym.__init__(self, Index.index_path, config, name, uid)
         Stat.__init__(self, Index.index_path, config, name, uid)
         Setting.__init__(self, Index.index_path, config, name, uid)
+        StopWord.__init__(self, Index.index_path, config, name, uid)
         self.config = config
         self.name = name
         self.uid = uid
         self.schema = schema
-    
+
 
     def delete(self):
         """Delete an index from meilisearch
@@ -57,10 +59,10 @@ class Index(Schema, Update, Document, Search, Synonym, Stat, Setting):
         ----------
         update: `dict`
             Dictionnary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status 
+            https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return HttpRequests.delete(self.config, '{}/{}'.format(self.index_path, self.uid))
-    
+
     def update(self, **body):
         """Update an index from meilisearch
 
@@ -73,7 +75,7 @@ class Index(Schema, Update, Document, Search, Synonym, Stat, Setting):
         ----------
         update: `dict`
             Dictionnary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status 
+            https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         payload = {}
         name = body.get("name", None)
@@ -90,7 +92,7 @@ class Index(Schema, Update, Document, Search, Synonym, Stat, Setting):
             Dictionnary containing index information.
         """
         return HttpRequests.get(self.config, '{}/{}'.format(self.index_path, self.uid)).json()
-        
+
     @staticmethod
     def create(config, name, uid=None, schema=None):
         """Create an index.
