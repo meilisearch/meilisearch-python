@@ -13,11 +13,11 @@ You can also use MeiliSearch as a service by registering on [meilisearch.com](ht
 
 ### pipenv
 ```bash
-pipenv install --pypi-mirror 'https://test.pypi.org/simple/' meilisearch==0.0.5
+pipenv install --pypi-mirror 'https://test.pypi.org/simple/' meilisearch==0.0.6
 ```
 ### pip
 ```bash
-python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps meilisearch==0.0.5
+python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps meilisearch==0.0.6
 
 ```
 
