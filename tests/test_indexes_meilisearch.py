@@ -1,23 +1,28 @@
 import json
-import time 
+import time
 import os
 import sys
 import inspect
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
-sys.path.insert(0, parent_dir) 
+sys.path.insert(0, parent_dir)
 import meilisearch
 
-class TestIndexes: 
+class TestIndexes:
     client = meilisearch.Client("http://127.0.0.1:7700", "123")
 
     def test_get_client(self):
-        """Tests a call to get a client instance of meilisearch"""     
+        """Tests a call to get a client instance of meilisearch"""
         client = meilisearch.Client("http://127.0.0.1:7700", "123")
         assert client.config
-    
+
+    def test_get_client_without_apikey(self):
+        """Tests a call to get a client instance of meilisearch"""
+        client = meilisearch.Client("http://127.0.0.1:7700")
+        assert client.config
+
     def test_health(self):
-        """Tests an API call to check the health of meilisearch"""     
+        """Tests an API call to check the health of meilisearch"""
         response = self.client.health()
         assert response.status_code == 204
 
@@ -29,7 +34,7 @@ class TestIndexes:
     def test_get_version(self):
         """Tests an API call to get the version of meilisearch"""
         response = self.client.get_version()
-        assert 'pkgVersion' in response   
+        assert 'pkgVersion' in response
 
     def test_create_index(self):
         """Tests an API call to create an index in meiliSearch"""
@@ -40,21 +45,22 @@ class TestIndexes:
         assert index.name == "movies"
         assert index.uid == "movies_uid"
 
+
     def test_get_indexes(self):
         """Tests an API call to get all indexes in meiliSearch"""
         response = self.client.get_indexes()
         assert isinstance(response, list)
-    
+
     def test_get_index_with_name(self):
         """Tests an API call to get one index with name in meiliSearch"""
         response = self.client.get_index(name="movies")
         assert isinstance(response, object)
-    
+
     def test_get_index_with_uid(self):
         """Tests an API call to get one index with uid in meiliSearch"""
         response = self.client.get_index(uid="movies_uid")
         assert isinstance(response, object)
-    
+
     def test_index_info(self):
         """Tests an API call to get an index's info in meiliSearch"""
         index = self.client.get_index(uid="movies_uid")
@@ -93,14 +99,14 @@ class TestIndexes:
         })
         assert isinstance(response, object)
         assert 'updateId' in response
-    
+
     def test_get_updates(self):
         """Tests a call to get updates of a given index"""
         index = self.client.get_index(uid="movies_uid")
         response = index.get_updates()
         assert isinstance(response, list)
         assert 'status' in response[0]
-    
+
     def test_get_update(self):
         """Tests a call to get an update of a given operation"""
         index = self.client.get_index(uid="movies_uid")
@@ -119,7 +125,7 @@ class TestIndexes:
         assert 'updateId' in response
 
     def test_get_documents(self):
-        
+
         index = self.client.get_index(uid="movies_uid")
         time.sleep(1)
         response = index.get_documents({
@@ -128,15 +134,15 @@ class TestIndexes:
             'attributesToRetrieve': 'title'
         })
         assert isinstance(response, list)
-        assert 'title' in response[0] 
-        assert 'overview' not in response[0] 
+        assert 'title' in response[0]
+        assert 'overview' not in response[0]
 
     def test_get_document(self):
         time.sleep(1)
         index = self.client.get_index(uid="movies_uid")
         response = index.get_document(500682)
         assert isinstance(response, object)
-        assert 'title' in response 
+        assert 'title' in response
         assert response['title'] == "The Highwaymen"
 
     def test_search_documents(self):
@@ -169,7 +175,7 @@ class TestIndexes:
         })
         assert 'key' in response
         assert response['description'] == "search key"
-    
+
     def test_get_keys(self):
         response = self.client.get_keys()
         print(response)
@@ -185,8 +191,8 @@ class TestIndexes:
         })
         assert 'key' in response
         assert response['description'] == "search key updated"
-    
-    
+
+
     def test_get_key(self):
         keys = self.client.get_keys()
         response = self.client.get_key(keys[0]["key"])
@@ -241,8 +247,8 @@ class TestIndexes:
         })
         assert isinstance(response, object)
         assert 'updateId' in response
-        
-    
+
+
     def test_get_settings(self):
         """Tests an API call to get settings of an index in meiliSearch"""
         index = self.client.get_index(uid="movies_uid")
@@ -270,7 +276,7 @@ class TestIndexes:
         # Deleted element
         # Escape Room, 522681
         # Glass, 450465
-        # Dumbo, 329996 
+        # Dumbo, 329996
         response = index.delete_documents([522681, 450465, 329996]);
         assert isinstance(response, object)
         assert 'updateId' in response
@@ -280,7 +286,7 @@ class TestIndexes:
         response = index.delete_all_documents();
         assert isinstance(response, object)
         assert 'updateId' in response
-    
+
     def test_delete_index(self):
         """Tests an API call to delete an index in meiliSearch"""
         index = self.client.get_index(uid="movies_uid")
