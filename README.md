@@ -9,16 +9,10 @@ You can also use MeiliSearch as a service by registering on [meilisearch.com](ht
 
 
 
-# Using alpha release
+# 🔧 Installation
 
-### pipenv
 ```bash
-pipenv install --pypi-mirror 'https://test.pypi.org/simple/' meilisearch==0.0.7
-```
-### pip
-```bash
-python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps meilisearch==0.0.7
-
+pip install meilisearch==0.8.0
 ```
 
 ## Quickstart
@@ -30,7 +24,7 @@ indexes = client.get_indexes()
 
 # Contributing 
 
-## 🔧 Installation
+##  Installation
 
 ```bash
 pipenv install
