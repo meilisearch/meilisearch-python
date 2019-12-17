@@ -2,7 +2,7 @@ import requests
 
 class HttpRequests:
     @staticmethod
-    def get(config, path): 
+    def get(config, path):
       try:
         r = requests.get(
           config.url + '/' + path,
@@ -11,16 +11,15 @@ class HttpRequests:
             'content-type': 'application/json'
           }
         )
-        print(r.url)
         r.raise_for_status()
         return r
       except requests.exceptions.HTTPError as err:
         raise Exception(err)
       except requests.exceptions.ConnectionError as err:
         raise Exception(err)
-          
+
     @staticmethod
-    def post(config, path, body=None): 
+    def post(config, path, body=None):
       try:
         if body is None:
           body = {}
@@ -40,7 +39,7 @@ class HttpRequests:
         raise Exception(err)
 
     @staticmethod
-    def put(config, path, body=None): 
+    def put(config, path, body=None):
       try:
         if body is None:
           body = {}
@@ -58,9 +57,9 @@ class HttpRequests:
         raise Exception(err)
       except requests.exceptions.ConnectionError as err:
         raise Exception(err)
-    
+
     @staticmethod
-    def patch(config, path, body=None): 
+    def patch(config, path, body=None):
       try:
         if body is None:
           body = {}
@@ -80,7 +79,7 @@ class HttpRequests:
         raise Exception(err)
 
     @staticmethod
-    def delete(config, path, body=None): 
+    def delete(config, path, body=None):
       try:
         if body is None:
               body = {}

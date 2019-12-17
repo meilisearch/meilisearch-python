@@ -45,7 +45,6 @@ class TestIndexes:
     def test_create_index(self):
         """Tests an API call to create an index in meiliSearch"""
         index = self.client.create_index(name="movies", uid="movies_uid")
-        print(index)
         # TODO : test creating index with schema
         assert isinstance(index, object)
         assert index.name == "movies"
@@ -71,7 +70,6 @@ class TestIndexes:
         """Tests an API call to get an index's info in meiliSearch"""
         index = self.client.get_index(uid="movies_uid")
         response = index.info()
-        print('resp', response)
         assert isinstance(response, object)
 
     def test_update_index(self):
@@ -160,7 +158,6 @@ class TestIndexes:
         response = index.search({
             'q': 'How to Train Your Dragon'
         })
-        print(response["hits"][0]["id"])
         assert isinstance(response, object)
         assert response["hits"][0]["id"] == '166428'
 
@@ -209,7 +206,6 @@ class TestIndexes:
 
     def test_get_keys(self):
         response = self.client.get_keys()
-        print(response)
         assert isinstance(response, list)
         assert response[0]['description'] == "search key"
 
@@ -232,7 +228,6 @@ class TestIndexes:
     def test_delete_key(self):
         keys = self.client.get_keys()
         response = self.client.delete_key(keys[0]["key"])
-        print(response)
         assert response.status_code == 204
 
     """ settings route """

@@ -3,7 +3,7 @@ from ._httprequests import HttpRequests
 class Setting:
     """
     Settings routes wrapper
-    
+
     Index's parent that gives access to all the settings methods of meilisearch.
     https://docs.meilisearch.com/references/settings.html
 
@@ -48,7 +48,7 @@ class Setting:
             self.uid,
             self.setting_path
             )).json()
-        
+
     def add_settings(self, body):
         """Add settings to the given Index
 
@@ -58,7 +58,7 @@ class Setting:
         ----------
         body: `dict`
             Dictionnary containing the settings of the index
-            More information : 
+            More information :
             https://docs.meilisearch.com/references/settings.html#add-or-update-settings
 
         Returns
@@ -70,7 +70,7 @@ class Setting:
             self.index_path,
             self.uid,
             self.setting_path
-            ), 
+            ),
             body
             ).json()
 
@@ -83,7 +83,7 @@ class Setting:
         ----------
         body: `dict`
             Dictionnary containing the settings of the index
-            More information : 
+            More information :
             https://docs.meilisearch.com/references/settings.html#add-or-update-settings
 
         Returns
