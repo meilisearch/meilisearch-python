@@ -1,10 +1,10 @@
 import urllib
-from ._httprequests import HttpRequests
+from meilisearch._httprequests import HttpRequests
 
 class Document:
     """
     Documents routes wrapper
-    
+
     Index's parent that gives access to all the documents methods of meilisearch.
     https://docs.meilisearch.com/references/documents.html
 
@@ -32,8 +32,8 @@ class Document:
         self.name = name
         self.uid = uid
         self.index_path = parent_path
-    
-        
+
+
     def get_document(self, document_id):
         """Get one document with given document identifier
 
@@ -66,7 +66,7 @@ class Document:
             Dictionnary containing the documents information
         """
         return HttpRequests.get(
-            self.config, 
+            self.config,
             '{}/{}/{}?{}'.format(
                 self.index_path,
                 self.uid, self.document_path,
@@ -85,7 +85,7 @@ class Document:
         ----------
         update: `dict`
             Dictionnary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status 
+            https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return HttpRequests.post(self.config, '{}/{}/{}'.format(
             self.index_path,
@@ -106,7 +106,7 @@ class Document:
         ----------
         update: `dict`
             Dictionnary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status 
+            https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return HttpRequests.put(self.config, '{}/{}/{}'.format(
             self.index_path,
@@ -127,7 +127,7 @@ class Document:
         ----------
         update: `dict`
             Dictionnary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status 
+            https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return HttpRequests.delete(self.config, '{}/{}/{}/{}'.format(
             self.index_path,
@@ -135,7 +135,7 @@ class Document:
             self.document_path,
             document_id
         )).json()
-    
+
     def delete_documents(self, ids):
         """Delete multiple documents of the index
 
@@ -147,7 +147,7 @@ class Document:
         ----------
         update: `dict`
             Dictionnary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status 
+            https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return HttpRequests.post(self.config, '{}/{}/{}/delete'.format(
             self.index_path,
@@ -156,7 +156,7 @@ class Document:
         ),
         ids
         ).json()
-        
+
     def delete_all_documents(self):
         """Delete all documents of the index
 
@@ -164,7 +164,7 @@ class Document:
         ----------
         update: `dict`
             Dictionnary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status 
+            https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return HttpRequests.delete(self.config, '{}/{}/{}'.format(
             self.index_path,

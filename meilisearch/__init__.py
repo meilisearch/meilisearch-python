@@ -1,3 +1,3 @@
-from .client import Client
-# from .index import Index
-# from .config import Config
+from meilisearch.client import Client
+# from meilisearch.index import Index
+# from meilisearch.config import Config

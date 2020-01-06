@@ -1,12 +1,15 @@
-import json
-import time
 import os
 import sys
+import time
+import json
 import inspect
+
+import meilisearch
+
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
-import meilisearch
+
 
 class TestIndexes:
     client = meilisearch.Client("http://127.0.0.1:7700", "123")
@@ -21,7 +24,6 @@ class TestIndexes:
         """Tests a call to get a client instance of meilisearch"""
         client = meilisearch.Client("http://127.0.0.1:7700")
         assert client.config
-
 
     """ health route """
     def test_health(self):
@@ -49,7 +51,6 @@ class TestIndexes:
         assert isinstance(index, object)
         assert index.name == "movies"
         assert index.uid == "movies_uid"
-
 
     def test_get_indexes(self):
         """Tests an API call to get all indexes in meiliSearch"""
