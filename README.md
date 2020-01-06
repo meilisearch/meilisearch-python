@@ -26,9 +26,15 @@ indexes = client.get_indexes()
 ##  Installation
 
 ```bash
-pipenv install
+pipenv install --dev
 pipenv shell
-pytest
+```
+
+## testing
+
+```bash
+pipenv install --dev
+pipenv run pytest
 ```
 
 ## Linting
