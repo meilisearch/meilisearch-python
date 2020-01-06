@@ -1,4 +1,5 @@
-from ._httprequests import HttpRequests
+from meilisearch._httprequests import HttpRequests
+
 
 class Setting:
     """
@@ -12,6 +13,7 @@ class Setting:
     setting_path:
         Settings url path
     """
+
     setting_path = 'settings'
 
     def __init__(self, parent_path, config, uid=None, name=None):
@@ -27,6 +29,7 @@ class Setting:
         index_path: str
             Index url path
         """
+
         self.config = config
         self.name = name
         self.uid = uid
@@ -43,11 +46,12 @@ class Setting:
         document: `dict`
             Dictionnary containing the settings of the index
         """
+
         return HttpRequests.get(self.config, '{}/{}/{}'.format(
             self.index_path,
             self.uid,
             self.setting_path
-            )).json()
+        )).json()
 
     def add_settings(self, body):
         """Add settings to the given Index
@@ -66,13 +70,14 @@ class Setting:
         document: `dict`
             Dictionnary containing the settings of the index
         """
+
         return HttpRequests.post(self.config, '{}/{}/{}'.format(
             self.index_path,
             self.uid,
             self.setting_path
-            ),
-            body
-            ).json()
+        ),
+                                 body
+                                 ).json()
 
     def replace_settings(self, body):
         """Replace settings to the given Index
@@ -91,4 +96,5 @@ class Setting:
         document: `dict`
             Dictionnary containing the settings of the index
         """
+
         return self.add_settings(body)

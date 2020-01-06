@@ -1,10 +1,10 @@
-from ._httprequests import HttpRequests
+from meilisearch._httprequests import HttpRequests
 
 
 class Stat:
     """
     Stats routes wrapper
-    
+
     Index's parent that gives access to all the stats methods of meilisearch.
     https://docs.meilisearch.com/references/stats.html#get-stat-of-an-index
 
@@ -44,10 +44,10 @@ class Stat:
         ----------
         stats: `dict`
             Dictionnary containing stats about the given index.
-            
+
         """
         return HttpRequests.get(self.config, '{}/{}'.format(self.stat_path, self.uid)).json()
-    
+
     @staticmethod
     def get_all_stats(config):
         """Get all stats of meilisearch
@@ -58,7 +58,6 @@ class Stat:
         ----------
         stats: `dict`
             Dictionnary containing stats about your meilisearch instance
-            
+
         """
         return HttpRequests.get(config, Stat.stat_path).json()
-    

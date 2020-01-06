@@ -1,12 +1,13 @@
-from ._httprequests import HttpRequests
-from .schema import Schema
-from .update import Update
-from .document import Document
-from .synonym import Synonym
-from .search import Search
-from .stat import Stat
-from .setting import Setting
-from .stop_word import StopWord
+from meilisearch._httprequests import HttpRequests
+from meilisearch.schema import Schema
+from meilisearch.update import Update
+from meilisearch.document import Document
+from meilisearch.synonym import Synonym
+from meilisearch.search import Search
+from meilisearch.stat import Stat
+from meilisearch.setting import Setting
+from meilisearch.stop_word import StopWord
+
 
 class Index(Schema, Update, Document, Search, Synonym, Stat, Setting, StopWord):
     """
@@ -21,6 +22,7 @@ class Index(Schema, Update, Document, Search, Synonym, Stat, Setting, StopWord):
         Index url path
 
     """
+
     index_path = 'indexes'
 
     def __init__(self, config, uid=None, name=None, schema=None):
@@ -38,6 +40,7 @@ class Index(Schema, Update, Document, Search, Synonym, Stat, Setting, StopWord):
         index_path: str
             Index url path
         """
+
         Schema.__init__(self, Index.index_path, config, name, uid)
         Update.__init__(self, Index.index_path, config, name, uid)
         Search.__init__(self, Index.index_path, config, name, uid)
@@ -51,7 +54,6 @@ class Index(Schema, Update, Document, Search, Synonym, Stat, Setting, StopWord):
         self.uid = uid
         self.schema = schema
 
-
     def delete(self):
         """Delete an index from meilisearch
 
@@ -61,6 +63,7 @@ class Index(Schema, Update, Document, Search, Synonym, Stat, Setting, StopWord):
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
+
         return HttpRequests.delete(self.config, '{}/{}'.format(self.index_path, self.uid))
 
     def update(self, **body):
@@ -77,6 +80,7 @@ class Index(Schema, Update, Document, Search, Synonym, Stat, Setting, StopWord):
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
+
         payload = {}
         name = body.get("name", None)
         if name is not None:
@@ -91,6 +95,7 @@ class Index(Schema, Update, Document, Search, Synonym, Stat, Setting, StopWord):
         index: `dict`
             Dictionnary containing index information.
         """
+
         return HttpRequests.get(self.config, '{}/{}'.format(self.index_path, self.uid)).json()
 
     @staticmethod
@@ -119,6 +124,7 @@ class Index(Schema, Update, Document, Search, Synonym, Stat, Setting, StopWord):
         HTTPError
             In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
         """
+
         payload = {}
         if name is not None:
             payload["name"] = name
@@ -127,7 +133,7 @@ class Index(Schema, Update, Document, Search, Synonym, Stat, Setting, StopWord):
         if schema is not None:
             payload["schema"] = schema
         response = HttpRequests.post(config, Index.index_path, payload)
-        return  response.json()
+        return response.json()
 
     @staticmethod
     def get_indexes(config):
@@ -142,6 +148,7 @@ class Index(Schema, Update, Document, Search, Synonym, Stat, Setting, StopWord):
         HTTPError
             In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
         """
+
         return HttpRequests.get(config, Index.index_path).json()
 
     @staticmethod

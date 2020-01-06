@@ -1,10 +1,11 @@
-from .index import Index
-from .health import Health
-from .key import Key
-from .config import Config
-from .sys_info import SysInfo
-from .stat import Stat
-from .version import Version
+from meilisearch.index import Index
+from meilisearch.health import Health
+from meilisearch.key import Key
+from meilisearch.config import Config
+from meilisearch.sys_info import SysInfo
+from meilisearch.stat import Stat
+from meilisearch.version import Version
+
 
 class Client(Health, Key, SysInfo, Version):
     """
