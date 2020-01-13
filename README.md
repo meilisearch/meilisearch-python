@@ -17,7 +17,6 @@ pip install meilisearch==0.8.0
 ### 🏃‍♀️ Run MeiliSearch
 
 There are many easy ways to download and run a MeiliSearch instance.</br>
-**Here is the [documentation about downloading MeiliSearch](https://docs.meilisearch.com/getting_started/download.html).**
 
 For example, if you use Docker:
 ```bash
