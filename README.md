@@ -63,9 +63,6 @@ documents = [
 index.add_documents(documents) # asynchronous
 ```
 
-The method `add_documents` is **[asynchronous](https://docs.meilisearch.com/advanced_guides/asynchronous_updates.html)**.<br/>
-It means that your new documents addition will be added to the stack of actions. It may not be instantly processed. Check for [the updates tracking](https://docs.meilisearch.com/advanced_guides/asynchronous_updates.html).
-
 #### Search in index <!-- omit in toc -->
 ``` python
 # MeiliSearch is typo-tolerant:
@@ -146,6 +143,8 @@ Response:
     "updateId": 1
 }
 ```
+
+The method `add_documents` is **[asynchronous](https://docs.meilisearch.com/advanced_guides/asynchronous_updates.html)**.<br/>
 With this `updateId` you can track your [operation status](#update-status).
 
 #### Delete documents <!-- omit in toc -->
