@@ -1,4 +1,5 @@
-from ._httprequests import HttpRequests
+from meilisearch._httprequests import HttpRequests
+
 
 class StopWord:
     """
@@ -13,7 +14,6 @@ class StopWord:
         Version url path
     """
     stop_word_path = 'stop-words'
-
 
     def __init__(self, parent_path, config, uid=None, name=None):
         """
@@ -30,6 +30,7 @@ class StopWord:
         index_path: str
             Index url path
         """
+
         self.config = config
         self.name = name
         self.uid = uid
@@ -47,12 +48,13 @@ class StopWord:
             List containing all the stop words of the given index
 
         """
+
         return HttpRequests.get(
             self.config, '{}/{}/{}'.format(
-            self.index_path,
-            self.uid,
-            self.stop_word_path
-        )).json()
+                self.index_path,
+                self.uid,
+                self.stop_word_path
+            )).json()
 
     def add_stop_words(self, body):
         """Add a list of stop words
@@ -70,11 +72,12 @@ class StopWord:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
 
         """
+
         return HttpRequests.patch(
             self.config, '{}/{}/{}'.format(
-            self.index_path,
-            self.uid,
-            self.stop_word_path
+                self.index_path,
+                self.uid,
+                self.stop_word_path
             ),
             body
         ).json()
@@ -97,9 +100,9 @@ class StopWord:
         """
         return HttpRequests.delete(
             self.config, '{}/{}/{}'.format(
-            self.index_path,
-            self.uid,
-            self.stop_word_path
+                self.index_path,
+                self.uid,
+                self.stop_word_path
             ),
             body
         ).json()

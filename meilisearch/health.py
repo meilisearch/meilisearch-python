@@ -1,9 +1,10 @@
-from ._httprequests import HttpRequests
+from meilisearch._httprequests import HttpRequests
+
 
 class Health:
     """
     Health routes wrapper
-    
+
     Client's parent that gives access to all the health methods of meilisearch.
     https://docs.meilisearch.com/references/health.html
 
@@ -24,7 +25,7 @@ class Health:
         self.config = config
 
     def health(self):
-        """Get health of meilisearch 
+        """Get health of meilisearch
 
         `204` http status response when meilisearch is healthy.
 
@@ -36,7 +37,7 @@ class Health:
         return HttpRequests.get(self.config, self.health_path)
 
     def update_health(self, health):
-        """Update health of meilisearch 
+        """Update health of meilisearch
 
         Update health of meilisearch to true or false.
 

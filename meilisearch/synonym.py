@@ -1,5 +1,6 @@
-# from ._httprequests import HttpRequests
+# from meilisearch._httprequests import HttpRequests
 # import urllib
+
 
 class Synonym:
     synonym_path = 'search'
@@ -12,7 +13,7 @@ class Synonym:
 
     # def list_one_synonym(self, synonym):
     #     return HttpRequests.get(
-    #         self.config, 
+    #         self.config,
     #         '{}/{}/{}/{}'.format(
     #             self.index_path,
     #             self.uid,
@@ -22,7 +23,7 @@ class Synonym:
 
     # def list_all_synonyms(self):
     #     return HttpRequests.get(
-    #         self.config, 
+    #         self.config,
     #         '{}/{}/{}'.format(
     #             self.index_path,
     #             self.uid,

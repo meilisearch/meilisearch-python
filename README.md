@@ -30,15 +30,16 @@ With `pip` in command line:
 pip install meilisearch
 ```
 
-### Run MeiliSearch <!-- omit in toc -->
+### 🏃‍♀️ Run MeiliSearch
 
 There are many easy ways to [download and run a MeiliSearch instance](https://docs.meilisearch.com/getting_started/download.html).
-
 
 For example, if you use Docker:
 ```bash
 $ docker run -it --rm -p 7700:7700 getmeili/meilisearch:latest --api-key=apiKey
 ```
+
+NB: you can also download MeiliSearch from **Homebrew** or **APT**.
 
 ## 🚀 Getting started
 
@@ -71,6 +72,7 @@ index.search({
   "q": 'hary pottre'
 })
 ```
+
 Output:
 ```python
 {
