@@ -127,7 +127,7 @@ class TestIndexes:
         json_file = open('./datasets/small_movies.json')
         data = json.load(json_file)
         index = self.client.get_index(uid="movies_uid")
-        response = index.add_documents(data);
+        response = index.add_documents(data)
         assert isinstance(response, object)
         assert 'updateId' in response
 
@@ -286,25 +286,25 @@ class TestIndexes:
         json_file = open('./datasets/small_movies.json')
         data = json.load(json_file)
         index = self.client.get_index(uid="movies_uid")
-        response = index.update_documents([data[0]]);
+        response = index.update_documents([data[0]])
         assert isinstance(response, object)
         assert 'updateId' in response
 
     def test_delete_document(self):
         index = self.client.get_index(uid="movies_uid")
-        response = index.delete_document(299537);
+        response = index.delete_document(299537)
         assert isinstance(response, object)
         assert 'updateId' in response
 
     def test_delete_documents(self):
         index = self.client.get_index(uid="movies_uid")
-        response = index.delete_documents([522681, 450465, 329996]);
+        response = index.delete_documents([522681, 450465, 329996])
         assert isinstance(response, object)
         assert 'updateId' in response
 
     def test_delete_all_documents(self):
         index = self.client.get_index(uid="movies_uid")
-        response = index.delete_all_documents();
+        response = index.delete_all_documents()
         assert isinstance(response, object)
         assert 'updateId' in response
 
