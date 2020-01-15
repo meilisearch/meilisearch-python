@@ -145,7 +145,7 @@ Response:
 ```
 
 The method `add_documents` is **[asynchronous](https://docs.meilisearch.com/advanced_guides/asynchronous_updates.html)**.<br/>
-With this `updateId` you can track your [operation status](#update-status).
+It sends back an `updateId` which with you can track your [operation status](#update-status).
 
 #### Delete documents <!-- omit in toc -->
 ```python
