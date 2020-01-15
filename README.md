@@ -24,7 +24,7 @@ Here is the [MeiliSearch documentation](https://docs.meilisearch.com/) 📖
 
 ## 🔧 Installation
 
-With `pip` in command line:
+With `pip3` in command line:
 
 ```bash
 pip3 install meilisearch
