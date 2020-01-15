@@ -85,14 +85,6 @@ Output:
 }
 ```
 
-#### Create an index <!-- omit in toc -->
-
-If you don't have any index yet, you can create one with:
-
-```python
-index = client.create_index(name='Books')
-```
-
 ## 🎬 Examples
 
 You can check out [the API documentation](https://docs.meilisearch.com/references/).
