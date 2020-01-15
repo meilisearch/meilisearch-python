@@ -27,7 +27,7 @@ Here is the [MeiliSearch documentation](https://docs.meilisearch.com/) 📖
 With `pip` in command line:
 
 ```bash
-pip install meilisearch
+pip3 install meilisearch
 ```
 
 ### 🏃‍♀️ Run MeiliSearch
@@ -48,7 +48,7 @@ NB: you can also download MeiliSearch from **Homebrew** or **APT**.
 ```python
 import meilisearch
 client = meilisearch.Client("http://127.0.0.1:7700", "apiKey")
-indexes = client.get_index('index_uid')
+index = client.get_index('index_uid')
 
 documents = [
   { "id": 123,  "title": 'Pride and Prejudice' },
