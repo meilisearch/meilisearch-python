@@ -8,7 +8,7 @@ from meilisearch.stat import Stat
 from meilisearch.setting import Setting
 from meilisearch.stop_word import StopWord
 
-
+# pylint: disable=too-many-ancestors
 class Index(Schema, Update, Document, Search, Synonym, Stat, Setting, StopWord):
     """
     Indexes routes wrapper
