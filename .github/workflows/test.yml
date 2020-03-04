@@ -20,3 +20,5 @@ jobs:
         run: docker run -d -p 7700:7700 getmeili/meilisearch:v0.8.4 ./meilisearch --no-analytics=true
       - name: Test with pytest
         run: pipenv run pytest
+      - name: Linter with pylint
+        run: pipenv run pylint meilisearch
