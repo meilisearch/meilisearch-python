@@ -120,9 +120,9 @@ index = client.get_index(uid="books")
 #### Fetch documents <!-- omit in toc -->
 ```python
 # Get one document
-index.document(123)
+index.get_document(123)
 # Get documents by batch
-index.documents({ "offset": 10 , "limit": 20 })
+index.get_documents({ "offset": 10 , "limit": 20 })
 ```
 #### Add documents <!-- omit in toc -->
 ```python
