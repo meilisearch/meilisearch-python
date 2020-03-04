@@ -16,12 +16,12 @@ jobs:
         python-version: '3.7'
     - name: Install dependencies
       run: |
-        python3 -m pip3 install --upgrade pip3
-        pip3 install setuptools wheel twine
+        pipenv install
+        pipenv run pip3 install setuptools wheel twine
     - name: Build and publish
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: |
-        python3 setup.py sdist bdist_wheel
-        twine upload dist/*
+        pipenv run python3 setup.py sdist bdist_wheel
+        pipenv run twine upload dist/*
