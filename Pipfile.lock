@@ -184,10 +184,10 @@
         },
         "pdoc3": {
             "hashes": [
-                "sha256:1a9393d6b1e8c2976c0e1a8d0b897ba5e5ea9515058470422cf57ee54293ab05"
+                "sha256:ebca75b7fcf23f3b4320abe23339834d3f08c28517718e9d29e555fc38eeb33c"
             ],
             "index": "pypi",
-            "version": "==0.7.4"
+            "version": "==0.7.5"
         },
         "pluggy": {
             "hashes": [
