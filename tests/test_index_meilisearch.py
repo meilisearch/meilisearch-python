@@ -1,15 +1,12 @@
 import os
 import sys
-import time
-import json
-import pytest
 import inspect
+import pytest
+import meilisearch
 
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
-
-import meilisearch
 
 class TestIndexe:
     client = meilisearch.Client("http://127.0.0.1:7700", "123")
@@ -19,7 +16,6 @@ class TestIndexe:
     def test_create_index(self):
         """Tests an API call to create an index in MeiliSearch"""
         index = self.client.create_index(name="movies", uid="movies_uid")
-        # TODO : test creating index with schema
         assert isinstance(index, object)
         assert index.name == "movies"
         assert index.uid == "movies_uid"
@@ -51,7 +47,6 @@ class TestIndexe:
         response = index.update(name="movie")
         assert isinstance(response, object)
 
-    """  schema route """
     def test_update_schema(self):
         """Tests an API call to update an schema in MeiliSearch"""
         index = self.client.get_index(uid="movies_uid")

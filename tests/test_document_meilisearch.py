@@ -2,8 +2,8 @@ import os
 import sys
 import time
 import json
-import pytest
 import inspect
+import pytest
 
 current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
