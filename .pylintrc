@@ -51,7 +51,6 @@ enable=use-symbolic-message-instead,useless-supression,fixme
 disable=
     attribute-defined-outside-init,
     duplicate-code,
-    invalid-name,
     missing-docstring,
     protected-access,
     too-few-public-methods,

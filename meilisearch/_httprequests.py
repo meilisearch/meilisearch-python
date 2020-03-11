@@ -5,15 +5,15 @@ class HttpRequests:
     @staticmethod
     def get(config, path):
         try:
-            r = requests.get(
+            request = requests.get(
                 config.url + '/' + path,
                 headers={
                     'x-meili-api-key': config.apikey,
                     'content-type': 'application/json'
                 }
             )
-            r.raise_for_status()
-            return r
+            request.raise_for_status()
+            return request
         except requests.exceptions.HTTPError as err:
             raise Exception(err)
         except requests.exceptions.ConnectionError as err:
@@ -24,7 +24,7 @@ class HttpRequests:
         try:
             if body is None:
                 body = {}
-            r = requests.post(
+            request = requests.post(
                 config.url + '/' + path,
                 headers={
                     'x-meili-api-key': config.apikey,
@@ -32,8 +32,8 @@ class HttpRequests:
                 },
                 json=body
             )
-            r.raise_for_status()
-            return r
+            request.raise_for_status()
+            return request
         except requests.exceptions.HTTPError as err:
             raise Exception(err)
         except requests.exceptions.ConnectionError as err:
@@ -44,7 +44,7 @@ class HttpRequests:
         try:
             if body is None:
                 body = {}
-            r = requests.put(
+            request = requests.put(
                 config.url + '/' + path,
                 headers={
                     'x-meili-api-key': config.apikey,
@@ -52,8 +52,8 @@ class HttpRequests:
                 },
                 json=body
             )
-            r.raise_for_status()
-            return r
+            request.raise_for_status()
+            return request
         except requests.exceptions.HTTPError as err:
             raise Exception(err)
         except requests.exceptions.ConnectionError as err:
@@ -64,7 +64,7 @@ class HttpRequests:
         try:
             if body is None:
                 body = {}
-            r = requests.patch(
+            request = requests.patch(
                 config.url + '/' + path,
                 headers={
                     'x-meili-api-key': config.apikey,
@@ -72,8 +72,8 @@ class HttpRequests:
                 },
                 json=body
             )
-            r.raise_for_status()
-            return r
+            request.raise_for_status()
+            return request
         except requests.exceptions.HTTPError as err:
             raise Exception(err)
         except requests.exceptions.ConnectionError as err:
@@ -84,7 +84,7 @@ class HttpRequests:
         try:
             if body is None:
                 body = {}
-            r = requests.delete(
+            request = requests.delete(
                 config.url + '/' + path,
                 headers={
                     'x-meili-api-key': config.apikey,
@@ -92,8 +92,8 @@ class HttpRequests:
                 },
                 json=body
             )
-            r.raise_for_status()
-            return r
+            request.raise_for_status()
+            return request
         except requests.exceptions.HTTPError as err:
             raise Exception(err)
         except requests.exceptions.ConnectionError as err:

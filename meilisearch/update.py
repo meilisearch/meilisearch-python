@@ -51,12 +51,12 @@ class Update:
             self.uid,
             self.update_path)).json()
 
-    def get_update(self, updateId):
+    def get_update(self, update_id):
         """Get one update from meilisearch
 
         Parameters
         ----------
-        updateId: int
+        update_id: int
             identifier of the update to retieve
         Returns
         ----------
@@ -68,4 +68,4 @@ class Update:
             self.index_path,
             self.uid,
             self.update_path,
-            updateId)).json()
+            update_id)).json()
