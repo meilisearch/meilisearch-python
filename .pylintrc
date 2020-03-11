@@ -52,7 +52,6 @@ disable=
     attribute-defined-outside-init,
     duplicate-code,
     missing-docstring,
-    protected-access,
     too-few-public-methods,
     # handled by black
     format
