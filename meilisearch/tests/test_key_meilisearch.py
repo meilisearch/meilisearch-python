@@ -6,7 +6,7 @@ class TestKey:
     """ key route """
     def test_create_key(self):
         response = self.client.create_key({
-            "expiresAt": 1575985008 ,
+            "expiresAt": 1575985008,
             "description": "search key",
             "acl": ["documentsRead"],
             "indexes": ["movies"]

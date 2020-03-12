@@ -46,7 +46,6 @@ class TestKey:
         assert isinstance(response, object)
         assert 'updateId' in response
 
-
     def test_get_settings(self):
         """Tests an API call to get settings of an index in MeiliSearch"""
         index = self.client.get_index(uid="movies_uid")

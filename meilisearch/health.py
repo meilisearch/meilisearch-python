@@ -45,4 +45,4 @@ class Health:
         health: bool
             Boolean reprensenting the healthyness of meilisearch. True for healthy.
         """
-        return HttpRequests.put(self.config, self.health_path, { 'health': health })
+        return HttpRequests.put(self.config, self.health_path, {'health': health})

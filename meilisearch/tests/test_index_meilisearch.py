@@ -44,11 +44,11 @@ class TestIndexe:
         """Tests an API call to update an schema in MeiliSearch"""
         index = self.client.get_index(uid="movies_uid")
         response = index.update_schema({
-            'id': ['indexed','displayed','identifier'],
-            'title':['displayed','indexed'],
-            'poster':['displayed','indexed'],
-            'overview':['indexed','displayed'],
-            'release_date':['indexed','displayed']
+            'id': ['indexed', 'displayed', 'identifier'],
+            'title': ['displayed', 'indexed'],
+            'poster': ['displayed', 'indexed'],
+            'overview': ['indexed', 'displayed'],
+            'release_date': ['indexed', 'displayed']
         })
         assert isinstance(response, object)
         assert 'updateId' in response
@@ -57,11 +57,11 @@ class TestIndexe:
         """Tests an API call to update an already existing schema in MeiliSearch"""
         index = self.client.get_index(uid="movies_uid")
         response = index.update_schema({
-            'id': ['indexed','displayed','identifier'],
-            'title':['displayed','indexed'],
-            'poster':['displayed','indexed'],
-            'overview':['indexed','displayed'],
-            'release_date':['indexed','displayed', 'ranked']
+            'id': ['indexed', 'displayed', 'identifier'],
+            'title': ['displayed', 'indexed'],
+            'poster': ['displayed', 'indexed'],
+            'overview': ['indexed', 'displayed'],
+            'release_date': ['indexed', 'displayed', 'ranked']
         })
         assert isinstance(response, object)
         assert 'updateId' in response
