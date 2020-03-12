@@ -1,15 +1,12 @@
 from meilisearch._httprequests import HttpRequests
 
-
 class SysInfo:
     """
     Sys-info routes wrapper
 
     Index's parent that gives access to all the sys-info methods of meilisearch.
     https://docs.meilisearch.com/references/sys-info.html#get-pretty-system-information
-
     """
-
     sys_info_path = 'sys-info'
 
     def __init__(self, config):

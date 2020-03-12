@@ -1,6 +1,5 @@
 from meilisearch._httprequests import HttpRequests
 
-
 class Version:
     """
     Version routes wrapper

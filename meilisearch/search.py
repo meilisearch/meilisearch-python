@@ -1,7 +1,6 @@
 import urllib
 from meilisearch._httprequests import HttpRequests
 
-
 class Search:
     """
     Search routes wrapper
@@ -14,7 +13,6 @@ class Search:
     search_path:
         Search url path
     """
-
     search_path = 'search'
 
     def __init__(self, parent_path, config, uid=None, name=None):
@@ -32,7 +30,6 @@ class Search:
         index_path: str
             Index url path
         """
-
         self.config = config
         self.name = name
         self.uid = uid
@@ -51,7 +48,6 @@ class Search:
         results: `dict`
             Dictionnary with hits, offset, limit, processingTime and initial query
         """
-
         return HttpRequests.get(
             self.config,
             '{}/{}/{}?{}'.format(

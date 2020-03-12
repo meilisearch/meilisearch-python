@@ -22,7 +22,6 @@ class Index(Schema, Update, Document, Search, Synonym, Stat, Setting, StopWord):
         Index url path
 
     """
-
     index_path = 'indexes'
 
     def __init__(self, config, uid=None, name=None, schema=None):
@@ -40,7 +39,6 @@ class Index(Schema, Update, Document, Search, Synonym, Stat, Setting, StopWord):
         index_path: str
             Index url path
         """
-
         Schema.__init__(self, Index.index_path, config, name, uid)
         Update.__init__(self, Index.index_path, config, name, uid)
         Search.__init__(self, Index.index_path, config, name, uid)
@@ -63,7 +61,6 @@ class Index(Schema, Update, Document, Search, Synonym, Stat, Setting, StopWord):
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-
         return HttpRequests.delete(self.config, '{}/{}'.format(self.index_path, self.uid))
 
     def update(self, **body):
@@ -80,7 +77,6 @@ class Index(Schema, Update, Document, Search, Synonym, Stat, Setting, StopWord):
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-
         payload = {}
         name = body.get("name", None)
         if name is not None:
@@ -95,7 +91,6 @@ class Index(Schema, Update, Document, Search, Synonym, Stat, Setting, StopWord):
         index: `dict`
             Dictionnary containing index information.
         """
-
         return HttpRequests.get(self.config, '{}/{}'.format(self.index_path, self.uid)).json()
 
     @staticmethod
@@ -124,7 +119,6 @@ class Index(Schema, Update, Document, Search, Synonym, Stat, Setting, StopWord):
         HTTPError
             In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
         """
-
         payload = {}
         if name is not None:
             payload["name"] = name
@@ -148,7 +142,6 @@ class Index(Schema, Update, Document, Search, Synonym, Stat, Setting, StopWord):
         HTTPError
             In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
         """
-
         return HttpRequests.get(config, Index.index_path).json()
 
     @staticmethod

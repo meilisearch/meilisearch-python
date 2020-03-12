@@ -1,6 +1,5 @@
 from meilisearch._httprequests import HttpRequests
 
-
 class Update:
     """
     Update routes wrapper
@@ -13,7 +12,6 @@ class Update:
     update_path:
         Update url path
     """
-
     update_path = 'updates'
 
     def __init__(self, parent_path, config, uid=None, name=None):
@@ -31,7 +29,6 @@ class Update:
         index_path: str
             Index url path
         """
-
         self.config = config
         self.name = name
         self.uid = uid
@@ -45,7 +42,6 @@ class Update:
         update: `list`
             List of all enqueued and processed actions of the index.
         """
-
         return HttpRequests.get(self.config, '{}/{}/{}'.format(
             self.index_path,
             self.uid,
@@ -63,7 +59,6 @@ class Update:
         update: `list`
             List of all enqueued and processed actions of the index.
         """
-
         return HttpRequests.get(self.config, '{}/{}/{}/{}'.format(
             self.index_path,
             self.uid,

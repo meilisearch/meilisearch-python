@@ -33,7 +33,6 @@ class Document:
         self.uid = uid
         self.index_path = parent_path
 
-
     def get_document(self, document_id):
         """Get one document with given document identifier
 

@@ -1,6 +1,5 @@
 from meilisearch._httprequests import HttpRequests
 
-
 class StopWord:
     """
     Stop-words routes wrapper
@@ -30,7 +29,6 @@ class StopWord:
         index_path: str
             Index url path
         """
-
         self.config = config
         self.name = name
         self.uid = uid
@@ -46,9 +44,7 @@ class StopWord:
         ----------
         stop_words: `list`
             List containing all the stop words of the given index
-
         """
-
         return HttpRequests.get(
             self.config, '{}/{}/{}'.format(
                 self.index_path,
@@ -70,9 +66,7 @@ class StopWord:
         update: `dict`
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
-
         """
-
         return HttpRequests.patch(
             self.config, '{}/{}/{}'.format(
                 self.index_path,

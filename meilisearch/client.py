@@ -6,7 +6,6 @@ from meilisearch.sys_info import SysInfo
 from meilisearch.stat import Stat
 from meilisearch.version import Version
 
-
 class Client(Health, Key, SysInfo, Version):
     """
     A client for the meilisearch API

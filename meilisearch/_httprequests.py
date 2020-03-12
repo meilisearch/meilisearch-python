@@ -1,6 +1,5 @@
 import requests
 
-
 class HttpRequests:
     @staticmethod
     def get(config, path):

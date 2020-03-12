@@ -1,6 +1,5 @@
 from meilisearch._httprequests import HttpRequests
 
-
 class Setting:
     """
     Settings routes wrapper
@@ -13,7 +12,6 @@ class Setting:
     setting_path:
         Settings url path
     """
-
     setting_path = 'settings'
 
     def __init__(self, parent_path, config, uid=None, name=None):
@@ -29,7 +27,6 @@ class Setting:
         index_path: str
             Index url path
         """
-
         self.config = config
         self.name = name
         self.uid = uid
@@ -46,7 +43,6 @@ class Setting:
         document: `dict`
             Dictionnary containing the settings of the index
         """
-
         return HttpRequests.get(self.config, '{}/{}/{}'.format(
             self.index_path,
             self.uid,
@@ -70,7 +66,6 @@ class Setting:
         document: `dict`
             Dictionnary containing the settings of the index
         """
-
         return HttpRequests.post(self.config, '{}/{}/{}'.format(
             self.index_path,
             self.uid,
@@ -96,5 +91,4 @@ class Setting:
         document: `dict`
             Dictionnary containing the settings of the index
         """
-
         return self.add_settings(body)

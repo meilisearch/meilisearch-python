@@ -1,7 +1,6 @@
 class Config:
     """
     A client's credentials and configuration parameters
-
     """
 
     def __init__(self, url, apikey=None):
