@@ -4,7 +4,7 @@ class Update:
     """
     Update routes wrapper
 
-    Index's parent that gives access to all the update methods of meilisearch.
+    Index's parent that gives access to all the update methods of MeiliSearch.
     https://docs.meilisearch.com/references/updates.html#get-an-update-status
 
     Attributes
@@ -19,13 +19,11 @@ class Update:
         Parameters
         ----------
         config : Config
-            Config object containing permission and location of meilisearch
+            Config object containing permission and location of MeiliSearch
         name: str
             Name of the index on which to perform the index actions.
         uid: str
             Uid of the index on which to perform the index actions.
-        schema: dict
-            Schema definition of index.
         index_path: str
             Index url path
         """
@@ -34,21 +32,25 @@ class Update:
         self.uid = uid
         self.index_path = parent_path
 
-    def get_updates(self):
-        """Get updates from meilisearch
+    def get_all_update_status(self):
+        """Get all update status from MeiliSearch
 
         Returns
         ----------
         update: `list`
             List of all enqueued and processed actions of the index.
         """
-        return HttpRequests.get(self.config, '{}/{}/{}'.format(
-            self.index_path,
-            self.uid,
-            self.update_path)).json()
+        return HttpRequests.get(
+            self.config,
+            '{}/{}/{}'.format(
+                self.index_path,
+                self.uid,
+                self.update_path
+            )
+        )
 
-    def get_update(self, update_id):
-        """Get one update from meilisearch
+    def get_update_status(self, update_id):
+        """Get one update from MeiliSearch
 
         Parameters
         ----------
@@ -59,8 +61,12 @@ class Update:
         update: `list`
             List of all enqueued and processed actions of the index.
         """
-        return HttpRequests.get(self.config, '{}/{}/{}/{}'.format(
-            self.index_path,
-            self.uid,
-            self.update_path,
-            update_id)).json()
+        return HttpRequests.get(
+            self.config,
+            '{}/{}/{}/{}'.format(
+                self.index_path,
+                self.uid,
+                self.update_path,
+                update_id
+            )
+        )

@@ -1,22 +1,33 @@
+import time
 import meilisearch
+from meilisearch.tests import BASE_URL, MASTER_KEY
 
-class TestUpdates:
-    client = meilisearch.Client("http://127.0.0.1:7700", "123")
+class TestStopWords:
+    client = meilisearch.Client(BASE_URL, MASTER_KEY)
+    index = None
+    new_stop_words = ['of', 'the']
+    default_stop_words = []
 
-    """ stop-words route """
-    def test_add_stop_words(self):
-        index = self.client.get_index(uid="movies_uid")
-        response = index.add_stop_words(['the', 'and'])
+    def setup_class(self):
+        self.index = self.client.create_index(uid='indexUID')
+
+    def teardown_class(self):
+        self.index.delete()
+
+    def test_update_stop_words(self):
+        response = self.index.update_stop_words(self.new_stop_words)
         assert isinstance(response, object)
         assert 'updateId' in response
 
     def test_get_stop_words(self):
-        index = self.client.get_index(uid="movies_uid")
-        response = index.get_stop_words()
-        assert isinstance(response, list)
+        response = self.index.get_stop_words()
+        assert isinstance(response, object)
+        assert response == self.new_stop_words
 
-    def test_delete_stop_words(self):
-        index = self.client.get_index(uid="movies_uid")
-        response = index.delete_stop_words(['the'])
+    def test_reset_stop_words(self):
+        response = self.index.reset_stop_words()
         assert isinstance(response, object)
         assert 'updateId' in response
+        time.sleep(0.1)
+        response = self.index.get_stop_words()
+        assert response == self.default_stop_words

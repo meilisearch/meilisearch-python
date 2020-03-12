@@ -4,7 +4,7 @@ class Stat:
     """
     Stats routes wrapper
 
-    Index's parent that gives access to all the stats methods of meilisearch.
+    Index's parent that gives access to all the stats methods of MeiliSearch.
     https://docs.meilisearch.com/references/stats.html#get-stat-of-an-index
 
     Attributes
@@ -19,13 +19,11 @@ class Stat:
         Parameters
         ----------
         config : Config
-            Config object containing permission and location of meilisearch
+            Config object containing permission and location of MeiliSearch
         name: str
             Name of the index on which to perform the index actions.
         uid: str
             Uid of the index on which to perform the index actions.
-        schema: dict
-            Schema definition of index.
         index_path: str
             Index url path
         """
@@ -43,20 +41,25 @@ class Stat:
         ----------
         stats: `dict`
             Dictionnary containing stats about the given index.
-
         """
-        return HttpRequests.get(self.config, '{}/{}'.format(self.stat_path, self.uid)).json()
+        return HttpRequests.get(
+            self.config,
+            '{}/{}/{}'.format(
+                self.index_path,
+                self.uid,
+                self.stat_path,
+            )
+        )
 
     @staticmethod
     def get_all_stats(config):
-        """Get all stats of meilisearch
+        """Get all stats of MeiliSearch
 
         Get information about databasesize and all indexes
         https://docs.meilisearch.com/references/stats.html
         Returns
         ----------
         stats: `dict`
-            Dictionnary containing stats about your meilisearch instance
-
+            Dictionnary containing stats about your MeiliSearch instance
         """
-        return HttpRequests.get(config, Stat.stat_path).json()
+        return HttpRequests.get(config, Stat.stat_path)

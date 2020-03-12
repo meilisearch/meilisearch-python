@@ -27,7 +27,7 @@ class Version:
         version: dict
             Information about version of meilisearch.
         """
-        return HttpRequests.get(self.config, self.version_path).json()
+        return HttpRequests.get(self.config, self.version_path)
 
     def version(self):
         """Alias for get_version

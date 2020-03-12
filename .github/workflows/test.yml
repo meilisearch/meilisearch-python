@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: pipenv install --dev
       - name: Docker setup
-        run: docker run -d -p 7700:7700 getmeili/meilisearch:v0.8.4 ./meilisearch --no-analytics=true
+        run: docker run -d -p 7700:7700 getmeili/meilisearch:latest ./meilisearch --no-analytics=true --master-key=masterKey
       - name: Test with pytest
         run: pipenv run pytest
       - name: Linter with pylint

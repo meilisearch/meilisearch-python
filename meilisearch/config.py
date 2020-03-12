@@ -8,9 +8,9 @@ class Config:
         Parameters
         ----------
         url : str
-            The url to the meilisearch API (ex: http://localhost:8080)
+            The url to the MeiliSearch API (ex: http://localhost:7700)
         apikey : str
-            The optionnal apikey to access meilisearch
+            The optional API key to access MeiliSearch
         """
 
         self.url = url

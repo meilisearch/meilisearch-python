@@ -1,15 +1,21 @@
+import pytest
 import meilisearch
+from meilisearch.tests import BASE_URL, MASTER_KEY
 
 class TestClient:
-    client = meilisearch.Client("http://127.0.0.1:7700", "123")
 
     """ Client """
-    def test_get_client(self):
+    @staticmethod
+    def test_get_client():
         """Tests a call to get a client instance of MeiliSearch"""
-        self.client = meilisearch.Client("http://127.0.0.1:7 00", "123")
-        assert self.client.config
+        client = meilisearch.Client(BASE_URL, MASTER_KEY)
+        assert client.config
+        response = client.get_indexes()
+        assert isinstance(response, list)
 
-    def test_get_client_without_apikey(self):
+    @staticmethod
+    def test_get_client_without_master_key():
         """Tests a call to get a client instance of MeiliSearch"""
-        self.client = meilisearch.Client("http://127.0.0.1:7700")
-        assert self.client.config
+        client = meilisearch.Client(BASE_URL)
+        with pytest.raises(Exception):
+            client.get_indexes()
