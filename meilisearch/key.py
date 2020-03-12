@@ -1,6 +1,5 @@
 from meilisearch._httprequests import HttpRequests
 
-
 class Key:
     """
     Key routes wrapper
@@ -13,7 +12,6 @@ class Key:
     index_path:
         Index url path
     """
-
     key_path = 'keys'
 
     def __init__(self, config):
@@ -36,7 +34,6 @@ class Key:
             List of keys and their information.
             https://docs.meilisearch.com/references/keys.html#get-keys
         """
-
         return HttpRequests.get(self.config, self.key_path).json()
 
     def get_key(self, key):
@@ -52,7 +49,6 @@ class Key:
             Information about a given key
             https://docs.meilisearch.com/references/keys.html#get-one-key
         """
-
         return HttpRequests.get(self.config, '{}/{}'.format(self.key_path, key)).json()
 
     def create_key(self, body):
@@ -71,7 +67,6 @@ class Key:
         key: dict
             Information about the created key
         """
-
         return HttpRequests.post(self.config, self.key_path, body).json()
 
     def update_key(self, key, body):
@@ -92,7 +87,6 @@ class Key:
         key: dict
             Information about the updated key
         """
-
         return HttpRequests.put(self.config, '{}/{}'.format(self.key_path, key), body).json()
 
     def delete_key(self, key):
@@ -106,5 +100,4 @@ class Key:
         key: str
             Key value
         """
-
         return HttpRequests.delete(self.config, '{}/{}'.format(self.key_path, key))

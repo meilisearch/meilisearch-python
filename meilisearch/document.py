@@ -33,7 +33,6 @@ class Document:
         self.uid = uid
         self.index_path = parent_path
 
-
     def get_document(self, document_id):
         """Get one document with given document identifier
 
@@ -87,13 +86,15 @@ class Document:
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.post(self.config, '{}/{}/{}'.format(
-            self.index_path,
-            self.uid,
-            self.document_path,
+        return HttpRequests.post(
+            self.config,
+            '{}/{}/{}'.format(
+                self.index_path,
+                self.uid,
+                self.document_path,
             ),
             documents
-            ).json()
+        ).json()
 
     def update_documents(self, documents):
         """Update documents in the index
@@ -108,13 +109,15 @@ class Document:
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.put(self.config, '{}/{}/{}'.format(
-            self.index_path,
-            self.uid,
-            self.document_path,
+        return HttpRequests.put(
+            self.config,
+            '{}/{}/{}'.format(
+                self.index_path,
+                self.uid,
+                self.document_path,
             ),
             documents
-            ).json()
+        ).json()
 
     def delete_document(self, document_id):
         """Add documents to the index
@@ -129,12 +132,15 @@ class Document:
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.delete(self.config, '{}/{}/{}/{}'.format(
-            self.index_path,
-            self.uid,
-            self.document_path,
-            document_id
-        )).json()
+        return HttpRequests.delete(
+            self.config,
+            '{}/{}/{}/{}'.format(
+                self.index_path,
+                self.uid,
+                self.document_path,
+                document_id
+            )
+        ).json()
 
     def delete_documents(self, ids):
         """Delete multiple documents of the index
@@ -149,12 +155,14 @@ class Document:
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.post(self.config, '{}/{}/{}/delete'.format(
-            self.index_path,
-            self.uid,
-            self.document_path
-        ),
-        ids
+        return HttpRequests.post(
+            self.config,
+            '{}/{}/{}/delete'.format(
+                self.index_path,
+                self.uid,
+                self.document_path
+            ),
+            ids
         ).json()
 
     def delete_all_documents(self):
@@ -166,9 +174,11 @@ class Document:
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.delete(self.config, '{}/{}/{}'.format(
-            self.index_path,
-            self.uid,
-            self.document_path
-        )
+        return HttpRequests.delete(
+            self.config,
+            '{}/{}/{}'.format(
+                self.index_path,
+                self.uid,
+                self.document_path
+            )
         ).json()

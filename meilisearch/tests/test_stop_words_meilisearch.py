@@ -6,7 +6,7 @@ class TestUpdates:
     """ stop-words route """
     def test_add_stop_words(self):
         index = self.client.get_index(uid="movies_uid")
-        response = index.add_stop_words(['the','and'])
+        response = index.add_stop_words(['the', 'and'])
         assert isinstance(response, object)
         assert 'updateId' in response
 

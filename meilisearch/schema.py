@@ -1,6 +1,5 @@
 from meilisearch._httprequests import HttpRequests
 
-
 class Schema:
     """
     Schema routes wrapper
@@ -13,7 +12,6 @@ class Schema:
     schema_path:
         Schema url path
     """
-
     schema_path = 'schema'
 
     def __init__(self, parent_path, config, uid=None, name=None):
@@ -31,7 +29,6 @@ class Schema:
         index_path: str
             Index url path
         """
-
         self.config = config
         self.name = name
         self.uid = uid
@@ -63,7 +60,6 @@ class Schema:
         update: `dict`
             Schema definition
         """
-
         return HttpRequests.put(
             self.config,
             '{}/{}/{}'.format(

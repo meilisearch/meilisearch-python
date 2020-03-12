@@ -1,6 +1,5 @@
 from meilisearch._httprequests import HttpRequests
 
-
 class Stat:
     """
     Stats routes wrapper
