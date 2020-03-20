@@ -8,43 +8,42 @@ from meilisearch.version import Version
 
 class Client(Health, Key, SysInfo, Version):
     """
-    A client for the meilisearch API
+    A client for the MeiliSearch API
 
-    A client instance is needed for every meilisearch API method to know the location of
-    meilisearch and his permissions.
+    A client instance is needed for every MeiliSearch API method to know the location of
+    MeiliSearch and its permissions.
     """
 
-    def __init__(self, url, apikey=None):
+    def __init__(self, url, apiKey=None):
         """
         Parameters
         ----------
         url : str
-            The url to the meilisearch API (ex: http://localhost:8080)
-        apikey : str
-            The optionnal apikey to access the meilisearch api
+            The url to the MeiliSearch API (ex: http://localhost:7700)
+        apiKey : str
+            The optional API key for MeiliSearch
         """
-        config = Config(url, apikey)
+        config = Config(url, apiKey)
         Health.__init__(self, config)
         Key.__init__(self, config)
         SysInfo.__init__(self, config)
         Version.__init__(self, config)
         self.config = config
 
-    def create_index(self, name, uid=None, schema=None):
+    def create_index(self, uid, primary_key=None, name=None):
         """Create an index.
 
         If the argument `uid` isn't passed in, it will be generated
-        by meilisearch.
+        by MeiliSearch.
 
         Parameters
         ----------
-        name: str
+        uid: str
+            UID of the index
+        primary_key: str, optional
+            Attribute used as unique document identifier
+        name: str, optional
             Name of the index
-        uid: str, optional
-            uid of the index
-        schema: dict, optional
-            dict containing the schema of the index.
-            https://docs.meilisearch.com/main_concepts/indexes.html#schema-definition
         Returns
         -------
         index : Index
@@ -54,8 +53,8 @@ class Client(Health, Key, SysInfo, Version):
         HTTPError
             In case of any other error found here https://docs.meilisearch.com/references/#errors-status-code
         """
-        index = Index.create(self.config, name=name, uid=uid, schema=schema)
-        return Index(self.config, name=index["name"], uid=index["uid"], schema=schema)
+        index = Index.create(self.config, uid=uid, primary_key=primary_key, name=name)
+        return Index(self.config, uid=index['uid'])
 
     def get_indexes(self):
         """Get all indexes.
@@ -67,12 +66,12 @@ class Client(Health, Key, SysInfo, Version):
         Returns
         -------
         list
-            List of indexes in dictionnary format. (e.g [{ 'name': 'movies' 'uid': '12345678' }])
+            List of indexes in dictionnary format. (e.g [{ 'uid': 'movies' 'primaryKey': 'objectID' }])
         """
         return Index.get_indexes(self.config)
 
 
-    def get_index(self, uid=None, name=None):
+    def get_index(self, uid):
         """Get an index.
 
         Raises
@@ -84,7 +83,7 @@ class Client(Health, Key, SysInfo, Version):
         index : Index
             an instance of Index containing the information of the index found
         """
-        return Index.get_index(self.config, uid=uid, name=name)
+        return Index.get_index(self.config, uid=uid)
 
     def get_all_stats(self):
         """Get statistics about indexes, database size and update date.

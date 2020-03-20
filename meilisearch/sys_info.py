@@ -28,4 +28,4 @@ class SysInfo:
         sys_info: dict
             Information about memory and processor usage.
         """
-        return HttpRequests.get(self.config, self.sys_info_path).json()
+        return HttpRequests.get(self.config, self.sys_info_path)

@@ -5,7 +5,7 @@ class Document:
     """
     Documents routes wrapper
 
-    Index's parent that gives access to all the documents methods of meilisearch.
+    Index's parent that gives access to all the documents methods of MeiliSearch.
     https://docs.meilisearch.com/references/documents.html
 
     Attributes
@@ -20,7 +20,7 @@ class Document:
         Parameters
         ----------
         config : Config
-            Config object containing permission and location of meilisearch
+            Config object containing permission and location of MeiliSearch
         name: str
             Name of the index on which to perform the document actions.
         uid: str
@@ -45,19 +45,22 @@ class Document:
         document: `dict`
             Dictionnary containing the documents information
         """
-        return HttpRequests.get(self.config, '{}/{}/{}/{}'.format(
-            self.index_path,
-            self.uid,
-            self.document_path,
-            document_id
-            )).json()
+        return HttpRequests.get(
+            self.config,
+            '{}/{}/{}/{}'.format(
+                self.index_path,
+                self.uid,
+                self.document_path,
+                document_id
+            )
+        )
 
-    def get_documents(self, parameters):
+    def get_documents(self, parameters=None):
         """Get a set of documents from the index
 
         Parameters
         ----------
-        parameters: dict
+        parameters (optional): dict
             parameters accepted by the get documents route: https://docs.meilisearch.com/references/documents.html#get-all-documents
         Returns
         ----------
@@ -68,56 +71,71 @@ class Document:
             self.config,
             '{}/{}/{}?{}'.format(
                 self.index_path,
-                self.uid, self.document_path,
+                self.uid,
+                self.document_path,
                 urllib.parse.urlencode(parameters))
-            ).json()
+            )
 
-
-    def add_documents(self, documents):
+    def add_documents(self, documents, primary_key=None):
         """Add documents to the index
 
         Parameters
         ----------
         documents: list
             List of dics containing each a document, or json string
+        primary_key: string
+            The primary-key used in MeiliSearch index. Ignored if already set up.
         Returns
         ----------
         update: `dict`
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.post(
-            self.config,
-            '{}/{}/{}'.format(
+        if primary_key is None:
+            url = '{}/{}/{}'.format(
+                self.index_path,
+                self.uid,
+                self.document_path
+            )
+        else:
+            url = '{}/{}/{}?{}'.format(
                 self.index_path,
                 self.uid,
                 self.document_path,
-            ),
-            documents
-        ).json()
+                urllib.parse.urlencode({'primaryKey': primary_key})
+            )
+        return HttpRequests.post(self.config, url, documents)
 
-    def update_documents(self, documents):
+    def update_documents(self, documents, primary_key=None):
         """Update documents in the index
 
         Parameters
         ----------
         documents: list
             List of dics containing each a document, or json string
+        primary_key: string
+            The primary-key used in MeiliSearch index. Ignored if already set up.
         Returns
         ----------
         update: `dict`
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.put(
-            self.config,
-            '{}/{}/{}'.format(
+        if primary_key is None:
+            url = '{}/{}/{}'.format(
+                self.index_path,
+                self.uid,
+                self.document_path
+            )
+        else:
+            url = '{}/{}/{}?{}'.format(
                 self.index_path,
                 self.uid,
                 self.document_path,
-            ),
-            documents
-        ).json()
+                urllib.parse.urlencode({'primaryKey': primary_key})
+            )
+        return HttpRequests.put(self.config, url, documents)
+
 
     def delete_document(self, document_id):
         """Add documents to the index
@@ -140,7 +158,7 @@ class Document:
                 self.document_path,
                 document_id
             )
-        ).json()
+        )
 
     def delete_documents(self, ids):
         """Delete multiple documents of the index
@@ -157,13 +175,13 @@ class Document:
         """
         return HttpRequests.post(
             self.config,
-            '{}/{}/{}/delete'.format(
+            '{}/{}/{}/delete-batch'.format(
                 self.index_path,
                 self.uid,
                 self.document_path
             ),
             ids
-        ).json()
+        )
 
     def delete_all_documents(self):
         """Delete all documents of the index
@@ -181,4 +199,4 @@ class Document:
                 self.uid,
                 self.document_path
             )
-        ).json()
+        )

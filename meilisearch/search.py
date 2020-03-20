@@ -25,8 +25,6 @@ class Search:
             Name of the index on which to perform the index actions.
         uid: str
             Uid of the index on which to perform the index actions.
-        schema: dict
-            Schema definition of index.
         index_path: str
             Index url path
         """
@@ -35,24 +33,31 @@ class Search:
         self.uid = uid
         self.index_path = parent_path
 
-    def search(self, parameters):
+    # pylint: disable=dangerous-default-value
+    # Not dangerous because opt_params is not modified in the method
+    # See: https://stackoverflow.com/questions/26320899/why-is-the-empty-dictionary-a-dangerous-default-value-in-python
+    def search(self, query, opt_params={}):
         """Search in meilisearch
 
         Parameters
         ----------
-        parameters: dict
-            Dictionnary containing all available query parameter from the search route
+        query: str
+            String containing the searched word(s)
+        opt_params: dict
+            Dictionnary containing optional query parameters
             https://docs.meilisearch.com/references/search.html#search-in-an-index
         Returns
         ----------
         results: `dict`
             Dictionnary with hits, offset, limit, processingTime and initial query
         """
+        search_param = {'q': query}
+        params = {**search_param, **opt_params}
         return HttpRequests.get(
             self.config,
             '{}/{}/{}?{}'.format(
                 self.index_path,
                 self.uid,
                 self.search_path,
-                urllib.parse.urlencode(parameters))
-        ).json()
+                urllib.parse.urlencode(params))
+        )
