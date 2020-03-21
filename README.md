@@ -51,7 +51,7 @@ NB: you can also download MeiliSearch from **Homebrew** or **APT**.
 ```python
 import meilisearch
 
-client = meilisearch.Client("http://127.0.0.1:7700", "apiKey")
+client = meilisearch.Client('http://127.0.0.1:7700', 'masterKey')
 index = client.create_index(uid='books') # If your index does not exist
 index = client.get_index('books')        # If you already created your index
 
