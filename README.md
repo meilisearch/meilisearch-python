@@ -30,7 +30,7 @@ Here is the [MeiliSearch documentation](https://docs.meilisearch.com/) 📖
 With `pip3` in command line:
 
 ```bash
-pip3 install meilisearch
+$ pip3 install meilisearch
 ```
 
 ### Run MeiliSearch <!-- omit in toc -->
@@ -52,16 +52,16 @@ NB: you can also download MeiliSearch from **Homebrew** or **APT**.
 import meilisearch
 
 client = meilisearch.Client("http://127.0.0.1:7700", "apiKey")
-index = client.create_index(uid='books_uid') # If your index does not exist
-index = client.get_index('books_uid')        # If you already created your index
+index = client.create_index(uid='books') # If your index does not exist
+index = client.get_index('books')        # If you already created your index
 
 documents = [
-  { "id": 123,  "title": 'Pride and Prejudice' },
-  { "id": 456,  "title": 'Le Petit Prince' },
-  { "id": 1,    "title": 'Alice In Wonderland' },
-  { "id": 1344, "title": 'The Hobbit' },
-  { "id": 4,    "title": 'Harry Potter and the Half-Blood Prince' },
-  { "id": 42,   "title": 'The Hitchhiker\'s Guide to the Galaxy' }
+  { 'book_id': 123,  'title': 'Pride and Prejudice' },
+  { 'book_id': 456,  'title': 'Le Petit Prince' },
+  { 'book_id': 1,    'title': 'Alice In Wonderland' },
+  { 'book_id': 1344, 'title': 'The Hobbit' },
+  { 'book_id': 4,    'title': 'Harry Potter and the Half-Blood Prince' },
+  { 'book_id': 42,   'title': 'The Hitchhiker\'s Guide to the Galaxy' }
 ]
 
 index.add_documents(documents) # => { "updateId": 0 }
@@ -72,22 +72,20 @@ With the `updateId`, you can check the status (`processed` or `failed`) of your 
 #### Search in index <!-- omit in toc -->
 ``` python
 # MeiliSearch is typo-tolerant:
-index.search({
-  "q": 'hary pottre'
-})
+index.search('harry pottre')
 ```
 
 Output:
 ```python
 {
   "hits" => [{
-    "id" => 4,
+    "book_id" => 4,
     "title" => "Harry Potter and the Half-Blood Prince"
   }],
   "offset" => 0,
   "limit" => 20,
   "processingTimeMs" => 1,
-  "query" => "hary pottre"
+  "query" => "harry pottre"
 }
 ```
 
@@ -102,7 +100,7 @@ You can check out [the API documentation](https://docs.meilisearch.com/reference
 # Create an index
 client.create_index(uid='books')
 # Create an index and give the primary-key
-client.create_index(uid='books', primary_key='objectID')
+client.create_index(uid='books', primary_key='book_id')
 ```
 
 #### List all indexes <!-- omit in toc -->
@@ -130,7 +128,7 @@ index.get_documents({ 'offset': 10 , 'limit': 20 })
 #### Add documents <!-- omit in toc -->
 
 ```python
-index.add_documents([{ 'id': 2, 'title': 'Madame Bovary' }])
+index.add_documents([{ 'book_id': 2, 'title': 'Madame Bovary' }])
 ```
 
 Response:
@@ -167,20 +165,18 @@ index.get_all_update_status()
 #### Basic search <!-- omit in toc -->
 
 ```python
-index.search({
-  "q": "prince"
-})
+index.search('prince')
 ```
 
 ```json
 {
     "hits": [
         {
-            "id": 456,
+            "book_id": 456,
             "title": "Le Petit Prince"
         },
         {
-            "id": 4,
+            "book_id": 4,
             "title": "Harry Potter and the Half-Blood Prince"
         }
     ],
@@ -196,17 +192,14 @@ index.search({
 All the supported options are described in [this documentation section](https://docs.meilisearch.com/references/search.html#search-in-an-index).
 
 ```python
-response = index.search({
-  "q": "prince",
-  "limit": 1
-})
+response = index.search('prince', { 'limit': 1 })
 ```
 
 ```json
 {
     "hits": [
         {
-            "id": 456,
+            "book_id": 456,
             "title": "Le Petit Prince"
         }
     ],
