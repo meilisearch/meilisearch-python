@@ -147,8 +147,8 @@ class Index(Update, Document, Search, Stat, Setting):
             Instance of Index with the given index.
         Raises
         ------
-        HTTPError
-            In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
+        Exception
+            If index UID is missing.
         """
         if uid is not None:
             return Index(config, uid=uid)
