@@ -33,6 +33,11 @@ class TestDocument:
         assert 'title' in response[0]
         assert 'overview' not in response[0]
 
+    def test_get_documents_default(self):
+        response = self.index.get_documents()
+        assert isinstance(response, list)
+        assert len(response) == 20 # Default limit
+
     def test_get_document(self):
         response = self.index.get_document(500682)
         assert isinstance(response, object)

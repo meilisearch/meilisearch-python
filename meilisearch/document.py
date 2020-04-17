@@ -67,7 +67,7 @@ class Document:
         document: `dict`
             Dictionnary containing the documents information
         """
-        if parameters = None:
+        if parameters is None:
             parameters = {}
 
         return HttpRequests.get(
