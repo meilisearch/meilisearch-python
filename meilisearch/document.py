@@ -67,6 +67,9 @@ class Document:
         document: `dict`
             Dictionnary containing the documents information
         """
+        if parameters is None:
+            parameters = {}
+
         return HttpRequests.get(
             self.config,
             '{}/{}/{}?{}'.format(
