@@ -257,4 +257,4 @@ A GitHub Action will be triggered and push the new gem on [RubyGems](https://rub
 
 ## 🤖 Compatibility with MeiliSearch
 
-This package works for MeiliSearch `v0.9.x`.
+This package works for MeiliSearch `>=v0.10`.
