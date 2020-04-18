@@ -253,7 +253,7 @@ $ git tag vX.X.X
 $ git push --tag origin master
 ```
 
-A GitHub Action will be triggered and push the new gem on [RubyGems](https://rubygems.org/gems/meilisearch).
+A GitHub Action will be triggered and push the new gem on [PyPI](https://pypi.org/project/meilisearch).
 
 ## 🤖 Compatibility with MeiliSearch
 
