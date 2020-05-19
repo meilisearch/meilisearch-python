@@ -39,7 +39,7 @@ class Index():
             self.config = config
             self.name = name
             self.uid = uid
-            self.config.index_path = parent_path
+            self.config.paths.index = parent_path
 
     class Stat:
         """
@@ -67,7 +67,7 @@ class Index():
             self.config = config
             self.name = name
             self.uid = uid
-            self.config.index_path = parent_path
+            self.config.paths.index = parent_path
 
     class Search:
         """
@@ -94,7 +94,7 @@ class Index():
             self.config = config
             self.name = name
             self.uid = uid
-            self.config.index_path = parent_path
+            self.config.paths.index = parent_path
 
     class Document:
         """
@@ -122,7 +122,7 @@ class Index():
             self.config = config
             self.name = name
             self.uid = uid
-            self.config.index_path = parent_path
+            self.config.paths.index = parent_path
 
     class Setting:
         """
@@ -149,7 +149,7 @@ class Index():
             self.config = config
             self.name = name
             self.uid = uid
-            self.config.index_path = parent_path
+            self.config.paths.index = parent_path
 
     def __init__(self, config, uid):
         """
@@ -174,7 +174,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.delete(self.config, '{}/{}'.format(self.config.index_path, self.uid))
+        return HttpRequests.delete(self.config, '{}/{}'.format(self.config.paths.index, self.uid))
 
     def update(self, **body):
         """Update an index from meilisearch
@@ -194,7 +194,7 @@ class Index():
         primary_key = body.get('primaryKey', None)
         if primary_key is not None:
             payload['primaryKey'] = primary_key
-        return HttpRequests.put(self.config, '{}/{}'.format(self.config.index_path, self.uid), payload)
+        return HttpRequests.put(self.config, '{}/{}'.format(self.config.paths.index, self.uid), payload)
 
     def info(self):
         """Get info of index
@@ -204,7 +204,7 @@ class Index():
         index: `dict`
             Dictionnary containing index information.
         """
-        return HttpRequests.get(self.config, '{}/{}'.format(self.config.index_path, self.uid))
+        return HttpRequests.get(self.config, '{}/{}'.format(self.config.paths.index, self.uid))
 
     def get_primary_key(self):
         """Get the primary key
@@ -244,7 +244,7 @@ class Index():
         primary_key = body.get('primary_key', None)
         if primary_key is not None:
             payload['primaryKey'] = primary_key
-        return HttpRequests.post(config, config.index_path, payload)
+        return HttpRequests.post(config, config.paths.index, payload)
 
     @staticmethod
     def get_indexes(config):
@@ -259,7 +259,7 @@ class Index():
         HTTPError
             In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
         """
-        return HttpRequests.get(config, config.index_path)
+        return HttpRequests.get(config, config.paths.index)
 
     @staticmethod
     def get_index(config, uid):
@@ -291,9 +291,9 @@ class Index():
         return HttpRequests.get(
             self.config,
             '{}/{}/{}'.format(
-                self.config.index_path,
+                self.config.paths.index,
                 self.uid,
-                self.config.update_path
+                self.config.paths.update
             )
         )
 
@@ -312,9 +312,9 @@ class Index():
         return HttpRequests.get(
             self.config,
             '{}/{}/{}/{}'.format(
-                self.config.index_path,
+                self.config.paths.index,
                 self.uid,
-                self.config.update_path,
+                self.config.paths.update,
                 update_id
             )
         )
@@ -332,9 +332,9 @@ class Index():
         return HttpRequests.get(
             self.config,
             '{}/{}/{}'.format(
-                self.config.index_path,
+                self.config.paths.index,
                 self.uid,
-                self.config.stat_path,
+                self.config.paths.stat,
             )
         )
 
@@ -361,9 +361,9 @@ class Index():
         return HttpRequests.get(
             self.config,
             '{}/{}/{}?{}'.format(
-                self.config.index_path,
+                self.config.paths.index,
                 self.uid,
-                self.config.search_path,
+                self.config.paths.search,
                 urllib.parse.urlencode(params))
         )
 
@@ -382,9 +382,9 @@ class Index():
         return HttpRequests.get(
             self.config,
             '{}/{}/{}/{}'.format(
-                self.config.index_path,
+                self.config.paths.index,
                 self.uid,
-                self.config.document_path,
+                self.config.paths.document,
                 document_id
             )
         )
@@ -407,9 +407,9 @@ class Index():
         return HttpRequests.get(
             self.config,
             '{}/{}/{}?{}'.format(
-                self.config.index_path,
+                self.config.paths.index,
                 self.uid,
-                self.config.document_path,
+                self.config.paths.document,
                 urllib.parse.urlencode(parameters))
             )
 
@@ -430,15 +430,15 @@ class Index():
         """
         if primary_key is None:
             url = '{}/{}/{}'.format(
-                self.config.index_path,
+                self.config.paths.index,
                 self.uid,
-                self.config.document_path
+                self.config.paths.document
             )
         else:
             url = '{}/{}/{}?{}'.format(
-                self.config.index_path,
+                self.config.paths.index,
                 self.uid,
-                self.config.document_path,
+                self.config.paths.document,
                 urllib.parse.urlencode({'primaryKey': primary_key})
             )
         return HttpRequests.post(self.config, url, documents)
@@ -460,15 +460,15 @@ class Index():
         """
         if primary_key is None:
             url = '{}/{}/{}'.format(
-                self.config.index_path,
+                self.config.paths.index,
                 self.uid,
-                self.config.document_path
+                self.config.paths.document
             )
         else:
             url = '{}/{}/{}?{}'.format(
-                self.config.index_path,
+                self.config.paths.index,
                 self.uid,
-                self.config.document_path,
+                self.config.paths.document,
                 urllib.parse.urlencode({'primaryKey': primary_key})
             )
         return HttpRequests.put(self.config, url, documents)
@@ -490,9 +490,9 @@ class Index():
         return HttpRequests.delete(
             self.config,
             '{}/{}/{}/{}'.format(
-                self.config.index_path,
+                self.config.paths.index,
                 self.uid,
-                self.config.document_path,
+                self.config.paths.document,
                 document_id
             )
         )
@@ -513,9 +513,9 @@ class Index():
         return HttpRequests.post(
             self.config,
             '{}/{}/{}/delete-batch'.format(
-                self.config.index_path,
+                self.config.paths.index,
                 self.uid,
-                self.config.document_path
+                self.config.paths.document
             ),
             ids
         )
@@ -532,9 +532,9 @@ class Index():
         return HttpRequests.delete(
             self.config,
             '{}/{}/{}'.format(
-                self.config.index_path,
+                self.config.paths.index,
                 self.uid,
-                self.config.document_path
+                self.config.paths.document
             )
         )
 
@@ -554,9 +554,9 @@ class Index():
         return HttpRequests.get(
             self.config,
             '{}/{}/{}'.format(
-                self.config.index_path,
+                self.config.paths.index,
                 self.uid,
-                self.config.setting_path
+                self.config.paths.setting
             )
         )
 
@@ -580,9 +580,9 @@ class Index():
         return HttpRequests.post(
             self.config,
             '{}/{}/{}'.format(
-                self.config.index_path,
+                self.config.paths.index,
                 self.uid,
-                self.config.setting_path
+                self.config.paths.setting
             ),
             body
         )
@@ -601,9 +601,9 @@ class Index():
         return HttpRequests.delete(
             self.config,
             '{}/{}/{}'.format(
-                self.config.index_path,
+                self.config.paths.index,
                 self.uid,
-                self.config.setting_path
+                self.config.paths.setting
             ),
         )
 
@@ -620,7 +620,7 @@ class Index():
         """
         return HttpRequests.get(
             self.config,
-            self.__settings_url_for(self.config.ranking_rules_path)
+            self.__settings_url_for(self.config.paths.ranking_rules)
         )
 
     def update_ranking_rules(self, body):
@@ -640,7 +640,7 @@ class Index():
         """
         return HttpRequests.post(
             self.config,
-            self.__settings_url_for(self.config.ranking_rules_path),
+            self.__settings_url_for(self.config.paths.ranking_rules),
             body
         )
 
@@ -655,7 +655,7 @@ class Index():
         """
         return HttpRequests.delete(
             self.config,
-            self.__settings_url_for(self.config.ranking_rules_path),
+            self.__settings_url_for(self.config.paths.ranking_rules),
         )
 
 
@@ -672,7 +672,7 @@ class Index():
         """
         return HttpRequests.get(
             self.config,
-            self.__settings_url_for(self.config.distinct_attribute_path)
+            self.__settings_url_for(self.config.paths.distinct_attribute)
         )
 
     def update_distinct_attribute(self, body):
@@ -692,7 +692,7 @@ class Index():
         """
         return HttpRequests.post(
             self.config,
-            self.__settings_url_for(self.config.distinct_attribute_path),
+            self.__settings_url_for(self.config.paths.distinct_attribute),
             body
         )
 
@@ -707,7 +707,7 @@ class Index():
         """
         return HttpRequests.delete(
             self.config,
-            self.__settings_url_for(self.config.distinct_attribute_path),
+            self.__settings_url_for(self.config.paths.distinct_attribute),
         )
 
     # SEARCHABLE ATTRIBUTES SUB-ROUTES
@@ -723,7 +723,7 @@ class Index():
         """
         return HttpRequests.get(
             self.config,
-            self.__settings_url_for(self.config.searchable_attributes_path)
+            self.__settings_url_for(self.config.paths.searchable_attributes)
         )
 
     def update_searchable_attributes(self, body):
@@ -743,7 +743,7 @@ class Index():
         """
         return HttpRequests.post(
             self.config,
-            self.__settings_url_for(self.config.searchable_attributes_path),
+            self.__settings_url_for(self.config.paths.searchable_attributes),
             body
         )
 
@@ -758,7 +758,7 @@ class Index():
         """
         return HttpRequests.delete(
             self.config,
-            self.__settings_url_for(self.config.searchable_attributes_path),
+            self.__settings_url_for(self.config.paths.searchable_attributes),
         )
 
     # DISPLAYED ATTRIBUTES SUB-ROUTES
@@ -774,7 +774,7 @@ class Index():
         """
         return HttpRequests.get(
             self.config,
-            self.__settings_url_for(self.config.displayed_attributes_path)
+            self.__settings_url_for(self.config.paths.displayed_attributes)
         )
 
     def update_displayed_attributes(self, body):
@@ -794,7 +794,7 @@ class Index():
         """
         return HttpRequests.post(
             self.config,
-            self.__settings_url_for(self.config.displayed_attributes_path),
+            self.__settings_url_for(self.config.paths.displayed_attributes),
             body
         )
 
@@ -809,7 +809,7 @@ class Index():
         """
         return HttpRequests.delete(
             self.config,
-            self.__settings_url_for(self.config.displayed_attributes_path),
+            self.__settings_url_for(self.config.paths.displayed_attributes),
         )
 
     # STOP WORDS SUB-ROUTES
@@ -825,7 +825,7 @@ class Index():
         """
         return HttpRequests.get(
             self.config,
-            self.__settings_url_for(self.config.stop_words_path)
+            self.__settings_url_for(self.config.paths.stop_words)
         )
 
     def update_stop_words(self, body):
@@ -845,7 +845,7 @@ class Index():
         """
         return HttpRequests.post(
             self.config,
-            self.__settings_url_for(self.config.stop_words_path),
+            self.__settings_url_for(self.config.paths.stop_words),
             body
         )
 
@@ -860,7 +860,7 @@ class Index():
         """
         return HttpRequests.delete(
             self.config,
-            self.__settings_url_for(self.config.stop_words_path),
+            self.__settings_url_for(self.config.paths.stop_words),
         )
 
     # SYNONYMS SUB-ROUTES
@@ -876,7 +876,7 @@ class Index():
         """
         return HttpRequests.get(
             self.config,
-            self.__settings_url_for(self.config.synonyms_path)
+            self.__settings_url_for(self.config.paths.synonyms)
         )
 
     def update_synonyms(self, body):
@@ -896,7 +896,7 @@ class Index():
         """
         return HttpRequests.post(
             self.config,
-            self.__settings_url_for(self.config.synonyms_path),
+            self.__settings_url_for(self.config.paths.synonyms),
             body
         )
 
@@ -911,7 +911,7 @@ class Index():
         """
         return HttpRequests.delete(
             self.config,
-            self.__settings_url_for(self.config.synonyms_path),
+            self.__settings_url_for(self.config.paths.synonyms),
         )
 
     # ACCEPT-NEW-FIELDS SUB-ROUTES
@@ -927,7 +927,7 @@ class Index():
         """
         return HttpRequests.get(
             self.config,
-            self.__settings_url_for(self.config.accept_new_fields_path)
+            self.__settings_url_for(self.config.paths.accept_new_fields)
         )
 
     def update_accept_new_fields(self, body):
@@ -947,15 +947,15 @@ class Index():
         """
         return HttpRequests.post(
             self.config,
-            self.__settings_url_for(self.config.accept_new_fields_path),
+            self.__settings_url_for(self.config.paths.accept_new_fields),
             body
         )
 
     def __settings_url_for(self, sub_route):
         return '{}/{}/{}/{}'.format(
-            self.config.index_path,
+            self.config.paths.index,
             self.uid,
-            self.config.setting_path,
+            self.config.paths.setting,
             sub_route
         )
 

@@ -89,7 +89,7 @@ class Client():
         stats: `dict`
             Dictionnary containing stats about your MeiliSearch instance
         """
-        return HttpRequests.get(self.config, self.config.stat_path)
+        return HttpRequests.get(self.config, self.config.paths.stat)
 
     def health(self):
         """Get health of meilisearch
@@ -101,7 +101,7 @@ class Client():
         HTTPError
             If meilisearch is not healthy
         """
-        return HttpRequests.get(self.config, self.config.health_path)
+        return HttpRequests.get(self.config, self.config.paths.health)
 
     def update_health(self, health):
         """Update health of meilisearch
@@ -113,7 +113,7 @@ class Client():
         health: bool
             Boolean reprensenting the healthyness of meilisearch. True for healthy.
         """
-        return HttpRequests.put(self.config, self.config.health_path, {'health': health})
+        return HttpRequests.put(self.config, self.config.paths.health, {'health': health})
 
     def get_keys(self):
         """Get all keys created
@@ -126,7 +126,7 @@ class Client():
             List of keys and their information.
             https://docs.meilisearch.com/references/keys.html#get-keys
         """
-        return HttpRequests.get(self.config, self.config.key_path)
+        return HttpRequests.get(self.config, self.config.paths.keys)
 
     def get_sys_info(self):
         """Get system information of meilisearch
@@ -138,7 +138,7 @@ class Client():
         sys_info: dict
             Information about memory and processor usage.
         """
-        return HttpRequests.get(self.config, self.config.sys_info_path)
+        return HttpRequests.get(self.config, self.config.paths.sys_info)
 
     def get_version(self):
         """Get version meilisearch
@@ -148,7 +148,7 @@ class Client():
         version: dict
             Information about version of meilisearch.
         """
-        return HttpRequests.get(self.config, self.config.version_path)
+        return HttpRequests.get(self.config, self.config.paths.version)
 
     def version(self):
         """Alias for get_version

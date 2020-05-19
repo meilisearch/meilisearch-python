@@ -3,23 +3,24 @@ class Config:
     A client's credentials and configuration parameters
     """
 
-    health_path = "health"
-    key_path = 'keys'
-    sys_info_path = 'sys-info'
-    version_path = 'version'
-    index_path = 'indexes'
-    update_path = 'updates'
-    stat_path = 'stats'
-    search_path = 'search'
-    document_path = 'documents'
-    setting_path = 'settings'
-    ranking_rules_path = 'ranking-rules'
-    distinct_attribute_path = 'distinct-attribute'
-    searchable_attributes_path = 'searchable-attributes'
-    displayed_attributes_path = 'displayed-attributes'
-    stop_words_path = 'stop-words'
-    synonyms_path = 'synonyms'
-    accept_new_fields_path = 'accept-new-fields'
+    class Paths():
+        health = "health"
+        keys = 'keys'
+        sys_info = 'sys-info'
+        version = 'version'
+        index = 'indexes'
+        update = 'updates'
+        stat = 'stats'
+        search = 'search'
+        document = 'documents'
+        setting = 'settings'
+        ranking_rules = 'ranking-rules'
+        distinct_attribute = 'distinct-attribute'
+        searchable_attributes = 'searchable-attributes'
+        displayed_attributes = 'displayed-attributes'
+        stop_words = 'stop-words'
+        synonyms = 'synonyms'
+        accept_new_fields = 'accept-new-fields'
 
     def __init__(self, url, apikey=None):
         """
@@ -33,3 +34,4 @@ class Config:
 
         self.url = url
         self.apikey = apikey
+        self.paths = self.Paths()
