@@ -19,6 +19,7 @@ class Index(Update, Document, Search, Stat, Setting):
         Index url path
     """
     index_path = 'indexes'
+    uid = ""
 
     def __init__(self, config, uid):
         """
