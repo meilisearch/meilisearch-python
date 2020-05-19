@@ -1,11 +1,11 @@
 from meilisearch._httprequests import HttpRequests
 from meilisearch.document import Document
 from meilisearch.search import Search
-from meilisearch.stat import Stat
+# from meilisearch.stat import Stat
 from meilisearch.setting import Setting
 
 # pylint: disable=too-many-ancestors
-class Index(Document, Search, Stat, Setting):
+class Index(Document, Search, Setting):
     """
     Indexes routes wrapper
 
@@ -19,6 +19,7 @@ class Index(Document, Search, Stat, Setting):
     """
     index_path = 'indexes'
     update_path = 'updates'
+    stat_path = 'stats'
     uid = ""
 
     class Update:
@@ -53,6 +54,38 @@ class Index(Document, Search, Stat, Setting):
             self.uid = uid
             self.index_path = parent_path
 
+    class Stat:
+        """
+        Stats routes wrapper
+
+        Index's parent that gives access to all the stats methods of MeiliSearch.
+        https://docs.meilisearch.com/references/stats.html#get-stat-of-an-index
+
+        Attributes
+        ----------
+        stat_path:
+            Version url path
+        """
+
+
+        def __init__(self, parent_path, config, uid=None, name=None):
+            """
+            Parameters
+            ----------
+            config : Config
+                Config object containing permission and location of MeiliSearch
+            name: str
+                Name of the index on which to perform the index actions.
+            uid: str
+                Uid of the index on which to perform the index actions.
+            index_path: str
+                Index url path
+            """
+            self.config = config
+            self.name = name
+            self.uid = uid
+            self.index_path = parent_path
+
     def __init__(self, config, uid):
         """
         Parameters
@@ -66,7 +99,7 @@ class Index(Document, Search, Stat, Setting):
         """
         Search.__init__(self, Index.index_path, config, uid)
         Document.__init__(self, Index.index_path, config, uid)
-        Stat.__init__(self, Index.index_path, config, uid)
+        # Stat.__init__(self, Index.index_path, config, uid)
         Setting.__init__(self, Index.index_path, config, uid)
         self.config = config
         self.uid = uid
@@ -222,5 +255,24 @@ class Index(Document, Search, Stat, Setting):
                 self.uid,
                 self.update_path,
                 update_id
+            )
+        )
+
+    def get_stats(self):
+        """Get stats of an index
+
+        Get information about number of documents, fieldsfrequencies, ...
+        https://docs.meilisearch.com/references/stats.html
+        Returns
+        ----------
+        stats: `dict`
+            Dictionnary containing stats about the given index.
+        """
+        return HttpRequests.get(
+            self.config,
+            '{}/{}/{}'.format(
+                self.index_path,
+                self.uid,
+                self.stat_path,
             )
         )

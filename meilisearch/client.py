@@ -1,6 +1,6 @@
 from meilisearch.index import Index
 from meilisearch.config import Config
-from meilisearch.stat import Stat
+# from meilisearch.stat import Stat
 from meilisearch._httprequests import HttpRequests
 
 class Client():
@@ -17,6 +17,7 @@ class Client():
     key_path = 'keys'
     sys_info_path = 'sys-info'
     version_path = 'version'
+    stat_path = 'stats'
 
     def __init__(self, url, apiKey=None):
         """
@@ -86,14 +87,16 @@ class Client():
         return Index.get_index(self.config, uid=uid)
 
     def get_all_stats(self):
-        """Get statistics about indexes, database size and update date.
+        """Get all stats of MeiliSearch
 
+        Get information about databasesize and all indexes
+        https://docs.meilisearch.com/references/stats.html
         Returns
-        -------
-        stats : dict
-            Dictionnary with information about indexes, database size and update date.
+        ----------
+        stats: `dict`
+            Dictionnary containing stats about your MeiliSearch instance
         """
-        return Stat.get_all_stats(self.config)
+        return HttpRequests.get(self.config, self.stat_path)
 
     def health(self):
         """Get health of meilisearch
