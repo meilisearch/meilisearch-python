@@ -1,5 +1,5 @@
-from meilisearch._httprequests import HttpRequests
 import urllib
+from meilisearch._httprequests import HttpRequests
 
 # pylint: disable=too-many-ancestors
 class Index():
@@ -958,4 +958,3 @@ class Index():
             self.config.paths.setting,
             sub_route
         )
-
