@@ -1,6 +1,5 @@
 from meilisearch.index import Index
 from meilisearch.config import Config
-# from meilisearch.stat import Stat
 from meilisearch._httprequests import HttpRequests
 
 class Client():
@@ -166,5 +165,3 @@ class Client():
             Information about version of meilisearch.
         """
         return self.get_version()
-
-
