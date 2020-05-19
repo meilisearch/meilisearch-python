@@ -12,12 +12,6 @@ class Client():
 
     config = None
 
-    health_path = "health"
-    key_path = 'keys'
-    sys_info_path = 'sys-info'
-    version_path = 'version'
-    stat_path = 'stats'
-
     def __init__(self, url, apiKey=None):
         """
         Parameters
@@ -95,7 +89,7 @@ class Client():
         stats: `dict`
             Dictionnary containing stats about your MeiliSearch instance
         """
-        return HttpRequests.get(self.config, self.stat_path)
+        return HttpRequests.get(self.config, self.config.stat_path)
 
     def health(self):
         """Get health of meilisearch
@@ -107,7 +101,7 @@ class Client():
         HTTPError
             If meilisearch is not healthy
         """
-        return HttpRequests.get(self.config, self.health_path)
+        return HttpRequests.get(self.config, self.config.health_path)
 
     def update_health(self, health):
         """Update health of meilisearch
@@ -119,7 +113,7 @@ class Client():
         health: bool
             Boolean reprensenting the healthyness of meilisearch. True for healthy.
         """
-        return HttpRequests.put(self.config, self.health_path, {'health': health})
+        return HttpRequests.put(self.config, self.config.health_path, {'health': health})
 
     def get_keys(self):
         """Get all keys created
@@ -132,7 +126,7 @@ class Client():
             List of keys and their information.
             https://docs.meilisearch.com/references/keys.html#get-keys
         """
-        return HttpRequests.get(self.config, self.key_path)
+        return HttpRequests.get(self.config, self.config.key_path)
 
     def get_sys_info(self):
         """Get system information of meilisearch
@@ -144,7 +138,7 @@ class Client():
         sys_info: dict
             Information about memory and processor usage.
         """
-        return HttpRequests.get(self.config, self.sys_info_path)
+        return HttpRequests.get(self.config, self.config.sys_info_path)
 
     def get_version(self):
         """Get version meilisearch
@@ -154,7 +148,7 @@ class Client():
         version: dict
             Information about version of meilisearch.
         """
-        return HttpRequests.get(self.config, self.version_path)
+        return HttpRequests.get(self.config, self.config.version_path)
 
     def version(self):
         """Alias for get_version
