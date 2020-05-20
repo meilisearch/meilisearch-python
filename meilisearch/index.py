@@ -38,7 +38,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return self.http.delete(self.config, '{}/{}'.format(self.config.paths.index, self.uid))
+        return self.http.delete('{}/{}'.format(self.config.paths.index, self.uid))
 
     def update(self, **body):
         """Update an index from meilisearch
@@ -58,7 +58,7 @@ class Index():
         primary_key = body.get('primaryKey', None)
         if primary_key is not None:
             payload['primaryKey'] = primary_key
-        return self.http.put(self.config, '{}/{}'.format(self.config.paths.index, self.uid), payload)
+        return self.http.put('{}/{}'.format(self.config.paths.index, self.uid), payload)
 
     def info(self):
         """Get info of index
@@ -329,7 +329,7 @@ class Index():
                 self.config.paths.document,
                 urllib.parse.urlencode({'primaryKey': primary_key})
             )
-        return self.http.put(self.config, url, documents)
+        return self.http.put(url, documents)
 
 
     def delete_document(self, document_id):
@@ -346,7 +346,6 @@ class Index():
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.delete(
-            self.config,
             '{}/{}/{}/{}'.format(
                 self.config.paths.index,
                 self.uid,
@@ -387,7 +386,6 @@ class Index():
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.delete(
-            self.config,
             '{}/{}/{}'.format(
                 self.config.paths.index,
                 self.uid,
@@ -454,7 +452,6 @@ class Index():
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.delete(
-            self.config,
             '{}/{}/{}'.format(
                 self.config.paths.index,
                 self.uid,
@@ -507,7 +504,6 @@ class Index():
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.delete(
-            self.config,
             self.__settings_url_for(self.config.paths.ranking_rules),
         )
 
@@ -557,7 +553,6 @@ class Index():
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.delete(
-            self.config,
             self.__settings_url_for(self.config.paths.distinct_attribute),
         )
 
@@ -606,7 +601,6 @@ class Index():
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.delete(
-            self.config,
             self.__settings_url_for(self.config.paths.searchable_attributes),
         )
 
@@ -655,7 +649,6 @@ class Index():
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.delete(
-            self.config,
             self.__settings_url_for(self.config.paths.displayed_attributes),
         )
 
@@ -704,7 +697,6 @@ class Index():
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.delete(
-            self.config,
             self.__settings_url_for(self.config.paths.stop_words),
         )
 
@@ -753,7 +745,6 @@ class Index():
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.delete(
-            self.config,
             self.__settings_url_for(self.config.paths.synonyms),
         )
 
