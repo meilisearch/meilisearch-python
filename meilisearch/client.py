@@ -84,7 +84,7 @@ class Client():
     def get_all_stats(self):
         """Get all stats of MeiliSearch
 
-        Get information about databasesize and all indexes
+        Get information about database size and all indexes
         https://docs.meilisearch.com/references/stats.html
         Returns
         ----------
@@ -94,26 +94,26 @@ class Client():
         return self.http.get(self.config.paths.stat)
 
     def health(self):
-        """Get health of meilisearch
+        """Get health of MeiliSearch
 
-        `204` http status response when meilisearch is healthy.
+        `204` HTTP status response when MeiliSearch is healthy.
 
         Raises
         ----------
         HTTPError
-            If meilisearch is not healthy
+            If MeiliSearch is not healthy
         """
         return self.http.get(self.config.paths.health)
 
     def update_health(self, health):
         """Update health of meilisearch
 
-        Update health of meilisearch to true or false.
+        Update health of MeiliSearch to true or false.
 
         Parameters
         ----------
         health: bool
-            Boolean reprensenting the healthyness of meilisearch. True for healthy.
+            Boolean representing the health status of MeiliSearch. True for healthy.
         """
         return self.http.put(self.config.paths.health, {'health': health})
 
@@ -131,7 +131,7 @@ class Client():
         return self.http.get(self.config.paths.keys)
 
     def get_sys_info(self):
-        """Get system information of meilisearch
+        """Get system information of MeiliSearch
 
         Get information about memory usage and processor usage.
 
@@ -143,12 +143,12 @@ class Client():
         return self.http.get(self.config.paths.sys_info)
 
     def get_version(self):
-        """Get version meilisearch
+        """Get version MeiliSearch
 
         Returns
         ----------
         version: dict
-            Information about version of meilisearch.
+            Information about the version of MeiliSearch.
         """
         return self.http.get(self.config.paths.version)
 
@@ -158,6 +158,6 @@ class Client():
         Returns
         ----------
         version: dict
-            Information about version of meilisearch.
+            Information about the version of MeiliSearch.
         """
         return self.get_version()
