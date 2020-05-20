@@ -166,7 +166,7 @@ class Index():
         Parameters
         ----------
         update_id: int
-            identifier of the update to retieve
+            identifier of the update to retrieve
         Returns
         ----------
         update: `list`
@@ -184,7 +184,7 @@ class Index():
     def get_stats(self):
         """Get stats of an index
 
-        Get information about number of documents, fieldsfrequencies, ...
+        Get information about the number of documents, field frequencies, ...
         https://docs.meilisearch.com/references/stats.html
         Returns
         ----------
@@ -422,7 +422,7 @@ class Index():
         ----------
         body: `dict`
             Dictionnary containing the settings of the index
-            More information :
+            More information:
             https://docs.meilisearch.com/references/settings.html#update-settings
 
         Returns
