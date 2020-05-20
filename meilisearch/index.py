@@ -11,6 +11,7 @@ class Index():
     """
 
     config = None
+    http = None
     uid = ""
 
     def __init__(self, config, uid):
@@ -26,6 +27,7 @@ class Index():
         """
         self.config = config
         self.uid = uid
+        self.http = HttpRequests(config)
 
     def delete(self):
         """Delete an index from meilisearch
@@ -36,7 +38,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.delete(self.config, '{}/{}'.format(self.config.paths.index, self.uid))
+        return self.http.delete(self.config, '{}/{}'.format(self.config.paths.index, self.uid))
 
     def update(self, **body):
         """Update an index from meilisearch
@@ -56,7 +58,7 @@ class Index():
         primary_key = body.get('primaryKey', None)
         if primary_key is not None:
             payload['primaryKey'] = primary_key
-        return HttpRequests.put(self.config, '{}/{}'.format(self.config.paths.index, self.uid), payload)
+        return self.http.put(self.config, '{}/{}'.format(self.config.paths.index, self.uid), payload)
 
     def info(self):
         """Get info of index
@@ -66,7 +68,7 @@ class Index():
         index: `dict`
             Dictionnary containing index information.
         """
-        return HttpRequests.get(self.config, '{}/{}'.format(self.config.paths.index, self.uid))
+        return self.http.get('{}/{}'.format(self.config.paths.index, self.uid))
 
     def get_primary_key(self):
         """Get the primary key
@@ -106,7 +108,7 @@ class Index():
         primary_key = body.get('primary_key', None)
         if primary_key is not None:
             payload['primaryKey'] = primary_key
-        return HttpRequests.post(config, config.paths.index, payload)
+        return HttpRequests(config).post(config.paths.index, payload)
 
     @staticmethod
     def get_indexes(config):
@@ -121,7 +123,7 @@ class Index():
         HTTPError
             In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
         """
-        return HttpRequests.get(config, config.paths.index)
+        return HttpRequests(config).get(config.paths.index)
 
     @staticmethod
     def get_index(config, uid):
@@ -150,8 +152,7 @@ class Index():
         update: `list`
             List of all enqueued and processed actions of the index.
         """
-        return HttpRequests.get(
-            self.config,
+        return self.http.get(
             '{}/{}/{}'.format(
                 self.config.paths.index,
                 self.uid,
@@ -171,8 +172,7 @@ class Index():
         update: `list`
             List of all enqueued and processed actions of the index.
         """
-        return HttpRequests.get(
-            self.config,
+        return self.http.get(
             '{}/{}/{}/{}'.format(
                 self.config.paths.index,
                 self.uid,
@@ -191,8 +191,7 @@ class Index():
         stats: `dict`
             Dictionnary containing stats about the given index.
         """
-        return HttpRequests.get(
-            self.config,
+        return self.http.get(
             '{}/{}/{}'.format(
                 self.config.paths.index,
                 self.uid,
@@ -220,8 +219,7 @@ class Index():
         """
         search_param = {'q': query}
         params = {**search_param, **opt_params}
-        return HttpRequests.get(
-            self.config,
+        return self.http.get(
             '{}/{}/{}?{}'.format(
                 self.config.paths.index,
                 self.uid,
@@ -241,8 +239,7 @@ class Index():
         document: `dict`
             Dictionnary containing the documents information
         """
-        return HttpRequests.get(
-            self.config,
+        return self.http.get(
             '{}/{}/{}/{}'.format(
                 self.config.paths.index,
                 self.uid,
@@ -266,8 +263,7 @@ class Index():
         if parameters is None:
             parameters = {}
 
-        return HttpRequests.get(
-            self.config,
+        return self.http.get(
             '{}/{}/{}?{}'.format(
                 self.config.paths.index,
                 self.uid,
@@ -303,7 +299,7 @@ class Index():
                 self.config.paths.document,
                 urllib.parse.urlencode({'primaryKey': primary_key})
             )
-        return HttpRequests.post(self.config, url, documents)
+        return self.http.post(url, documents)
 
     def update_documents(self, documents, primary_key=None):
         """Update documents in the index
@@ -333,7 +329,7 @@ class Index():
                 self.config.paths.document,
                 urllib.parse.urlencode({'primaryKey': primary_key})
             )
-        return HttpRequests.put(self.config, url, documents)
+        return self.http.put(self.config, url, documents)
 
 
     def delete_document(self, document_id):
@@ -349,7 +345,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.delete(
+        return self.http.delete(
             self.config,
             '{}/{}/{}/{}'.format(
                 self.config.paths.index,
@@ -372,8 +368,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.post(
-            self.config,
+        return self.http.post(
             '{}/{}/{}/delete-batch'.format(
                 self.config.paths.index,
                 self.uid,
@@ -391,7 +386,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.delete(
+        return self.http.delete(
             self.config,
             '{}/{}/{}'.format(
                 self.config.paths.index,
@@ -413,8 +408,7 @@ class Index():
         settings: `dict`
             Dictionnary containing the settings of the index
         """
-        return HttpRequests.get(
-            self.config,
+        return self.http.get(
             '{}/{}/{}'.format(
                 self.config.paths.index,
                 self.uid,
@@ -439,8 +433,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.post(
-            self.config,
+        return self.http.post(
             '{}/{}/{}'.format(
                 self.config.paths.index,
                 self.uid,
@@ -460,7 +453,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.delete(
+        return self.http.delete(
             self.config,
             '{}/{}/{}'.format(
                 self.config.paths.index,
@@ -480,8 +473,7 @@ class Index():
         settings: `list`
             List containing the ranking rules of the index
         """
-        return HttpRequests.get(
-            self.config,
+        return self.http.get(
             self.__settings_url_for(self.config.paths.ranking_rules)
         )
 
@@ -500,8 +492,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.post(
-            self.config,
+        return self.http.post(
             self.__settings_url_for(self.config.paths.ranking_rules),
             body
         )
@@ -515,7 +506,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.delete(
+        return self.http.delete(
             self.config,
             self.__settings_url_for(self.config.paths.ranking_rules),
         )
@@ -532,8 +523,7 @@ class Index():
         settings: `str`
             String containing the distinct attribute of the index
         """
-        return HttpRequests.get(
-            self.config,
+        return self.http.get(
             self.__settings_url_for(self.config.paths.distinct_attribute)
         )
 
@@ -552,8 +542,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.post(
-            self.config,
+        return self.http.post(
             self.__settings_url_for(self.config.paths.distinct_attribute),
             body
         )
@@ -567,7 +556,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.delete(
+        return self.http.delete(
             self.config,
             self.__settings_url_for(self.config.paths.distinct_attribute),
         )
@@ -583,8 +572,7 @@ class Index():
         settings: `list`
             List containing the searchable attributes of the index
         """
-        return HttpRequests.get(
-            self.config,
+        return self.http.get(
             self.__settings_url_for(self.config.paths.searchable_attributes)
         )
 
@@ -603,8 +591,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.post(
-            self.config,
+        return self.http.post(
             self.__settings_url_for(self.config.paths.searchable_attributes),
             body
         )
@@ -618,7 +605,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.delete(
+        return self.http.delete(
             self.config,
             self.__settings_url_for(self.config.paths.searchable_attributes),
         )
@@ -634,8 +621,7 @@ class Index():
         settings: `list`
             List containing the displayed attributes of the index
         """
-        return HttpRequests.get(
-            self.config,
+        return self.http.get(
             self.__settings_url_for(self.config.paths.displayed_attributes)
         )
 
@@ -654,8 +640,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.post(
-            self.config,
+        return self.http.post(
             self.__settings_url_for(self.config.paths.displayed_attributes),
             body
         )
@@ -669,7 +654,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.delete(
+        return self.http.delete(
             self.config,
             self.__settings_url_for(self.config.paths.displayed_attributes),
         )
@@ -685,8 +670,7 @@ class Index():
         settings: `list`
             List containing the stop words of the index
         """
-        return HttpRequests.get(
-            self.config,
+        return self.http.get(
             self.__settings_url_for(self.config.paths.stop_words)
         )
 
@@ -705,8 +689,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.post(
-            self.config,
+        return self.http.post(
             self.__settings_url_for(self.config.paths.stop_words),
             body
         )
@@ -720,7 +703,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.delete(
+        return self.http.delete(
             self.config,
             self.__settings_url_for(self.config.paths.stop_words),
         )
@@ -736,8 +719,7 @@ class Index():
         settings: `dict`
             Dictionnary containing the synonyms of the index
         """
-        return HttpRequests.get(
-            self.config,
+        return self.http.get(
             self.__settings_url_for(self.config.paths.synonyms)
         )
 
@@ -756,8 +738,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.post(
-            self.config,
+        return self.http.post(
             self.__settings_url_for(self.config.paths.synonyms),
             body
         )
@@ -771,7 +752,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.delete(
+        return self.http.delete(
             self.config,
             self.__settings_url_for(self.config.paths.synonyms),
         )
@@ -787,8 +768,7 @@ class Index():
         settings: `bool`
             Boolean containing the accept-new-fields value of the index
         """
-        return HttpRequests.get(
-            self.config,
+        return self.http.get(
             self.__settings_url_for(self.config.paths.accept_new_fields)
         )
 
@@ -807,8 +787,7 @@ class Index():
             Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
-        return HttpRequests.post(
-            self.config,
+        return self.http.post(
             self.__settings_url_for(self.config.paths.accept_new_fields),
             body
         )

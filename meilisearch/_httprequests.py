@@ -2,30 +2,34 @@ import requests
 
 class HttpRequests:
 
-    @staticmethod
-    def get(config, path):
+    config = None
+
+    def __init__(self, config):
+        self.config = config
+
+
+    def get(self, path):
         request = requests.get(
-            config.url + '/' + path,
+            self.config.url + '/' + path,
             headers={
-                'X-Meili-Api-Key': config.apikey,
+                'X-Meili-Api-Key': self.config.apikey,
                 'Content-Type': 'application/json'
             }
         )
-        return HttpRequests.__validate(request)
+        return self.__validate(request)
 
-    @staticmethod
-    def post(config, path, body=None):
+    def post(self, path, body=None):
         if body is None:
             body = {}
         request = requests.post(
-            config.url + '/' + path,
+            self.config.url + '/' + path,
             headers={
-                'x-meili-api-key': config.apikey,
+                'x-meili-api-key': self.config.apikey,
                 'content-type': 'application/json'
             },
             json=body
         )
-        return HttpRequests.__validate(request)
+        return self.__validate(request)
 
     @staticmethod
     def put(config, path, body=None):
