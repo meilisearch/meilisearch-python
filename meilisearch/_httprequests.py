@@ -3,18 +3,20 @@ import requests
 class HttpRequests:
 
     config = None
+    headers = {}
 
     def __init__(self, config):
         self.config = config
+        self.headers = {
+            'X-Meili-Api-Key': self.config.apikey,
+            'Content-Type': 'application/json'
+        }
 
 
     def get(self, path):
         request = requests.get(
             self.config.url + '/' + path,
-            headers={
-                'X-Meili-Api-Key': self.config.apikey,
-                'Content-Type': 'application/json'
-            }
+            headers=self.headers,
         )
         return self.__validate(request)
 
@@ -23,10 +25,7 @@ class HttpRequests:
             body = {}
         request = requests.post(
             self.config.url + '/' + path,
-            headers={
-                'x-meili-api-key': self.config.apikey,
-                'content-type': 'application/json'
-            },
+            headers=self.headers,
             json=body
         )
         return self.__validate(request)
@@ -36,10 +35,7 @@ class HttpRequests:
             body = {}
         request = requests.put(
             self.config.url + '/' + path,
-            headers={
-                'x-meili-api-key': self.config.apikey,
-                'content-type': 'application/json'
-            },
+            headers=self.headers,
             json=body
         )
         return self.__validate(request)
@@ -49,10 +45,7 @@ class HttpRequests:
             body = {}
         request = requests.patch(
             self.config.url + '/' + path,
-            headers={
-                'x-meili-api-key': self.config.apikey,
-                'content-type': 'application/json'
-            },
+            headers=self.headers,
             json=body
         )
         return self.__validate(request)
@@ -62,10 +55,7 @@ class HttpRequests:
             body = {}
         request = requests.delete(
             self.config.url + '/' + path,
-            headers={
-                'x-meili-api-key': self.config.apikey,
-                'content-type': 'application/json'
-            },
+            headers=self.headers,
             json=body
         )
         return self.__validate(request)
