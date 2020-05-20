@@ -40,16 +40,6 @@ class HttpRequests:
         )
         return self.__validate(request)
 
-    def patch(self, path, body=None):
-        if body is None:
-            body = {}
-        request = requests.patch(
-            self.config.url + '/' + path,
-            headers=self.headers,
-            json=body
-        )
-        return self.__validate(request)
-
     def delete(self, path, body=None):
         if body is None:
             body = {}
