@@ -1,7 +1,7 @@
 import urllib
 from meilisearch._httprequests import HttpRequests
 
-# pylint: disable=too-many-ancestors
+# pylint: disable=R0904
 class Index():
     """
     Indexes routes wrapper
