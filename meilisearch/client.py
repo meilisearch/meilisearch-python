@@ -1,18 +1,17 @@
 from meilisearch.index import Index
-from meilisearch.health import Health
-from meilisearch.key import Key
 from meilisearch.config import Config
-from meilisearch.sys_info import SysInfo
-from meilisearch.stat import Stat
-from meilisearch.version import Version
+from meilisearch._httprequests import HttpRequests
 
-class Client(Health, Key, SysInfo, Version):
+class Client():
     """
     A client for the MeiliSearch API
 
     A client instance is needed for every MeiliSearch API method to know the location of
     MeiliSearch and its permissions.
     """
+
+    config = None
+    http = None
 
     def __init__(self, url, apiKey=None):
         """
@@ -23,12 +22,8 @@ class Client(Health, Key, SysInfo, Version):
         apiKey : str
             The optional API key for MeiliSearch
         """
-        config = Config(url, apiKey)
-        Health.__init__(self, config)
-        Key.__init__(self, config)
-        SysInfo.__init__(self, config)
-        Version.__init__(self, config)
-        self.config = config
+        self.config = Config(url, apiKey)
+        self.http = HttpRequests(self.config)
 
     def create_index(self, uid, primary_key=None, name=None):
         """Create an index.
@@ -53,8 +48,9 @@ class Client(Health, Key, SysInfo, Version):
         HTTPError
             In case of any other error found here https://docs.meilisearch.com/references/#errors-status-code
         """
-        index = Index.create(self.config, uid=uid, primary_key=primary_key, name=name)
-        return Index(self.config, uid=index['uid'])
+        index = Index(self.config, uid=uid)
+        index.create(self.config, uid=uid, primary_key=primary_key, name=name)
+        return index
 
     def get_indexes(self):
         """Get all indexes.
@@ -86,11 +82,82 @@ class Client(Health, Key, SysInfo, Version):
         return Index.get_index(self.config, uid=uid)
 
     def get_all_stats(self):
-        """Get statistics about indexes, database size and update date.
+        """Get all stats of MeiliSearch
+
+        Get information about database size and all indexes
+        https://docs.meilisearch.com/references/stats.html
+        Returns
+        ----------
+        stats: `dict`
+            Dictionnary containing stats about your MeiliSearch instance
+        """
+        return self.http.get(self.config.paths.stat)
+
+    def health(self):
+        """Get health of MeiliSearch
+
+        `204` HTTP status response when MeiliSearch is healthy.
+
+        Raises
+        ----------
+        HTTPError
+            If MeiliSearch is not healthy
+        """
+        return self.http.get(self.config.paths.health)
+
+    def update_health(self, health):
+        """Update health of meilisearch
+
+        Update health of MeiliSearch to true or false.
+
+        Parameters
+        ----------
+        health: bool
+            Boolean representing the health status of MeiliSearch. True for healthy.
+        """
+        return self.http.put(self.config.paths.health, {'health': health})
+
+    def get_keys(self):
+        """Get all keys created
+
+        Get list of all the keys that were created and all their related information.
 
         Returns
-        -------
-        stats : dict
-            Dictionnary with information about indexes, database size and update date.
+        ----------
+        keys: list
+            List of keys and their information.
+            https://docs.meilisearch.com/references/keys.html#get-keys
         """
-        return Stat.get_all_stats(self.config)
+        return self.http.get(self.config.paths.keys)
+
+    def get_sys_info(self):
+        """Get system information of MeiliSearch
+
+        Get information about memory usage and processor usage.
+
+        Returns
+        ----------
+        sys_info: dict
+            Information about memory and processor usage.
+        """
+        return self.http.get(self.config.paths.sys_info)
+
+    def get_version(self):
+        """Get version MeiliSearch
+
+        Returns
+        ----------
+        version: dict
+            Information about the version of MeiliSearch.
+        """
+        return self.http.get(self.config.paths.version)
+
+    def version(self):
+        """Alias for get_version
+
+        Returns
+        ----------
+        version: dict
+            Information about the version of MeiliSearch.
+        """
+        return self.get_version()

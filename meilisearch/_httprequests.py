@@ -2,72 +2,53 @@ import requests
 
 class HttpRequests:
 
-    @staticmethod
-    def get(config, path):
-        request = requests.get(
-            config.url + '/' + path,
-            headers={
-                'X-Meili-Api-Key': config.apikey,
-                'Content-Type': 'application/json'
-            }
-        )
-        return HttpRequests.__validate(request)
+    config = None
+    headers = {}
 
-    @staticmethod
-    def post(config, path, body=None):
+    def __init__(self, config):
+        self.config = config
+        self.headers = {
+            'X-Meili-Api-Key': self.config.apikey,
+            'Content-Type': 'application/json'
+        }
+
+
+    def get(self, path):
+        request = requests.get(
+            self.config.url + '/' + path,
+            headers=self.headers,
+        )
+        return self.__validate(request)
+
+    def post(self, path, body=None):
         if body is None:
             body = {}
         request = requests.post(
-            config.url + '/' + path,
-            headers={
-                'x-meili-api-key': config.apikey,
-                'content-type': 'application/json'
-            },
+            self.config.url + '/' + path,
+            headers=self.headers,
             json=body
         )
-        return HttpRequests.__validate(request)
+        return self.__validate(request)
 
-    @staticmethod
-    def put(config, path, body=None):
+    def put(self, path, body=None):
         if body is None:
             body = {}
         request = requests.put(
-            config.url + '/' + path,
-            headers={
-                'x-meili-api-key': config.apikey,
-                'content-type': 'application/json'
-            },
+            self.config.url + '/' + path,
+            headers=self.headers,
             json=body
         )
-        return HttpRequests.__validate(request)
+        return self.__validate(request)
 
-    @staticmethod
-    def patch(config, path, body=None):
-        if body is None:
-            body = {}
-        request = requests.patch(
-            config.url + '/' + path,
-            headers={
-                'x-meili-api-key': config.apikey,
-                'content-type': 'application/json'
-            },
-            json=body
-        )
-        return HttpRequests.__validate(request)
-
-    @staticmethod
-    def delete(config, path, body=None):
+    def delete(self, path, body=None):
         if body is None:
             body = {}
         request = requests.delete(
-            config.url + '/' + path,
-            headers={
-                'x-meili-api-key': config.apikey,
-                'content-type': 'application/json'
-            },
+            self.config.url + '/' + path,
+            headers=self.headers,
             json=body
         )
-        return HttpRequests.__validate(request)
+        return self.__validate(request)
 
     @staticmethod
     def __to_json(request):
