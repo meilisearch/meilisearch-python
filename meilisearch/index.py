@@ -199,10 +199,7 @@ class Index():
             )
         )
 
-    # pylint: disable=dangerous-default-value
-    # Not dangerous because opt_params is not modified in the method
-    # See: https://stackoverflow.com/questions/26320899/why-is-the-empty-dictionary-a-dangerous-default-value-in-python
-    def search(self, query, opt_params={}):
+    def search(self, query, opt_params=None):
         """Search in meilisearch
 
         Parameters
@@ -217,6 +214,8 @@ class Index():
         results: `dict`
             Dictionnary with hits, offset, limit, processingTime and initial query
         """
+        if opt_params is None:
+            opt_params = {}
         search_param = {'q': query}
         params = {**search_param, **opt_params}
         return self.http.get(
