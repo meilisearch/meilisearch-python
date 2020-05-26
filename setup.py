@@ -8,8 +8,8 @@ setup(
     install_requires=[
         "requests"
     ],
-    name="meilisearch",  # Replace with your own username
-    version="0.10.0",
+    name="meilisearch",
+    version="0.10.1",
     author="Charlotte Vermandel",
     author_email="charlotte@meilisearch.com",
     description="The python client for MeiliSearch API.",
