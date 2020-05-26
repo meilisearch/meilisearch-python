@@ -3,7 +3,7 @@ from datetime import datetime
 from time import sleep
 from meilisearch._httprequests import HttpRequests
 
-# pylint: disable=R0904
+# pylint: disable=too-many-public-methods
 class Index():
     """
     Indexes routes wrapper

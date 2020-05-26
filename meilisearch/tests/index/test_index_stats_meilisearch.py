@@ -1,7 +1,10 @@
 import meilisearch
 from meilisearch.tests import BASE_URL, MASTER_KEY
 
-class TestStat:
+class TestStats:
+
+    """ TESTS: stats route """
+
     client = meilisearch.Client(BASE_URL, MASTER_KEY)
     index = None
 
@@ -11,13 +14,10 @@ class TestStat:
     def teardown_class(self):
         self.index.delete()
 
-    def test_get_all_stats(self):
-        response = self.client.get_all_stats()
-        assert isinstance(response, object)
-        assert 'databaseSize' in response
-
     def test_get_stats(self):
+        """Tests getting stats of a single index"""
         response = self.index.get_stats()
         assert isinstance(response, object)
         assert 'numberOfDocuments' in response
         assert response['numberOfDocuments'] == 0
+        assert 'isIndexing' in response

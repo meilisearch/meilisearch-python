@@ -2,10 +2,12 @@ import meilisearch
 from meilisearch.tests import BASE_URL, MASTER_KEY
 
 class TestHealth:
+
+    """ TESTS: health route """
+
     client = meilisearch.Client(BASE_URL, MASTER_KEY)
 
-    """ health route """
     def test_health(self):
-        """Tests an API call to check the health of MeiliSearch"""
+        """Tests checking the health of MeiliSearch instance"""
         response = self.client.health()
         assert response.status_code == 200
