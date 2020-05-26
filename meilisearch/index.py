@@ -1,4 +1,6 @@
 import urllib
+from datetime import datetime
+from time import sleep
 from meilisearch._httprequests import HttpRequests
 
 # pylint: disable=R0904
@@ -170,7 +172,7 @@ class Index():
         Returns
         ----------
         update: `list`
-            List of all enqueued and processed actions of the index.
+            List containing the details of the update status.
         """
         return self.http.get(
             '{}/{}/{}/{}'.format(
@@ -180,6 +182,33 @@ class Index():
                 update_id
             )
         )
+
+    def wait_for_pending_update(self, update_id, timeout_in_ms=5000, interval_in_ms=50):
+        """Wait until MeiliSearch processes an update, and get its status
+
+        Parameters
+        ----------
+        update_id: int
+            identifier of the update to retrieve
+        timeout_in_ms (optional): int
+            time the method should wait before rising a TimeoutError
+        interval_in_ms (optional): int
+            time interval the method should wait (sleep) between requests
+        Returns
+        ----------
+        update: `dict`
+            Dictionary containing the details of the processed update status.
+        """
+        start_time = datetime.now()
+        elapsed_time = 0
+        while elapsed_time < timeout_in_ms:
+            get_update = self.get_update_status(update_id)
+            if get_update['status'] != 'enqueued':
+                return get_update
+            sleep(interval_in_ms / 1000)
+            time_delta = datetime.now() - start_time
+            elapsed_time = time_delta.seconds * 1000 + time_delta.microseconds / 1000
+        raise TimeoutError
 
     def get_stats(self):
         """Get stats of an index
