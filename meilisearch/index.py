@@ -172,7 +172,7 @@ class Index():
         Returns
         ----------
         update: `list`
-            List of all enqueued and processed actions of the index.
+            List containing the details of the update status.
         """
         return self.http.get(
             '{}/{}/{}/{}'.format(
@@ -197,7 +197,7 @@ class Index():
         Returns
         ----------
         update: `list`
-            List of all enqueued and processed actions of the index.
+            List containing the details of the processed update status.
         """
         start_time = datetime.now()
         elapsed_time = 0
