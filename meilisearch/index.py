@@ -183,7 +183,7 @@ class Index():
             )
         )
 
-    def wait_for_pending_update(self, update_id, timeout_in_ms=2000, interval_in_ms=10):
+    def wait_for_pending_update(self, update_id, timeout_in_ms=5000, interval_in_ms=50):
         """Wait until MeiliSearch processes an update, and get its status
 
         Parameters
