@@ -51,7 +51,6 @@ class TestUpdate:
         """Tests call to wait for an update with custom interval"""
         response = self.index.add_documents(self.dataset_json)
         assert 'updateId' in response
-        start_time = datetime.now()
         wait_update = self.index.wait_for_pending_update(
             response['updateId'],
             interval_in_ms=0,
