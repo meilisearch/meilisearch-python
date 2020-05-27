@@ -183,7 +183,6 @@ class Index():
             )
         )
 
-
     def wait_for_pending_update(self, update_id, timeout_in_ms=2000, interval_in_ms=10):
         """Wait until MeiliSearch processes an update, and get its status
 
@@ -192,9 +191,9 @@ class Index():
         update_id: int
             identifier of the update to retrieve
         timeout_in_ms (optional): int
-            time the function should wait before rising a TimeoutError
+            time the method should wait before rising a TimeoutError
         interval_in_ms (optional): int
-            time interval the function should wait (sleep) between requests
+            time interval the method should wait (sleep) between requests
         Returns
         ----------
         update: `list`
@@ -206,11 +205,10 @@ class Index():
             get_update = self.get_update_status(update_id)
             if get_update['status'] != 'enqueued':
                 return get_update
-            sleep(interval_in_ms/1000)
+            sleep(interval_in_ms / 1000)
             time_delta = datetime.now() - start_time
             elapsed_time = time_delta.seconds * 1000 + time_delta.microseconds / 1000
         raise TimeoutError
-
 
     def get_stats(self):
         """Get stats of an index
