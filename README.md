@@ -28,6 +28,7 @@
 
 - [🔧 Installation](#-installation)
 - [🚀 Getting started](#-getting-started)
+- [🤖 Compatibility with MeiliSearch](#-compatibility-with-meilisearch)
 - [🎬 Examples](#-examples)
   - [Indexes](#indexes)
   - [Documents](#documents)
@@ -37,7 +38,6 @@
   - [Install dependencies](#install-dependencies)
   - [Tests and Linter](#tests-and-linter)
   - [Release](#release)
-- [🤖 Compatibility with MeiliSearch](#-compatibility-with-meilisearch)
 
 ## 🔧 Installation
 
@@ -102,6 +102,11 @@ Output:
   "query" => "harry pottre"
 }
 ```
+
+## 🤖 Compatibility with MeiliSearch
+
+This package is compatible with the following MeiliSearch versions:
+- `v0.10.X`
 
 ## 🎬 Examples
 
@@ -268,10 +273,6 @@ $ git push --tag origin master
 ```
 
 A GitHub Action will be triggered and push the new package on [PyPI](https://pypi.org/project/meilisearch).
-
-## 🤖 Compatibility with MeiliSearch
-
-This package works for MeiliSearch `>=v0.10`.
 
 <hr>
 
