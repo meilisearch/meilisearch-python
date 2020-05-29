@@ -2,11 +2,20 @@ import meilisearch
 from meilisearch.tests import BASE_URL, MASTER_KEY
 
 class TestSysInfo:
-    client = meilisearch.Client(BASE_URL, MASTER_KEY)
 
-    """ sys-info route """
+    """ TESTS: sysinfo route """
+
+    client = meilisearch.Client(BASE_URL, MASTER_KEY)
+    index = None
+
+    def setup_class(self):
+        self.index = self.client.create_index(uid='indexUID')
+
+    def teardown_class(self):
+        self.index.delete()
+
     def test_get_sys_info(self):
-        """Tests an API call to check the system information of MeiliSearch"""
+        """Tests getting the system information of the MeiliSearch instance"""
         response = self.client.get_sys_info()
         assert 'memoryUsage' in response
         assert 'processorUsage' in response

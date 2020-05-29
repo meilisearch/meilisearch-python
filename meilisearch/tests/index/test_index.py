@@ -3,61 +3,66 @@ import meilisearch
 from meilisearch.tests import BASE_URL, MASTER_KEY
 
 class TestIndex:
-    client = meilisearch.Client(BASE_URL, MASTER_KEY)
 
-    """ index route """
-    @pytest.mark.run(order=1)
+    """ TESTS: all index routes """
+
+    client = meilisearch.Client(BASE_URL, MASTER_KEY)
+    index_uid = 'indexUID'
+
     def test_create_index(self):
-        """Tests an API call to create an index in MeiliSearch"""
-        index = self.client.create_index(uid='movies_uid')
+        """Tests creating an index"""
+        index = self.client.create_index(uid=self.index_uid)
         assert isinstance(index, object)
-        assert index.uid == 'movies_uid'
+        assert index.uid == self.index_uid
 
     def test_get_indexes(self):
-        """Tests an API call to get all indexes in MeiliSearch"""
+        """Tests getting all indexes"""
         response = self.client.get_indexes()
         assert isinstance(response, list)
+        assert response[0]['uid'] == self.index_uid
 
     def test_get_index_with_uid(self):
-        """Tests an API call to get one index with uid in MeiliSearch"""
-        response = self.client.get_index(uid='movies_uid')
+        """Tests getting one index with uid"""
+        response = self.client.get_index(uid=self.index_uid)
         assert isinstance(response, object)
+        assert response.uid == self.index_uid
 
     def test_get_index_with_none_uid(self):
-        """Raises an exception if the index UID si None"""
+        """Test raising an exception if the index UID is None"""
         with pytest.raises(Exception):
             self.client.get_index(uid=None)
 
     def test_index_info(self):
-        """Tests an API call to get an index's info in MeiliSearch"""
-        index = self.client.get_index(uid='movies_uid')
+        """Tests getting an index's info"""
+        index = self.client.get_index(uid=self.index_uid)
         response = index.info()
         assert isinstance(response, object)
-        assert response['uid'] == 'movies_uid'
+        assert response['uid'] == self.index_uid
         assert response['primaryKey'] is None
 
     def test_index_info_with_wrong_uid(self):
-        """Tests an API call to get an index's info in MeiliSearch with a wrong UID"""
+        """Tests getting an index's info in MeiliSearch with a wrong UID"""
         with pytest.raises(Exception):
             self.client.get_index(uid='wrongUID').info()
 
     def test_get_primary_key(self):
-        """Tests an API call to get primary-key of an index in MeiliSearch"""
-        index = self.client.get_index(uid='movies_uid')
+        """Tests getting the primary-key of an index"""
+        index = self.client.get_index(uid=self.index_uid)
         response = index.get_primary_key()
         assert response is None
 
     def test_update_index(self):
-        """Tests an API call to update an index in MeiliSearch"""
-        index = self.client.get_index(uid='movies_uid')
+        """Tests updating an index"""
+        index = self.client.get_index(uid=self.index_uid)
         response = index.update(primaryKey='objectID')
         assert isinstance(response, object)
         assert index.get_primary_key() == 'objectID'
 
-    @pytest.mark.run(order=-1)
     def test_delete_index(self):
-        """Tests an API call to delete an index in MeiliSearch"""
-        index = self.client.get_index(uid="movies_uid")
+        """Tests deleting an index"""
+        index = self.client.get_index(uid=self.index_uid)
         response = index.delete()
         assert isinstance(response, object)
         assert response.status_code == 204
+        with pytest.raises(Exception):
+            self.client.get_index(uid=self.index_uid).info()

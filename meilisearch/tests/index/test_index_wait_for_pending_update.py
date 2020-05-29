@@ -5,26 +5,31 @@ import meilisearch
 from meilisearch.tests import BASE_URL, MASTER_KEY
 
 class TestUpdate:
+
+    """ TESTS: wait_for_pending_update method """
+
     client = meilisearch.Client(BASE_URL, MASTER_KEY)
     index = None
-    dataset_file = open("datasets/small_movies.json", "r")
+    dataset_file = None
     dataset_json = None
 
     def setup_class(self):
         self.index = self.client.create_index(uid='indexUID')
+        self.dataset_file = open("./datasets/small_movies.json", "r")
         self.dataset_json = json.loads(self.dataset_file.read())
+        self.dataset_file.close()
 
     def teardown_class(self):
         self.index.delete()
 
     def test_wait_for_pending_update_default(self):
-        """Tests call to wait for an update with default parameters"""
+        """Tests waiting for an update with default parameters"""
         response = self.index.add_documents([{'id': 1, 'title': 'Le Petit Prince'}])
         assert 'updateId' in response
-        wait_update = self.index.wait_for_pending_update(response['updateId'])
-        assert isinstance(wait_update, object)
-        assert 'status' in wait_update
-        assert wait_update['status'] != 'enqueued'
+        update = self.index.wait_for_pending_update(response['updateId'])
+        assert isinstance(update, object)
+        assert 'status' in update
+        assert update['status'] != 'enqueued'
 
     def test_wait_for_pending_update_timeout(self):
         """Tests timeout risen by waiting for an update"""

@@ -1,5 +1,4 @@
-import setuptools
-from setuptools import setup
+from setuptools import setup, find_packages
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -16,7 +15,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/meilisearch/meilisearch-python",
-    packages=["meilisearch"],
+    packages=find_packages(),
     project_urls={"Documentation": "https://docs.meilisearch.com/",},
     keywords="search python meilisearch",
     platform="any",
