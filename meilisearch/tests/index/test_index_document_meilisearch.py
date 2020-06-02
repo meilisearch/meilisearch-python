@@ -14,7 +14,7 @@ class TestDocument:
 
     def setup_class(self):
         self.index = self.client.create_index(uid='indexUID')
-        self.dataset_file = open("./datasets/small_movies.json", "r")
+        self.dataset_file = open('./datasets/small_movies.json', 'r')
         self.dataset_json = json.loads(self.dataset_file.read())
         self.dataset_file.close()
 
@@ -38,7 +38,7 @@ class TestDocument:
 
     def test_get_document(self):
         """Tests getting one document on a populated index"""
-        response = self.index.get_document("500682")
+        response = self.index.get_document('500682')
         assert isinstance(response, object)
         assert 'title' in response
         assert response['title'] == 'The Highwaymen'
@@ -46,7 +46,7 @@ class TestDocument:
     def test_get_document_inexistent(self):
         """Tests getting one INEXISTENT document on a populated index"""
         with pytest.raises(Exception):
-            self.index.get_document("123")
+            self.index.get_document('123')
 
     def test_get_documents_populated(self):
         """Tests getting documents on a populated index"""
@@ -70,30 +70,30 @@ class TestDocument:
     def test_update_documents(self):
         """Tests updating a single document and a set of documents """
         response = self.index.get_documents()
-        response[0]['title'] = "Some title"
+        response[0]['title'] = 'Some title'
         update = self.index.update_documents([response[0]])
         assert isinstance(update, object)
         assert 'updateId' in update
         self.index.wait_for_pending_update(update['updateId'])
         response = self.index.get_documents()
-        assert response[0]['title'] == "Some title"
+        assert response[0]['title'] == 'Some title'
         update = self.index.update_documents(self.dataset_json)
         self.index.wait_for_pending_update(update['updateId'])
         response = self.index.get_documents()
-        assert response[0]['title'] != "Some title"
+        assert response[0]['title'] != 'Some title'
 
     def test_delete_document(self):
         """Tests deleting a single document"""
-        response = self.index.delete_document("500682")
+        response = self.index.delete_document('500682')
         assert isinstance(response, object)
         assert 'updateId' in response
         self.index.wait_for_pending_update(response['updateId'])
         with pytest.raises(Exception):
-            self.index.get_document("500682")
+            self.index.get_document('500682')
 
     def test_delete_documents(self):
         """Tests deleting a set of documents """
-        to_delete = ["522681", "450465", "329996"]
+        to_delete = ['522681', '450465', '329996']
         response = self.index.delete_documents(to_delete)
         assert isinstance(response, object)
         assert 'updateId' in response

@@ -13,7 +13,7 @@ class TestSearch:
 
     def setup_class(self):
         self.index = self.client.create_index(uid='indexUID')
-        self.dataset_file = open("./datasets/small_movies.json", "r")
+        self.dataset_file = open('./datasets/small_movies.json', 'r')
         self.dataset_json = json.loads(self.dataset_file.read())
         self.dataset_file.close()
         response = self.index.add_documents(self.dataset_json, primary_key='id')
@@ -83,8 +83,23 @@ class TestSearch:
         assert isinstance(response, object)
         assert len(response['hits']) == 5
         assert '_formatted' in response['hits'][0]
-        assert "title" in response['hits'][0]['_formatted']
-        assert not "release_date" in response['hits'][0]['_formatted']
+        assert 'title' in response['hits'][0]['_formatted']
+        assert not 'release_date' in response['hits'][0]['_formatted']
 
-    # Add def test_basic_search_params_with_string_list(self):
-    # when bug (issue #85) is fixed
+    def test_basic_search_params_with_string_list(self):
+        """Tests search with string list in query params"""
+        response = self.index.search(
+            'a',
+            {
+                'limit': 5,
+                'attributesToRetrieve': ['title', 'overview'],
+                'attributesToHighlight': ['title'],
+            }
+        )
+        assert isinstance(response, object)
+        assert len(response['hits']) == 5
+        assert 'title' in response['hits'][0]
+        assert 'overview' in response['hits'][0]
+        assert not 'release_date' in response['hits'][0]
+        assert 'title' in response['hits'][0]['_formatted']
+        assert not 'overview' in response['hits'][0]['_formatted']
