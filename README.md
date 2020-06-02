@@ -106,7 +106,7 @@ Output:
 ## 🤖 Compatibility with MeiliSearch
 
 This package is compatible with the following MeiliSearch versions:
-- `v0.10.X`
+- `v0.11.X`
 
 ## 🎬 Examples
 
