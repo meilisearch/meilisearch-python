@@ -248,7 +248,7 @@ class Index():
         search_param = {'q': query}
         for key in opt_params:
             if isinstance(opt_params[key], list):
-                opt_params[key] = ",".join(opt_params[key])
+                opt_params[key] = ','.join(opt_params[key])
         params = {**search_param, **opt_params}
         return self.http.get(
             '{}/{}/{}?{}'.format(
