@@ -9,7 +9,7 @@ class HttpRequests:
     def __init__(self, config):
         self.config = config
         self.headers = {
-            'X-Meili-Api-Key': self.config.apikey,
+            'X-Meili-Api-Key': self.config.api_key,
             'Content-Type': 'application/json'
         }
 
