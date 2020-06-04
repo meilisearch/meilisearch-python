@@ -814,6 +814,54 @@ class Index():
             body
         )
 
+    # ATTRIBUTES FOR FACETING SUB-ROUTES
+
+    def get_attributes_for_faceting(self):
+        """
+        Get attributes for faceting of an index
+
+        Returns
+        ----------
+        settings: `list`
+            List containing the attributes for faceting of the index
+        """
+        return self.http.get(
+            self.__settings_url_for(self.config.paths.attributes_for_faceting)
+        )
+
+    def update_attributes_for_faceting(self, body):
+        """
+        Update attributes for faceting of an index
+
+        Parameters
+        ----------
+        body: `list`
+            List containing the attributes for faceting
+
+        Returns
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
+            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+        """
+        return self.http.post(
+            self.__settings_url_for(self.config.paths.attributes_for_faceting),
+            body
+        )
+
+    def reset_attributes_for_faceting(self):
+        """Reset attributes for faceting of an index to default values
+
+        Returns
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
+            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+        """
+        return self.http.delete(
+            self.__settings_url_for(self.config.paths.attributes_for_faceting),
+        )
+
     def __settings_url_for(self, sub_route):
         return '{}/{}/{}/{}'.format(
             self.config.paths.index,
