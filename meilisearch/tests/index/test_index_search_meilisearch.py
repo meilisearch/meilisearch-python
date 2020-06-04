@@ -53,7 +53,7 @@ class TestSearch:
         assert '_formatted' in response['hits'][0]
         assert 'dragon' in response['hits'][0]['_formatted']['title'].lower()
 
-    def test_basic_search_params_with_wildcard(self):
+    def test_custom_search_params_with_wildcard(self):
         """Tests search with '*' in query params"""
         response = self.index.search(
             'a',
@@ -69,7 +69,7 @@ class TestSearch:
         assert '_formatted' in response['hits'][0]
         assert "title" in response['hits'][0]['_formatted']
 
-    def test_basic_search_params_with_simple_string(self):
+    def test_custom_search_params_with_simple_string(self):
         """Tests search with simple string in query params"""
         response = self.index.search(
             'a',
@@ -86,7 +86,7 @@ class TestSearch:
         assert 'title' in response['hits'][0]['_formatted']
         assert not 'release_date' in response['hits'][0]['_formatted']
 
-    def test_basic_search_params_with_string_list(self):
+    def test_custom_search_params_with_string_list(self):
         """Tests search with string list in query params"""
         response = self.index.search(
             'a',
@@ -103,3 +103,55 @@ class TestSearch:
         assert not 'release_date' in response['hits'][0]
         assert 'title' in response['hits'][0]['_formatted']
         assert not 'overview' in response['hits'][0]['_formatted']
+
+    def test_custom_search_params_with_facets_distribution(self):
+        update = self.index.update_attributes_for_faceting(['genre'])
+        self.index.wait_for_pending_update(update['updateId'])
+        response = self.index.search(
+            'world',
+            {
+                'facetsDistribution': ['genre']
+            }
+        )
+        assert isinstance(response, object)
+        assert len(response['hits']) == 12
+        assert 'facetsDistribution' in response
+        assert 'exhaustiveFacetsCount' in response
+        assert response['exhaustiveFacetsCount']
+        assert 'genre' in response['facetsDistribution']
+        assert response['facetsDistribution']['genre']['cartoon'] == 1
+        assert response['facetsDistribution']['genre']['action'] == 3
+        assert response['facetsDistribution']['genre']['fantasy'] == 1
+
+    def test_custom_search_params_with_facet_filters(self):
+        update = self.index.update_attributes_for_faceting(['genre'])
+        self.index.wait_for_pending_update(update['updateId'])
+        response = self.index.search(
+            'world',
+            {
+                'facetFilters': [['genre:action']]
+            }
+        )
+        assert isinstance(response, object)
+        assert len(response['hits']) == 3
+        assert 'facetsDistribution' not in response
+        assert 'exhaustiveFacetsCount' not in response
+
+    def test_custom_search_params_with_many_params(self):
+        update = self.index.update_attributes_for_faceting(['genre'])
+        self.index.wait_for_pending_update(update['updateId'])
+        response = self.index.search(
+            'world',
+            {
+                'facetFilters': [['genre:action']],
+                'attributesToRetrieve': ['title', 'poster']
+            }
+        )
+        assert isinstance(response, object)
+        assert len(response['hits']) == 3
+        assert 'facetsDistribution' not in response
+        assert 'exhaustiveFacetsCount' not in response
+        assert 'title' in response['hits'][0]
+        assert 'poster' in response['hits'][0]
+        assert 'overview' not in response['hits'][0]
+        assert 'release_date' not in response['hits'][0]
