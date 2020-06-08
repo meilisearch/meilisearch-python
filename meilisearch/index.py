@@ -1,3 +1,4 @@
+import json
 import urllib
 from datetime import datetime
 from time import sleep
@@ -228,7 +229,8 @@ class Index():
             )
         )
 
-    def search(self, query, opt_params=None):
+    # pylint: disable=dangerous-default-value
+    def search(self, query, opt_params={}):
         """Search in meilisearch
 
         Parameters
@@ -243,13 +245,16 @@ class Index():
         results: `dict`
             Dictionnary with hits, offset, limit, processingTime and initial query
         """
-        if opt_params is None:
-            opt_params = {}
-        search_param = {'q': query}
+        # Query parameters parsing
         for key in opt_params:
-            if isinstance(opt_params[key], list):
+            if key in ('facetsDistribution', 'facetFilters'):
+                opt_params[key] = json.dumps(opt_params[key])
+            elif isinstance(opt_params[key], list):
                 opt_params[key] = ','.join(opt_params[key])
-        params = {**search_param, **opt_params}
+        params = {
+            'q': query,
+            **opt_params
+        }
         return self.http.get(
             '{}/{}/{}?{}'.format(
                 self.config.paths.index,

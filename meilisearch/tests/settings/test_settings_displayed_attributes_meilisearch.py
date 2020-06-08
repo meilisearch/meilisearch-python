@@ -8,7 +8,7 @@ class TestDisplayedAttributes:
 
     client = meilisearch.Client(BASE_URL, MASTER_KEY)
     index = None
-    displayed_attributes = ['id', 'release_date', 'title', 'poster', 'overview']
+    displayed_attributes = ['id', 'release_date', 'title', 'poster', 'overview', 'genre']
     dataset_file = None
     dataset_json = None
 

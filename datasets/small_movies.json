@@ -4,14 +4,16 @@
     "title": "Shazam!",
     "poster": "https://image.tmdb.org/t/p/w1280/xnopI5Xtky18MPhK40cZAGAOVeV.jpg",
     "overview": "A boy is given the ability to become an adult superhero in times of need with a single magic word.",
-    "release_date": 1553299200
+    "release_date": 1553299200,
+    "genre": "action"
   },
   {
     "id": "299537",
     "title": "Captain Marvel",
     "poster": "https://image.tmdb.org/t/p/w1280/AtsgWhDnHTq68L0lLsUrCnM7TjG.jpg",
     "overview": "The story follows Carol Danvers as she becomes one of the universe’s most powerful heroes when Earth is caught in the middle of a galactic war between two alien races. Set in the 1990s, Captain Marvel is an all-new adventure from a previously unseen period in the history of the Marvel Cinematic Universe.",
-    "release_date": 1551830400
+    "release_date": 1551830400,
+    "genre": "action"
   },
   {
     "id": "522681",
@@ -25,7 +27,8 @@
     "title": "How to Train Your Dragon: The Hidden World",
     "poster": "https://image.tmdb.org/t/p/w1280/xvx4Yhf0DVH8G4LzNISpMfFBDy2.jpg",
     "overview": "As Hiccup fulfills his dream of creating a peaceful dragon utopia, Toothless’ discovery of an untamed, elusive mate draws the Night Fury away. When danger mounts at home and Hiccup’s reign as village chief is tested, both dragon and rider must make impossible decisions to save their kind.",
-    "release_date": 1546473600
+    "release_date": 1546473600,
+    "genre": "cartoon"
   },
   {
     "id": "450465",
@@ -46,14 +49,16 @@
     "title": "Dumbo",
     "poster": "https://image.tmdb.org/t/p/w1280/279PwJAcelI4VuBtdzrZASqDPQr.jpg",
     "overview": "A young elephant, whose oversized ears enable him to fly, helps save a struggling circus, but when the circus plans a new venture, Dumbo and his friends discover dark secrets beneath its shiny veneer.",
-    "release_date": 1553644800
+    "release_date": 1553644800,
+    "genre": "cartoon"
   },
   {
     "id": "299536",
     "title": "Avengers: Infinity War",
     "poster": "https://image.tmdb.org/t/p/w1280/7WsyChQLEftFiDOVTGkv3hFpyyt.jpg",
     "overview": "As the Avengers and their allies have continued to protect the world from threats too large for any one hero to handle, a new danger has emerged from the cosmic shadows: Thanos. A despot of intergalactic infamy, his goal is to collect all six Infinity Stones, artifacts of unimaginable power, and use them to inflict his twisted will on all of reality. Everything the Avengers have fought for has led up to this moment - the fate of Earth and existence itself has never been more uncertain.",
-    "release_date": 1524618000
+    "release_date": 1524618000,
+    "genre": "action"
   },
   {
     "id": "458723",
@@ -74,21 +79,24 @@
     "title": "Cars",
     "poster": "https://image.tmdb.org/t/p/w1280/5damnMcRFKSjhCirgX3CMa88MBj.jpg",
     "overview": "Lightning McQueen, a hotshot rookie race car driven to succeed, discovers that life is about the journey, not the finish line, when he finds himself unexpectedly detoured in the sleepy Route 66 town of Radiator Springs. On route across the country to the big Piston Cup Championship in California to compete against two seasoned pros, McQueen gets to know the town's offbeat characters.",
-    "release_date": 1149728400
+    "release_date": 1149728400,
+    "genre": "cartoon"
   },
   {
     "id": "299534",
     "title": "Avengers: Endgame",
     "poster": "https://image.tmdb.org/t/p/w1280/dHjLaIUHXcMBt7YxK1TKWK1end9.jpg",
     "overview": "After the devastating events of Avengers: Infinity War, the universe is in ruins due to the efforts of the Mad Titan, Thanos. With the help of remaining allies, the Avengers must assemble once more in order to undo Thanos' actions and restore order to the universe once and for all, no matter what consequences may be in store.",
-    "release_date": 1556067600
+    "release_date": 1556067600,
+    "genre": "action"
   },
   {
     "id": "324857",
     "title": "Spider-Man: Into the Spider-Verse",
     "poster": "https://image.tmdb.org/t/p/w1280/iiZZdoQBEYBv6id8su7ImL0oCbD.jpg",
     "overview": "Miles Morales is juggling his life between being a high school student and being a spider-man. When Wilson 'Kingpin' Fisk uses a super collider, others from across the Spider-Verse are transported to this dimension.",
-    "release_date": 1544140800
+    "release_date": 1544140800,
+    "genre": "action"
   },
   {
     "id": "157433",
@@ -137,7 +145,8 @@
     "title": "Aquaman",
     "poster": "https://image.tmdb.org/t/p/w1280/5Kg76ldv7VxeX9YlcQXiowHgdX6.jpg",
     "overview": "Once home to the most advanced civilization on Earth, Atlantis is now an underwater kingdom ruled by the power-hungry King Orm. With a vast army at his disposal, Orm plans to conquer the remaining oceanic people and then the surface world. Standing in his way is Arthur Curry, Orm's half-human, half-Atlantean brother and true heir to the throne.",
-    "release_date": 1544140800
+    "release_date": 1544140800,
+    "genre": "action"
   },
   {
     "id": "512196",
@@ -186,7 +195,8 @@
     "title": "Fantastic Beasts: The Crimes of Grindelwald",
     "poster": "https://image.tmdb.org/t/p/w1280/fMMrl8fD9gRCFJvsx0SuFwkEOop.jpg",
     "overview": "Gellert Grindelwald has escaped imprisonment and has begun gathering followers to his cause—elevating wizards above all non-magical beings. The only one capable of putting a stop to him is the wizard he once called his closest friend, Albus Dumbledore. However, Dumbledore will need to seek help from the wizard who had thwarted Grindelwald once before, his former student Newt Scamander, who agrees to help, unaware of the dangers that lie ahead. Lines are drawn as love and loyalty are tested, even among the truest friends and family, in an increasingly divided wizarding world.",
-    "release_date": 1542153600
+    "release_date": 1542153600,
+    "genre": "fantasy"
   },
   {
     "id": "399579",
