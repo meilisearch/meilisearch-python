@@ -1,5 +1,5 @@
 import meilisearch
-from meilisearch.tests import BASE_URL, MASTER_KEY
+from meilisearch.tests import BASE_URL, MASTER_KEY, clear_all_indexes
 
 class TestStats:
 
@@ -10,6 +10,7 @@ class TestStats:
     index2 = None
 
     def setup_class(self):
+        clear_all_indexes(self.client)
         self.index = self.client.create_index(uid='indexUID')
         self.index_2 = self.client.create_index(uid='indexUID2')
 
