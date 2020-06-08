@@ -247,7 +247,7 @@ class Index():
         """
         # Query parameters parsing
         for key in opt_params:
-            if key == 'facetsDistribution' or key == 'facetFilters':
+            if key in ('facetsDistribution', 'facetFilters'):
                 opt_params[key] = json.dumps(opt_params[key])
             elif isinstance(opt_params[key], list):
                 opt_params[key] = ','.join(opt_params[key])

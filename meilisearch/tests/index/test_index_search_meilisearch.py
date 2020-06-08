@@ -155,3 +155,4 @@ class TestSearch:
         assert 'poster' in response['hits'][0]
         assert 'overview' not in response['hits'][0]
         assert 'release_date' not in response['hits'][0]
+        assert response['hits'][0]['title'] == 'Avengers: Infinity War'
