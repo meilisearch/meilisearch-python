@@ -1,5 +1,5 @@
 import meilisearch
-from meilisearch.tests import BASE_URL, MASTER_KEY
+from meilisearch.tests import BASE_URL, MASTER_KEY, clear_all_indexes
 
 class TestVersion:
     """ TESTS: version route """
@@ -8,6 +8,7 @@ class TestVersion:
     index = None
 
     def setup_class(self):
+        clear_all_indexes(self.client)
         self.index = self.client.create_index(uid='indexUID')
 
     def teardown_class(self):

@@ -1,6 +1,6 @@
 import pytest
 import meilisearch
-from meilisearch.tests import BASE_URL, MASTER_KEY
+from meilisearch.tests import BASE_URL, MASTER_KEY, clear_all_indexes
 
 class TestIndex:
 
@@ -8,6 +8,9 @@ class TestIndex:
 
     client = meilisearch.Client(BASE_URL, MASTER_KEY)
     index_uid = 'indexUID'
+
+    def setup_class(self):
+        clear_all_indexes(self.client)
 
     def test_create_index(self):
         """Tests creating an index"""

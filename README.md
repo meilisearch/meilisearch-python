@@ -37,6 +37,7 @@
 - [⚙️ Development Workflow](#️-development-workflow)
   - [Install dependencies](#install-dependencies)
   - [Tests and Linter](#tests-and-linter)
+  - [Want to debug?](#want-to-debug)
   - [Release](#release)
 
 ## 🔧 Installation
@@ -252,6 +253,20 @@ $ pipenv run pytest meilisearch
 # Linter
 $ pipenv run pylint meilisearch
 ```
+
+### Want to debug?
+
+Import `pdb` in your file and use it:
+
+```python
+import pdb
+
+...
+pdb.set_trace() # create a break point
+...
+```
+
+More information [about pdb](https://docs.python.org/3/library/pdb.html).
 
 ### Release
 

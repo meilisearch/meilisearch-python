@@ -1,6 +1,6 @@
 import json
 import meilisearch
-from meilisearch.tests import BASE_URL, MASTER_KEY
+from meilisearch.tests import BASE_URL, MASTER_KEY, clear_all_indexes
 
 class TestSearch:
 
@@ -12,6 +12,7 @@ class TestSearch:
     dataset_json = None
 
     def setup_class(self):
+        clear_all_indexes(self.client)
         self.index = self.client.create_index(uid='indexUID')
         self.dataset_file = open('./datasets/small_movies.json', 'r')
         self.dataset_json = json.loads(self.dataset_file.read())
