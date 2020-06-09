@@ -229,8 +229,7 @@ class Index():
             )
         )
 
-    # pylint: disable=dangerous-default-value
-    def search(self, query, opt_params={}):
+    def search(self, query, opt_params=None):
         """Search in meilisearch
 
         Parameters
@@ -246,6 +245,8 @@ class Index():
             Dictionnary with hits, offset, limit, processingTime and initial query
         """
         # Query parameters parsing
+        if opt_params is None:
+            opt_params = {}
         for key in opt_params:
             if key in ('facetsDistribution', 'facetFilters'):
                 opt_params[key] = json.dumps(opt_params[key])
