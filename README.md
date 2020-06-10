@@ -67,8 +67,8 @@ NB: you can also download MeiliSearch from **Homebrew** or **APT**.
 import meilisearch
 
 client = meilisearch.Client('http://127.0.0.1:7700', 'masterKey')
-index = client.create_index(uid='books') # If your index does not exist
-index = client.get_index('books')        # If you already created your index
+index = client.create_index('books') # If your index does not exist
+index = client.get_index('books')    # If you already created your index
 
 documents = [
   { 'book_id': 123,  'title': 'Pride and Prejudice' },
@@ -118,9 +118,9 @@ You can check out [the API documentation](https://docs.meilisearch.com/reference
 #### Create an index <!-- omit in toc -->
 ```python
 # Create an index
-client.create_index(uid='books')
+client.create_index('books')
 # Create an index and give the primary-key
-client.create_index(uid='books', primary_key='book_id')
+client.create_index('books', {'primaryKey': 'book_id'})
 ```
 
 #### List all indexes <!-- omit in toc -->

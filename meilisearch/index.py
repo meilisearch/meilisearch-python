@@ -84,13 +84,15 @@ class Index():
         return self.info()['primaryKey']
 
     @staticmethod
-    def create(config, **body):
+    def create(config, uid, options=None):
         """Create an index.
 
         Parameters
         ----------
-            body: **kwargs
-            Accepts uid, name and primaryKey as parameter.
+        uid: str
+            UID of the index
+        options: dict, optional
+            Options passed during creation (ex: primaryKey)
 
         Returns
         -------
@@ -101,16 +103,9 @@ class Index():
         HTTPError
             In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
         """
-        payload = {}
-        uid = body.get('uid', None)
-        if uid is not None:
-            payload['uid'] = uid
-        name = body.get('name', None)
-        if name is not None:
-            payload['name'] = name
-        primary_key = body.get('primary_key', None)
-        if primary_key is not None:
-            payload['primaryKey'] = primary_key
+        if options is None:
+            options = {}
+        payload = {'uid': uid, **options}
         return HttpRequests(config).post(config.paths.index, payload)
 
     @staticmethod
