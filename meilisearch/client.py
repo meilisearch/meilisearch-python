@@ -36,7 +36,7 @@ class Client():
         uid: str
             UID of the index
         options: dict, optional
-            Options passed during creation (ex: primaryKey)
+            Options passed during index creation (ex: primaryKey)
 
         Returns
         -------
