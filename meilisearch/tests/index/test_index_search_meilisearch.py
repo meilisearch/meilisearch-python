@@ -138,6 +138,20 @@ class TestSearch:
         assert 'facetsDistribution' not in response
         assert 'exhaustiveFacetsCount' not in response
 
+    def test_custom_search_params_with_multiple_facet_filters(self):
+        update = self.index.update_attributes_for_faceting(['genre'])
+        self.index.wait_for_pending_update(update['updateId'])
+        response = self.index.search(
+            'world',
+            {
+                'facetFilters': ['genre:action', ['genre:action', 'genre:action']]
+            }
+        )
+        assert isinstance(response, object)
+        assert len(response['hits']) == 3
+        assert 'facetsDistribution' not in response
+        assert 'exhaustiveFacetsCount' not in response
+
     def test_custom_search_params_with_many_params(self):
         update = self.index.update_attributes_for_faceting(['genre'])
         self.index.wait_for_pending_update(update['updateId'])
