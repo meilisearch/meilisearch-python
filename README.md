@@ -37,6 +37,7 @@
 - [⚙️ Development Workflow](#️-development-workflow)
   - [Install dependencies](#install-dependencies)
   - [Tests and Linter](#tests-and-linter)
+  - [Want to debug?](#want-to-debug)
   - [Release](#release)
 
 ## 🔧 Installation
@@ -66,8 +67,8 @@ NB: you can also download MeiliSearch from **Homebrew** or **APT**.
 import meilisearch
 
 client = meilisearch.Client('http://127.0.0.1:7700', 'masterKey')
-index = client.create_index(uid='books') # If your index does not exist
-index = client.get_index('books')        # If you already created your index
+index = client.create_index('books') # If your index does not exist
+index = client.get_index('books')    # If you already created your index
 
 documents = [
   { 'book_id': 123,  'title': 'Pride and Prejudice' },
@@ -106,7 +107,7 @@ Output:
 ## 🤖 Compatibility with MeiliSearch
 
 This package is compatible with the following MeiliSearch versions:
-- `v0.10.X`
+- `v0.11.X`
 
 ## 🎬 Examples
 
@@ -117,9 +118,9 @@ You can check out [the API documentation](https://docs.meilisearch.com/reference
 #### Create an index <!-- omit in toc -->
 ```python
 # Create an index
-client.create_index(uid='books')
+client.create_index('books')
 # Create an index and give the primary-key
-client.create_index(uid='books', primary_key='book_id')
+client.create_index('books', {'primaryKey': 'book_id'})
 ```
 
 #### List all indexes <!-- omit in toc -->
@@ -252,6 +253,20 @@ $ pipenv run pytest meilisearch
 # Linter
 $ pipenv run pylint meilisearch
 ```
+
+### Want to debug?
+
+Import `pdb` in your file and use it:
+
+```python
+import pdb
+
+...
+pdb.set_trace() # create a break point
+...
+```
+
+More information [about pdb](https://docs.python.org/3/library/pdb.html).
 
 ### Release
 

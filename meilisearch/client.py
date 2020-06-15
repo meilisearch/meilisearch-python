@@ -25,7 +25,7 @@ class Client():
         self.config = Config(url, apiKey)
         self.http = HttpRequests(self.config)
 
-    def create_index(self, uid, primary_key=None, name=None):
+    def create_index(self, uid, options=None):
         """Create an index.
 
         If the argument `uid` isn't passed in, it will be generated
@@ -35,10 +35,9 @@ class Client():
         ----------
         uid: str
             UID of the index
-        primary_key: str, optional
-            Attribute used as unique document identifier
-        name: str, optional
-            Name of the index
+        options: dict, optional
+            Options passed during index creation (ex: primaryKey)
+
         Returns
         -------
         index : Index
@@ -48,8 +47,8 @@ class Client():
         HTTPError
             In case of any other error found here https://docs.meilisearch.com/references/#errors-status-code
         """
-        index = Index(self.config, uid=uid)
-        index.create(self.config, uid=uid, primary_key=primary_key, name=name)
+        index = Index(self.config, uid)
+        index.create(self.config, uid, options)
         return index
 
     def get_indexes(self):

@@ -21,17 +21,18 @@ class Config:
         stop_words = 'stop-words'
         synonyms = 'synonyms'
         accept_new_fields = 'accept-new-fields'
+        attributes_for_faceting = 'attributes-for-faceting'
 
-    def __init__(self, url, apikey=None):
+    def __init__(self, url, api_key=None):
         """
         Parameters
         ----------
         url : str
             The url to the MeiliSearch API (ex: http://localhost:7700)
-        apikey : str
+        api_key : str
             The optional API key to access MeiliSearch
         """
 
         self.url = url
-        self.apikey = apikey
+        self.api_key = api_key
         self.paths = self.Paths()

@@ -1,3 +1,4 @@
+import json
 import urllib
 from datetime import datetime
 from time import sleep
@@ -83,13 +84,15 @@ class Index():
         return self.info()['primaryKey']
 
     @staticmethod
-    def create(config, **body):
+    def create(config, uid, options=None):
         """Create an index.
 
         Parameters
         ----------
-            body: **kwargs
-            Accepts uid, name and primaryKey as parameter.
+        uid: str
+            UID of the index
+        options: dict, optional
+            Options passed during index creation (ex: primaryKey)
 
         Returns
         -------
@@ -100,16 +103,9 @@ class Index():
         HTTPError
             In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
         """
-        payload = {}
-        uid = body.get('uid', None)
-        if uid is not None:
-            payload['uid'] = uid
-        name = body.get('name', None)
-        if name is not None:
-            payload['name'] = name
-        primary_key = body.get('primary_key', None)
-        if primary_key is not None:
-            payload['primaryKey'] = primary_key
+        if options is None:
+            options = {}
+        payload = {'uid': uid, **options}
         return HttpRequests(config).post(config.paths.index, payload)
 
     @staticmethod
@@ -243,13 +239,18 @@ class Index():
         results: `dict`
             Dictionnary with hits, offset, limit, processingTime and initial query
         """
+        # Query parameters parsing
         if opt_params is None:
             opt_params = {}
-        search_param = {'q': query}
         for key in opt_params:
-            if isinstance(opt_params[key], list):
+            if key in ('facetsDistribution', 'facetFilters'):
+                opt_params[key] = json.dumps(opt_params[key])
+            elif isinstance(opt_params[key], list):
                 opt_params[key] = ','.join(opt_params[key])
-        params = {**search_param, **opt_params}
+        params = {
+            'q': query,
+            **opt_params
+        }
         return self.http.get(
             '{}/{}/{}?{}'.format(
                 self.config.paths.index,
@@ -812,6 +813,54 @@ class Index():
         return self.http.post(
             self.__settings_url_for(self.config.paths.accept_new_fields),
             body
+        )
+
+    # ATTRIBUTES FOR FACETING SUB-ROUTES
+
+    def get_attributes_for_faceting(self):
+        """
+        Get attributes for faceting of an index
+
+        Returns
+        ----------
+        settings: `list`
+            List containing the attributes for faceting of the index
+        """
+        return self.http.get(
+            self.__settings_url_for(self.config.paths.attributes_for_faceting)
+        )
+
+    def update_attributes_for_faceting(self, body):
+        """
+        Update attributes for faceting of an index
+
+        Parameters
+        ----------
+        body: `list`
+            List containing the attributes for faceting
+
+        Returns
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
+            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+        """
+        return self.http.post(
+            self.__settings_url_for(self.config.paths.attributes_for_faceting),
+            body
+        )
+
+    def reset_attributes_for_faceting(self):
+        """Reset attributes for faceting of an index to default values
+
+        Returns
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
+            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+        """
+        return self.http.delete(
+            self.__settings_url_for(self.config.paths.attributes_for_faceting),
         )
 
     def __settings_url_for(self, sub_route):
