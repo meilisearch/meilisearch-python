@@ -8,6 +8,7 @@ class TestIndex:
 
     client = meilisearch.Client(BASE_URL, MASTER_KEY)
     index_uid = 'indexUID'
+    index_uid2 = 'indexUID2'
 
     def setup_class(self):
         clear_all_indexes(self.client)
@@ -17,6 +18,14 @@ class TestIndex:
         index = self.client.create_index(uid=self.index_uid)
         assert isinstance(index, object)
         assert index.uid == self.index_uid
+        assert index.get_primary_key() is None
+
+    def test_create_index_with_primary_key(self):
+        """Tests creating an index with a primary key"""
+        index = self.client.create_index(uid=self.index_uid2, options={'primaryKey': 'book_id'})
+        assert isinstance(index, object)
+        assert index.uid == self.index_uid2
+        assert index.get_primary_key() == 'book_id'
 
     def test_get_indexes(self):
         """Tests getting all indexes"""
@@ -69,3 +78,9 @@ class TestIndex:
         assert response.status_code == 204
         with pytest.raises(Exception):
             self.client.get_index(uid=self.index_uid).info()
+        index = self.client.get_index(uid=self.index_uid2)
+        response = index.delete()
+        assert isinstance(response, object)
+        assert response.status_code == 204
+        with pytest.raises(Exception):
+            self.client.get_index(uid=self.index_uid2).info()
