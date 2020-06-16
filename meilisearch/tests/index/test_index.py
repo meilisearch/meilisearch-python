@@ -9,6 +9,7 @@ class TestIndex:
     client = meilisearch.Client(BASE_URL, MASTER_KEY)
     index_uid = 'indexUID'
     index_uid2 = 'indexUID2'
+    index_uid3 = 'indexUID3'
 
     def setup_class(self):
         clear_all_indexes(self.client)
@@ -27,11 +28,22 @@ class TestIndex:
         assert index.uid == self.index_uid2
         assert index.get_primary_key() == 'book_id'
 
+    def test_create_index_with_uid_in_options(self):
+        """Tests creating an index with a primary key"""
+        index = self.client.create_index(uid=self.index_uid3, options={'uid': 'wrong', 'primaryKey': 'book_id'})
+        assert isinstance(index, object)
+        assert index.uid == self.index_uid3
+        assert index.get_primary_key() == 'book_id'
+
     def test_get_indexes(self):
         """Tests getting all indexes"""
         response = self.client.get_indexes()
+        uids = [index['uid'] for index in response]
         assert isinstance(response, list)
-        assert response[0]['uid'] == self.index_uid
+        assert self.index_uid in uids
+        assert self.index_uid2 in uids
+        assert self.index_uid3 in uids
+        assert len(response) == 3
 
     def test_get_index_with_uid(self):
         """Tests getting one index with uid"""
@@ -84,3 +96,10 @@ class TestIndex:
         assert response.status_code == 204
         with pytest.raises(Exception):
             self.client.get_index(uid=self.index_uid2).info()
+        index = self.client.get_index(uid=self.index_uid3)
+        response = index.delete()
+        assert isinstance(response, object)
+        assert response.status_code == 204
+        with pytest.raises(Exception):
+            self.client.get_index(uid=self.index_uid3).info()
+        assert len(self.client.get_indexes()) == 0
