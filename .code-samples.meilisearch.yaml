@@ -22,8 +22,9 @@ add_or_replace_documents_1: |-
   }])
 add_or_update_documents_1: |-
   client.get_index('movies').update_documents([{
-    'id': 287947,
-    'title': 'Shazam12'
+      'id': 287947,
+      title: 'Shazam ⚡️',
+      genre: 'comedy'
   }])
 delete_all_documents_1: |-
   client.get_index('movies').delete_all_documents()
