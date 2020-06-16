@@ -105,7 +105,7 @@ class Index():
         """
         if options is None:
             options = {}
-        payload = {'uid': uid, **options}
+        payload = {**options, 'uid': uid}
         return HttpRequests(config).post(config.paths.index, payload)
 
     @staticmethod
