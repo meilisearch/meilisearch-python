@@ -20,4 +20,4 @@ no-changes-template: 'Changes are coming soon 😎'
 sort-direction: 'ascending'
 replacers:
   - search: '(?:and )?@dependabot-preview(?:\[bot\])?,?'
-  - replace: ''
+    replace: ''
