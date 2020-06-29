@@ -8,7 +8,7 @@ class MeiliSearchError(Exception):
         super().__init__(self.message)
 
     def __str__(self):
-        return f'MeiliSearchError, {self.message}'
+        return f'MeiliSearchError. Error message: {self.message}.'
 
 class MeiliSearchApiError(MeiliSearchError):
     """Error sent by MeiliSearch API"""
@@ -17,12 +17,14 @@ class MeiliSearchApiError(MeiliSearchError):
         self.status_code = request.status_code
         if request.text:
             self.message = f'{json.loads(request.text)["message"]}'
+            self.error_code = f'{json.loads(request.text)["errorCode"]}'
+            self.error_link = f'{json.loads(request.text)["errorLink"]}'
         else:
             self.message = error
         super().__init__(self.message)
 
     def __str__(self):
-        return f'MeiliSearchApiError, HTTP status: {self.status_code} -> {self.message}'
+        return f'MeiliSearchApiError. Error code: {self.error_code}. Error message: {self.message}. Error documentation: {self.error_link}'
 
 class MeiliSearchCommunicationError(MeiliSearchError):
     """Error connecting to MeiliSearch"""
