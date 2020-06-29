@@ -1,6 +1,7 @@
 from meilisearch.index import Index
 from meilisearch.config import Config
 from meilisearch._httprequests import HttpRequests
+from meilisearch.errors import MeiliSearchApiError
 
 class Client():
     """
@@ -79,6 +80,33 @@ class Client():
             an instance of Index containing the information of the index found
         """
         return Index.get_index(self.config, uid=uid)
+
+    def get_or_create_index(self, uid, options=None):
+        """Get an index, or create it if it doesn't exist.
+
+        Parameters
+        ----------
+        uid: str
+            UID of the index
+        options: dict, optional
+            Options passed during index creation (ex: primaryKey)
+
+        Returns
+        -------
+        index : Index
+            an instance of Index containing the information of the retrieved or newly created index
+        Raises
+        ------
+        HTTPError
+            In case of any other error found here https://docs.meilisearch.com/references/#errors-status-code
+        """
+        index = self.get_index(uid)
+        try:
+            index.create(self.config, uid, options)
+        except MeiliSearchApiError as err:
+            if err.error_code != 'index_already_exists':
+                raise err
+        return index
 
     def get_all_stats(self):
         """Get all stats of MeiliSearch

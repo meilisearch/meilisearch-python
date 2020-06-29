@@ -10,6 +10,7 @@ class TestIndex:
     index_uid = 'indexUID'
     index_uid2 = 'indexUID2'
     index_uid3 = 'indexUID3'
+    index_uid4 = 'indexUID4'
 
     def setup_class(self):
         clear_all_indexes(self.client)
@@ -55,6 +56,32 @@ class TestIndex:
         """Test raising an exception if the index UID is None"""
         with pytest.raises(Exception):
             self.client.get_index(uid=None)
+
+    def test_get_or_create_index(self):
+        """Test get_or_create_index method"""
+        # self.client.create_index(self.index_uid3)
+        index_1 = self.client.get_or_create_index(self.index_uid4)
+        index_2 = self.client.get_or_create_index(self.index_uid4)
+        index_3 = self.client.get_or_create_index(self.index_uid4)
+        assert index_1.uid == index_2.uid == index_3.uid == self.index_uid4
+        update = index_1.add_documents([{
+            'book_id': 1,
+            'name': "Some book"
+        }])
+        index_1.wait_for_pending_update(update['updateId'])
+        documents = index_2.get_documents()
+        assert len(documents) == 1
+        index_2.delete()
+        with pytest.raises(Exception):
+            self.client.get_index(index_3).info()
+
+    def test_get_or_create_index_with_primary_key(self):
+        """Test get_or_create_index method with primary key"""
+        index_1 = self.client.get_or_create_index('books', {'primaryKey': self.index_uid4})
+        index_2 = self.client.get_or_create_index('books', {'primaryKey': 'some_wrong_key'})
+        assert index_1.get_primary_key() == self.index_uid4
+        assert index_2.get_primary_key() == self.index_uid4
+        index_1.delete()
 
     def test_index_info(self):
         """Tests getting an index's info"""
