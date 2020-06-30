@@ -307,30 +307,30 @@ search_guide_2: |-
   })
 getting_started_create_index_md: |-
   ```bash
-    $ pip3 install meilisearch
+  $ pip3 install meilisearch
   ```
 
   ```python
-    import meilisearch
+  import meilisearch
 
-    client = meilisearch.Client('http://127.0.0.1:7700')
-    index = client.create_index(uid='movies')
+  client = meilisearch.Client('http://127.0.0.1:7700')
+  index = client.create_index(uid='movies')
   ```
 
   [About this package](https://github.com/meilisearch/meilisearch-python/)
 getting_started_add_documents_md: |-
   ```python
-    import json
+  import json
 
-    json_file = open('movies.json')
-    movies = json.load(json_file)
-    index.add_documents(movies)
+  json_file = open('movies.json')
+  movies = json.load(json_file)
+  index.add_documents(movies)
   ```
 
   [About this package](https://github.com/meilisearch/meilisearch-python/)
 getting_started_search_md: |-
   ```python
-    index.search('botman')
+  index.search('botman')
   ```
 
   [About this package](https://github.com/meilisearch/meilisearch-python/)
