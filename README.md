@@ -34,11 +34,7 @@
   - [Documents](#documents)
   - [Update status](#update-status)
   - [Search](#search)
-- [⚙️ Development Workflow](#️-development-workflow)
-  - [Install dependencies](#install-dependencies)
-  - [Tests and Linter](#tests-and-linter)
-  - [Want to debug?](#want-to-debug)
-  - [Release](#release)
+- [⚙️ Development Workflow and Contributing](#️-development-workflow-and-contributing)
 
 ## 🔧 Installation
 
@@ -232,65 +228,11 @@ response = index.search('prince', { 'limit': 1 })
     "query": "prince"
 }
 ```
+## ⚙️ Development Workflow and Contributing
 
-## ⚙️ Development Workflow
+Any new contribution is more than welcome in this project!
 
-If you want to contribute, this section describes the steps to follow.
-
-Thank you for your interest in a MeiliSearch tool! ♥️
-
-### Install dependencies
-
-```bash
-$ pipenv install --dev
-```
-
-### Tests and Linter
-
-Each PR should pass the tests and the linter to be accepted.
-
-```bash
-# Tests
-$ docker run -p 7700:7700 getmeili/meilisearch:latest ./meilisearch --master-key=masterKey --no-analytics
-$ pipenv run pytest meilisearch
-# Linter
-$ pipenv run pylint meilisearch
-```
-
-### Want to debug?
-
-Import `pdb` in your file and use it:
-
-```python
-import pdb
-
-...
-pdb.set_trace() # create a break point
-...
-```
-
-More information [about pdb](https://docs.python.org/3/library/pdb.html).
-
-### Release
-
-MeiliSearch tools follow the [Semantic Versioning Convention](https://semver.org/).
-
-You must do a PR modifying the file `setup.py` with the right version.<br>
-
-```python
-version="X.X.X"
-```
-
-Once the changes are merged on `master`, in your terminal, you must be on the `master` branch and push a new tag with the right version:
-
-```bash
-$ git checkout master
-$ git pull origin master
-$ git tag vX.X.X
-$ git push --tag origin master
-```
-
-A GitHub Action will be triggered and push the new package on [PyPI](https://pypi.org/project/meilisearch).
+If you want to know more about the development workflow or want to contribute, please visit our [contributing guidelines](/CONTRIBUTING.md) for detailed instructions!
 
 <hr>
 
