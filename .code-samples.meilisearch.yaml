@@ -4,7 +4,7 @@
 # You can read more on https://github.com/meilisearch/documentation/tree/master/.vuepress/code-samples
 ---
 get_one_index_1: |-
-  client.get_index('movies')
+  client.get_index('movies').info()
 list_all_indexes_1: |-
   client.get_indexes()
 create_an_index_1: |-
