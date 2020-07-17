@@ -6,7 +6,6 @@ class Config:
     class Paths():
         health = "health"
         keys = 'keys'
-        sys_info = 'sys-info'
         version = 'version'
         index = 'indexes'
         update = 'updates'
