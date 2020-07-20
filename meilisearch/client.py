@@ -157,18 +157,6 @@ class Client():
         """
         return self.http.get(self.config.paths.keys)
 
-    def get_sys_info(self):
-        """Get system information of MeiliSearch
-
-        Get information about memory usage and processor usage.
-
-        Returns
-        ----------
-        sys_info: dict
-            Information about memory and processor usage.
-        """
-        return self.http.get(self.config.paths.sys_info)
-
     def get_version(self):
         """Get version MeiliSearch
 
