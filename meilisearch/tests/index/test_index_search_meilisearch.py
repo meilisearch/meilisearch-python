@@ -46,7 +46,7 @@ class TestSearch:
         response = self.index.search(
             'Dragon',
             {
-                'attributesToHighlight': 'title'
+                'attributesToHighlight': ['title']
             }
         )
         assert isinstance(response, object)
@@ -60,9 +60,9 @@ class TestSearch:
             'a',
             {
                 'limit': 5,
-                'attributesToHighlight': '*',
-                'attributesToRetrieve': '*',
-                'attributesToCrop': '*',
+                'attributesToHighlight': ['*'],
+                'attributesToRetrieve': ['*'],
+                'attributesToCrop': ['*'],
             }
         )
         assert isinstance(response, object)
@@ -76,9 +76,9 @@ class TestSearch:
             'a',
             {
                 'limit': 5,
-                'attributesToHighlight': 'title',
-                'attributesToRetrieve': 'title',
-                'attributesToCrop': 'title',
+                'attributesToHighlight': ['title'],
+                'attributesToRetrieve': ['title'],
+                'attributesToCrop': ['title'],
             }
         )
         assert isinstance(response, object)

@@ -1,4 +1,3 @@
-import json
 import urllib
 from datetime import datetime
 from time import sleep
@@ -239,24 +238,19 @@ class Index():
         results: `dict`
             Dictionnary with hits, offset, limit, processingTime and initial query
         """
-        # Query parameters parsing
+        # Bidy data parsing
         if opt_params is None:
             opt_params = {}
-        for key in opt_params:
-            if key in ('facetsDistribution', 'facetFilters'):
-                opt_params[key] = json.dumps(opt_params[key])
-            elif isinstance(opt_params[key], list):
-                opt_params[key] = ','.join(opt_params[key])
-        params = {
+        body = {
             'q': query,
             **opt_params
         }
-        return self.http.get(
-            '{}/{}/{}?{}'.format(
+        return self.http.post(
+            '{}/{}/{}'.format(
                 self.config.paths.index,
                 self.uid,
-                self.config.paths.search,
-                urllib.parse.urlencode(params))
+                self.config.paths.search),
+            body=body
         )
 
     def get_document(self, document_id):
