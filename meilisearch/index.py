@@ -238,7 +238,6 @@ class Index():
         results: `dict`
             Dictionnary with hits, offset, limit, processingTime and initial query
         """
-        # Bidy data parsing
         if opt_params is None:
             opt_params = {}
         body = {
