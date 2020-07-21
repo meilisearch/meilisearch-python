@@ -25,21 +25,21 @@ class TestDisplayedAttributes:
         """ Tests getting the displayed attributes before and after indexing a dataset """
         response = self.index.get_displayed_attributes()
         assert isinstance(response, object)
-        assert response == []
+        assert response == ['*']
         response = self.index.add_documents(self.dataset_json, primary_key='id')
         self.index.wait_for_pending_update(response['updateId'])
         get_attributes = self.index.get_displayed_attributes()
-        for attribute in self.displayed_attributes:
-            assert attribute in get_attributes
+        assert get_attributes == ['*']
 
     def test_update_displayed_attributes(self):
         """Tests updating the displayed attributes"""
         get_attributes = self.index.get_displayed_attributes()
-        response = self.index.update_displayed_attributes(get_attributes[1:])
+        response = self.index.update_displayed_attributes(self.displayed_attributes)
         self.index.wait_for_pending_update(response['updateId'])
         get_attributes_new = self.index.get_displayed_attributes()
-        assert len(get_attributes_new) == len(self.displayed_attributes) - 1
-        assert get_attributes[0] not in get_attributes_new
+        assert len(get_attributes_new) == len(self.displayed_attributes)
+        for attribute in self.displayed_attributes:
+            assert attribute in get_attributes_new
 
     def test_reset_displayed_attributes(self):
         """Tests the reset of displayedAttributes to default values (in dataset)"""
@@ -48,6 +48,4 @@ class TestDisplayedAttributes:
         assert 'updateId' in response
         self.index.wait_for_pending_update(response['updateId'])
         get_attributes = self.index.get_displayed_attributes()
-        assert len(get_attributes) == len(self.displayed_attributes)
-        for attribute in self.displayed_attributes:
-            assert attribute in get_attributes
+        assert get_attributes == ['*']

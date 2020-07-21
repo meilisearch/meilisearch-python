@@ -148,10 +148,6 @@ update_displayed_attributes_1: |-
   ])
 reset_displayed_attributes_1: |-
   client.get_index('movies').reset_displayed_attributes()
-get_accept_new_fields_1: |-
-  client.get_index('movies').get_accept_new_fields()
-update_accept_new_fields_1: |-
-  client.get_index('movies').update_accept_new_fields(False)
 get_index_stats_1: |-
   client.get_index('movies').get_stats()
 get_indexes_stats_1: |-
@@ -286,10 +282,6 @@ settings_guide_displayed_1: |-
       'release_date',
       'rank'
     ]
-  })
-settings_guide_accept_new_fields_1: |-
-  client.get_index('movies').update_settings({
-    'acceptNewFields': False
   })
 documents_guide_add_movie_1: |-
   client.get_index('movies').add_documents([{
