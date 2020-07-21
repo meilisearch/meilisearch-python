@@ -773,41 +773,6 @@ class Index():
             self.__settings_url_for(self.config.paths.synonyms),
         )
 
-    # ACCEPT-NEW-FIELDS SUB-ROUTES
-
-    def get_accept_new_fields(self):
-        """
-        Get accept-new-fields value of an index
-
-        Returns
-        ----------
-        settings: `bool`
-            Boolean containing the accept-new-fields value of the index
-        """
-        return self.http.get(
-            self.__settings_url_for(self.config.paths.accept_new_fields)
-        )
-
-    def update_accept_new_fields(self, body):
-        """
-        Update accept-new-fields value of an index
-
-        Parameters
-        ----------
-        body: `bool`
-            Boolean containing the accept-new-fields value
-
-        Returns
-        ----------
-        update: `dict`
-            Dictionnary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
-        """
-        return self.http.post(
-            self.__settings_url_for(self.config.paths.accept_new_fields),
-            body
-        )
-
     # ATTRIBUTES FOR FACETING SUB-ROUTES
 
     def get_attributes_for_faceting(self):
