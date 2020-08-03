@@ -33,7 +33,6 @@ class TestDisplayedAttributes:
 
     def test_update_displayed_attributes(self):
         """Tests updating the displayed attributes"""
-        get_attributes = self.index.get_displayed_attributes()
         response = self.index.update_displayed_attributes(self.displayed_attributes)
         self.index.wait_for_pending_update(response['updateId'])
         get_attributes_new = self.index.get_displayed_attributes()
