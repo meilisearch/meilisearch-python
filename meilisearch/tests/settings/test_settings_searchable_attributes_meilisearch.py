@@ -26,12 +26,11 @@ class TestSearchableAttributes:
         """Tests getting the searchable attributes on an empty and populated index"""
         response = self.index.get_searchable_attributes()
         assert isinstance(response, object)
-        assert response == []
+        assert response == ['*']
         response = self.index.add_documents(self.dataset_json, primary_key='id')
         self.index.wait_for_pending_update(response['updateId'])
         get_attributes = self.index.get_searchable_attributes()
-        for attribute in self.full_searchable_attributes:
-            assert attribute in get_attributes
+        assert get_attributes == ['*']
 
 
     def test_update_searchable_attributes(self):
@@ -41,6 +40,7 @@ class TestSearchableAttributes:
         assert 'updateId' in response
         self.index.wait_for_pending_update(response['updateId'])
         response = self.index.get_searchable_attributes()
+        assert len(response) == len(self.new_searchable_attributes)
         for attribute in self.new_searchable_attributes:
             assert attribute in response
 
@@ -51,5 +51,4 @@ class TestSearchableAttributes:
         assert 'updateId' in response
         self.index.wait_for_pending_update(response['updateId'])
         response = self.index.get_searchable_attributes()
-        for attribute in self.full_searchable_attributes:
-            assert attribute in response
+        assert response == ['*']

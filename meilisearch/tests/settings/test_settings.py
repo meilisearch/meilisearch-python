@@ -33,11 +33,10 @@ class TestSetting:
         for rule in self.default_ranking_rules:
             assert rule in response['rankingRules']
         assert response['distinctAttribute'] is None
-        assert response['searchableAttributes'] == []
-        assert response['displayedAttributes'] == []
+        assert response['searchableAttributes'] == ['*']
+        assert response['displayedAttributes'] == ['*']
         assert response['stopWords'] == []
         assert response['synonyms'] == {}
-        assert response['acceptNewFields'] is True
 
     def test_update_settings(self):
         """Tests updating some settings"""
@@ -52,10 +51,9 @@ class TestSetting:
         assert response['distinctAttribute'] is None
         for attribute in self.new_settings['searchableAttributes']:
             assert attribute in response['searchableAttributes']
-        assert response['displayedAttributes'] == []
+        assert response['displayedAttributes'] == ['*']
         assert response['stopWords'] == []
         assert response['synonyms'] == {}
-        assert response['acceptNewFields'] is True
 
     def test_reset_settings(self):
         """Tests resetting default settings"""
@@ -68,9 +66,7 @@ class TestSetting:
         for rule in self.default_ranking_rules:
             assert rule in response['rankingRules']
         assert response['distinctAttribute'] is None
-        for attribute in self.new_settings['searchableAttributes']:
-            assert attribute in response['searchableAttributes']
-            assert attribute in response['displayedAttributes']
+        assert response['displayedAttributes'] == ['*']
+        assert response['searchableAttributes'] == ['*']
         assert response['stopWords'] == []
         assert response['synonyms'] == {}
-        assert response['acceptNewFields'] is True

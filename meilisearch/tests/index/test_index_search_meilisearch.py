@@ -41,12 +41,25 @@ class TestSearch:
         assert response['hits'][0]['id'] == '166428'
         assert '_formatted' not in response['hits'][0]
 
+    def test_basic_search_with_empty_query(self):
+        """Tests search with empty query and empty params"""
+        response = self.index.search('')
+        assert isinstance(response, object)
+        assert len(response['hits']) == 0
+        assert response['query'] == ''
+
+    def test_basic_search_with_placeholder(self):
+        """Tests search with no query [None] and empty params"""
+        response = self.index.search(None, {})
+        assert isinstance(response, object)
+        assert len(response['hits']) == 20
+
     def test_custom_search(self):
         """Tests search with an simple query and custom parameter (attributesToHighlight)"""
         response = self.index.search(
             'Dragon',
             {
-                'attributesToHighlight': 'title'
+                'attributesToHighlight': ['title']
             }
         )
         assert isinstance(response, object)
@@ -54,15 +67,38 @@ class TestSearch:
         assert '_formatted' in response['hits'][0]
         assert 'dragon' in response['hits'][0]['_formatted']['title'].lower()
 
+    def test_custom_search_with_empty_query(self):
+        """Tests search with empty query and custom parameter (attributesToHighlight)"""
+        response = self.index.search(
+            '',
+            {
+                'attributesToHighlight': ['title']
+            }
+        )
+        assert isinstance(response, object)
+        assert len(response['hits']) == 0
+        assert response['query'] == ''
+
+    def test_custom_search_with_placeholder(self):
+        """Tests search with no query [None] and custom parameter (limit)"""
+        response = self.index.search(
+            None,
+            {
+                'limit': 5
+            }
+        )
+        assert isinstance(response, object)
+        assert len(response['hits']) == 5
+
     def test_custom_search_params_with_wildcard(self):
         """Tests search with '*' in query params"""
         response = self.index.search(
             'a',
             {
                 'limit': 5,
-                'attributesToHighlight': '*',
-                'attributesToRetrieve': '*',
-                'attributesToCrop': '*',
+                'attributesToHighlight': ['*'],
+                'attributesToRetrieve': ['*'],
+                'attributesToCrop': ['*'],
             }
         )
         assert isinstance(response, object)
@@ -76,9 +112,9 @@ class TestSearch:
             'a',
             {
                 'limit': 5,
-                'attributesToHighlight': 'title',
-                'attributesToRetrieve': 'title',
-                'attributesToCrop': 'title',
+                'attributesToHighlight': ['title'],
+                'attributesToRetrieve': ['title'],
+                'attributesToCrop': ['title'],
             }
         )
         assert isinstance(response, object)
