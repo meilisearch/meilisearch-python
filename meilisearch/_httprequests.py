@@ -22,7 +22,7 @@ class HttpRequests:
                 request = http_method(request_path, headers=self.headers, json=body)
             return self.__validate(request)
         except requests.exceptions.ConnectionError as err:
-            raise MeiliSearchCommunicationError(err)
+            raise MeiliSearchCommunicationError(err) from err
 
     def get(self, path):
         return self.send_request(requests.get, path)
@@ -48,4 +48,4 @@ class HttpRequests:
             request.raise_for_status()
             return HttpRequests.__to_json(request)
         except requests.exceptions.HTTPError as err:
-            raise MeiliSearchApiError(err, request)
+            raise MeiliSearchApiError(err, request) from err
