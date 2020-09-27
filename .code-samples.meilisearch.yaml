@@ -236,6 +236,13 @@ search_parameter_guide_matches_1: |-
     'attributesToHighlight': ['overview'],
     'matches': 'true'
   })
+settings_guide_synonyms_1: |-
+  client.get_index('movies').update_settings({
+    'synonyms': {
+      sweater: ['jumper'],
+      jumper: ['sweater']
+    },
+  })
 settings_guide_stop_words_1: |-
   client.get_index('movies').update_settings({
     'stopWords': [
