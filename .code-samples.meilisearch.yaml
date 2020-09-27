@@ -335,8 +335,8 @@ getting_started_search_md: |-
   [About this package](https://github.com/meilisearch/meilisearch-python/)
 faceted_search_update_settings_1: |-
   client.get_index('movies').update_attributes_for_faceting([
-      'genres',
       'director',
+      'genres',
   ])
 faceted_search_facet_filters_1: |-
   client.get_index('movies').search('thriller', {
