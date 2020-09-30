@@ -29,7 +29,7 @@
 - [🔧 Installation](#-installation)
 - [🚀 Getting started](#-getting-started)
 - [🤖 Compatibility with MeiliSearch](#-compatibility-with-meilisearch)
-- [🎬 Documentation and Examples](#-documentation-and-examples)
+- [📖 Documentation and Examples](#-documentation-and-examples)
 - [⚙️ Development Workflow and Contributing](#️-development-workflow-and-contributing)
 
 ## 🔧 Installation
@@ -104,7 +104,7 @@ This package is compatible with the following MeiliSearch versions:
 - `v0.14.X`
 - `v0.13.X`
 
-## 🎬 Documentation and Examples
+## 📖 Documentation and Examples
 
 MeiliSearch documentation provides **examples** and a detailed explanation of every one of its features and functionalities, including examples on how to implement them **using this SDK**.
 
