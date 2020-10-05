@@ -29,11 +29,7 @@
 - [🔧 Installation](#-installation)
 - [🚀 Getting started](#-getting-started)
 - [🤖 Compatibility with MeiliSearch](#-compatibility-with-meilisearch)
-- [🎬 Examples](#-examples)
-  - [Indexes](#indexes)
-  - [Documents](#documents)
-  - [Update status](#update-status)
-  - [Search](#search)
+- [📖 Documentation and Examples](#-documentation-and-examples)
 - [⚙️ Development Workflow and Contributing](#️-development-workflow-and-contributing)
 
 ## 🔧 Installation
@@ -79,9 +75,10 @@ documents = [
 index.add_documents(documents) # => { "updateId": 0 }
 ```
 
-With the `updateId`, you can check the status (`processed` or `failed`) of your documents addition thanks to this [method](#update-status).
+With the `updateId`, you can check the status (`processed` or `failed`) of your documents addition thanks to this [method](https://docs.meilisearch.com/references/updates.html#get-an-update-status).
 
 #### Search in index <!-- omit in toc -->
+
 ``` python
 # MeiliSearch is typo-tolerant:
 index.search('harry pottre')
@@ -105,128 +102,19 @@ Output:
 
 This package only guarantees the compatibility with the [version v0.15.0 of MeiliSearch](https://github.com/meilisearch/MeiliSearch/releases/tag/v0.15.0).
 
-## 🎬 Examples
+## 📖 Documentation and Examples
 
-You can check out [the API documentation](https://docs.meilisearch.com/references/).
+MeiliSearch documentation provides **examples** and a detailed explanation of every one of its features and functionalities, including examples on how to implement them **using this SDK**.
 
-### Indexes
+Please read the [guides available in the documentation](https://docs.meilisearch.com/guides/) or check the [API references](https://docs.meilisearch.com/references/) to find the one that you need!
 
-#### Create an index <!-- omit in toc -->
-```python
-# Create an index
-client.create_index('books')
-# Create an index and give the primary-key
-client.create_index('books', {'primaryKey': 'book_id'})
-# Get an index or create it if it doesn't exist
-client.get_or_create_index('books', {'primaryKey': 'book_id'})
-```
+The following sections may interest you:
 
-#### List all indexes <!-- omit in toc -->
-```python
-client.get_indexes()
-```
+- [Manipulate documents](https://docs.meilisearch.com/references/documents.html)
+- [Search](https://docs.meilisearch.com/references/search.html)
+- [Manage the indexes](https://docs.meilisearch.com/references/indexes.html)
+- [Configure the index settings](https://docs.meilisearch.com/references/settings.html)
 
-#### Get an index object <!-- omit in toc -->
-
-```python
-index = client.get_index('books')
-```
-
-### Documents
-
-#### Fetch documents <!-- omit in toc -->
-
-```python
-# Get one document
-index.get_document(123)
-# Get documents by batch
-index.get_documents({ 'offset': 10 , 'limit': 20 })
-```
-
-#### Add documents <!-- omit in toc -->
-
-```python
-index.add_documents([{ 'book_id': 2, 'title': 'Madame Bovary' }])
-```
-
-Response:
-```json
-{
-    "updateId": 1
-}
-```
-This `updateId` allows you to [track the current update](#update-status).
-
-#### Delete documents <!-- omit in toc -->
-
-```python
-# Delete one document
-index.delete_document(2)
-# Delete several documents
-index.delete_documents([1, 42])
-# Delete all documents
-index.delete_all_documents()
-```
-
-### Update status
-
-```python
-# Get one update status
-# Parameter: the updateId got after an asynchronous request (e.g. documents addition)
-index.get_update_status(1)
-# Get all updates status
-index.get_all_update_status()
-```
-
-### Search
-
-#### Basic search <!-- omit in toc -->
-
-```python
-index.search('prince')
-```
-
-```json
-{
-    "hits": [
-        {
-            "book_id": 456,
-            "title": "Le Petit Prince"
-        },
-        {
-            "book_id": 4,
-            "title": "Harry Potter and the Half-Blood Prince"
-        }
-    ],
-    "offset": 0,
-    "limit": 20,
-    "processingTimeMs": 13,
-    "query": "prince"
-}
-```
-
-#### Custom search <!-- omit in toc -->
-
-All the supported options are described in [this documentation section](https://docs.meilisearch.com/references/search.html#search-in-an-index).
-
-```python
-response = index.search('prince', { 'limit': 1 })
-```
-
-```json
-{
-    "hits": [
-        {
-            "book_id": 456,
-            "title": "Le Petit Prince"
-        }
-    ],
-    "offset": 0,
-    "limit": 1,
-    "processingTimeMs": 10,
-    "query": "prince"
-}
-```
 ## ⚙️ Development Workflow and Contributing
 
 Any new contribution is more than welcome in this project!
