@@ -23,11 +23,6 @@ class TestSearch:
     def teardown_class(self):
         self.index.delete()
 
-    def test_basic_search_empty_query(self):
-        """Tests search with an empty query"""
-        response = self.index.search('')
-        assert len(response['hits']) == 0
-
     def test_basic_search(self):
         """Tests search with an simple query"""
         response = self.index.search('How to Train Your Dragon')
@@ -45,7 +40,7 @@ class TestSearch:
         """Tests search with empty query and empty params"""
         response = self.index.search('')
         assert isinstance(response, object)
-        assert len(response['hits']) == 0
+        assert len(response['hits']) == 20
         assert response['query'] == ''
 
     def test_basic_search_with_placeholder(self):
@@ -76,7 +71,7 @@ class TestSearch:
             }
         )
         assert isinstance(response, object)
-        assert len(response['hits']) == 0
+        assert len(response['hits']) == 20
         assert response['query'] == ''
 
     def test_custom_search_with_placeholder(self):
