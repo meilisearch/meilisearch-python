@@ -23,7 +23,6 @@ class TestClientDumps:
         """Tests the creation of a MeiliSearch dump"""
         dump = self.client.create_dump()
         assert dump['uid'] is not None
-        assert dump['status'] is not None
         assert dump['status'] == 'processing'
 
     def test_dump_status_route(self):
@@ -32,10 +31,9 @@ class TestClientDumps:
         self.index.wait_for_pending_update(response['updateId'])
         dump = self.client.create_dump()
         assert dump['uid'] is not None
-        assert dump['status'] is not None
+        assert dump['status'] == 'processing'
         dump_status = self.client.get_dump_status(dump['uid'])
         assert dump_status['uid'] is not None
-        assert dump_status['status'] is not None
         assert dump_status['status'] == 'processing'
         while dump_status['status'] == 'processing':
             time.sleep(0.1)
