@@ -1,7 +1,9 @@
 import json
 import time
+import pytest
 import meilisearch
 from meilisearch.tests import BASE_URL, MASTER_KEY, clear_all_indexes
+from meilisearch.errors import MeiliSearchApiError
 
 class TestClientDumps:
 
@@ -39,3 +41,8 @@ class TestClientDumps:
             time.sleep(0.1)
             dump_status = self.client.get_dump_status(dump['uid'])
         assert dump_status['status'] == 'done'
+
+    def test_dump_status_nonexistent_uid_raises_error(self):
+        """Tests the route for getting a nonexistent dump status"""
+        with pytest.raises(MeiliSearchApiError):
+            self.client.get_dump_status('uid_not_exists')
