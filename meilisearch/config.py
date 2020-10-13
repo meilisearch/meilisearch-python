@@ -21,6 +21,8 @@ class Config:
         synonyms = 'synonyms'
         accept_new_fields = 'accept-new-fields'
         attributes_for_faceting = 'attributes-for-faceting'
+        dumps = 'dumps'
+        dump_status = 'dump_status'
 
     def __init__(self, url, api_key=None):
         """
