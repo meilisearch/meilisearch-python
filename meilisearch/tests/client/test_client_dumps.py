@@ -1,7 +1,6 @@
-import pytest
-import meilisearch
 import json
 import time
+import meilisearch
 from meilisearch.tests import BASE_URL, MASTER_KEY, clear_all_indexes
 
 class TestClientDumps:
