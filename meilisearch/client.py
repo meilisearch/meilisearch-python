@@ -176,3 +176,32 @@ class Client():
             Information about the version of MeiliSearch.
         """
         return self.get_version()
+
+    def create_dump(self):
+        """Triggers the creation of a MeiliSearch dump
+
+        Returns
+        ----------
+        Dump: dict
+            Information about the dump.
+            https://docs.meilisearch.com/references/dump.html#create-a-dump
+        """
+        return self.http.post(self.config.paths.dumps)
+
+    def get_dump_status(self, uid):
+        """Retrieves the status of a MeiliSearch dump creation
+
+        Parameters
+        ----------
+        uid: str
+            UID of the dump
+
+        Returns
+        ----------
+        Dump status: dict
+            Information about the dump status.
+            https://docs.meilisearch.com/references/dump.html#get-dump-status
+        """
+        return self.http.get(
+            self.config.paths.dumps + '/' + str(uid) + '/status'
+        )
