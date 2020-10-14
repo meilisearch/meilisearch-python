@@ -46,7 +46,7 @@ class TestClientDumps:
         assert dump['status'] == 'processing'
         dump_status = self.client.get_dump_status(dump['uid'])
         assert dump_status['uid'] is not None
-        assert dump_status['status'] == 'processing'
+        assert dump_status['status'] is not None
         wait_for_dump_creation(self.client, dump['uid'])
 
     def test_dump_status_nonexistent_uid_raises_error(self):
