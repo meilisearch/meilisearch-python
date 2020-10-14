@@ -15,12 +15,22 @@ class TestClientDumps:
 
     def setup_class(self):
         clear_all_indexes(self.client)
-        self.index = self.client.create_index(uid='indexUID')
         self.dataset_file = open('./datasets/small_movies.json', 'r')
         self.dataset_json = json.loads(self.dataset_file.read())
         self.dataset_file.close()
+
+    def setup_method(self, method):
+        """Creates and populates an index before each test is run"""
+        self.index = self.client.create_index(uid='indexUID-' + method.__name__)
         response = self.index.add_documents(self.dataset_json, primary_key='id')
         self.index.wait_for_pending_update(response['updateId'])
+
+    def teardown_method(self, method):
+        self.client.get_index('indexUID-' + method.__name__).delete()
+
+    def teardown_class(self):
+        """Cleans all indexes in MEiliSearch when all the test are done"""
+        clear_all_indexes(self.client)
 
     def test_dump_creation(self):
         """Tests the creation of a MeiliSearch dump"""
