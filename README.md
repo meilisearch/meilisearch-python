@@ -77,7 +77,7 @@ index.add_documents(documents) # => { "updateId": 0 }
 
 With the `updateId`, you can check the status (`processed` or `failed`) of your documents addition thanks to this [method](https://docs.meilisearch.com/references/updates.html#get-an-update-status).
 
-#### Search in index <!-- omit in toc -->
+#### Basic Search <!-- omit in toc -->
 
 ``` python
 # MeiliSearch is typo-tolerant:
@@ -95,6 +95,29 @@ Output:
   "limit" => 20,
   "processingTimeMs" => 1,
   "query" => "harry pottre"
+}
+```
+
+#### Custom Search <!-- omit in toc -->
+
+All the supported options are described in [this documentation section](https://docs.meilisearch.com/guides/advanced_guides/search_parameters.html).
+
+```python
+index.search('prince', { 'limit': 1 })
+```
+
+```json
+{
+    "hits": [
+        {
+            "book_id": 456,
+            "title": "Le Petit Prince"
+        }
+    ],
+    "offset": 0,
+    "limit": 1,
+    "processingTimeMs": 10,
+    "query": "prince"
 }
 ```
 
