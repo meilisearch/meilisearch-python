@@ -103,7 +103,13 @@ Output:
 All the supported options are described in [this documentation section](https://docs.meilisearch.com/guides/advanced_guides/search_parameters.html).
 
 ```python
-index.search('prince', { 'limit': 1 })
+index.search(
+  'prince',
+  {
+    'limit': 1,
+    'attributesToHighlight': ['title']
+  }
+)
 ```
 
 ```json
@@ -111,7 +117,11 @@ index.search('prince', { 'limit': 1 })
     "hits": [
         {
             "book_id": 456,
-            "title": "Le Petit Prince"
+            "title": "Le Petit Prince",
+            "_formatted": {
+                "book_id": 456,
+                "title": "Le Petit <em>Prince</em>"
+            }
         }
     ],
     "offset": 0,
