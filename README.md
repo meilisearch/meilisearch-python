@@ -100,7 +100,7 @@ Output:
 
 #### Custom Search <!-- omit in toc -->
 
-All the supported options are described in [this documentation section](https://docs.meilisearch.com/guides/advanced_guides/search_parameters.html).
+All the supported options are described in [the search parameters documentation section](https://docs.meilisearch.com/guides/advanced_guides/search_parameters.html).
 
 ```python
 index.search(
