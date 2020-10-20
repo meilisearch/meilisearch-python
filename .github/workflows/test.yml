@@ -1,13 +1,17 @@
-name: Pytest
+name: Tests
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
+  push:
+    # trying and staging branches are for BORS config
+    branches:
+      - trying
+      - staging
+      - master
 
 jobs:
-  build:
+  test:
+    name: python-tests
     runs-on: ubuntu-latest
 
     steps:
