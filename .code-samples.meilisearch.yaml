@@ -8,7 +8,7 @@ get_one_index_1: |-
 list_all_indexes_1: |-
   client.get_indexes()
 create_an_index_1: |-
-  client.create_index('movies', {'primary_key': 'movie_id'})
+  client.create_index('movies', {'primaryKey': 'movie_id'})
 update_an_index_1: |-
   client.get_index('movies').update(primaryKey='movie_review_id')
 delete_an_index_1: |-
