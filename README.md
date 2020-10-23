@@ -60,7 +60,7 @@ NB: you can also download MeiliSearch from **Homebrew** or **APT**.
 
 ## 🚀 Getting Started
 
-#### Add documents <!-- omit in toc -->
+#### Add Documents <!-- omit in toc -->
 
 ```python
 import meilisearch
@@ -114,7 +114,7 @@ index.search(
   'prince',
   {
     'attributesToHighlight': ['title'],
-    'filters': ['book_id > 10']
+    'filters': 'book_id > 10'
   }
 )
 ```
