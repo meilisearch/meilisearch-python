@@ -28,7 +28,7 @@
 
 - [📖 Documentation](#-documentation)
 - [🔧 Installation](#-installation)
-- [🚀 Getting started](#-getting-started)
+- [🚀 Getting Started](#-getting-started)
 - [🤖 Compatibility with MeiliSearch](#-compatibility-with-meilisearch)
 - [� Learn More](#-learn-more)
 - [⚙️ Development Workflow and Contributing](#️-development-workflow-and-contributing)
@@ -58,7 +58,7 @@ $ docker run -it --rm -p 7700:7700 getmeili/meilisearch:latest ./meilisearch --m
 
 NB: you can also download MeiliSearch from **Homebrew** or **APT**.
 
-## 🚀 Getting started
+## 🚀 Getting Started
 
 #### Add documents <!-- omit in toc -->
 
