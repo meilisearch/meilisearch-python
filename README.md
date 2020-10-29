@@ -18,6 +18,7 @@
   <a href="https://github.com/meilisearch/meilisearch-python/actions"><img src="https://github.com/meilisearch/meilisearch-python/workflows/Pytest/badge.svg" alt="Test Status"></a>
   <a href="https://github.com/meilisearch/meilisearch-python/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-informational" alt="License"></a>
   <a href="https://slack.meilisearch.com"><img src="https://img.shields.io/badge/slack-MeiliSearch-blue.svg?logo=slack" alt="Slack"></a>
+  <a href="https://app.bors.tech/repositories/28782"><img src="https://bors.tech/images/badge_small.svg" alt="Bors enabled"></a>
 </p>
 
 <p align="center">⚡ The MeiliSearch API client written for Python 🐍</p>
