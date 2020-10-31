@@ -10,4 +10,4 @@ class TestHealth:
     def test_health(self):
         """Tests checking the health of MeiliSearch instance"""
         response = self.client.health()
-        assert response.status_code == 200
+        assert response.status_code == 204
