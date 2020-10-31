@@ -132,18 +132,6 @@ class Client():
         """
         return self.http.get(self.config.paths.health)
 
-    def update_health(self, health):
-        """Update health of meilisearch
-
-        Update health of MeiliSearch to true or false.
-
-        Parameters
-        ----------
-        health: bool
-            Boolean representing the health status of MeiliSearch. True for healthy.
-        """
-        return self.http.put(self.config.paths.health, {'health': health})
-
     def get_keys(self):
         """Get all keys created
 
