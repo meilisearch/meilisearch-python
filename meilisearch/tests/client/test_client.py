@@ -12,7 +12,7 @@ class TestClient:
         client = meilisearch.Client(BASE_URL, MASTER_KEY)
         assert client.config
         response = client.health()
-        assert response.status_code == 200
+        assert response.status_code < 400
 
     @staticmethod
     def test_get_client_without_master_key():
