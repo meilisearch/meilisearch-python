@@ -8,7 +8,7 @@ setup(
         "requests"
     ],
     name="meilisearch",
-    version="0.12.4",
+    version="0.13.0",
     author="Charlotte Vermandel",
     author_email="charlotte@meilisearch.com",
     description="The python client for MeiliSearch API.",
