@@ -154,8 +154,6 @@ get_indexes_stats_1: |-
   client.get_all_stats()
 get_health_1: |-
   client.health()
-update_health_1: |-
-  client.update_health()
 get_version_1: |-
   clien.get_version()
 get_pretty_sys_info_1: |-

@@ -10,6 +10,6 @@ def clear_all_indexes(client):
 
 def wait_for_dump_creation(client, dump_uid):
     dump_status = client.get_dump_status(dump_uid)
-    while dump_status['status'] == 'processing':
+    while dump_status['status'] == 'in_progress':
         time.sleep(0.1)
         dump_status = client.get_dump_status(dump_uid)
