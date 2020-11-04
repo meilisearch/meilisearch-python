@@ -31,7 +31,7 @@
 - [🔧 Installation](#-installation)
 - [🚀 Getting Started](#-getting-started)
 - [🤖 Compatibility with MeiliSearch](#-compatibility-with-meilisearch)
-- [� Learn More](#-learn-more)
+- [💡 Learn More](#-learn-more)
 - [⚙️ Development Workflow and Contributing](#️-development-workflow-and-contributing)
 
 ## 📖 Documentation
