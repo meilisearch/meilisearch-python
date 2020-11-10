@@ -26,10 +26,10 @@ class TestClientDumps:
         self.index.wait_for_pending_update(response['updateId'])
 
     def teardown_method(self, method):
-        self.client.get_index('indexUID-' + method.__name__).delete()
+        self.client.index('indexUID-' + method.__name__).delete()
 
     def teardown_class(self):
-        """Cleans all indexes in MEiliSearch when all the test are done"""
+        """Cleans all indexes in MeiliSearch when all the test are done"""
         clear_all_indexes(self.client)
 
     def test_dump_creation(self):
