@@ -24,9 +24,9 @@ class Index():
         config : Config
             Config object containing permission and location of MeiliSearch.
         uid: str
-            Uid of the index on which to perform the index actions.
-        index_path: str
-            Index url path.
+            UID of the index on which to perform the index actions.
+        primary_key: str, optional
+            Primary-key of the index.
         """
         self.config = config
         self.http = HttpRequests(config)
@@ -44,12 +44,13 @@ class Index():
         return self.http.delete('{}/{}'.format(self.config.paths.index, self.uid))
 
     def update(self, **body):
-        """Update the index.
+        """Update the index primary-key.
 
         Parameters
         ----------
         body: **kwargs
             Accepts primaryKey as an updatable parameter.
+            Ex: index.update(primaryKey='name')
 
         Returns
         -------
@@ -82,7 +83,7 @@ class Index():
         Returns
         -------
         primary_key: str
-            String containing primary key.
+            String containing the primary key.
         """
         self.primary_key = self.fetch_info()['primaryKey']
         return self.primary_key
@@ -114,12 +115,12 @@ class Index():
 
     @staticmethod
     def list_all(config):
-        """Get all indexes
+        """Get all indexes.
 
         Returns
         -------
         indexes : list
-            List of indexes. Each index is a dictionnary.
+            List of the indexes. Each index is a dictionnary.
         Raises
         ------
         HTTPError

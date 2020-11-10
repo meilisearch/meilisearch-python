@@ -32,14 +32,14 @@ class Client():
         Parameters
         ----------
         uid: str
-            UID of the index
+            UID of the index.
         options: dict, optional
-            Options passed during index creation (ex: primaryKey)
+            Options passed during index creation (ex: primaryKey).
 
         Returns
         -------
         index : Index
-            An instance of Index containing the information of the newly created index
+            An instance of Index containing the information of the newly created index.
         Raises
         ------
         HTTPError
@@ -57,7 +57,7 @@ class Client():
             In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
         Returns
         -------
-        list
+        indexes: list
             List of indexes in dictionnary format. (e.g [{ 'uid': 'movies' 'primaryKey': 'objectID' }])
         """
         return Index.list_all(self.config)
@@ -65,6 +65,11 @@ class Client():
     def get_index(self, uid):
         """Get the index.
         This index should already exist.
+
+        Parameters
+        ----------
+        uid: str
+            UID of the index.
 
         Raises
         ------
@@ -82,10 +87,15 @@ class Client():
         """Create an Index instance.
         This method doesn't trigger any HTTP call.
 
+        Parameters
+        ----------
+        uid: str
+            UID of the index.
+
         Returns
         -------
         index : Index
-            An Index instance
+            An Index instance.
         """
         if uid is not None:
             return Index(self.config, uid=uid)
@@ -104,7 +114,7 @@ class Client():
         Returns
         -------
         index : Index
-            An instance of Index containing the information of the retrieved or newly created index
+            An instance of Index containing the information of the retrieved or newly created index.
         Raises
         ------
         HTTPError
@@ -123,15 +133,16 @@ class Client():
 
         Get information about database size and all indexes
         https://docs.meilisearch.com/references/stats.html
+
         Returns
-        ----------
+        -------
         stats: `dict`
-            Dictionnary containing stats about your MeiliSearch instance
+            Dictionnary containing stats about your MeiliSearch instance.
         """
         return self.http.get(self.config.paths.stat)
 
     def health(self):
-        """Get health of MeiliSearch
+        """Get health of the MeiliSearch server.
 
         `204` HTTP status response when MeiliSearch is healthy.
 
@@ -143,9 +154,9 @@ class Client():
         return self.http.get(self.config.paths.health)
 
     def get_keys(self):
-        """Get all keys created
+        """Get all keys.
 
-        Get list of all the keys that were created and all their related information.
+        Get list of all the keys.
 
         Returns
         ----------
@@ -176,7 +187,7 @@ class Client():
         return self.get_version()
 
     def create_dump(self):
-        """Triggers the creation of a MeiliSearch dump
+        """Triggers the creation of a MeiliSearch dump.
 
         Returns
         ----------
@@ -187,15 +198,15 @@ class Client():
         return self.http.post(self.config.paths.dumps)
 
     def get_dump_status(self, uid):
-        """Retrieves the status of a MeiliSearch dump creation
+        """Retrieves the status of a MeiliSearch dump creation.
 
         Parameters
         ----------
         uid: str
-            UID of the dump
+            UID of the dump.
 
         Returns
-        ----------
+        -------
         Dump status: dict
             Information about the dump status.
             https://docs.meilisearch.com/references/dump.html#get-dump-status
