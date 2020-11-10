@@ -9,11 +9,9 @@ def clear_all_indexes(client):
     for index in indexes:
         client.get_index(index['uid']).delete()
 
-"""
-Waits until the end of the dump creation.
 
-Raises a TimeoutError if the `timeout_in_ms` is reached.
-"""
+# Waits until the end of the dump creation.
+# Raises a TimeoutError if the `timeout_in_ms` is reached.
 def wait_for_dump_creation(client, dump_uid, timeout_in_ms=10000, interval_in_ms=500):
     start_time = datetime.now()
     elapsed_time = 0
