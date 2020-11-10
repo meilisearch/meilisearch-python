@@ -29,7 +29,7 @@ class TestClientDumps:
         self.client.index('indexUID-' + method.__name__).delete()
 
     def teardown_class(self):
-        """Cleans all indexes in MeiliSearch when all the test are done"""
+        """Cleans all indexes in MeiliSearch when all the tests are done"""
         clear_all_indexes(self.client)
 
     def test_dump_creation(self):

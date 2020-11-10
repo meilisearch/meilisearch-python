@@ -58,7 +58,7 @@ class Client():
         Returns
         -------
         indexes: list
-            List of indexes in dictionnary format. (e.g [{ 'uid': 'movies' 'primaryKey': 'objectID' }])
+            List of indexes in dictionary format. (e.g [{ 'uid': 'movies' 'primaryKey': 'objectID' }])
         """
         return Index.list_all(self.config)
 
@@ -78,7 +78,7 @@ class Client():
         Returns
         -------
         index : Index
-            An Index instance containing the information the fetched index
+            An Index instance containing the information the fetched index.
         """
         index_dict = Index(self.config, uid).fetch_info()
         return Index(self.config, index_dict['uid'], index_dict['primaryKey'])
@@ -137,7 +137,7 @@ class Client():
         Returns
         -------
         stats: `dict`
-            Dictionnary containing stats about your MeiliSearch instance.
+            Dictionary containing stats about your MeiliSearch instance.
         """
         return self.http.get(self.config.paths.stat)
 
@@ -149,7 +149,7 @@ class Client():
         Raises
         ----------
         HTTPError
-            If MeiliSearch is not healthy
+            If MeiliSearch is not healthy.
         """
         return self.http.get(self.config.paths.health)
 
@@ -187,7 +187,7 @@ class Client():
         return self.get_version()
 
     def create_dump(self):
-        """Triggers the creation of a MeiliSearch dump.
+        """Trigger the creation of a MeiliSearch dump.
 
         Returns
         ----------
@@ -198,7 +198,7 @@ class Client():
         return self.http.post(self.config.paths.dumps)
 
     def get_dump_status(self, uid):
-        """Retrieves the status of a MeiliSearch dump creation.
+        """Retrieve the status of a MeiliSearch dump creation.
 
         Parameters
         ----------
