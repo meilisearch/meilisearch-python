@@ -111,20 +111,20 @@ class TestIndex:
         index = self.client.index(uid=self.index_uid)
         response = index.fetch_info()
         assert isinstance(response, object)
-        assert response['uid'] == self.index_uid
-        assert response['primaryKey'] is None
-        assert index.primary_key == response['primaryKey']
-        assert index.get_primary_key() == response['primaryKey']
+        assert response.uid == self.index_uid
+        assert response.primary_key is None
+        assert response.primary_key == index.primary_key
+        assert response.primary_key == index.get_primary_key()
 
     def test_index_fetch_info_containing_primary_key(self):
         """Tests getting the index info"""
         index = self.client.index(uid=self.index_uid3)
         response = index.fetch_info()
         assert isinstance(response, object)
-        assert response['uid'] == self.index_uid3
-        assert response['primaryKey'] == 'book_id'
-        assert index.primary_key == response['primaryKey']
-        assert index.get_primary_key() == response['primaryKey']
+        assert response.uid == self.index_uid3
+        assert response.primary_key == 'book_id'
+        assert response.primary_key == index.primary_key
+        assert response.primary_key == index.get_primary_key()
 
     def test_get_primary_key(self):
         """Tests getting the primary-key of an index"""

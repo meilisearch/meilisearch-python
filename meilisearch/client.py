@@ -80,8 +80,7 @@ class Client():
         index : Index
             An Index instance containing the information the fetched index.
         """
-        index_dict = Index(self.config, uid).fetch_info()
-        return Index(self.config, index_dict['uid'], index_dict['primaryKey'])
+        return Index(self.config, uid).fetch_info()
 
     def index(self, uid):
         """Create an Index instance.

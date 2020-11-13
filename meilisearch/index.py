@@ -71,12 +71,12 @@ class Index():
 
         Returns
         -------
-        index: dict
-            Dictionary containing the index information.
+        index : Index
+            An instance of Index containing the information of the index.
         """
         index_dict = self.http.get('{}/{}'.format(self.config.paths.index, self.uid))
         self.primary_key = index_dict['primaryKey']
-        return index_dict
+        return self
 
     def get_primary_key(self):
         """Get the primary key.
@@ -86,8 +86,7 @@ class Index():
         primary_key: str
             String containing the primary key.
         """
-        self.primary_key = self.fetch_info()['primaryKey']
-        return self.primary_key
+        return self.fetch_info().primary_key
 
     @staticmethod
     def create(config, uid, options=None):
