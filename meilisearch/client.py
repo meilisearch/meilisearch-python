@@ -60,7 +60,7 @@ class Client():
         list
             List of indexes in dictionnary format. (e.g [{ 'uid': 'movies' 'primaryKey': 'objectID' }])
         """
-        return Index.list_all(self.config)
+        return Index.get_indexes(self.config)
 
     def get_index(self, uid):
         """Get the index.

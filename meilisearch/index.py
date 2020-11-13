@@ -114,13 +114,13 @@ class Index():
         return HttpRequests(config).post(config.paths.index, payload)
 
     @staticmethod
-    def list_all(config):
-        """Get all indexes.
+    def get_indexes(config):
+        """Get all indexes from meilisearch.
 
         Returns
         -------
         indexes : list
-            List of the indexes. Each index is a dictionary.
+            List of indexes (dict)
         Raises
         ------
         HTTPError
