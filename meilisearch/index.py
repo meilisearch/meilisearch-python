@@ -6,7 +6,7 @@ from meilisearch._httprequests import HttpRequests
 # pylint: disable=too-many-public-methods
 class Index():
     """
-    Indexes routes wrapper.
+    Indexes routes wrapper
 
     Index class gives access to all indexes routes and child routes (herited).
     https://docs.meilisearch.com/references/indexes.html
@@ -34,12 +34,13 @@ class Index():
         self.primary_key = primary_key
 
     def delete(self):
-        """Delete the index.
+        """Delete an index from meilisearch
 
-        Raises
-        ------
-        HTTPError
-            In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
+        Returns
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
+            https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.delete('{}/{}'.format(self.config.paths.index, self.uid))
 
@@ -129,11 +130,11 @@ class Index():
         return HttpRequests(config).get(config.paths.index)
 
     def get_all_update_status(self):
-        """Get all update status
+        """Get all update status from MeiliSearch
 
         Returns
-        -------
-        update: list
+        ----------
+        update: `list`
             List of all enqueued and processed actions of the index.
         """
         return self.http.get(
@@ -145,15 +146,15 @@ class Index():
         )
 
     def get_update_status(self, update_id):
-        """Get one update status
+        """Get one update from MeiliSearch
 
         Parameters
         ----------
         update_id: int
             identifier of the update to retrieve
         Returns
-        -------
-        update: list
+        ----------
+        update: `list`
             List containing the details of the update status.
         """
         return self.http.get(
@@ -166,7 +167,7 @@ class Index():
         )
 
     def wait_for_pending_update(self, update_id, timeout_in_ms=5000, interval_in_ms=50):
-        """Wait until MeiliSearch processes an update, and get its status.
+        """Wait until MeiliSearch processes an update, and get its status
 
         Parameters
         ----------
@@ -177,8 +178,8 @@ class Index():
         interval_in_ms (optional): int
             time interval the method should wait (sleep) between requests
         Returns
-        -------
-        update: dict
+        ----------
+        update: `dict`
             Dictionary containing the details of the processed update status.
         """
         start_time = datetime.now()
@@ -193,14 +194,14 @@ class Index():
         raise TimeoutError
 
     def get_stats(self):
-        """Get stats of the index.
+        """Get stats of an index
 
         Get information about the number of documents, field frequencies, ...
         https://docs.meilisearch.com/references/stats.html
         Returns
-        -------
-        stats: dict
-            Dictionary containing stats about the given index.
+        ----------
+        stats: `dict`
+            Dictionnary containing stats about the given index.
         """
         return self.http.get(
             '{}/{}/{}'.format(
@@ -211,20 +212,19 @@ class Index():
         )
 
     def search(self, query, opt_params=None):
-        """Search in the index.
+        """Search in meilisearch
 
         Parameters
         ----------
         query: str
             String containing the searched word(s)
-        opt_params: dict, optional
-            Dictionary containing optional query parameters
+        opt_params: dict
+            Dictionnary containing optional query parameters
             https://docs.meilisearch.com/references/search.html#search-in-an-index
-
         Returns
-        -------
-        results: dict
-            Dictionary with hits, offset, limit, processingTime and initial query
+        ----------
+        results: `dict`
+            Dictionnary with hits, offset, limit, processingTime and initial query
         """
         if opt_params is None:
             opt_params = {}
@@ -241,17 +241,16 @@ class Index():
         )
 
     def get_document(self, document_id):
-        """Get one document with given document identifier.
+        """Get one document with given document identifier
 
         Parameters
         ----------
         document_id: str
             Unique identifier of the document.
-
         Returns
-        -------
-        document: dict
-            Dictionary containing the documents information.
+        ----------
+        document: `dict`
+            Dictionnary containing the documents information
         """
         return self.http.get(
             '{}/{}/{}/{}'.format(
@@ -263,17 +262,16 @@ class Index():
         )
 
     def get_documents(self, parameters=None):
-        """Get a set of documents from the index.
+        """Get a set of documents from the index
 
         Parameters
         ----------
         parameters (optional): dict
             parameters accepted by the get documents route: https://docs.meilisearch.com/references/documents.html#get-all-documents
-
         Returns
-        -------
-        document: dict
-            Dictionary containing the documents information.
+        ----------
+        document: `dict`
+            Dictionnary containing the documents information
         """
         if parameters is None:
             parameters = {}
@@ -287,19 +285,18 @@ class Index():
             )
 
     def add_documents(self, documents, primary_key=None):
-        """Add documents to the index.
+        """Add documents to the index
 
         Parameters
         ----------
         documents: list
-            List of documents. Each document should be a dictionary.
-        primary_key: string, optional
-            The primary-key used in index. Ignored if already set up.
-
+            List of dics containing each a document, or json string
+        primary_key: string
+            The primary-key used in MeiliSearch index. Ignored if already set up.
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         if primary_key is None:
@@ -318,19 +315,18 @@ class Index():
         return self.http.post(url, documents)
 
     def update_documents(self, documents, primary_key=None):
-        """Update documents in the index.
+        """Update documents in the index
 
         Parameters
         ----------
         documents: list
-            List of documents. Each document should be a dictionary.
-        primary_key: string, optional
-            The primary-key used in index. Ignored if already set up
-
+            List of dics containing each a document, or json string
+        primary_key: string
+            The primary-key used in MeiliSearch index. Ignored if already set up.
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         if primary_key is None:
@@ -350,17 +346,16 @@ class Index():
 
 
     def delete_document(self, document_id):
-        """Delete one document from the index.
+        """Add documents to the index
 
         Parameters
         ----------
         document_id: str
             Unique identifier of the document.
-
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.delete(
@@ -373,17 +368,16 @@ class Index():
         )
 
     def delete_documents(self, ids):
-        """Delete multiple documents from the index.
+        """Delete multiple documents of the index
 
         Parameters
         ----------
         list: list
             List of unique identifiers of documents.
-
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.post(
@@ -396,12 +390,12 @@ class Index():
         )
 
     def delete_all_documents(self):
-        """Delete all documents from the index.
+        """Delete all documents of the index
 
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.delete(
@@ -416,14 +410,14 @@ class Index():
     # GENERAL SETTINGS ROUTES
 
     def get_settings(self):
-        """Get settings of the index.
+        """Get settings of an index
 
         https://docs.meilisearch.com/references/settings.html
 
         Returns
-        -------
-        settings: dict
-            Dictionary containing the settings of the index.
+        ----------
+        settings: `dict`
+            Dictionnary containing the settings of the index
         """
         return self.http.get(
             '{}/{}/{}'.format(
@@ -434,21 +428,20 @@ class Index():
         )
 
     def update_settings(self, body):
-        """Update settings of the index.
+        """Update settings of an index
 
         https://docs.meilisearch.com/references/settings.html#update-settings
-
         Parameters
         ----------
-        body: dict
-            Dictionary containing the settings of the index.
+        body: `dict`
+            Dictionnary containing the settings of the index
             More information:
             https://docs.meilisearch.com/references/settings.html#update-settings
 
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.post(
@@ -461,14 +454,14 @@ class Index():
         )
 
     def reset_settings(self):
-        """Reset settings of the index to default values..
+        """Reset settings of an index to default values
 
         https://docs.meilisearch.com/references/settings.html#reset-settings
 
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.delete(
@@ -483,12 +476,12 @@ class Index():
 
     def get_ranking_rules(self):
         """
-        Get ranking rules of the index.
+        Get ranking rules of an index
 
         Returns
-        -------
-        settings: list
-            List containing the ranking rules of the index.
+        ----------
+        settings: `list`
+            List containing the ranking rules of the index
         """
         return self.http.get(
             self.__settings_url_for(self.config.paths.ranking_rules)
@@ -496,17 +489,17 @@ class Index():
 
     def update_ranking_rules(self, body):
         """
-        Update ranking rules of the index.
+        Update ranking rules of an index
 
         Parameters
         ----------
-        body: list
-            List containing the ranking rules.
+        body: `list`
+            List containing the ranking rules
 
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.post(
@@ -515,12 +508,12 @@ class Index():
         )
 
     def reset_ranking_rules(self):
-        """Reset ranking rules of the index to default values.
+        """Reset ranking rules of an index to default values
 
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.delete(
@@ -532,12 +525,12 @@ class Index():
 
     def get_distinct_attribute(self):
         """
-        Get distinct attribute of the index.
+        Get distinct attribute of an index
 
         Returns
-        -------
-        settings: str
-            String containing the distinct attribute of the index.
+        ----------
+        settings: `str`
+            String containing the distinct attribute of the index
         """
         return self.http.get(
             self.__settings_url_for(self.config.paths.distinct_attribute)
@@ -545,17 +538,17 @@ class Index():
 
     def update_distinct_attribute(self, body):
         """
-        Update distinct attribute of the index.
+        Update distinct attribute of an index
 
         Parameters
         ----------
-        body: str
-            String containing the distinct attribute.
+        body: `str`
+            String containing the distinct attribute
 
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.post(
@@ -564,12 +557,12 @@ class Index():
         )
 
     def reset_distinct_attribute(self):
-        """Reset distinct attribute of the index to default values.
+        """Reset distinct attribute of an index to default values
 
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.delete(
@@ -580,12 +573,12 @@ class Index():
 
     def get_searchable_attributes(self):
         """
-        Get searchable attributes of the index.
+        Get searchable attributes of an index
 
         Returns
-        -------
-        settings: list
-            List containing the searchable attributes of the index.
+        ----------
+        settings: `list`
+            List containing the searchable attributes of the index
         """
         return self.http.get(
             self.__settings_url_for(self.config.paths.searchable_attributes)
@@ -593,17 +586,17 @@ class Index():
 
     def update_searchable_attributes(self, body):
         """
-        Update searchable attributes of the index.
+        Update searchable attributes of an index
 
         Parameters
         ----------
-        body: list
-            List containing the searchable attributes.
+        body: `list`
+            List containing the searchable attributes
 
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.post(
@@ -612,12 +605,12 @@ class Index():
         )
 
     def reset_searchable_attributes(self):
-        """Reset searchable attributes of the index to default values.
+        """Reset searchable attributes of an index to default values
 
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.delete(
@@ -628,12 +621,12 @@ class Index():
 
     def get_displayed_attributes(self):
         """
-        Get displayed attributes of the index.
+        Get displayed attributes of an index
 
         Returns
-        -------
-        settings: list
-            List containing the displayed attributes of the index.
+        ----------
+        settings: `list`
+            List containing the displayed attributes of the index
         """
         return self.http.get(
             self.__settings_url_for(self.config.paths.displayed_attributes)
@@ -641,17 +634,17 @@ class Index():
 
     def update_displayed_attributes(self, body):
         """
-        Update displayed attributes of the index.
+        Update displayed attributes of an index
 
         Parameters
         ----------
-        body: list
-            List containing the displayed attributes.
+        body: `list`
+            List containing the displayed attributes
 
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.post(
@@ -660,12 +653,12 @@ class Index():
         )
 
     def reset_displayed_attributes(self):
-        """Reset displayed attributes of the index to default values.
+        """Reset displayed attributes of an index to default values
 
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.delete(
@@ -676,12 +669,12 @@ class Index():
 
     def get_stop_words(self):
         """
-        Get stop words of the index.
+        Get stop words of an index
 
         Returns
-        -------
-        settings: list
-            List containing the stop words of the index.
+        ----------
+        settings: `list`
+            List containing the stop words of the index
         """
         return self.http.get(
             self.__settings_url_for(self.config.paths.stop_words)
@@ -689,17 +682,17 @@ class Index():
 
     def update_stop_words(self, body):
         """
-        Update stop words of the index.
+        Update stop words of an index
 
         Parameters
         ----------
-        body: list
-            List containing the stop words.
+        body: `list`
+            List containing the stop words
 
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.post(
@@ -708,12 +701,12 @@ class Index():
         )
 
     def reset_stop_words(self):
-        """Reset stop words of the index to default values.
+        """Reset stop words of an index to default values
 
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.delete(
@@ -724,12 +717,12 @@ class Index():
 
     def get_synonyms(self):
         """
-        Get synonyms of the index.
+        Get synonyms of an index
 
         Returns
-        -------
-        settings: dict
-            Dictionary containing the synonyms of the index.
+        ----------
+        settings: `dict`
+            Dictionnary containing the synonyms of the index
         """
         return self.http.get(
             self.__settings_url_for(self.config.paths.synonyms)
@@ -737,17 +730,17 @@ class Index():
 
     def update_synonyms(self, body):
         """
-        Update synonyms of the index.
+        Update synonyms of an index
 
         Parameters
         ----------
-        body: dict
-            Dictionary containing the synonyms.
+        body: `dict`
+            Dictionnary containing the synonyms
 
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.post(
@@ -756,12 +749,12 @@ class Index():
         )
 
     def reset_synonyms(self):
-        """Reset synonyms of the index to default values.
+        """Reset synonyms of an index to default values
 
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.delete(
@@ -772,11 +765,11 @@ class Index():
 
     def get_attributes_for_faceting(self):
         """
-        Get attributes for faceting of the index.
+        Get attributes for faceting of an index
 
         Returns
-        -------
-        settings: list
+        ----------
+        settings: `list`
             List containing the attributes for faceting of the index
         """
         return self.http.get(
@@ -785,17 +778,17 @@ class Index():
 
     def update_attributes_for_faceting(self, body):
         """
-        Update attributes for faceting of the index.
+        Update attributes for faceting of an index
 
         Parameters
         ----------
-        body: list
-            List containing the attributes for faceting.
+        body: `list`
+            List containing the attributes for faceting
 
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.post(
@@ -804,12 +797,12 @@ class Index():
         )
 
     def reset_attributes_for_faceting(self):
-        """Reset attributes for faceting of the index to default values.
+        """Reset attributes for faceting of an index to default values
 
         Returns
-        -------
-        update: dict
-            Dictionary containing an update id to track the action:
+        ----------
+        update: `dict`
+            Dictionnary containing an update id to track the action:
             https://docs.meilisearch.com/references/updates.html#get-an-update-status
         """
         return self.http.delete(
