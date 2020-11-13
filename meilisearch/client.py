@@ -29,9 +29,6 @@ class Client():
     def create_index(self, uid, options=None):
         """Create an index.
 
-        If the argument `uid` isn't passed in, it will be generated
-        by MeiliSearch.
-
         Parameters
         ----------
         uid: str
@@ -48,9 +45,8 @@ class Client():
         HTTPError
             In case of any other error found here https://docs.meilisearch.com/references/#errors-status-code
         """
-        index = Index(self.config, uid)
-        index.create(self.config, uid, options)
-        return index
+        index_dict = Index.create(self.config, uid, options)
+        return Index(self.config, index_dict['uid'], index_dict['primaryKey'])
 
     def get_indexes(self):
         """Get all indexes.
@@ -66,9 +62,14 @@ class Client():
         """
         return Index.get_indexes(self.config)
 
-
     def get_index(self, uid):
-        """Get an index.
+        """Get the index.
+        This index should already exist.
+
+        Parameters
+        ----------
+        uid: str
+            UID of the index.
 
         Raises
         ------
@@ -77,9 +78,27 @@ class Client():
         Returns
         -------
         index : Index
-            an instance of Index containing the information of the index found
+            An Index instance containing the information the fetched index.
         """
-        return Index.get_index(self.config, uid=uid)
+        return Index(self.config, uid).fetch_info()
+
+    def index(self, uid):
+        """Create an Index instance.
+        This method doesn't trigger any HTTP call.
+
+        Parameters
+        ----------
+        uid: str
+            UID of the index.
+
+        Returns
+        -------
+        index : Index
+            An Index instance.
+        """
+        if uid is not None:
+            return Index(self.config, uid=uid)
+        raise Exception('The index UID should not be None')
 
     def get_or_create_index(self, uid, options=None):
         """Get an index, or create it if it doesn't exist.
@@ -94,19 +113,19 @@ class Client():
         Returns
         -------
         index : Index
-            an instance of Index containing the information of the retrieved or newly created index
+            An instance of Index containing the information of the retrieved or newly created index.
         Raises
         ------
         HTTPError
             In case of any other error found here https://docs.meilisearch.com/references/#errors-status-code
         """
-        index = self.get_index(uid)
+        index_instance = self.index(uid)
         try:
-            index.create(self.config, uid, options)
+            index_instance = self.create_index(uid, options)
         except MeiliSearchApiError as err:
             if err.error_code != 'index_already_exists':
                 raise err
-        return index
+        return index_instance
 
     def get_all_stats(self):
         """Get all stats of MeiliSearch
