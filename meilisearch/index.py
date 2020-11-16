@@ -22,9 +22,9 @@ class Index():
         Parameters
         ----------
         config : dict
-            Config object containing permission and location of MeiliSearch.
+            Config object containing MeiliSearch configuration data, such as url and API Key.
         uid: str
-            UID of the index on which to perform the index actions.
+            UID of the index in which further actions will be performed.
         primary_key: str, optional
             Primary-key of the index.
         """
@@ -45,7 +45,7 @@ class Index():
         return self.http.delete('{}/{}'.format(self.config.paths.index, self.uid))
 
     def update(self, **body):
-        """Update the index primary-key.
+        """Update the primary-key of the index.
 
         Parameters
         ----------
@@ -67,23 +67,23 @@ class Index():
         return response
 
     def fetch_info(self):
-        """Fetch the info of the index.
+        """Fetch the information of the index.
 
         Returns
         -------
         index : Index
-            An instance of Index containing the information of the index.
+            An Index instance containing the information of the index.
         """
         index_dict = self.http.get('{}/{}'.format(self.config.paths.index, self.uid))
         self.primary_key = index_dict['primaryKey']
         return self
 
     def get_primary_key(self):
-        """Get the primary key.
+        """Fetch the primary key of the index.
 
         Returns
         -------
-        primary_key: str
+        primary_key: str | None
             String containing the primary key.
         """
         return self.fetch_info().primary_key
@@ -97,12 +97,13 @@ class Index():
         uid: str
             UID of the index.
         options: dict, optional
-            Options passed during index creation (ex: { 'primaryKey': 'name' }).
+            Options passed during index creation.
+            Ex: Index.create('indexUID', { 'primaryKey': 'name' })
 
         Returns
         -------
         index : Index
-            An instance of Index containing the information of the newly created index.
+            An Index instance containing the information of the newly created index.
         Raises
         ------
         HTTPError

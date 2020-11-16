@@ -78,13 +78,13 @@ class Client():
         Returns
         -------
         index : Index
-            An Index instance containing the information the fetched index.
+            An Index instance containing the information of the fetched index.
         """
         return Index(self.config, uid).fetch_info()
 
     def index(self, uid):
-        """Create an Index instance.
-        This method doesn't trigger any HTTP call.
+        """Create a local reference to an index identified by `uid`, without doing an HTTP call.
+        Calling this method doesn't create an index by itself, but grants access to all the other methods in the Index class.
 
         Parameters
         ----------
@@ -101,7 +101,7 @@ class Client():
         raise Exception('The index UID should not be None')
 
     def get_or_create_index(self, uid, options=None):
-        """Get an index, or create it if it doesn't exist.
+        """Retrieve an index in MeiliSearch, or create it if it doesn't exist yet.
 
         Parameters
         ----------
@@ -113,10 +113,10 @@ class Client():
         Returns
         -------
         index : Index
-            An instance of Index containing the information of the retrieved or newly created index.
+            An Index instance containing the information of the retrieved or newly created index.
         Raises
         ------
-        HTTPError
+        MeiliSearchApiError
             In case of any other error found here https://docs.meilisearch.com/references/#errors-status-code
         """
         index_instance = self.index(uid)

@@ -146,17 +146,14 @@ class TestIndex:
     def test_delete_index(self):
         """Tests deleting an index"""
         response = self.client.index(uid=self.index_uid).delete()
-        assert isinstance(response, object)
         assert response.status_code == 204
         with pytest.raises(Exception):
             self.client.get_index(uid=self.index_uid)
         response = self.client.index(uid=self.index_uid2).delete()
-        assert isinstance(response, object)
         assert response.status_code == 204
         with pytest.raises(Exception):
             self.client.get_index(uid=self.index_uid2)
         response = self.client.index(uid=self.index_uid3).delete()
-        assert isinstance(response, object)
         assert response.status_code == 204
         with pytest.raises(Exception):
             self.client.get_index(uid=self.index_uid3)
