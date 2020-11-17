@@ -5,11 +5,6 @@
 ---
 get_one_index_1: |-
   index = client.get_index('movies')
-  # Or
-  index = client.index('movies').fetch_info()
-
-  index.uid
-  index.primary_key
 list_all_indexes_1: |-
   client.get_indexes()
 create_an_index_1: |-
