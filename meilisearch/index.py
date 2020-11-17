@@ -115,21 +115,6 @@ class Index():
         index_dict = HttpRequests(config).post(config.paths.index, payload)
         return cls(config, index_dict['uid'], index_dict['primaryKey'])
 
-    @staticmethod
-    def get_indexes(config):
-        """Get all indexes from meilisearch.
-
-        Returns
-        -------
-        indexes : list
-            List of indexes (dict)
-        Raises
-        ------
-        HTTPError
-            In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
-        """
-        return HttpRequests(config).get(config.paths.index)
-
     def get_all_update_status(self):
         """Get all update status from MeiliSearch
 

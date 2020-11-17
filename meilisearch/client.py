@@ -59,7 +59,7 @@ class Client():
         list
             List of indexes in dictionnary format. (e.g [{ 'uid': 'movies' 'primaryKey': 'objectID' }])
         """
-        return Index.get_indexes(self.config)
+        return self.http.get(self.config.paths.index)
 
     def get_index(self, uid):
         """Get the index.
