@@ -119,12 +119,12 @@ class Client():
         MeiliSearchApiError
             In case of any other error found here https://docs.meilisearch.com/references/#errors-status-code
         """
-        index_instance = self.index(uid)
         try:
-            index_instance = self.create_index(uid, options)
+            index_instance = self.get_index(uid)
         except MeiliSearchApiError as err:
-            if err.error_code != 'index_already_exists':
+            if err.error_code != 'index_not_found':
                 raise err
+            index_instance = self.create_index(uid, options)
         return index_instance
 
     def get_all_stats(self):

@@ -101,9 +101,8 @@ class TestIndex:
         index_2 = self.client.get_or_create_index('books', {'primaryKey': 'some_wrong_key'})
         assert index_1.primary_key == self.index_uid4
         assert index_1.get_primary_key() == self.index_uid4
-        assert index_2.primary_key is None
-        assert index_2.get_primary_key() == self.index_uid4
         assert index_2.primary_key == self.index_uid4
+        assert index_2.get_primary_key() == self.index_uid4
         index_1.delete()
 
     def test_index_fetch_info(self):
