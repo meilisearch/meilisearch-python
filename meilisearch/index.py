@@ -14,22 +14,24 @@ class Index():
 
     config = None
     http = None
-    uid = ""
+    uid = None
+    primary_key = None
 
-    def __init__(self, config, uid):
+    def __init__(self, config, uid, primary_key=None):
         """
         Parameters
         ----------
-        config : Config
-            Config object containing permission and location of meilisearch
+        config : dict
+            Config object containing MeiliSearch configuration data, such as url and API Key.
         uid: str
-            Uid of the index on which to perform the index actions.
-        index_path: str
-            Index url path
+            UID of the index in which further actions will be performed.
+        primary_key: str, optional
+            Primary-key of the index.
         """
         self.config = config
-        self.uid = uid
         self.http = HttpRequests(config)
+        self.uid = uid
+        self.primary_key = primary_key
 
     def delete(self):
         """Delete an index from meilisearch
@@ -43,60 +45,65 @@ class Index():
         return self.http.delete('{}/{}'.format(self.config.paths.index, self.uid))
 
     def update(self, **body):
-        """Update an index from meilisearch
+        """Update the primary-key of the index.
 
         Parameters
         ----------
         body: **kwargs
             Accepts primaryKey as an updatable parameter.
+            Ex: index.update(primaryKey='name')
 
         Returns
-        ----------
-        update: `dict`
-            Dictionnary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+        -------
+        index: dict
+            Dictionary containing index information.
         """
         payload = {}
         primary_key = body.get('primaryKey', None)
         if primary_key is not None:
             payload['primaryKey'] = primary_key
-        return self.http.put('{}/{}'.format(self.config.paths.index, self.uid), payload)
+        response = self.http.put('{}/{}'.format(self.config.paths.index, self.uid), payload)
+        self.primary_key = response['primaryKey']
+        return response
 
-    def info(self):
-        """Get info of index
-
-        Returns
-        ----------
-        index: `dict`
-            Dictionnary containing index information.
-        """
-        return self.http.get('{}/{}'.format(self.config.paths.index, self.uid))
-
-    def get_primary_key(self):
-        """Get the primary key
-
-        Returns
-        ----------
-        primary_key: str
-            String containing primary key.
-        """
-        return self.info()['primaryKey']
-
-    @staticmethod
-    def create(config, uid, options=None):
-        """Create an index.
-
-        Parameters
-        ----------
-        uid: str
-            UID of the index
-        options: dict, optional
-            Options passed during index creation (ex: primaryKey)
+    def fetch_info(self):
+        """Fetch the information of the index.
 
         Returns
         -------
         index : Index
-            an instance of Index containing the information of the newly created index
+            An Index instance containing the information of the index.
+        """
+        index_dict = self.http.get('{}/{}'.format(self.config.paths.index, self.uid))
+        self.primary_key = index_dict['primaryKey']
+        return self
+
+    def get_primary_key(self):
+        """Fetch the primary key of the index.
+
+        Returns
+        -------
+        primary_key: str | None
+            String containing the primary key.
+        """
+        return self.fetch_info().primary_key
+
+    @staticmethod
+    def create(config, uid, options=None):
+        """Create the index.
+
+        Parameters
+        ----------
+        uid: str
+            UID of the index.
+        options: dict, optional
+            Options passed during index creation.
+            Ex: Index.create('indexUID', { 'primaryKey': 'name' })
+
+        Returns
+        -------
+        index : Index
+            An Index instance containing the information of the newly created index.
         Raises
         ------
         HTTPError
@@ -121,25 +128,6 @@ class Index():
             In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
         """
         return HttpRequests(config).get(config.paths.index)
-
-    @staticmethod
-    def get_index(config, uid):
-        """Get Index instance from given index
-
-        If the argument `uid` aren't passed in, it will raise an exception.
-
-        Returns
-        -------
-        index : Index
-            Instance of Index with the given index.
-        Raises
-        ------
-        Exception
-            If index UID is missing.
-        """
-        if uid is not None:
-            return Index(config, uid=uid)
-        raise Exception('Uid is needed to find index')
 
     def get_all_update_status(self):
         """Get all update status from MeiliSearch
