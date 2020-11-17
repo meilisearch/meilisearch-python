@@ -88,8 +88,8 @@ class Index():
         """
         return self.fetch_info().primary_key
 
-    @staticmethod
-    def create(config, uid, options=None):
+    @classmethod
+    def create(cls, config, uid, options=None):
         """Create the index.
 
         Parameters
@@ -112,7 +112,8 @@ class Index():
         if options is None:
             options = {}
         payload = {**options, 'uid': uid}
-        return HttpRequests(config).post(config.paths.index, payload)
+        index_dict = HttpRequests(config).post(config.paths.index, payload)
+        return cls(config, index_dict['uid'], index_dict['primaryKey'])
 
     @staticmethod
     def get_indexes(config):
