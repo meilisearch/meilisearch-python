@@ -64,7 +64,7 @@ class Index():
             payload['primaryKey'] = primary_key
         response = self.http.put('{}/{}'.format(self.config.paths.index, self.uid), payload)
         self.primary_key = response['primaryKey']
-        return response
+        return self
 
     def fetch_info(self):
         """Fetch the information of the index.
