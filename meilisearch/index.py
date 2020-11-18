@@ -64,7 +64,7 @@ class Index():
             payload['primaryKey'] = primary_key
         response = self.http.put('{}/{}'.format(self.config.paths.index, self.uid), payload)
         self.primary_key = response['primaryKey']
-        return response
+        return self
 
     def fetch_info(self):
         """Fetch the information of the index.
@@ -88,8 +88,8 @@ class Index():
         """
         return self.fetch_info().primary_key
 
-    @staticmethod
-    def create(config, uid, options=None):
+    @classmethod
+    def create(cls, config, uid, options=None):
         """Create the index.
 
         Parameters
@@ -112,22 +112,8 @@ class Index():
         if options is None:
             options = {}
         payload = {**options, 'uid': uid}
-        return HttpRequests(config).post(config.paths.index, payload)
-
-    @staticmethod
-    def get_indexes(config):
-        """Get all indexes from meilisearch.
-
-        Returns
-        -------
-        indexes : list
-            List of indexes (dict)
-        Raises
-        ------
-        HTTPError
-            In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
-        """
-        return HttpRequests(config).get(config.paths.index)
+        index_dict = HttpRequests(config).post(config.paths.index, payload)
+        return cls(config, index_dict['uid'], index_dict['primaryKey'])
 
     def get_all_update_status(self):
         """Get all update status from MeiliSearch

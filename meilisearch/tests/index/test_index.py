@@ -1,5 +1,6 @@
 import pytest
 import meilisearch
+from meilisearch.index import Index
 from meilisearch.tests import BASE_URL, MASTER_KEY, clear_all_indexes
 
 class TestIndex:
@@ -18,7 +19,7 @@ class TestIndex:
     def test_create_index(self):
         """Tests creating an index"""
         index = self.client.create_index(uid=self.index_uid)
-        assert isinstance(index, object)
+        assert isinstance(index, Index)
         assert index.uid == self.index_uid
         assert index.primary_key is None
         assert index.get_primary_key() is None
@@ -26,7 +27,7 @@ class TestIndex:
     def test_create_index_with_primary_key(self):
         """Tests creating an index with a primary key"""
         index = self.client.create_index(uid=self.index_uid2, options={'primaryKey': 'book_id'})
-        assert isinstance(index, object)
+        assert isinstance(index, Index)
         assert index.uid == self.index_uid2
         assert index.primary_key == 'book_id'
         assert index.get_primary_key() == 'book_id'
@@ -34,7 +35,7 @@ class TestIndex:
     def test_create_index_with_uid_in_options(self):
         """Tests creating an index with a primary key"""
         index = self.client.create_index(uid=self.index_uid3, options={'uid': 'wrong', 'primaryKey': 'book_id'})
-        assert isinstance(index, object)
+        assert isinstance(index, Index)
         assert index.uid == self.index_uid3
         assert index.primary_key == 'book_id'
         assert index.get_primary_key() == 'book_id'
@@ -51,7 +52,7 @@ class TestIndex:
 
     def test_index_with_any_uid(self):
         index = self.client.index('anyUID')
-        assert isinstance(index, object)
+        assert isinstance(index, Index)
         assert index.uid == 'anyUID'
         assert index.primary_key is None
         assert index.config is not None
@@ -64,7 +65,7 @@ class TestIndex:
     def test_get_index_with_valid_uid(self):
         """Tests getting one index with uid"""
         response = self.client.get_index(uid=self.index_uid)
-        assert isinstance(response, object)
+        assert isinstance(response, Index)
         assert response.uid == self.index_uid
 
     def test_get_index_with_none_uid(self):
@@ -109,7 +110,7 @@ class TestIndex:
         """Tests getting the index info"""
         index = self.client.index(uid=self.index_uid)
         response = index.fetch_info()
-        assert isinstance(response, object)
+        assert isinstance(response, Index)
         assert response.uid == self.index_uid
         assert response.primary_key is None
         assert response.primary_key == index.primary_key
@@ -119,7 +120,7 @@ class TestIndex:
         """Tests getting the index info"""
         index = self.client.index(uid=self.index_uid3)
         response = index.fetch_info()
-        assert isinstance(response, object)
+        assert isinstance(response, Index)
         assert response.uid == self.index_uid3
         assert response.primary_key == 'book_id'
         assert response.primary_key == index.primary_key
@@ -138,7 +139,7 @@ class TestIndex:
         """Tests updating an index"""
         index = self.client.index(uid=self.index_uid)
         response = index.update(primaryKey='objectID')
-        assert isinstance(response, object)
+        assert isinstance(response, Index)
         assert index.primary_key == 'objectID'
         assert index.get_primary_key() == 'objectID'
 

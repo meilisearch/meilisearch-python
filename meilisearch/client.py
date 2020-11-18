@@ -45,8 +45,7 @@ class Client():
         HTTPError
             In case of any other error found here https://docs.meilisearch.com/references/#errors-status-code
         """
-        index_dict = Index.create(self.config, uid, options)
-        return Index(self.config, index_dict['uid'], index_dict['primaryKey'])
+        return Index.create(self.config, uid, options)
 
     def get_indexes(self):
         """Get all indexes.
@@ -60,7 +59,7 @@ class Client():
         list
             List of indexes in dictionnary format. (e.g [{ 'uid': 'movies' 'primaryKey': 'objectID' }])
         """
-        return Index.get_indexes(self.config)
+        return self.http.get(self.config.paths.index)
 
     def get_index(self, uid):
         """Get the index.
