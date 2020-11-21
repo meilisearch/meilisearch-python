@@ -10,7 +10,7 @@ def test_wait_for_pending_update_default(indexed_small_movies):
     assert 'status' in update
     assert update['status'] != 'enqueued'
 
-def test_wait_for_pending_update_timeout(indexed_small_movies, small_movies):
+def test_wait_for_pending_update_timeout(indexed_small_movies):
     """Tests timeout risen by waiting for an update"""
     with pytest.raises(TimeoutError):
         indexed_small_movies[0].wait_for_pending_update(2, timeout_in_ms=0)

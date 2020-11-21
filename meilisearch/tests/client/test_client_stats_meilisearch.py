@@ -1,6 +1,7 @@
+import pytest
 
-
-def test_get_all_stats(client, sample_indexes):
+@pytest.mark.usefixtures("sample_indexes")
+def test_get_all_stats(client):
     """Tests getting all stats after creating two indexes"""
     response = client.get_all_stats()
     assert isinstance(response, object)

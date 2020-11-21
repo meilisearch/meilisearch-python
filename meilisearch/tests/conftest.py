@@ -1,3 +1,4 @@
+# pylint: disable=redefined-outer-name
 import json
 from pytest import fixture
 
@@ -25,7 +26,7 @@ def clear_indexes(client):
 @fixture(scope="function")
 def sample_indexes(client):
     indexes = []
-    for index_args in common.index_fixture:
+    for index_args in common.INDEX_FIXTURE:
         indexes.append(client.create_index(**index_args))
     # yield the indexes to the test so it can use it
     yield indexes
