@@ -1,4 +1,4 @@
-from meilisearch.tests.common import BASE_URL, MASTER_KEY
+
 
 class TestStats:
 

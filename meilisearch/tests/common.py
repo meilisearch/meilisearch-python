@@ -1,9 +1,7 @@
-import meilisearch
+
 
 MASTER_KEY = 'masterKey'
 BASE_URL = 'http://127.0.0.1:7700'
-
-client = meilisearch.Client(BASE_URL, MASTER_KEY)
 
 index_uid = 'indexUID'
 index_uid2 = 'indexUID2'
