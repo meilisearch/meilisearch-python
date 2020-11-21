@@ -1,6 +1,6 @@
 import pytest
 import meilisearch
-from meilisearch.tests import BASE_URL, MASTER_KEY
+from meilisearch.tests.common import BASE_URL, MASTER_KEY
 
 class TestClient:
 

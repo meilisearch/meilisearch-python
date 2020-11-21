@@ -9,7 +9,6 @@ import meilisearch
 def client():
     return meilisearch.Client(common.BASE_URL, common.MASTER_KEY)
 
-# TODO: this will not be needed anymore?
 @fixture(autouse=True)
 def clear_indexes(client):
     """
