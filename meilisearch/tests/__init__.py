@@ -1,8 +1,6 @@
 from datetime import datetime
 from time import sleep
-
-MASTER_KEY = 'masterKey'
-BASE_URL = 'http://127.0.0.1:7700'
+from .common import MASTER_KEY, BASE_URL
 
 def clear_all_indexes(client):
     indexes = client.get_indexes()
