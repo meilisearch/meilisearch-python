@@ -1,7 +1,7 @@
 import json
 import pytest
 import meilisearch
-from meilisearch.tests import BASE_URL, MASTER_KEY, clear_all_indexes, wait_for_dump_creation
+from meilisearch.tests import BASE_URL, MASTER_KEY, wait_for_dump_creation
 from meilisearch.errors import MeiliSearchApiError
 
 class TestClientDumps:
@@ -14,7 +14,6 @@ class TestClientDumps:
     dataset_json = None
 
     def setup_class(self):
-        clear_all_indexes(self.client)
         self.dataset_file = open('./datasets/small_movies.json', 'r')
         self.dataset_json = json.loads(self.dataset_file.read())
         self.dataset_file.close()
@@ -27,10 +26,6 @@ class TestClientDumps:
 
     def teardown_method(self, method):
         self.client.index('indexUID-' + method.__name__).delete()
-
-    def teardown_class(self):
-        """Cleans all indexes in MEiliSearch when all the test are done"""
-        clear_all_indexes(self.client)
 
     def test_dump_creation(self):
         """Tests the creation of a MeiliSearch dump"""

@@ -2,12 +2,6 @@ from datetime import datetime
 from time import sleep
 from .common import MASTER_KEY, BASE_URL
 
-def clear_all_indexes(client):
-    indexes = client.get_indexes()
-    for index in indexes:
-        client.index(index['uid']).delete()
-
-
 # Waits until the end of the dump creation.
 # Raises a TimeoutError if the `timeout_in_ms` is reached.
 def wait_for_dump_creation(client, dump_uid, timeout_in_ms=10000, interval_in_ms=500):
