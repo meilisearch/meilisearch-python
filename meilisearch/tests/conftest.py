@@ -57,3 +57,15 @@ def indexed_small_movies(sample_indexes, small_movies):
     response = sample_indexes[0].add_documents(small_movies)
     sample_indexes[0].wait_for_pending_update(response['updateId'])
     return sample_indexes
+
+
+@fixture(scope="function")
+def custom_indexed_maker(client, small_movies):
+    def index_maker(index_suffix):
+        index = client.create_index(uid='indexUID-' + index_suffix)
+        response = index.add_documents(small_movies, primary_key='id')
+        index.wait_for_pending_update(response['updateId'])
+        yield
+        # cleanup
+        index.delete()
+    return index_maker
