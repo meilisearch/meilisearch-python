@@ -2,8 +2,6 @@ import pytest
 from meilisearch.index import Index
 from meilisearch.tests import common
 
-
-
 def test_create_index(client):
     """Tests creating an index"""
     index = client.create_index(uid=common.INDEX_UID)
