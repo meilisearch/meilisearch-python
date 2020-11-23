@@ -6,7 +6,6 @@ INDEX_UID2 = 'indexUID2'
 INDEX_UID3 = 'indexUID3'
 INDEX_UID4 = 'indexUID4'
 
-
 INDEX_FIXTURE = [
 	{
 		"uid": INDEX_UID
