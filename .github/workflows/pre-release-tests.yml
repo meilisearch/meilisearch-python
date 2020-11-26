@@ -1,0 +1,30 @@
+# Testing the code base against the MeiliSearch pre-releases
+name: Pre-Release Tests
+
+# Will only run for PRs and pushes to bump-meilisearch-v*
+on:
+  push:
+    branches: bump-meilisearch-v*
+  pull_request:
+    branches: bump-meilisearch-v*
+
+jobs:
+  integration_tests:
+    name: integration-tests-against-rc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+      - name: Install pipenv
+        uses: dschep/install-pipenv-action@v1
+      - name: Install dependencies
+        run: pipenv install --dev
+      - name: Get the latest MeiliSearch RC
+        run: echo "MEILISEARCH_VERSION=$(curl https://raw.githubusercontent.com/meilisearch/integration-guides/master/scripts/get-latest-meilisearch-rc.sh | bash)" >> $GITHUB_ENV
+      - name: MeiliSearch (${{ env.MEILISEARCH_VERSION }}) setup with Docker
+        run: docker run -d -p 7700:7700 getmeili/meilisearch:${{ env.MEILISEARCH_VERSION }} ./meilisearch --master-key=masterKey --no-analytics=true
+      - name: Test with pytest
+        run: pipenv run pytest
