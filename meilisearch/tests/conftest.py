@@ -49,6 +49,4 @@ def index_with_documents(client, small_movies):
         response = index.add_documents(documents)
         index.wait_for_pending_update(response['updateId'])
         return index
-        # cleanup
-        index.delete()
     return index_maker
