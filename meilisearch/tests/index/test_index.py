@@ -70,7 +70,6 @@ def test_get_index_with_wrong_uid(client):
 
 def test_get_or_create_index(client):
     """Test get_or_create_index method"""
-    # client.create_index(common.INDEX_UID3)
     index_1 = client.get_or_create_index(common.INDEX_UID4)
     index_2 = client.get_or_create_index(common.INDEX_UID4)
     index_3 = client.get_or_create_index(common.INDEX_UID4)
