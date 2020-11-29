@@ -5,9 +5,10 @@ import pytest
 
 def test_wait_for_pending_update_default(index_with_documents):
     """Tests waiting for an update with default parameters"""
-    response = index_with_documents.add_documents([{'id': 1, 'title': 'Le Petit Prince'}])
+    index = index_with_documents()
+    response = index.add_documents([{'id': 1, 'title': 'Le Petit Prince'}])
     assert 'updateId' in response
-    update = index_with_documents.wait_for_pending_update(response['updateId'])
+    update = index.wait_for_pending_update(response['updateId'])
     assert isinstance(update, object)
     assert 'status' in update
     assert update['status'] != 'enqueued'
@@ -15,14 +16,15 @@ def test_wait_for_pending_update_default(index_with_documents):
 def test_wait_for_pending_update_timeout(index_with_documents):
     """Tests timeout risen by waiting for an update"""
     with pytest.raises(TimeoutError):
-        index_with_documents.wait_for_pending_update(2, timeout_in_ms=0)
+        index_with_documents().wait_for_pending_update(2, timeout_in_ms=0)
 
 def test_wait_for_pending_update_interval_custom(index_with_documents, small_movies):
     """Tests call to wait for an update with custom interval"""
-    response = index_with_documents.add_documents(small_movies)
+    index = index_with_documents()
+    response = index.add_documents(small_movies)
     assert 'updateId' in response
     start_time = datetime.now()
-    wait_update = index_with_documents.wait_for_pending_update(
+    wait_update = index.wait_for_pending_update(
         response['updateId'],
         interval_in_ms=1000,
         timeout_in_ms=6000
@@ -35,9 +37,10 @@ def test_wait_for_pending_update_interval_custom(index_with_documents, small_mov
 
 def test_wait_for_pending_update_interval_zero(index_with_documents, small_movies):
     """Tests call to wait for an update with custom interval"""
-    response = index_with_documents.add_documents(small_movies)
+    index = index_with_documents()
+    response = index.add_documents(small_movies)
     assert 'updateId' in response
-    wait_update = index_with_documents.wait_for_pending_update(
+    wait_update = index.wait_for_pending_update(
         response['updateId'],
         interval_in_ms=0,
         timeout_in_ms=6000
