@@ -2,19 +2,20 @@
 
 import pytest
 
-def test_get_documents_default(indexes_sample):
+def test_get_documents_default(empty_index):
     """Tests getting documents on a clean index"""
-    response = indexes_sample[0].get_documents()
+    response = empty_index().get_documents()
     assert isinstance(response, list)
     assert response == []
 
-def test_add_documents(indexes_sample, small_movies):
+def test_add_documents(empty_index, small_movies):
     """Tests adding new documents to a clean index"""
-    response = indexes_sample[0].add_documents(small_movies)
+    index = empty_index()
+    response = index.add_documents(small_movies)
     assert isinstance(response, object)
     assert 'updateId' in response
-    assert indexes_sample[0].get_primary_key() == 'id'
-    update = indexes_sample[0].wait_for_pending_update(response['updateId'])
+    assert index.get_primary_key() == 'id'
+    update = index.wait_for_pending_update(response['updateId'])
     assert update['status'] == 'processed'
 
 def test_get_document(index_with_documents):
@@ -24,10 +25,10 @@ def test_get_document(index_with_documents):
     assert 'title' in response
     assert response['title'] == 'The Highwaymen'
 
-def test_get_document_inexistent(indexes_sample):
+def test_get_document_inexistent(empty_index):
     """Tests getting one INEXISTENT document on a populated index"""
     with pytest.raises(Exception):
-        indexes_sample[0].get_document('123')
+        empty_index().get_document('123')
 
 def test_get_documents_populated(index_with_documents):
     """Tests getting documents on a populated index"""

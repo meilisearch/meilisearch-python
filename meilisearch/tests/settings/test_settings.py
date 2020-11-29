@@ -13,9 +13,9 @@ DEFAULT_RANKING_RULES = [
     'exactness'
 ]
 
-def test_get_settings_default(indexes_sample):
+def test_get_settings_default(empty_index):
     """Tests getting all settings by default"""
-    response = indexes_sample[0].get_settings()
+    response = empty_index().get_settings()
     assert isinstance(response, object)
     for rule in DEFAULT_RANKING_RULES:
         assert rule in response['rankingRules']
@@ -25,14 +25,15 @@ def test_get_settings_default(indexes_sample):
     assert response['stopWords'] == []
     assert response['synonyms'] == {}
 
-def test_update_settings(indexes_sample):
+def test_update_settings(empty_index):
     """Tests updating some settings"""
-    response = indexes_sample[0].update_settings(NEW_SETTINGS)
+    index = empty_index()
+    response = index.update_settings(NEW_SETTINGS)
     assert isinstance(response, object)
     assert 'updateId' in response
-    update = indexes_sample[0].wait_for_pending_update(response['updateId'])
+    update = index.wait_for_pending_update(response['updateId'])
     assert update['status'] == 'processed'
-    response = indexes_sample[0].get_settings()
+    response = index.get_settings()
     for rule in NEW_SETTINGS['rankingRules']:
         assert rule in response['rankingRules']
     assert response['distinctAttribute'] is None
@@ -42,14 +43,15 @@ def test_update_settings(indexes_sample):
     assert response['stopWords'] == []
     assert response['synonyms'] == {}
 
-def test_reset_settings(indexes_sample):
+def test_reset_settings(empty_index):
     """Tests resetting default settings"""
-    response = indexes_sample[0].reset_settings()
+    index = empty_index()
+    response = index.reset_settings()
     assert isinstance(response, object)
     assert 'updateId' in response
-    update = indexes_sample[0].wait_for_pending_update(response['updateId'])
+    update = index.wait_for_pending_update(response['updateId'])
     assert update['status'] == 'processed'
-    response = indexes_sample[0].get_settings()
+    response = index.get_settings()
     for rule in DEFAULT_RANKING_RULES:
         assert rule in response['rankingRules']
     assert response['distinctAttribute'] is None

@@ -43,9 +43,16 @@ def small_movies():
 
 
 @fixture(scope='function')
-def index_with_documents(client, small_movies):
+def empty_index(client):
+    def index_maker(index_name=common.INDEX_UID):
+        return client.create_index(uid=index_name)
+    return index_maker
+
+
+@fixture(scope='function')
+def index_with_documents(empty_index, small_movies):
     def index_maker(index_name=common.INDEX_UID, documents=small_movies):
-        index = client.create_index(uid=index_name)
+        index = empty_index(index_name)
         response = index.add_documents(documents)
         index.wait_for_pending_update(response['updateId'])
         return index

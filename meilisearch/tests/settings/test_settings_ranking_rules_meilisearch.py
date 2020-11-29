@@ -9,30 +9,32 @@ DEFAULT_RANKING_RULES = [
     'exactness'
 ]
 
-def test_get_ranking_rules_default(indexes_sample):
+def test_get_ranking_rules_default(empty_index):
     """Tests getting the default ranking rules"""
-    response = indexes_sample[0].get_ranking_rules()
+    response = empty_index().get_ranking_rules()
     assert isinstance(response, object)
     for rule in DEFAULT_RANKING_RULES:
         assert rule in response
 
-def test_update_ranking_rules(indexes_sample):
+def test_update_ranking_rules(empty_index):
     """Tests changing the ranking rules"""
-    response = indexes_sample[0].update_ranking_rules(NEW_RANKING_RULES)
+    index = empty_index()
+    response = index.update_ranking_rules(NEW_RANKING_RULES)
     assert isinstance(response, object)
     assert 'updateId' in response
-    indexes_sample[0].wait_for_pending_update(response['updateId'])
-    response = indexes_sample[0].get_ranking_rules()
+    index.wait_for_pending_update(response['updateId'])
+    response = index.get_ranking_rules()
     assert isinstance(response, object)
     for rule in NEW_RANKING_RULES:
         assert rule in response
 
-def test_reset_ranking_rules(indexes_sample):
+def test_reset_ranking_rules(empty_index):
     """Tests resetting the ranking rules"""
-    response = indexes_sample[0].reset_ranking_rules()
+    index = empty_index()
+    response = index.reset_ranking_rules()
     assert isinstance(response, object)
     assert 'updateId' in response
-    indexes_sample[0].wait_for_pending_update(response['updateId'])
-    response = indexes_sample[0].get_ranking_rules()
+    index.wait_for_pending_update(response['updateId'])
+    response = index.get_ranking_rules()
     for rule in DEFAULT_RANKING_RULES:
         assert rule in response
