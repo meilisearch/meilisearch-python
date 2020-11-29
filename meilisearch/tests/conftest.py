@@ -30,13 +30,6 @@ def indexes_sample(client):
         indexes.append(client.create_index(**index_args))
     # yield the indexes to the test so it can use it
     yield indexes
-    # test finished, let's cleanup
-    for index in indexes:
-        try:
-            index.delete()
-        except meilisearch.errors.MeiliSearchApiError:
-            # test deleted index explicitly
-            pass
 
 
 @fixture(scope='session')
