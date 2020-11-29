@@ -5,7 +5,7 @@ from pytest import fixture
 from meilisearch.tests import common
 import meilisearch
 
-@fixture(scope="session")
+@fixture(scope='session')
 def client():
     return meilisearch.Client(common.BASE_URL, common.MASTER_KEY)
 
@@ -23,7 +23,7 @@ def clear_indexes(client):
         client.index(index['uid']).delete()
 
 
-@fixture(scope="function")
+@fixture(scope='function')
 def sample_indexes(client):
     indexes = []
     for index_args in common.INDEX_FIXTURE:
@@ -39,7 +39,7 @@ def sample_indexes(client):
             pass
 
 
-@fixture(scope="session")
+@fixture(scope='session')
 def small_movies():
     """
     Run once per session, provide the content of small_movies.json
@@ -49,17 +49,17 @@ def small_movies():
         yield json.loads(movie_file.read())
 
 
-@fixture(scope="function")
-def indexed_small_movies(sample_indexes, small_movies):
+@fixture(scope='function')
+def index_with_documents(sample_indexes, small_movies):
     """
     Add small movies sample entries to the index(es)
     """
     response = sample_indexes[0].add_documents(small_movies)
     sample_indexes[0].wait_for_pending_update(response['updateId'])
-    return sample_indexes
+    return sample_indexes[0]
 
 
-@fixture(scope="function")
+@fixture(scope='function')
 def custom_indexed_maker(client, small_movies):
     def index_maker(index_suffix):
         index = client.create_index(uid='indexUID-' + index_suffix)

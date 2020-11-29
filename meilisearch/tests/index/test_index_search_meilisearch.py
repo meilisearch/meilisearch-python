@@ -1,33 +1,33 @@
 
-def test_basic_search(indexed_small_movies):
+def test_basic_search(index_with_documents):
     """Tests search with an simple query"""
-    response = indexed_small_movies[0].search('How to Train Your Dragon')
+    response = index_with_documents.search('How to Train Your Dragon')
     assert isinstance(response, object)
     assert response['hits'][0]['id'] == '166428'
 
-def test_basic_search_with_empty_params(indexed_small_movies):
+def test_basic_search_with_empty_params(index_with_documents):
     """Tests search with an simple query and empty params"""
-    response = indexed_small_movies[0].search('How to Train Your Dragon', {})
+    response = index_with_documents.search('How to Train Your Dragon', {})
     assert isinstance(response, object)
     assert response['hits'][0]['id'] == '166428'
     assert '_formatted' not in response['hits'][0]
 
-def test_basic_search_with_empty_query(indexed_small_movies):
+def test_basic_search_with_empty_query(index_with_documents):
     """Tests search with empty query and empty params"""
-    response = indexed_small_movies[0].search('')
+    response = index_with_documents.search('')
     assert isinstance(response, object)
     assert len(response['hits']) == 20
     assert response['query'] == ''
 
-def test_basic_search_with_placeholder(indexed_small_movies):
+def test_basic_search_with_placeholder(index_with_documents):
     """Tests search with no query [None] and empty params"""
-    response = indexed_small_movies[0].search(None, {})
+    response = index_with_documents.search(None, {})
     assert isinstance(response, object)
     assert len(response['hits']) == 20
 
-def test_custom_search(indexed_small_movies):
+def test_custom_search(index_with_documents):
     """Tests search with an simple query and custom parameter (attributesToHighlight)"""
-    response = indexed_small_movies[0].search(
+    response = index_with_documents.search(
         'Dragon',
         {
             'attributesToHighlight': ['title']
@@ -38,9 +38,9 @@ def test_custom_search(indexed_small_movies):
     assert '_formatted' in response['hits'][0]
     assert 'dragon' in response['hits'][0]['_formatted']['title'].lower()
 
-def test_custom_search_with_empty_query(indexed_small_movies):
+def test_custom_search_with_empty_query(index_with_documents):
     """Tests search with empty query and custom parameter (attributesToHighlight)"""
-    response = indexed_small_movies[0].search(
+    response = index_with_documents.search(
         '',
         {
             'attributesToHighlight': ['title']
@@ -50,9 +50,9 @@ def test_custom_search_with_empty_query(indexed_small_movies):
     assert len(response['hits']) == 20
     assert response['query'] == ''
 
-def test_custom_search_with_placeholder(indexed_small_movies):
+def test_custom_search_with_placeholder(index_with_documents):
     """Tests search with no query [None] and custom parameter (limit)"""
-    response = indexed_small_movies[0].search(
+    response = index_with_documents.search(
         None,
         {
             'limit': 5
@@ -61,9 +61,9 @@ def test_custom_search_with_placeholder(indexed_small_movies):
     assert isinstance(response, object)
     assert len(response['hits']) == 5
 
-def test_custom_search_params_with_wildcard(indexed_small_movies):
+def test_custom_search_params_with_wildcard(index_with_documents):
     """Tests search with '*' in query params"""
-    response = indexed_small_movies[0].search(
+    response = index_with_documents.search(
         'a',
         {
             'limit': 5,
@@ -77,9 +77,9 @@ def test_custom_search_params_with_wildcard(indexed_small_movies):
     assert '_formatted' in response['hits'][0]
     assert "title" in response['hits'][0]['_formatted']
 
-def test_custom_search_params_with_simple_string(indexed_small_movies):
+def test_custom_search_params_with_simple_string(index_with_documents):
     """Tests search with simple string in query params"""
-    response = indexed_small_movies[0].search(
+    response = index_with_documents.search(
         'a',
         {
             'limit': 5,
@@ -94,9 +94,9 @@ def test_custom_search_params_with_simple_string(indexed_small_movies):
     assert 'title' in response['hits'][0]['_formatted']
     assert not 'release_date' in response['hits'][0]['_formatted']
 
-def test_custom_search_params_with_string_list(indexed_small_movies):
+def test_custom_search_params_with_string_list(index_with_documents):
     """Tests search with string list in query params"""
-    response = indexed_small_movies[0].search(
+    response = index_with_documents.search(
         'a',
         {
             'limit': 5,
@@ -112,10 +112,10 @@ def test_custom_search_params_with_string_list(indexed_small_movies):
     assert 'title' in response['hits'][0]['_formatted']
     assert not 'overview' in response['hits'][0]['_formatted']
 
-def test_custom_search_params_with_facets_distribution(indexed_small_movies):
-    update = indexed_small_movies[0].update_attributes_for_faceting(['genre'])
-    indexed_small_movies[0].wait_for_pending_update(update['updateId'])
-    response = indexed_small_movies[0].search(
+def test_custom_search_params_with_facets_distribution(index_with_documents):
+    update = index_with_documents.update_attributes_for_faceting(['genre'])
+    index_with_documents.wait_for_pending_update(update['updateId'])
+    response = index_with_documents.search(
         'world',
         {
             'facetsDistribution': ['genre']
@@ -131,10 +131,10 @@ def test_custom_search_params_with_facets_distribution(indexed_small_movies):
     assert response['facetsDistribution']['genre']['action'] == 3
     assert response['facetsDistribution']['genre']['fantasy'] == 1
 
-def test_custom_search_params_with_facet_filters(indexed_small_movies):
-    update = indexed_small_movies[0].update_attributes_for_faceting(['genre'])
-    indexed_small_movies[0].wait_for_pending_update(update['updateId'])
-    response = indexed_small_movies[0].search(
+def test_custom_search_params_with_facet_filters(index_with_documents):
+    update = index_with_documents.update_attributes_for_faceting(['genre'])
+    index_with_documents.wait_for_pending_update(update['updateId'])
+    response = index_with_documents.search(
         'world',
         {
             'facetFilters': [['genre:action']]
@@ -145,10 +145,10 @@ def test_custom_search_params_with_facet_filters(indexed_small_movies):
     assert 'facetsDistribution' not in response
     assert 'exhaustiveFacetsCount' not in response
 
-def test_custom_search_params_with_multiple_facet_filters(indexed_small_movies):
-    update = indexed_small_movies[0].update_attributes_for_faceting(['genre'])
-    indexed_small_movies[0].wait_for_pending_update(update['updateId'])
-    response = indexed_small_movies[0].search(
+def test_custom_search_params_with_multiple_facet_filters(index_with_documents):
+    update = index_with_documents.update_attributes_for_faceting(['genre'])
+    index_with_documents.wait_for_pending_update(update['updateId'])
+    response = index_with_documents.search(
         'world',
         {
             'facetFilters': ['genre:action', ['genre:action', 'genre:action']]
@@ -159,10 +159,10 @@ def test_custom_search_params_with_multiple_facet_filters(indexed_small_movies):
     assert 'facetsDistribution' not in response
     assert 'exhaustiveFacetsCount' not in response
 
-def test_custom_search_params_with_many_params(indexed_small_movies):
-    update = indexed_small_movies[0].update_attributes_for_faceting(['genre'])
-    indexed_small_movies[0].wait_for_pending_update(update['updateId'])
-    response = indexed_small_movies[0].search(
+def test_custom_search_params_with_many_params(index_with_documents):
+    update = index_with_documents.update_attributes_for_faceting(['genre'])
+    index_with_documents.wait_for_pending_update(update['updateId'])
+    response = index_with_documents.search(
         'world',
         {
             'facetFilters': [['genre:action']],

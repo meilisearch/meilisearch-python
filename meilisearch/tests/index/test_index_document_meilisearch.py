@@ -15,9 +15,9 @@ def test_add_documents(sample_indexes, small_movies):
     update = sample_indexes[0].wait_for_pending_update(response['updateId'])
     assert update['status'] == 'processed'
 
-def test_get_document(indexed_small_movies):
+def test_get_document(index_with_documents):
     """Tests getting one document on a populated index"""
-    response = indexed_small_movies[0].get_document('500682')
+    response = index_with_documents.get_document('500682')
     assert isinstance(response, object)
     assert 'title' in response
     assert response['title'] == 'The Highwaymen'
@@ -27,22 +27,22 @@ def test_get_document_inexistent(sample_indexes):
     with pytest.raises(Exception):
         sample_indexes[0].get_document('123')
 
-def test_get_documents_populated(indexed_small_movies):
+def test_get_documents_populated(index_with_documents):
     """Tests getting documents on a populated index"""
 
-    response = indexed_small_movies[0].get_documents()
+    response = index_with_documents.get_documents()
     assert isinstance(response, list)
     assert len(response) == 20
 
-def test_get_documents_offset_optional_params(indexed_small_movies, small_movies):
+def test_get_documents_offset_optional_params(index_with_documents, small_movies):
     """Tests getting documents on a populated index with optional parameters"""
     # Add movies to the index
-    indexed_small_movies[0].add_documents(small_movies)
+    index_with_documents.add_documents(small_movies)
 
-    response = indexed_small_movies[0].get_documents()
+    response = index_with_documents.get_documents()
     assert isinstance(response, list)
     assert len(response) == 20
-    response_offset_limit = indexed_small_movies[0].get_documents({
+    response_offset_limit = index_with_documents.get_documents({
         'limit': 3,
         'offset': 1,
         'attributesToRetrieve': 'title'
@@ -50,47 +50,47 @@ def test_get_documents_offset_optional_params(indexed_small_movies, small_movies
     assert len(response_offset_limit) == 3
     assert response_offset_limit[0]['title'] == response[1]['title']
 
-def test_update_documents(indexed_small_movies, small_movies):
+def test_update_documents(index_with_documents, small_movies):
     """Tests updating a single document and a set of documents """
-    response = indexed_small_movies[0].get_documents()
+    response = index_with_documents.get_documents()
     response[0]['title'] = 'Some title'
-    update = indexed_small_movies[0].update_documents([response[0]])
+    update = index_with_documents.update_documents([response[0]])
     assert isinstance(update, object)
     assert 'updateId' in update
-    indexed_small_movies[0].wait_for_pending_update(update['updateId'])
-    response = indexed_small_movies[0].get_documents()
+    index_with_documents.wait_for_pending_update(update['updateId'])
+    response = index_with_documents.get_documents()
     assert response[0]['title'] == 'Some title'
-    update = indexed_small_movies[0].update_documents(small_movies)
-    indexed_small_movies[0].wait_for_pending_update(update['updateId'])
-    response = indexed_small_movies[0].get_documents()
+    update = index_with_documents.update_documents(small_movies)
+    index_with_documents.wait_for_pending_update(update['updateId'])
+    response = index_with_documents.get_documents()
     assert response[0]['title'] != 'Some title'
 
-def test_delete_document(indexed_small_movies):
+def test_delete_document(index_with_documents):
     """Tests deleting a single document"""
-    response = indexed_small_movies[0].delete_document('500682')
+    response = index_with_documents.delete_document('500682')
     assert isinstance(response, object)
     assert 'updateId' in response
-    indexed_small_movies[0].wait_for_pending_update(response['updateId'])
+    index_with_documents.wait_for_pending_update(response['updateId'])
     with pytest.raises(Exception):
-        indexed_small_movies[0].get_document('500682')
+        index_with_documents.get_document('500682')
 
-def test_delete_documents(indexed_small_movies):
+def test_delete_documents(index_with_documents):
     """Tests deleting a set of documents """
     to_delete = ['522681', '450465', '329996']
-    response = indexed_small_movies[0].delete_documents(to_delete)
+    response = index_with_documents.delete_documents(to_delete)
     assert isinstance(response, object)
     assert 'updateId' in response
-    indexed_small_movies[0].wait_for_pending_update(response['updateId'])
+    index_with_documents.wait_for_pending_update(response['updateId'])
     for document in to_delete:
         with pytest.raises(Exception):
-            indexed_small_movies[0].get_document(document)
+            index_with_documents.get_document(document)
 
-def test_delete_all_documents(indexed_small_movies):
+def test_delete_all_documents(index_with_documents):
     """Tests updating all the documents in the index"""
-    response = indexed_small_movies[0].delete_all_documents()
+    response = index_with_documents.delete_all_documents()
     assert isinstance(response, object)
     assert 'updateId' in response
-    indexed_small_movies[0].wait_for_pending_update(response['updateId'])
-    response = indexed_small_movies[0].get_documents()
+    index_with_documents.wait_for_pending_update(response['updateId'])
+    response = index_with_documents.get_documents()
     assert isinstance(response, list)
     assert response == []
