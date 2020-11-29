@@ -1,6 +1,6 @@
 import pytest
 
-@pytest.mark.usefixtures("sample_indexes")
+@pytest.mark.usefixtures("indexes_sample")
 def test_get_all_stats(client):
     """Tests getting all stats after creating two indexes"""
     response = client.get_all_stats()

@@ -26,7 +26,7 @@ def test_create_index_with_uid_in_options(client):
     assert index.primary_key == 'book_id'
     assert index.get_primary_key() == 'book_id'
 
-@pytest.mark.usefixtures("sample_indexes")
+@pytest.mark.usefixtures("indexes_sample")
 def test_get_indexes(client):
     """Tests getting all indexes"""
     response = client.get_indexes()
@@ -49,7 +49,7 @@ def test_index_with_none_uid(client):
     with pytest.raises(Exception):
         client.index(None)
 
-@pytest.mark.usefixtures("sample_indexes")
+@pytest.mark.usefixtures("indexes_sample")
 def test_get_index_with_valid_uid(client):
     """Tests getting one index with uid"""
     response = client.get_index(uid=common.INDEX_UID)
@@ -94,7 +94,7 @@ def test_get_or_create_index_with_primary_key(client):
     assert index_2.get_primary_key() == common.INDEX_UID4
     index_1.delete()
 
-@pytest.mark.usefixtures("sample_indexes")
+@pytest.mark.usefixtures("indexes_sample")
 def test_index_fetch_info(client):
     """Tests getting the index info"""
     index = client.index(uid=common.INDEX_UID)
@@ -105,7 +105,7 @@ def test_index_fetch_info(client):
     assert response.primary_key == index.primary_key
     assert response.primary_key == index.get_primary_key()
 
-@pytest.mark.usefixtures("sample_indexes")
+@pytest.mark.usefixtures("indexes_sample")
 def test_index_fetch_info_containing_primary_key(client):
     """Tests getting the index info"""
     index = client.index(uid=common.INDEX_UID3)
@@ -116,7 +116,7 @@ def test_index_fetch_info_containing_primary_key(client):
     assert response.primary_key == index.primary_key
     assert response.primary_key == index.get_primary_key()
 
-@pytest.mark.usefixtures("sample_indexes")
+@pytest.mark.usefixtures("indexes_sample")
 def test_get_primary_key(client):
     """Tests getting the primary-key of an index"""
     index = client.index(uid=common.INDEX_UID3)
@@ -126,7 +126,7 @@ def test_get_primary_key(client):
     assert index.primary_key == 'book_id'
     assert index.get_primary_key() == 'book_id'
 
-@pytest.mark.usefixtures("sample_indexes")
+@pytest.mark.usefixtures("indexes_sample")
 def test_update_index(client):
     """Tests updating an index"""
     index = client.index(uid=common.INDEX_UID)
@@ -135,7 +135,7 @@ def test_update_index(client):
     assert index.primary_key == 'objectID'
     assert index.get_primary_key() == 'objectID'
 
-@pytest.mark.usefixtures("sample_indexes")
+@pytest.mark.usefixtures("indexes_sample")
 def test_delete_index(client):
     """Tests deleting an index"""
     response = client.index(uid=common.INDEX_UID).delete()

@@ -1,8 +1,8 @@
 
 
-def test_get_stats(sample_indexes):
+def test_get_stats(indexes_sample):
     """Tests getting stats of a single index"""
-    response = sample_indexes[0].get_stats()
+    response = indexes_sample[0].get_stats()
     assert isinstance(response, object)
     assert 'numberOfDocuments' in response
     assert response['numberOfDocuments'] == 0

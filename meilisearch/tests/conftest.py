@@ -24,7 +24,7 @@ def clear_indexes(client):
 
 
 @fixture(scope='function')
-def sample_indexes(client):
+def indexes_sample(client):
     indexes = []
     for index_args in common.INDEX_FIXTURE:
         indexes.append(client.create_index(**index_args))
@@ -50,13 +50,13 @@ def small_movies():
 
 
 @fixture(scope='function')
-def index_with_documents(sample_indexes, small_movies):
+def index_with_documents(indexes_sample, small_movies):
     """
     Add small movies sample entries to the index(es)
     """
-    response = sample_indexes[0].add_documents(small_movies)
-    sample_indexes[0].wait_for_pending_update(response['updateId'])
-    return sample_indexes[0]
+    response = indexes_sample[0].add_documents(small_movies)
+    indexes_sample[0].wait_for_pending_update(response['updateId'])
+    return indexes_sample[0]
 
 
 @fixture(scope='function')
