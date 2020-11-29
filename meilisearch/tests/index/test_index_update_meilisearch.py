@@ -1,3 +1,5 @@
+# pylint: disable=invalid-name
+
 import pytest
 
 def test_get_all_update_status_default(indexes_sample):

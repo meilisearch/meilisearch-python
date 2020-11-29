@@ -1,3 +1,5 @@
+# pylint: disable=invalid-name
+
 import pytest
 from meilisearch.index import Index
 from meilisearch.tests import common

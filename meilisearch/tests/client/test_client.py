@@ -1,3 +1,5 @@
+# pylint: disable=invalid-name
+
 import pytest
 import meilisearch
 from meilisearch.tests import BASE_URL, MASTER_KEY

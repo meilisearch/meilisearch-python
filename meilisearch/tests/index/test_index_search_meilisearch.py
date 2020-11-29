@@ -1,3 +1,4 @@
+# pylint: disable=invalid-name
 
 def test_basic_search(index_with_documents):
     """Tests search with an simple query"""

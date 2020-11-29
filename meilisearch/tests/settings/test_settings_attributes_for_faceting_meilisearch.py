@@ -1,4 +1,4 @@
-
+# pylint: disable=invalid-name
 
 def test_get_attributes_for_faceting(indexes_sample):
     """ Tests getting the attributes for faceting """
