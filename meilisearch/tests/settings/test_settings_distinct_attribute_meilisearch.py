@@ -1,42 +1,31 @@
-import meilisearch
-from meilisearch.tests import BASE_URL, MASTER_KEY
 
-class TestDistinctAttribute:
 
-    """ TESTS: distinctAttribute setting """
+NEW_DISTINCT_ATTRIBUTE = 'title'
+DEFAULT_DISTINCT_ATTRIBUTE = None
 
-    client = meilisearch.Client(BASE_URL, MASTER_KEY)
-    index = None
-    new_distinct_attribute = 'title'
-    default_distinct_attribute = None
+def test_get_distinct_attribute(empty_index):
+    """Tests geting the distinct attributes"""
+    response = empty_index().get_distinct_attribute()
+    assert isinstance(response, object)
+    assert response == DEFAULT_DISTINCT_ATTRIBUTE
 
-    def setup_class(self):
-        self.index = self.client.create_index(uid='indexUID')
+def test_update_distinct_attribute(empty_index):
+    """Tests creating a custom distinct attribute and checks it has been set correctly"""
+    index = empty_index()
+    response = index.update_distinct_attribute(NEW_DISTINCT_ATTRIBUTE)
+    assert isinstance(response, object)
+    assert 'updateId' in response
+    index.wait_for_pending_update(response['updateId'])
+    response = index.get_distinct_attribute()
+    assert isinstance(response, object)
+    assert response == NEW_DISTINCT_ATTRIBUTE
 
-    def teardown_class(self):
-        self.index.delete()
-
-    def test_get_distinct_attribute(self):
-        """Tests geting the distinct attributes"""
-        response = self.index.get_distinct_attribute()
-        assert isinstance(response, object)
-        assert response == self.default_distinct_attribute
-
-    def test_update_distinct_attribute(self):
-        """Tests creating a custom distinct attribute and checks it has been set correctly"""
-        response = self.index.update_distinct_attribute(self.new_distinct_attribute)
-        assert isinstance(response, object)
-        assert 'updateId' in response
-        self.index.wait_for_pending_update(response['updateId'])
-        response = self.index.get_distinct_attribute()
-        assert isinstance(response, object)
-        assert response == self.new_distinct_attribute
-
-    def test_reset_distinct_attribute(self):
-        """Tests resetting distinct attribute"""
-        response = self.index.reset_distinct_attribute()
-        assert isinstance(response, object)
-        assert 'updateId' in response
-        self.index.wait_for_pending_update(response['updateId'])
-        response = self.index.get_distinct_attribute()
-        assert response == self.default_distinct_attribute
+def test_reset_distinct_attribute(empty_index):
+    """Tests resetting distinct attribute"""
+    index = empty_index()
+    response = index.reset_distinct_attribute()
+    assert isinstance(response, object)
+    assert 'updateId' in response
+    index.wait_for_pending_update(response['updateId'])
+    response = index.get_distinct_attribute()
+    assert response == DEFAULT_DISTINCT_ATTRIBUTE

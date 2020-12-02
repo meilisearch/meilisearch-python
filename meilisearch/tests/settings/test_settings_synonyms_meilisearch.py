@@ -1,46 +1,34 @@
-import meilisearch
-from meilisearch.tests import BASE_URL, MASTER_KEY
 
-class TestSynonyms:
+NEW_SYNONYMS = {
+    'hp': ['harry potter']
+}
 
-    """ TESTS: synonyms setting """
+def test_get_synonyms_default(empty_index):
+    """Tests getting default synonyms"""
+    response = empty_index().get_synonyms()
+    assert isinstance(response, object)
+    assert response == {}
 
-    client = meilisearch.Client(BASE_URL, MASTER_KEY)
-    index = None
-    new_synonyms = {
-        'hp': ['harry potter']
-    }
+def test_update_synonyms(empty_index):
+    """Tests updating synonyms"""
+    index = empty_index()
+    response = index.update_synonyms(NEW_SYNONYMS)
+    assert isinstance(response, object)
+    assert 'updateId' in response
+    update = index.wait_for_pending_update(response['updateId'])
+    assert update['status'] == 'processed'
+    response = index.get_synonyms()
+    assert isinstance(response, object)
+    for synonym in NEW_SYNONYMS:
+        assert synonym in response
 
-    def setup_class(self):
-        self.index = self.client.create_index(uid='indexUID')
-
-    def teardown_class(self):
-        self.index.delete()
-
-    def test_get_synonyms_default(self):
-        """Tests getting default synonyms"""
-        response = self.index.get_synonyms()
-        assert isinstance(response, object)
-        assert response == {}
-
-    def test_update_synonyms(self):
-        """Tests updating synonyms"""
-        response = self.index.update_synonyms(self.new_synonyms)
-        assert isinstance(response, object)
-        assert 'updateId' in response
-        update = self.index.wait_for_pending_update(response['updateId'])
-        assert update['status'] == 'processed'
-        response = self.index.get_synonyms()
-        assert isinstance(response, object)
-        for synonym in self.new_synonyms:
-            assert synonym in response
-
-    def test_reset_synonyms(self):
-        """Tests resetting synonyms"""
-        response = self.index.reset_synonyms()
-        assert isinstance(response, object)
-        assert 'updateId' in response
-        update = self.index.wait_for_pending_update(response['updateId'])
-        assert update['status'] == 'processed'
-        response = self.index.get_synonyms()
-        assert response == {}
+def test_reset_synonyms(empty_index):
+    """Tests resetting synonyms"""
+    index = empty_index()
+    response = index.reset_synonyms()
+    assert isinstance(response, object)
+    assert 'updateId' in response
+    update = index.wait_for_pending_update(response['updateId'])
+    assert update['status'] == 'processed'
+    response = index.get_synonyms()
+    assert response == {}
