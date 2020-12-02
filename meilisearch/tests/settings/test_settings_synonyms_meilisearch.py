@@ -25,6 +25,16 @@ def test_update_synonyms(empty_index):
 def test_reset_synonyms(empty_index):
     """Tests resetting synonyms"""
     index = empty_index()
+    # Update the settings first
+    response = index.update_synonyms(NEW_SYNONYMS)
+    update = index.wait_for_pending_update(response['updateId'])
+    assert update['status'] == 'processed'
+    # Check the settings have been correctly updated
+    response = index.get_synonyms()
+    assert isinstance(response, object)
+    for synonym in NEW_SYNONYMS:
+        assert synonym in response
+    # Check the reset of the settings
     response = index.reset_synonyms()
     assert isinstance(response, object)
     assert 'updateId' in response

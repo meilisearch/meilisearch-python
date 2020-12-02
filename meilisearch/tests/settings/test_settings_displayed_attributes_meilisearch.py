@@ -27,6 +27,16 @@ def test_update_displayed_attributes(empty_index):
 def test_reset_displayed_attributes(empty_index):
     """Tests the reset of displayedAttributes to default values (in dataset)"""
     index = empty_index()
+    # Update the settings first
+    response = index.update_displayed_attributes(DISPLAYED_ATTRIBUTES)
+    update = index.wait_for_pending_update(response['updateId'])
+    assert update['status'] == 'processed'
+    # Check the settings have been correctly updated
+    get_attributes_new = index.get_displayed_attributes()
+    assert len(get_attributes_new) == len(DISPLAYED_ATTRIBUTES)
+    for attribute in DISPLAYED_ATTRIBUTES:
+        assert attribute in get_attributes_new
+    # Check the reset of the settings
     response = index.reset_displayed_attributes()
     assert isinstance(response, object)
     assert 'updateId' in response

@@ -31,6 +31,16 @@ def test_update_ranking_rules(empty_index):
 def test_reset_ranking_rules(empty_index):
     """Tests resetting the ranking rules"""
     index = empty_index()
+    # Update the settings first
+    response = index.update_ranking_rules(NEW_RANKING_RULES)
+    update = index.wait_for_pending_update(response['updateId'])
+    assert update['status'] == 'processed'
+    # Check the settings have been correctly updated
+    response = index.get_ranking_rules()
+    assert isinstance(response, object)
+    for rule in NEW_RANKING_RULES:
+        assert rule in response
+    # Check the reset of the settings
     response = index.reset_ranking_rules()
     assert isinstance(response, object)
     assert 'updateId' in response

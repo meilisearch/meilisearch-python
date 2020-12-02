@@ -1,5 +1,7 @@
 # pylint: disable=invalid-name
 
+ATTRIBUTES_FOR_FACETING = ['title', 'release_date']
+
 def test_get_attributes_for_faceting(empty_index):
     """ Tests getting the attributes for faceting """
     response = empty_index().get_attributes_for_faceting()
@@ -8,19 +10,29 @@ def test_get_attributes_for_faceting(empty_index):
 
 def test_update_attributes_for_faceting(empty_index):
     """Tests updating the attributes for faceting"""
-    attributes_for_faceting = ['title', 'release_date']
     index = empty_index()
-    response = index.update_attributes_for_faceting(attributes_for_faceting)
+    response = index.update_attributes_for_faceting(ATTRIBUTES_FOR_FACETING)
     index.wait_for_pending_update(response['updateId'])
     get_attributes_new = index.get_attributes_for_faceting()
-    assert len(get_attributes_new) == len(attributes_for_faceting)
+    assert len(get_attributes_new) == len(ATTRIBUTES_FOR_FACETING)
     get_attributes = index.get_attributes_for_faceting()
-    for attribute in attributes_for_faceting:
+    for attribute in ATTRIBUTES_FOR_FACETING:
         assert attribute in get_attributes
 
 def test_reset_attributes_for_faceting(empty_index):
     """Tests the reset of attributes for faceting to default values (in dataset)"""
     index = empty_index()
+    # Update the settings first
+    response = index.update_attributes_for_faceting(ATTRIBUTES_FOR_FACETING)
+    update = index.wait_for_pending_update(response['updateId'])
+    assert update['status'] == 'processed'
+    # Check the settings have been correctly updated
+    get_attributes_new = index.get_attributes_for_faceting()
+    assert len(get_attributes_new) == len(ATTRIBUTES_FOR_FACETING)
+    get_attributes = index.get_attributes_for_faceting()
+    for attribute in ATTRIBUTES_FOR_FACETING:
+        assert attribute in get_attributes
+    # Check the reset of the settings
     response = index.reset_attributes_for_faceting()
     assert isinstance(response, object)
     assert 'updateId' in response
