@@ -23,6 +23,15 @@ def test_update_distinct_attribute(empty_index):
 def test_reset_distinct_attribute(empty_index):
     """Tests resetting distinct attribute"""
     index = empty_index()
+    # Update the settings first
+    response = index.update_distinct_attribute(NEW_DISTINCT_ATTRIBUTE)
+    update = index.wait_for_pending_update(response['updateId'])
+    assert update['status'] == 'processed'
+    # Check the settings have been correctly updated
+    response = index.get_distinct_attribute()
+    assert isinstance(response, object)
+    assert response == NEW_DISTINCT_ATTRIBUTE
+    # Check the reset of the settings
     response = index.reset_distinct_attribute()
     assert isinstance(response, object)
     assert 'updateId' in response
