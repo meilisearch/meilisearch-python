@@ -3,13 +3,13 @@
 ATTRIBUTES_FOR_FACETING = ['title', 'release_date']
 
 def test_get_attributes_for_faceting(empty_index):
-    """ Tests getting the attributes for faceting """
+    """Tests getting the attributes for faceting."""
     response = empty_index().get_attributes_for_faceting()
     assert isinstance(response, object)
     assert response == []
 
 def test_update_attributes_for_faceting(empty_index):
-    """Tests updating the attributes for faceting"""
+    """Tests updating the attributes for faceting."""
     index = empty_index()
     response = index.update_attributes_for_faceting(ATTRIBUTES_FOR_FACETING)
     index.wait_for_pending_update(response['updateId'])
@@ -20,7 +20,7 @@ def test_update_attributes_for_faceting(empty_index):
         assert attribute in get_attributes
 
 def test_reset_attributes_for_faceting(empty_index):
-    """Tests the reset of attributes for faceting to default values (in dataset)"""
+    """Tests resetting the attributes for faceting setting to its default value"""
     index = empty_index()
     # Update the settings first
     response = index.update_attributes_for_faceting(ATTRIBUTES_FOR_FACETING)

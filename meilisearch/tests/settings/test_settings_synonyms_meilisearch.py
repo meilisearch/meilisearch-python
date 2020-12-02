@@ -4,13 +4,13 @@ NEW_SYNONYMS = {
 }
 
 def test_get_synonyms_default(empty_index):
-    """Tests getting default synonyms"""
+    """Tests getting default synonyms."""
     response = empty_index().get_synonyms()
     assert isinstance(response, object)
     assert response == {}
 
 def test_update_synonyms(empty_index):
-    """Tests updating synonyms"""
+    """Tests updating synonyms."""
     index = empty_index()
     response = index.update_synonyms(NEW_SYNONYMS)
     assert isinstance(response, object)
@@ -23,7 +23,7 @@ def test_update_synonyms(empty_index):
         assert synonym in response
 
 def test_reset_synonyms(empty_index):
-    """Tests resetting synonyms"""
+    """Tests resetting the synonyms setting to its default value."""
     index = empty_index()
     # Update the settings first
     response = index.update_synonyms(NEW_SYNONYMS)

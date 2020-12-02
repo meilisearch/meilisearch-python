@@ -1,6 +1,6 @@
 
 def test_get_keys(client):
-    """Tests if public and private keys are generated and retrieved"""
+    """Tests if public and private keys have been generated and can be retrieved."""
     response = client.get_keys()
     assert isinstance(response, dict)
     assert 'public' in response

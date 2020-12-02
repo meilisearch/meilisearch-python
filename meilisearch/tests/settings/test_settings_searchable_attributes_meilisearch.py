@@ -3,7 +3,7 @@
 NEW_SEARCHABLE_ATTRIBUTES = ['something', 'random']
 
 def test_get_searchable_attributes(empty_index, small_movies):
-    """Tests getting the searchable attributes on an empty and populated index"""
+    """Tests getting the searchable attributes on an empty and populated index."""
     index = empty_index()
     response = index.get_searchable_attributes()
     assert isinstance(response, object)
@@ -15,7 +15,7 @@ def test_get_searchable_attributes(empty_index, small_movies):
 
 
 def test_update_searchable_attributes(empty_index):
-    """Tests updating the searchable attributes"""
+    """Tests updating the searchable attributes."""
     index = empty_index()
     response = index.update_searchable_attributes(NEW_SEARCHABLE_ATTRIBUTES)
     assert isinstance(response, object)
@@ -27,7 +27,7 @@ def test_update_searchable_attributes(empty_index):
         assert attribute in response
 
 def test_reset_searchable_attributes(empty_index):
-    """Tests reseting searchable attributes"""
+    """Tests resetting the searchable attributes setting to its default value."""
     index = empty_index()
     # Update the settings first
     response = index.update_searchable_attributes(NEW_SEARCHABLE_ATTRIBUTES)

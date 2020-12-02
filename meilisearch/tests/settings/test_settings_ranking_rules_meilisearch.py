@@ -10,14 +10,14 @@ DEFAULT_RANKING_RULES = [
 ]
 
 def test_get_ranking_rules_default(empty_index):
-    """Tests getting the default ranking rules"""
+    """Tests getting the default ranking rules."""
     response = empty_index().get_ranking_rules()
     assert isinstance(response, object)
     for rule in DEFAULT_RANKING_RULES:
         assert rule in response
 
 def test_update_ranking_rules(empty_index):
-    """Tests changing the ranking rules"""
+    """Tests changing the ranking rules."""
     index = empty_index()
     response = index.update_ranking_rules(NEW_RANKING_RULES)
     assert isinstance(response, object)
@@ -29,7 +29,7 @@ def test_update_ranking_rules(empty_index):
         assert rule in response
 
 def test_reset_ranking_rules(empty_index):
-    """Tests resetting the ranking rules"""
+    """Tests resetting the ranking rules setting to its default value."""
     index = empty_index()
     # Update the settings first
     response = index.update_ranking_rules(NEW_RANKING_RULES)

@@ -4,7 +4,7 @@ DISPLAYED_ATTRIBUTES = ['id', 'release_date', 'title', 'poster', 'overview', 'ge
 
 
 def test_get_displayed_attributes(empty_index, small_movies):
-    """ Tests getting the displayed attributes before and after indexing a dataset """
+    """Tests getting the displayed attributes before and after indexing a dataset."""
     index =  empty_index()
     response = index.get_displayed_attributes()
     assert isinstance(response, object)
@@ -15,7 +15,7 @@ def test_get_displayed_attributes(empty_index, small_movies):
     assert get_attributes == ['*']
 
 def test_update_displayed_attributes(empty_index):
-    """Tests updating the displayed attributes"""
+    """Tests updating the displayed attributes."""
     index = empty_index()
     response = index.update_displayed_attributes(DISPLAYED_ATTRIBUTES)
     index.wait_for_pending_update(response['updateId'])
@@ -25,7 +25,7 @@ def test_update_displayed_attributes(empty_index):
         assert attribute in get_attributes_new
 
 def test_reset_displayed_attributes(empty_index):
-    """Tests the reset of displayedAttributes to default values (in dataset)"""
+    """Tests resetting the displayed attributes setting to its default value."""
     index = empty_index()
     # Update the settings first
     response = index.update_displayed_attributes(DISPLAYED_ATTRIBUTES)

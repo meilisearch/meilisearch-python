@@ -4,7 +4,7 @@ from datetime import datetime
 import pytest
 
 def test_wait_for_pending_update_default(index_with_documents):
-    """Tests waiting for an update with default parameters"""
+    """Tests waiting for an update with default parameters."""
     index = index_with_documents()
     response = index.add_documents([{'id': 1, 'title': 'Le Petit Prince'}])
     assert 'updateId' in response
@@ -14,12 +14,12 @@ def test_wait_for_pending_update_default(index_with_documents):
     assert update['status'] != 'enqueued'
 
 def test_wait_for_pending_update_timeout(index_with_documents):
-    """Tests timeout risen by waiting for an update"""
+    """Tests timeout risen by waiting for an update."""
     with pytest.raises(TimeoutError):
         index_with_documents().wait_for_pending_update(2, timeout_in_ms=0)
 
 def test_wait_for_pending_update_interval_custom(index_with_documents, small_movies):
-    """Tests call to wait for an update with custom interval"""
+    """Tests call to wait for an update with custom interval."""
     index = index_with_documents()
     response = index.add_documents(small_movies)
     assert 'updateId' in response
@@ -36,7 +36,7 @@ def test_wait_for_pending_update_interval_custom(index_with_documents, small_mov
     assert time_delta.seconds >= 1
 
 def test_wait_for_pending_update_interval_zero(index_with_documents, small_movies):
-    """Tests call to wait for an update with custom interval"""
+    """Tests call to wait for an update with custom interval."""
     index = index_with_documents()
     response = index.add_documents(small_movies)
     assert 'updateId' in response

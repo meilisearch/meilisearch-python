@@ -5,7 +5,7 @@ from meilisearch.index import Index
 from meilisearch.tests import common
 
 def test_create_index(client):
-    """Tests creating an index"""
+    """Tests creating an index."""
     index = client.create_index(uid=common.INDEX_UID)
     assert isinstance(index, Index)
     assert index.uid == common.INDEX_UID
@@ -13,7 +13,7 @@ def test_create_index(client):
     assert index.get_primary_key() is None
 
 def test_create_index_with_primary_key(client):
-    """Tests creating an index with a primary key"""
+    """Tests creating an index with a primary key."""
     index = client.create_index(uid=common.INDEX_UID2, options={'primaryKey': 'book_id'})
     assert isinstance(index, Index)
     assert index.uid == common.INDEX_UID2
@@ -21,7 +21,7 @@ def test_create_index_with_primary_key(client):
     assert index.get_primary_key() == 'book_id'
 
 def test_create_index_with_uid_in_options(client):
-    """Tests creating an index with a primary key"""
+    """Tests creating an index with a primary key."""
     index = client.create_index(uid=common.INDEX_UID3, options={'uid': 'wrong', 'primaryKey': 'book_id'})
     assert isinstance(index, Index)
     assert index.uid == common.INDEX_UID3
@@ -30,7 +30,7 @@ def test_create_index_with_uid_in_options(client):
 
 @pytest.mark.usefixtures("indexes_sample")
 def test_get_indexes(client):
-    """Tests getting all indexes"""
+    """Tests getting all indexes."""
     response = client.get_indexes()
     uids = [index['uid'] for index in response]
     assert isinstance(response, list)
@@ -53,23 +53,23 @@ def test_index_with_none_uid(client):
 
 @pytest.mark.usefixtures("indexes_sample")
 def test_get_index_with_valid_uid(client):
-    """Tests getting one index with uid"""
+    """Tests getting one index with uid."""
     response = client.get_index(uid=common.INDEX_UID)
     assert isinstance(response, Index)
     assert response.uid == common.INDEX_UID
 
 def test_get_index_with_none_uid(client):
-    """Test raising an exception if the index UID is None"""
+    """Test raising an exception if the index UID is None."""
     with pytest.raises(Exception):
         client.get_index(uid=None)
 
 def test_get_index_with_wrong_uid(client):
-    """Tests get_index with an non-existing index"""
+    """Tests get_index with an non-existing index."""
     with pytest.raises(Exception):
         client.get_index(uid='wrongUID')
 
 def test_get_or_create_index(client):
-    """Test get_or_create_index method"""
+    """Test get_or_create_index method."""
     index_1 = client.get_or_create_index(common.INDEX_UID4)
     index_2 = client.get_or_create_index(common.INDEX_UID4)
     index_3 = client.get_or_create_index(common.INDEX_UID4)
@@ -86,7 +86,7 @@ def test_get_or_create_index(client):
         client.get_index(index_3)
 
 def test_get_or_create_index_with_primary_key(client):
-    """Test get_or_create_index method with primary key"""
+    """Test get_or_create_index method with primary key."""
     index_1 = client.get_or_create_index('books', {'primaryKey': common.INDEX_UID4})
     index_2 = client.get_or_create_index('books', {'primaryKey': 'some_wrong_key'})
     assert index_1.primary_key == common.INDEX_UID4
@@ -97,7 +97,7 @@ def test_get_or_create_index_with_primary_key(client):
 
 @pytest.mark.usefixtures("indexes_sample")
 def test_index_fetch_info(client):
-    """Tests getting the index info"""
+    """Tests fetching the index info."""
     index = client.index(uid=common.INDEX_UID)
     response = index.fetch_info()
     assert isinstance(response, Index)
@@ -108,7 +108,7 @@ def test_index_fetch_info(client):
 
 @pytest.mark.usefixtures("indexes_sample")
 def test_index_fetch_info_containing_primary_key(client):
-    """Tests getting the index info"""
+    """Tests fetching the index info when a primary key has been set."""
     index = client.index(uid=common.INDEX_UID3)
     response = index.fetch_info()
     assert isinstance(response, Index)
@@ -119,7 +119,7 @@ def test_index_fetch_info_containing_primary_key(client):
 
 @pytest.mark.usefixtures("indexes_sample")
 def test_get_primary_key(client):
-    """Tests getting the primary-key of an index"""
+    """Tests getting the primary key of an index."""
     index = client.index(uid=common.INDEX_UID3)
     assert index.primary_key is None
     response = index.get_primary_key()
@@ -129,7 +129,7 @@ def test_get_primary_key(client):
 
 @pytest.mark.usefixtures("indexes_sample")
 def test_update_index(client):
-    """Tests updating an index"""
+    """Tests updating an index."""
     index = client.index(uid=common.INDEX_UID)
     response = index.update(primaryKey='objectID')
     assert isinstance(response, Index)
@@ -138,7 +138,7 @@ def test_update_index(client):
 
 @pytest.mark.usefixtures("indexes_sample")
 def test_delete_index(client):
-    """Tests deleting an index"""
+    """Tests deleting an index."""
     response = client.index(uid=common.INDEX_UID).delete()
     assert response.status_code == 204
     with pytest.raises(Exception):

@@ -27,7 +27,7 @@ class MeiliSearchApiError(MeiliSearchError):
         return f'MeiliSearchApiError. Error code: {self.error_code}. Error message: {self.message}. Error documentation: {self.error_link}'
 
 class MeiliSearchCommunicationError(MeiliSearchError):
-    """Error connecting to MeiliSearch"""
+    """Error when connecting to MeiliSearch"""
 
     def __str__(self):
         return f'MeiliSearchCommunicationError, {self.message}'

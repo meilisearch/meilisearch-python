@@ -2,13 +2,13 @@
 NEW_STOP_WORDS = ['of', 'the']
 
 def test_get_stop_words_default(empty_index):
-    """Tests call to get stop words by default"""
+    """Tests getting stop words by default."""
     response = empty_index().get_stop_words()
     assert isinstance(response, object)
     assert response == []
 
 def test_update_stop_words(empty_index):
-    """Tests call to modify stop words"""
+    """Tests updating the stop words."""
     index = empty_index()
     response = index.update_stop_words(NEW_STOP_WORDS)
     assert isinstance(response, object)
@@ -21,7 +21,7 @@ def test_update_stop_words(empty_index):
         assert stop_word in response
 
 def test_reset_stop_words(empty_index):
-    """Tests call to reset stop words"""
+    """Tests resetting the stop words setting to its default value"""
     index = empty_index()
     # Update the settings first
     response = index.update_stop_words(NEW_STOP_WORDS)
