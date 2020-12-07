@@ -1,54 +1,47 @@
-import json
-import meilisearch
-from meilisearch.tests import BASE_URL, MASTER_KEY
+# pylint: disable=invalid-name
 
-class TestSearchableAttributes:
+NEW_SEARCHABLE_ATTRIBUTES = ['something', 'random']
 
-    """ TESTS: searchableAttributes setting """
-
-    client = meilisearch.Client(BASE_URL, MASTER_KEY)
-    index = None
-    dataset_file = None
-    dataset_json = None
-    new_searchable_attributes = ['something', 'random']
-    full_searchable_attributes = ['id', 'title', 'poster', 'overview', 'release_date']
-
-    def setup_class(self):
-        self.index = self.client.create_index(uid='indexUID')
-        self.dataset_file = open('./datasets/small_movies.json', 'r')
-        self.dataset_json = json.loads(self.dataset_file.read())
-        self.dataset_file.close()
-
-    def teardown_class(self):
-        self.index.delete()
-
-    def test_get_searchable_attributes(self):
-        """Tests getting the searchable attributes on an empty and populated index"""
-        response = self.index.get_searchable_attributes()
-        assert isinstance(response, object)
-        assert response == ['*']
-        response = self.index.add_documents(self.dataset_json, primary_key='id')
-        self.index.wait_for_pending_update(response['updateId'])
-        get_attributes = self.index.get_searchable_attributes()
-        assert get_attributes == ['*']
+def test_get_searchable_attributes(empty_index, small_movies):
+    """Tests getting the searchable attributes on an empty and populated index"""
+    index = empty_index()
+    response = index.get_searchable_attributes()
+    assert isinstance(response, object)
+    assert response == ['*']
+    response = index.add_documents(small_movies, primary_key='id')
+    index.wait_for_pending_update(response['updateId'])
+    get_attributes = index.get_searchable_attributes()
+    assert get_attributes == ['*']
 
 
-    def test_update_searchable_attributes(self):
-        """Tests updating the searchable attributes"""
-        response = self.index.update_searchable_attributes(self.new_searchable_attributes)
-        assert isinstance(response, object)
-        assert 'updateId' in response
-        self.index.wait_for_pending_update(response['updateId'])
-        response = self.index.get_searchable_attributes()
-        assert len(response) == len(self.new_searchable_attributes)
-        for attribute in self.new_searchable_attributes:
-            assert attribute in response
+def test_update_searchable_attributes(empty_index):
+    """Tests updating the searchable attributes"""
+    index = empty_index()
+    response = index.update_searchable_attributes(NEW_SEARCHABLE_ATTRIBUTES)
+    assert isinstance(response, object)
+    assert 'updateId' in response
+    index.wait_for_pending_update(response['updateId'])
+    response = index.get_searchable_attributes()
+    assert len(response) == len(NEW_SEARCHABLE_ATTRIBUTES)
+    for attribute in NEW_SEARCHABLE_ATTRIBUTES:
+        assert attribute in response
 
-    def test_reset_searchable_attributes(self):
-        """Tests reseting searchable attributes"""
-        response = self.index.reset_searchable_attributes()
-        assert isinstance(response, object)
-        assert 'updateId' in response
-        self.index.wait_for_pending_update(response['updateId'])
-        response = self.index.get_searchable_attributes()
-        assert response == ['*']
+def test_reset_searchable_attributes(empty_index):
+    """Tests reseting searchable attributes"""
+    index = empty_index()
+    # Update the settings first
+    response = index.update_searchable_attributes(NEW_SEARCHABLE_ATTRIBUTES)
+    update = index.wait_for_pending_update(response['updateId'])
+    assert update['status'] == 'processed'
+    # Check the settings have been correctly updated
+    response = index.get_searchable_attributes()
+    assert len(response) == len(NEW_SEARCHABLE_ATTRIBUTES)
+    for attribute in NEW_SEARCHABLE_ATTRIBUTES:
+        assert attribute in response
+    # Check the reset of the settings
+    response = index.reset_searchable_attributes()
+    assert isinstance(response, object)
+    assert 'updateId' in response
+    index.wait_for_pending_update(response['updateId'])
+    response = index.get_searchable_attributes()
+    assert response == ['*']

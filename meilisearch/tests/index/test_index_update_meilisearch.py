@@ -1,56 +1,38 @@
-import json
+# pylint: disable=invalid-name
+
 import pytest
-import meilisearch
-from meilisearch.tests import BASE_URL, MASTER_KEY, clear_all_indexes
 
-class TestUpdate:
+def test_get_all_update_status_default(empty_index):
+    """Tests getting the updates list of an empty index"""
+    response = empty_index().get_all_update_status()
+    assert isinstance(response, list)
+    assert response == []
 
-    """ TESTS: all update routes """
+def test_get_all_update_status(empty_index, small_movies):
+    """Tests getting the updates list of a populated index"""
+    index = empty_index()
+    response = index.add_documents(small_movies)
+    assert 'updateId' in response
+    response = index.add_documents(small_movies)
+    assert 'updateId' in response
+    response = index.get_all_update_status()
+    assert len(response) == 2
 
-    client = meilisearch.Client(BASE_URL, MASTER_KEY)
-    index = None
-    dataset_file = None
-    dataset_json = None
+def test_get_update(empty_index, small_movies):
+    """Tests getting an update of a given operation"""
+    index = empty_index()
+    response = index.add_documents(small_movies)
+    assert 'updateId' in response
+    update = index.wait_for_pending_update(response['updateId'])
+    assert update['status'] == 'processed'
+    response = index.get_update_status(response['updateId'])
+    assert 'updateId' in response
+    assert 'type' in response
+    assert 'duration' in response
+    assert 'enqueuedAt' in response
+    assert 'processedAt' in response
 
-    def setup_class(self):
-        clear_all_indexes(self.client)
-        self.index = self.client.create_index(uid='indexUID')
-        self.dataset_file = open('./datasets/small_movies.json', 'r')
-        self.dataset_json = json.loads(self.dataset_file.read())
-        self.dataset_file.close()
-
-    def teardown_class(self):
-        self.index.delete()
-
-    def test_get_all_update_status_default(self):
-        """Tests getting the updates list of an empty index"""
-        response = self.index.get_all_update_status()
-        assert isinstance(response, list)
-        assert response == []
-
-    def test_get_all_update_status(self):
-        """Tests getting the updates list of a populated index"""
-        response = self.index.add_documents(self.dataset_json)
-        assert 'updateId' in response
-        response = self.index.add_documents(self.dataset_json)
-        assert 'updateId' in response
-        response = self.index.get_all_update_status()
-        assert len(response) == 2
-
-    def test_get_update(self):
-        """Tests getting an update of a given operation"""
-        response = self.index.add_documents(self.dataset_json)
-        assert 'updateId' in response
-        update = self.index.wait_for_pending_update(response['updateId'])
-        assert update['status'] == 'processed'
-        response = self.index.get_update_status(response['updateId'])
-        assert 'updateId' in response
-        assert 'type' in response
-        assert 'duration' in response
-        assert 'enqueuedAt' in response
-        assert 'processedAt' in response
-
-    def test_get_update_inexistent(self):
-        """Tests getting an update of an INEXISTENT operation"""
-        with pytest.raises(Exception):
-            self.index.get_update_status('999')
+def test_get_update_inexistent(empty_index):
+    """Tests getting an update of an INEXISTENT operation"""
+    with pytest.raises(Exception):
+        empty_index().get_update_status('999')

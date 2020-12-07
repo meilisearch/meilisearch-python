@@ -1,48 +1,42 @@
-import json
-import meilisearch
-from meilisearch.tests import BASE_URL, MASTER_KEY
+# pylint: disable=invalid-name
 
-class TestAttributesForFaceting:
+ATTRIBUTES_FOR_FACETING = ['title', 'release_date']
 
-    """ TESTS: attributesForFaceting setting """
+def test_get_attributes_for_faceting(empty_index):
+    """ Tests getting the attributes for faceting """
+    response = empty_index().get_attributes_for_faceting()
+    assert isinstance(response, object)
+    assert response == []
 
-    client = meilisearch.Client(BASE_URL, MASTER_KEY)
-    index = None
-    attributes_for_faceting = ['title', 'release_date']
-    dataset_file = None
-    dataset_json = None
+def test_update_attributes_for_faceting(empty_index):
+    """Tests updating the attributes for faceting"""
+    index = empty_index()
+    response = index.update_attributes_for_faceting(ATTRIBUTES_FOR_FACETING)
+    index.wait_for_pending_update(response['updateId'])
+    get_attributes_new = index.get_attributes_for_faceting()
+    assert len(get_attributes_new) == len(ATTRIBUTES_FOR_FACETING)
+    get_attributes = index.get_attributes_for_faceting()
+    for attribute in ATTRIBUTES_FOR_FACETING:
+        assert attribute in get_attributes
 
-    def setup_class(self):
-        self.index = self.client.create_index(uid='indexUID')
-        self.dataset_file = open('./datasets/small_movies.json', 'r')
-        self.dataset_json = json.loads(self.dataset_file.read())
-        self.dataset_file.close()
-
-    def teardown_class(self):
-        self.index.delete()
-
-    def test_get_attributes_for_faceting(self):
-        """ Tests getting the attributes for faceting """
-        response = self.index.get_attributes_for_faceting()
-        assert isinstance(response, object)
-        assert response == []
-
-    def test_update_attributes_for_faceting(self):
-        """Tests updating the attributes for faceting"""
-        response = self.index.update_attributes_for_faceting(self.attributes_for_faceting)
-        self.index.wait_for_pending_update(response['updateId'])
-        get_attributes_new = self.index.get_attributes_for_faceting()
-        assert len(get_attributes_new) == len(self.attributes_for_faceting)
-        get_attributes = self.index.get_attributes_for_faceting()
-        for attribute in self.attributes_for_faceting:
-            assert attribute in get_attributes
-
-    def test_reset_attributes_for_faceting(self):
-        """Tests the reset of attributes for faceting to default values (in dataset)"""
-        response = self.index.reset_attributes_for_faceting()
-        assert isinstance(response, object)
-        assert 'updateId' in response
-        self.index.wait_for_pending_update(response['updateId'])
-        response = self.index.get_attributes_for_faceting()
-        assert isinstance(response, object)
-        assert response == []
+def test_reset_attributes_for_faceting(empty_index):
+    """Tests the reset of attributes for faceting to default values (in dataset)"""
+    index = empty_index()
+    # Update the settings first
+    response = index.update_attributes_for_faceting(ATTRIBUTES_FOR_FACETING)
+    update = index.wait_for_pending_update(response['updateId'])
+    assert update['status'] == 'processed'
+    # Check the settings have been correctly updated
+    get_attributes_new = index.get_attributes_for_faceting()
+    assert len(get_attributes_new) == len(ATTRIBUTES_FOR_FACETING)
+    get_attributes = index.get_attributes_for_faceting()
+    for attribute in ATTRIBUTES_FOR_FACETING:
+        assert attribute in get_attributes
+    # Check the reset of the settings
+    response = index.reset_attributes_for_faceting()
+    assert isinstance(response, object)
+    assert 'updateId' in response
+    index.wait_for_pending_update(response['updateId'])
+    response = index.get_attributes_for_faceting()
+    assert isinstance(response, object)
+    assert response == []
