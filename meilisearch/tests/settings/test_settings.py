@@ -14,7 +14,7 @@ DEFAULT_RANKING_RULES = [
 ]
 
 def test_get_settings_default(empty_index):
-    """Tests getting all settings by default"""
+    """Tests getting all settings by default."""
     response = empty_index().get_settings()
     assert isinstance(response, object)
     for rule in DEFAULT_RANKING_RULES:
@@ -26,7 +26,7 @@ def test_get_settings_default(empty_index):
     assert response['synonyms'] == {}
 
 def test_update_settings(empty_index):
-    """Tests updating some settings"""
+    """Tests updating some settings."""
     index = empty_index()
     response = index.update_settings(NEW_SETTINGS)
     assert isinstance(response, object)
@@ -44,7 +44,7 @@ def test_update_settings(empty_index):
     assert response['synonyms'] == {}
 
 def test_reset_settings(empty_index):
-    """Tests resetting default settings"""
+    """Tests resetting all the settings to their default value."""
     index = empty_index()
     # Update settings first
     response = index.update_settings(NEW_SETTINGS)

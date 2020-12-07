@@ -2,7 +2,7 @@ import pytest
 
 @pytest.mark.usefixtures("indexes_sample")
 def test_get_all_stats(client):
-    """Tests getting all stats after creating two indexes"""
+    """Tests getting all stats."""
     response = client.get_all_stats()
     assert isinstance(response, object)
     assert 'databaseSize' in response

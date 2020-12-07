@@ -12,42 +12,37 @@ def client():
 @fixture(autouse=True)
 def clear_indexes(client):
     """
-    Auto clear the indexes after each tetst function run.
-    helps with identifying tests that are not independent.
+    Auto-clears the indexes after each test function run.
+    Makes all the test functions independent.
     """
-    # Yield back to the test function
+    # Yields back to the test function.
     yield
-    # test function has finished, let's cleanup
+    # Deletes all the indexes in the MeiliSearch instance.
     indexes = client.get_indexes()
     for index in indexes:
         client.index(index['uid']).delete()
-
 
 @fixture(scope='function')
 def indexes_sample(client):
     indexes = []
     for index_args in common.INDEX_FIXTURE:
         indexes.append(client.create_index(**index_args))
-    # yield the indexes to the test so it can use it
+    # Yields the indexes to the test to make them accessible.
     yield indexes
-
 
 @fixture(scope='session')
 def small_movies():
     """
-    Run once per session, provide the content of small_movies.json
-     as a dictionary to the test.
+    Runs once per session. Provides the content of small_movies.json.
     """
     with open('./datasets/small_movies.json', 'r') as movie_file:
         yield json.loads(movie_file.read())
-
 
 @fixture(scope='function')
 def empty_index(client):
     def index_maker(index_name=common.INDEX_UID):
         return client.create_index(uid=index_name)
     return index_maker
-
 
 @fixture(scope='function')
 def index_with_documents(empty_index, small_movies):

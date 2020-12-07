@@ -32,32 +32,34 @@ class Client():
         Parameters
         ----------
         uid: str
-            UID of the index
-        options: dict, optional
-            Options passed during index creation (ex: primaryKey)
+            UID of the index.
+        options (optional): dict
+            Options passed during index creation (ex: primaryKey).
 
         Returns
         -------
         index : Index
-            an instance of Index containing the information of the newly created index
+            An instance of Index containing the information of the newly created index.
+
         Raises
         ------
-        HTTPError
-            In case of any other error found here https://docs.meilisearch.com/references/#errors-status-code
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return Index.create(self.config, uid, options)
 
     def get_indexes(self):
         """Get all indexes.
 
-        Raises
-        ------
-        HTTPError
-            In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
         Returns
         -------
-        list
-            List of indexes in dictionnary format. (e.g [{ 'uid': 'movies' 'primaryKey': 'objectID' }])
+        indexes: list
+            List of indexes in dictionary format. (e.g [{ 'uid': 'movies' 'primaryKey': 'objectID' }])
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(self.config.paths.index)
 
@@ -70,20 +72,21 @@ class Client():
         uid: str
             UID of the index.
 
-        Raises
-        ------
-        HTTPError
-            In case of any error found here https://docs.meilisearch.com/references/#errors-status-code
         Returns
         -------
         index : Index
             An Index instance containing the information of the fetched index.
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return Index(self.config, uid).fetch_info()
 
     def index(self, uid):
-        """Create a local reference to an index identified by `uid`, without doing an HTTP call.
-        Calling this method doesn't create an index by itself, but grants access to all the other methods in the Index class.
+        """Create a local reference to an index identified by UID, without doing an HTTP call.
+        Calling this method doesn't create an index in the MeiliSearch instance, but grants access to all the other methods in the Index class.
 
         Parameters
         ----------
@@ -100,23 +103,24 @@ class Client():
         raise Exception('The index UID should not be None')
 
     def get_or_create_index(self, uid, options=None):
-        """Retrieve an index in MeiliSearch, or create it if it doesn't exist yet.
+        """Get an index, or create it if it doesn't exist.
 
         Parameters
         ----------
         uid: str
             UID of the index
-        options: dict, optional
+        options (optional): dict
             Options passed during index creation (ex: primaryKey)
 
         Returns
         -------
         index : Index
-            An Index instance containing the information of the retrieved or newly created index.
+            An instance of Index containing the information of the retrieved or newly created index.
+
         Raises
         ------
         MeiliSearchApiError
-            In case of any other error found here https://docs.meilisearch.com/references/#errors-status-code
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         try:
             index_instance = self.get_index(uid)
@@ -131,35 +135,46 @@ class Client():
 
         Get information about database size and all indexes
         https://docs.meilisearch.com/references/stats.html
+
         Returns
-        ----------
+        -------
         stats: `dict`
-            Dictionnary containing stats about your MeiliSearch instance
+            Dictionary containing stats about your MeiliSearch instance.
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(self.config.paths.stat)
 
     def health(self):
-        """Get health of MeiliSearch
+        """Get health of the MeiliSearch server.
 
         `204` HTTP status response when MeiliSearch is healthy.
 
         Raises
-        ----------
-        HTTPError
-            If MeiliSearch is not healthy
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(self.config.paths.health)
 
     def get_keys(self):
-        """Get all keys created
+        """Get all keys.
 
-        Get list of all the keys that were created and all their related information.
+        Get list of all the keys.
 
         Returns
-        ----------
+        -------
         keys: list
             List of keys and their information.
             https://docs.meilisearch.com/references/keys.html#get-keys
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(self.config.paths.keys)
 
@@ -167,9 +182,14 @@ class Client():
         """Get version MeiliSearch
 
         Returns
-        ----------
+        -------
         version: dict
             Information about the version of MeiliSearch.
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(self.config.paths.version)
 
@@ -177,36 +197,51 @@ class Client():
         """Alias for get_version
 
         Returns
-        ----------
+        -------
         version: dict
             Information about the version of MeiliSearch.
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.get_version()
 
     def create_dump(self):
-        """Triggers the creation of a MeiliSearch dump
+        """Trigger the creation of a MeiliSearch dump.
 
         Returns
-        ----------
+        -------
         Dump: dict
             Information about the dump.
             https://docs.meilisearch.com/references/dump.html#create-a-dump
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.post(self.config.paths.dumps)
 
     def get_dump_status(self, uid):
-        """Retrieves the status of a MeiliSearch dump creation
+        """Retrieve the status of a MeiliSearch dump creation.
 
         Parameters
         ----------
         uid: str
-            UID of the dump
+            UID of the dump.
 
         Returns
-        ----------
+        -------
         Dump status: dict
             Information about the dump status.
             https://docs.meilisearch.com/references/dump.html#get-dump-status
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(
             self.config.paths.dumps + '/' + str(uid) + '/status'

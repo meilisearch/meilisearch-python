@@ -1,6 +1,6 @@
 class Config:
     """
-    A client's credentials and configuration parameters
+    Client's credentials and configuration parameters
     """
 
     class Paths():
@@ -27,9 +27,9 @@ class Config:
         """
         Parameters
         ----------
-        url : str
+        url: str
             The url to the MeiliSearch API (ex: http://localhost:7700)
-        api_key : str
+        api_key (optional): str
             The optional API key to access MeiliSearch
         """
 
