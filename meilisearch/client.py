@@ -65,7 +65,7 @@ class Client():
 
     def get_index(self, uid):
         """Get the index.
-        This index should already exist.
+        Get information about an existing index.
 
         Parameters
         ----------
