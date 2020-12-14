@@ -360,3 +360,18 @@ post_dump_1: |-
   client.create_dump()
 get_dump_status_1: |-
   client.get_dump_status('20201101-110357260')
+get_attributes_for_faceting_1: |-
+  client.index('movies').get_attributes_for_faceting()
+update_attributes_for_faceting_1: |-
+  client.index('movies').update_attributes_for_faceting([
+    'genres',
+    'director'
+  ])
+reset_attributes_for_faceting_1: |-
+  client.index('movies').reset_attributes_for_faceting()
+add_movies_json_1: |-
+  import json
+
+  json_file = open('movies.json')
+  movies = json.load(json_file)
+  index.add_documents(movies)
