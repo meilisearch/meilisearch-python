@@ -2,7 +2,7 @@ import urllib
 from datetime import datetime
 from time import sleep
 from meilisearch._httprequests import HttpRequests
-from meilisearch.errors import MeiliSearchTimeOutError
+from meilisearch.errors import MeiliSearchTimeoutError
 
 # pylint: disable=too-many-public-methods
 class Index():
@@ -186,7 +186,7 @@ class Index():
         update_id: int
             identifier of the update to retrieve
         timeout_in_ms (optional): int
-            time the method should wait before raising a MeiliSearchTimeOutError
+            time the method should wait before raising a MeiliSearchTimeoutError
         interval_in_ms (optional): int
             time interval the method should wait (sleep) between requests
 
@@ -197,7 +197,7 @@ class Index():
 
         Raises
         ------
-        MeiliSearchTimeOutError
+        MeiliSearchTimeoutError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         start_time = datetime.now()
@@ -209,7 +209,7 @@ class Index():
             sleep(interval_in_ms / 1000)
             time_delta = datetime.now() - start_time
             elapsed_time = time_delta.seconds * 1000 + time_delta.microseconds / 1000
-        raise MeiliSearchTimeOutError(f'timeout of ${timeout_in_ms}ms has exceeded on process ${update_id} when waiting for pending update to resolve.')
+        raise MeiliSearchTimeoutError(f'timeout of ${timeout_in_ms}ms has exceeded on process ${update_id} when waiting for pending update to resolve.')
 
     def get_stats(self):
         """Get stats of the index.
