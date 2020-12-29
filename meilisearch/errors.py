@@ -31,3 +31,9 @@ class MeiliSearchCommunicationError(MeiliSearchError):
 
     def __str__(self):
         return f'MeiliSearchCommunicationError, {self.message}'
+
+class MeiliSearchTimeOutError(MeiliSearchError):
+    """Error when MeiliSearch operation takes longer than expected"""
+
+    def __str__(self):
+        return f'MeiliSearchTimeOutError, {self.message}'
