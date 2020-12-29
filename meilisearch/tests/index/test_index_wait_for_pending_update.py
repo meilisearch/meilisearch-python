@@ -2,7 +2,7 @@
 
 from datetime import datetime
 import pytest
-from meilisearch.errors import MeiliSearchTimeOutError
+from meilisearch.errors import MeiliSearchTimeoutError
 
 def test_wait_for_pending_update_default(index_with_documents):
     """Tests waiting for an update with default parameters."""
@@ -16,7 +16,7 @@ def test_wait_for_pending_update_default(index_with_documents):
 
 def test_wait_for_pending_update_timeout(index_with_documents):
     """Tests timeout risen by waiting for an update."""
-    with pytest.raises(MeiliSearchTimeOutError):
+    with pytest.raises(MeiliSearchTimeoutError):
         index_with_documents().wait_for_pending_update(2, timeout_in_ms=0)
 
 def test_wait_for_pending_update_interval_custom(index_with_documents, small_movies):
