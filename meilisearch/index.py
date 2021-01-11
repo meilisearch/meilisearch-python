@@ -9,7 +9,7 @@ class Index():
     """
     Indexes routes wrapper.
 
-    Index class gives access to all indexes routes and child routes (herited).
+    Index class gives access to all indexes routes and child routes (inherited).
     https://docs.meilisearch.com/references/indexes.html
     """
 
