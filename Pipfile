@@ -8,9 +8,7 @@ pylint = "*"
 pytest = "*"
 pdoc3 = "*"
 pytest-ordering = "*"
+tox-pipenv = "*"
 
 [packages]
 requests = "*"
-
-[requires]
-python_version = "3.7"

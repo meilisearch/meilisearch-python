@@ -4,11 +4,21 @@ First of all, thank you for contributing to MeiliSearch! The goal of this docume
 
 <!-- MarkdownTOC autolink="true" style="ordered" indent="   " -->
 
-- [Assumptions](#assumptions)
-- [How to Contribute](#how-to-contribute)
-- [Development Workflow](#development-workflow)
-- [Git Guidelines](#git-guidelines)
-- [Release Process (for Admin only)](#release-process-for-admin-only)
+- [Contributing](#contributing)
+  - [Assumptions](#assumptions)
+  - [How to Contribute](#how-to-contribute)
+  - [Development Workflow](#development-workflow)
+    - [Setup](#setup)
+    - [Tests and Linter](#tests-and-linter)
+    - [Want to debug?](#want-to-debug)
+  - [Git Guidelines](#git-guidelines)
+    - [Git Branches](#git-branches)
+    - [Git Commits](#git-commits)
+    - [GitHub Pull Requests](#github-pull-requests)
+  - [Release Process (for Admin only)](#release-process-for-admin-only)
+    - [Automation to Rebase and Merge the PRs](#automation-to-rebase-and-merge-the-prs)
+    - [Automated Changelogs](#automated-changelogs)
+    - [How to Publish the Release](#how-to-publish-the-release)
 
 <!-- /MarkdownTOC -->
 
@@ -41,12 +51,10 @@ $ pipenv install --dev
 Each PR should pass the tests and the linter to be accepted.
 
 ```bash
-# Tests
+# Tests and Linting
 $ docker pull getmeili/meilisearch:latest # Fetch the latest version of MeiliSearch image from Docker Hub
 $ docker run -p 7700:7700 getmeili/meilisearch:latest ./meilisearch --master-key=masterKey --no-analytics=true
-$ pipenv run pytest meilisearch
-# Linter
-$ pipenv run pylint meilisearch
+$ pipenv run tox
 ```
 
 ### Want to debug?
