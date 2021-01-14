@@ -258,8 +258,7 @@ settings_guide_searchable_1: |-
     'searchableAttributes': [
       'title',
       'description',
-      'genre',
-      'release_date'
+      'genre'
     ]
   })
 settings_guide_displayed_1: |-
