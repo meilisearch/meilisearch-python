@@ -61,20 +61,15 @@ update_settings_1: |-
     ],
     'distinctAttribute': 'movie_id',
     'searchableAttributes': [
-        'uid',
-        'movie_id',
         'title',
         'description',
-        'poster',
-        'release_date',
-        'rank'
+        'genre'
     ],
     'displayedAttributes': [
         'title',
         'description',
-        'poster',
-        'release_date',
-        'rank'
+        'genre',
+        'release_date'
     ],
     'stopWords': [
         'the',
@@ -161,22 +156,17 @@ distinct_attribute_guide_1: |-
 field_properties_guide_searchable_1: |-
   client.index('movies').update_settings({
     'searchableAttributes': [
-        'uid',
-        'movie_id',
         'title',
         'description',
-        'poster',
-        'release_date',
-        'rank'
+        'genre'
   ]})
 field_properties_guide_displayed_1: |-
   client.index('movies').update_settings({
     'displayedAttributes': [
         'title',
         'description',
-        'poster',
-        'release_date',
-        'rank'
+        'genre',
+        'release_date'
   ]})
 filtering_guide_1: |-
   client.index('movies').search('Avengers', {
@@ -266,13 +256,9 @@ settings_guide_distinct_1: |-
 settings_guide_searchable_1: |-
   client.index('movies').update_settings({
     'searchableAttributes': [
-      'uid',
-      'movie_id',
       'title',
       'description',
-      'poster',
-      'release_date',
-      'rank'
+      'genre'
     ]
   })
 settings_guide_displayed_1: |-
@@ -280,9 +266,8 @@ settings_guide_displayed_1: |-
     'displayedAttributes': [
       'title',
       'description',
-      'poster',
-      'release_date',
-      'rank'
+      'genre',
+      'release_date'
     ]
   })
 documents_guide_add_movie_1: |-
@@ -299,26 +284,20 @@ search_guide_2: |-
   client.index('movies').search('Avengers', {
     'filters': 'release_date > 795484800'
   })
-getting_started_create_index_md: |-
+getting_started_add_documents_md: |-
   ```bash
   $ pip3 install meilisearch
   ```
 
   ```python
   import meilisearch
+  import json
 
   client = meilisearch.Client('http://127.0.0.1:7700')
-  index = client.create_index(uid='movies')
-  ```
-
-  [About this package](https://github.com/meilisearch/meilisearch-python/)
-getting_started_add_documents_md: |-
-  ```python
-  import json
 
   json_file = open('movies.json')
   movies = json.load(json_file)
-  index.add_documents(movies)
+  client.index('movies').add_documents(movies)
   ```
 
   [About this package](https://github.com/meilisearch/meilisearch-python/)
