@@ -8,6 +8,7 @@ pylint = "*"
 pytest = "*"
 pdoc3 = "*"
 pytest-ordering = "*"
+tox = "*"
 tox-pipenv = "*"
 
 [packages]
