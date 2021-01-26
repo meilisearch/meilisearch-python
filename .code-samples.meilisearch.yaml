@@ -150,7 +150,7 @@ get_indexes_stats_1: |-
 get_health_1: |-
   client.health()
 get_version_1: |-
-  clien.get_version()
+  client.get_version()
 distinct_attribute_guide_1: |-
   client.index('jackets').update_settings({'distinctAttribute': 'product_id'})
 field_properties_guide_searchable_1: |-
