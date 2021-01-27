@@ -1,3 +1,9 @@
-status = ['integration-tests', 'pylint']
+status = [
+  'pylint',
+  'integration-tests (3.6)',
+  'integration-tests (3.7)',
+  'integration-tests (3.8)',
+  'integration-tests (3.9)'
+]
 # 1 hour timeout
 timeout-sec = 3600

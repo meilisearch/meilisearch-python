@@ -49,6 +49,14 @@ $ pipenv run pytest meilisearch
 $ pipenv run pylint meilisearch
 ```
 
+Optionally tox can be used to run test on all supported version of Python and linting.
+
+```bash
+$ docker pull getmeili/meilisearch:latest # Fetch the latest version of MeiliSearch image from Docker Hub
+$ docker run -p 7700:7700 getmeili/meilisearch:latest ./meilisearch --master-key=masterKey --no-analytics=true
+$ pipenv run tox
+```
+
 ### Want to debug?
 
 Import `pdb` in your file and use it:
