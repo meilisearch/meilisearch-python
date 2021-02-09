@@ -14,8 +14,8 @@ def test_add_documents(empty_index, small_movies):
     response = index.add_documents(small_movies)
     assert isinstance(response, object)
     assert 'updateId' in response
-    assert index.get_primary_key() == 'id'
     update = index.wait_for_pending_update(response['updateId'])
+    assert index.get_primary_key() == 'id'
     assert update['status'] == 'processed'
 
 def test_get_document(index_with_documents):
