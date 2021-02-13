@@ -163,12 +163,12 @@ class Client():
     def get_keys(self):
         """Get all keys.
 
-        Get list of all the keys.
+        Get the public and private keys.
 
         Returns
         -------
-        keys: list
-            List of keys and their information.
+        keys: dict
+            Dictionary of keys and their information.
             https://docs.meilisearch.com/references/keys.html#get-keys
 
         Raises
