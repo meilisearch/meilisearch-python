@@ -134,7 +134,7 @@ class Client():
         """Get all stats of MeiliSearch
 
         Get information about database size and all indexes
-        https://docs.meilisearch.com/references/stats.html
+        https://docs.meilisearch.com/reference/api/stats.html
 
         Returns
         -------
@@ -169,7 +169,7 @@ class Client():
         -------
         keys: dict
             Dictionary of keys and their information.
-            https://docs.meilisearch.com/references/keys.html#get-keys
+            https://docs.meilisearch.com/reference/api/keys.html#get-keys
 
         Raises
         ------
@@ -215,7 +215,7 @@ class Client():
         -------
         Dump: dict
             Information about the dump.
-            https://docs.meilisearch.com/references/dump.html#create-a-dump
+            https://docs.meilisearch.com/reference/api/dump.html#create-a-dump
 
         Raises
         ------
@@ -236,7 +236,7 @@ class Client():
         -------
         Dump status: dict
             Information about the dump status.
-            https://docs.meilisearch.com/references/dump.html#get-dump-status
+            https://docs.meilisearch.com/reference/api/dump.html#get-dump-status
 
         Raises
         ------

@@ -10,7 +10,7 @@ class Index():
     Indexes routes wrapper.
 
     Index class gives access to all indexes routes and child routes (inherited).
-    https://docs.meilisearch.com/references/indexes.html
+    https://docs.meilisearch.com/reference/api/indexes.html
     """
 
     config = None
@@ -215,7 +215,7 @@ class Index():
         """Get stats of the index.
 
         Get information about the number of documents, field frequencies, ...
-        https://docs.meilisearch.com/references/stats.html
+        https://docs.meilisearch.com/reference/api/stats.html
 
         Returns
         -------
@@ -244,7 +244,7 @@ class Index():
             String containing the searched word(s)
         opt_params (optional): dict
             Dictionary containing optional query parameters
-            https://docs.meilisearch.com/references/search.html#search-in-an-index
+            https://docs.meilisearch.com/reference/api/search.html#search-in-an-index
 
         Returns
         -------
@@ -303,7 +303,7 @@ class Index():
         Parameters
         ----------
         parameters (optional): dict
-            parameters accepted by the get documents route: https://docs.meilisearch.com/references/documents.html#get-all-documents
+            parameters accepted by the get documents route: https://docs.meilisearch.com/reference/api/documents.html#get-all-documents
 
         Returns
         -------
@@ -340,7 +340,7 @@ class Index():
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
@@ -376,7 +376,7 @@ class Index():
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
@@ -411,7 +411,7 @@ class Index():
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
@@ -439,7 +439,7 @@ class Index():
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
@@ -462,7 +462,7 @@ class Index():
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
@@ -483,7 +483,7 @@ class Index():
     def get_settings(self):
         """Get settings of the index.
 
-        https://docs.meilisearch.com/references/settings.html
+        https://docs.meilisearch.com/reference/api/settings.html
 
         Returns
         -------
@@ -506,20 +506,20 @@ class Index():
     def update_settings(self, body):
         """Update settings of the index.
 
-        https://docs.meilisearch.com/references/settings.html#update-settings
+        https://docs.meilisearch.com/reference/api/settings.html#update-settings
 
         Parameters
         ----------
         body: dict
             Dictionary containing the settings of the index.
             More information:
-            https://docs.meilisearch.com/references/settings.html#update-settings
+            https://docs.meilisearch.com/reference/api/settings.html#update-settings
 
         Returns
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
@@ -538,13 +538,13 @@ class Index():
     def reset_settings(self):
         """Reset settings of the index to default values.
 
-        https://docs.meilisearch.com/references/settings.html#reset-settings
+        https://docs.meilisearch.com/reference/api/settings.html#reset-settings
 
         Returns
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
@@ -592,7 +592,7 @@ class Index():
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
@@ -611,7 +611,7 @@ class Index():
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
@@ -656,7 +656,7 @@ class Index():
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
@@ -675,7 +675,7 @@ class Index():
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
@@ -719,7 +719,7 @@ class Index():
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
@@ -738,7 +738,7 @@ class Index():
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
@@ -782,7 +782,7 @@ class Index():
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
@@ -801,7 +801,7 @@ class Index():
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
@@ -845,7 +845,7 @@ class Index():
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
@@ -864,7 +864,7 @@ class Index():
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
@@ -908,7 +908,7 @@ class Index():
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
@@ -927,7 +927,7 @@ class Index():
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
@@ -971,7 +971,7 @@ class Index():
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
@@ -990,7 +990,7 @@ class Index():
         -------
         update: dict
             Dictionary containing an update id to track the action:
-            https://docs.meilisearch.com/references/updates.html#get-an-update-status
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
 
         Raises
         ------
