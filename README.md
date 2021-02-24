@@ -41,6 +41,8 @@ See our [Documentation](https://docs.meilisearch.com/learn/tutorials/getting_sta
 
 ## 🔧 Installation
 
+**Note**: Python 3.6+ is required
+
 With `pip3` in command line:
 
 ```bash
