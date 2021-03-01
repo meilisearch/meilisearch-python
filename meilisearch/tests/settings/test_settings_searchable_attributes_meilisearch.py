@@ -6,7 +6,7 @@ def test_get_searchable_attributes(empty_index, small_movies):
     """Tests getting the searchable attributes on an empty and populated index."""
     index = empty_index()
     response = index.get_searchable_attributes()
-    assert isinstance(response, object)
+    assert isinstance(response, list)
     assert response == ['*']
     response = index.add_documents(small_movies, primary_key='id')
     index.wait_for_pending_update(response['updateId'])
@@ -18,7 +18,7 @@ def test_update_searchable_attributes(empty_index):
     """Tests updating the searchable attributes."""
     index = empty_index()
     response = index.update_searchable_attributes(NEW_SEARCHABLE_ATTRIBUTES)
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert 'updateId' in response
     index.wait_for_pending_update(response['updateId'])
     response = index.get_searchable_attributes()
@@ -40,7 +40,7 @@ def test_reset_searchable_attributes(empty_index):
         assert attribute in response
     # Check the reset of the settings
     response = index.reset_searchable_attributes()
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert 'updateId' in response
     index.wait_for_pending_update(response['updateId'])
     response = index.get_searchable_attributes()
