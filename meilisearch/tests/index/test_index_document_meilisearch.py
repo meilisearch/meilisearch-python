@@ -12,7 +12,7 @@ def test_add_documents(empty_index, small_movies):
     """Tests adding new documents to a clean index."""
     index = empty_index()
     response = index.add_documents(small_movies)
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert 'updateId' in response
     update = index.wait_for_pending_update(response['updateId'])
     assert index.get_primary_key() == 'id'
@@ -21,7 +21,7 @@ def test_add_documents(empty_index, small_movies):
 def test_get_document(index_with_documents):
     """Tests getting one document from a populated index."""
     response = index_with_documents().get_document('500682')
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert 'title' in response
     assert response['title'] == 'The Highwaymen'
 
@@ -56,7 +56,7 @@ def test_update_documents(index_with_documents, small_movies):
     response = index.get_documents()
     response[0]['title'] = 'Some title'
     update = index.update_documents([response[0]])
-    assert isinstance(update, object)
+    assert isinstance(update, dict)
     assert 'updateId' in update
     index.wait_for_pending_update(update['updateId'])
     response = index.get_documents()
@@ -70,7 +70,7 @@ def test_delete_document(index_with_documents):
     """Tests deleting a single document."""
     index = index_with_documents()
     response = index.delete_document('500682')
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert 'updateId' in response
     index.wait_for_pending_update(response['updateId'])
     with pytest.raises(Exception):
@@ -81,7 +81,7 @@ def test_delete_documents(index_with_documents):
     to_delete = ['522681', '450465', '329996']
     index = index_with_documents()
     response = index.delete_documents(to_delete)
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert 'updateId' in response
     index.wait_for_pending_update(response['updateId'])
     for document in to_delete:
@@ -92,7 +92,7 @@ def test_delete_all_documents(index_with_documents):
     """Tests deleting all the documents in the index."""
     index = index_with_documents()
     response = index.delete_all_documents()
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert 'updateId' in response
     index.wait_for_pending_update(response['updateId'])
     response = index.get_documents()

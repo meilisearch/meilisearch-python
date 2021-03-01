@@ -4,7 +4,7 @@ import pytest
 def test_get_all_stats(client):
     """Tests getting all stats."""
     response = client.get_all_stats()
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert 'databaseSize' in response
     assert isinstance(response['databaseSize'], int)
     assert 'lastUpdate' in response

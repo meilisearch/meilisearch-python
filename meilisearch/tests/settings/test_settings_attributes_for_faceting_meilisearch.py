@@ -5,7 +5,7 @@ ATTRIBUTES_FOR_FACETING = ['title', 'release_date']
 def test_get_attributes_for_faceting(empty_index):
     """Tests getting the attributes for faceting."""
     response = empty_index().get_attributes_for_faceting()
-    assert isinstance(response, object)
+    assert isinstance(response, list)
     assert response == []
 
 def test_update_attributes_for_faceting(empty_index):
@@ -34,9 +34,9 @@ def test_reset_attributes_for_faceting(empty_index):
         assert attribute in get_attributes
     # Check the reset of the settings
     response = index.reset_attributes_for_faceting()
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert 'updateId' in response
     index.wait_for_pending_update(response['updateId'])
     response = index.get_attributes_for_faceting()
-    assert isinstance(response, object)
+    assert isinstance(response, list)
     assert response == []

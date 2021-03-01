@@ -631,8 +631,8 @@ class Index():
 
         Returns
         -------
-        settings: str
-            String containing the distinct attribute of the index.
+        settings: str | None
+            String containing the distinct attribute of the index. If no distinct attribute None is returned.
 
         Raises
         ------

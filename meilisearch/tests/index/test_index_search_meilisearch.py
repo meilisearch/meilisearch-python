@@ -3,27 +3,27 @@
 def test_basic_search(index_with_documents):
     """Tests search with an simple query."""
     response = index_with_documents().search('How to Train Your Dragon')
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert response['hits'][0]['id'] == '166428'
 
 def test_basic_search_with_empty_params(index_with_documents):
     """Tests search with a simple query and empty params."""
     response = index_with_documents().search('How to Train Your Dragon', {})
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert response['hits'][0]['id'] == '166428'
     assert '_formatted' not in response['hits'][0]
 
 def test_basic_search_with_empty_query(index_with_documents):
     """Tests search with an empty query and empty params."""
     response = index_with_documents().search('')
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert len(response['hits']) == 20
     assert response['query'] == ''
 
 def test_basic_search_with_no_query(index_with_documents):
     """Tests search with no query [None] and empty params."""
     response = index_with_documents().search(None, {})
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert len(response['hits']) == 20
 
 def test_custom_search(index_with_documents):
@@ -34,7 +34,7 @@ def test_custom_search(index_with_documents):
             'attributesToHighlight': ['title']
         }
     )
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert response['hits'][0]['id'] == '166428'
     assert '_formatted' in response['hits'][0]
     assert 'dragon' in response['hits'][0]['_formatted']['title'].lower()
@@ -47,7 +47,7 @@ def test_custom_search_with_empty_query(index_with_documents):
             'attributesToHighlight': ['title']
         }
     )
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert len(response['hits']) == 20
     assert response['query'] == ''
 
@@ -59,7 +59,7 @@ def test_custom_search_with_no_query(index_with_documents):
             'limit': 5
         }
     )
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert len(response['hits']) == 5
 
 def test_custom_search_params_with_wildcard(index_with_documents):
@@ -73,7 +73,7 @@ def test_custom_search_params_with_wildcard(index_with_documents):
             'attributesToCrop': ['*'],
         }
     )
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert len(response['hits']) == 5
     assert '_formatted' in response['hits'][0]
     assert "title" in response['hits'][0]['_formatted']
@@ -89,7 +89,7 @@ def test_custom_search_params_with_simple_string(index_with_documents):
             'attributesToCrop': ['title'],
         }
     )
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert len(response['hits']) == 5
     assert '_formatted' in response['hits'][0]
     assert 'title' in response['hits'][0]['_formatted']
@@ -105,7 +105,7 @@ def test_custom_search_params_with_string_list(index_with_documents):
             'attributesToHighlight': ['title'],
         }
     )
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert len(response['hits']) == 5
     assert 'title' in response['hits'][0]
     assert 'overview' in response['hits'][0]
@@ -123,7 +123,7 @@ def test_custom_search_params_with_facets_distribution(index_with_documents):
             'facetsDistribution': ['genre']
         }
     )
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert len(response['hits']) == 12
     assert 'facetsDistribution' in response
     assert 'exhaustiveFacetsCount' in response
@@ -143,7 +143,7 @@ def test_custom_search_params_with_facet_filters(index_with_documents):
             'facetFilters': [['genre:action']]
         }
     )
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert len(response['hits']) == 3
     assert 'facetsDistribution' not in response
     assert 'exhaustiveFacetsCount' not in response
@@ -158,7 +158,7 @@ def test_custom_search_params_with_multiple_facet_filters(index_with_documents):
             'facetFilters': ['genre:action', ['genre:action', 'genre:action']]
         }
     )
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert len(response['hits']) == 3
     assert 'facetsDistribution' not in response
     assert 'exhaustiveFacetsCount' not in response
@@ -174,7 +174,7 @@ def test_custom_search_params_with_many_params(index_with_documents):
             'attributesToRetrieve': ['title', 'poster']
         }
     )
-    assert isinstance(response, object)
+    assert isinstance(response, dict)
     assert len(response['hits']) == 3
     assert 'facetsDistribution' not in response
     assert 'exhaustiveFacetsCount' not in response

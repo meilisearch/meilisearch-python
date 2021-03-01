@@ -10,7 +10,7 @@ def test_wait_for_pending_update_default(index_with_documents):
     response = index.add_documents([{'id': 1, 'title': 'Le Petit Prince'}])
     assert 'updateId' in response
     update = index.wait_for_pending_update(response['updateId'])
-    assert isinstance(update, object)
+    assert isinstance(update, dict)
     assert 'status' in update
     assert update['status'] != 'enqueued'
 
@@ -31,7 +31,7 @@ def test_wait_for_pending_update_interval_custom(index_with_documents, small_mov
         timeout_in_ms=6000
     )
     time_delta = datetime.now() - start_time
-    assert isinstance(wait_update, object)
+    assert isinstance(wait_update, dict)
     assert 'status' in wait_update
     assert wait_update['status'] != 'enqueued'
     assert time_delta.seconds >= 1
@@ -46,6 +46,6 @@ def test_wait_for_pending_update_interval_zero(index_with_documents, small_movie
         interval_in_ms=0,
         timeout_in_ms=6000
     )
-    assert isinstance(wait_update, object)
+    assert isinstance(wait_update, dict)
     assert 'status' in wait_update
     assert wait_update['status'] != 'enqueued'
