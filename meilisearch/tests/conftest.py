@@ -1,9 +1,39 @@
 # pylint: disable=redefined-outer-name
 import json
+import socket
+import docker
 from pytest import fixture
 
 from meilisearch.tests import common
 import meilisearch
+
+@fixture(scope="session", autouse=True)
+def meilisearch_docker():
+    """
+    Check if something is already running on port 7700, and if so assume meilisearch is running
+    already. If not start a meilisearch docker container for testing.
+    """
+
+    start_container = False
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as socket_check:
+        port = 7700
+        if socket_check.connect_ex(("localhost", port)) != 0:
+            start_container = True
+
+    if start_container:
+        client = docker.from_env()
+        container = client.containers.run(
+            image="getmeili/meilisearch:latest",
+            command="./meilisearch --master-key=masterKey --no-analytics=true",
+            ports={"7700": 7700},
+            tty=True,
+            remove=True,
+            detach=True,
+        )
+        yield container
+        container.stop()
+    else:
+        yield
 
 @fixture(scope='session')
 def client():
