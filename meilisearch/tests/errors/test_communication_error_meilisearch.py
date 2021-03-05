@@ -7,6 +7,6 @@ from meilisearch.tests import MASTER_KEY
 
 
 def test_meilisearch_communication_error_host():
-    client = meilisearch.Client("http://wrongurl:1234", MASTER_KEY)
+    client = meilisearch.Client("http://wrongurl:1234", MASTER_KEY, timeout=1)
     with pytest.raises(MeiliSearchCommunicationError):
         client.create_index("some_index")

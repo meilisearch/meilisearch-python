@@ -17,9 +17,18 @@ class HttpRequests:
         try:
             request_path = self.config.url + '/' + path
             if body is None:
-                request = http_method(request_path, headers=self.headers)
+                request = http_method(
+                    request_path,
+                    timeout=self.config.timeout,
+                    headers=self.headers,
+                )
             else:
-                request = http_method(request_path, headers=self.headers, json=body)
+                request = http_method(
+                    request_path,
+                    timeout=self.config.timeout,
+                    headers=self.headers,
+                    json=body,
+                )
             return self.__validate(request)
         except requests.exceptions.ConnectionError as err:
             raise MeiliSearchCommunicationError(err) from err
