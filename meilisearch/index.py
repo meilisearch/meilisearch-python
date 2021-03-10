@@ -42,7 +42,7 @@ class Index():
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.delete('{}/{}'.format(self.config.paths.index, self.uid))
+        return self.http.delete(f'{self.config.paths.index}/{self.uid}')
 
     def update(self, **body):
         """Update the index primary-key.
@@ -55,8 +55,8 @@ class Index():
 
         Returns
         -------
-        index: dict
-            Dictionary containing index information.
+        index : Index
+            An instance of Index
 
         Raises
         ------
@@ -67,7 +67,7 @@ class Index():
         primary_key = body.get('primaryKey', None)
         if primary_key is not None:
             payload['primaryKey'] = primary_key
-        response = self.http.put('{}/{}'.format(self.config.paths.index, self.uid), payload)
+        response = self.http.put(f'{self.config.paths.index}/{self.uid}', payload)
         self.primary_key = response['primaryKey']
         return self
 
@@ -76,15 +76,15 @@ class Index():
 
         Returns
         -------
-        index: dict
-            Dictionary containing the index information.
+        index : Index
+            An instance of Index
 
         Raises
         ------
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        index_dict = self.http.get('{}/{}'.format(self.config.paths.index, self.uid))
+        index_dict = self.http.get(f'{self.config.paths.index}/{self.uid}')
         self.primary_key = index_dict['primaryKey']
         return self
 
@@ -144,11 +144,7 @@ class Index():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(
-            '{}/{}/{}'.format(
-                self.config.paths.index,
-                self.uid,
-                self.config.paths.update
-            )
+            f'{self.config.paths.index}/{self.uid}/{self.config.paths.update}'
         )
 
     def get_update_status(self, update_id):
@@ -170,12 +166,7 @@ class Index():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(
-            '{}/{}/{}/{}'.format(
-                self.config.paths.index,
-                self.uid,
-                self.config.paths.update,
-                update_id
-            )
+            f'{self.config.paths.index}/{self.uid}/{self.config.paths.update}/{update_id}'
         )
 
     def wait_for_pending_update(self, update_id, timeout_in_ms=5000, interval_in_ms=50):
@@ -228,11 +219,7 @@ class Index():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(
-            '{}/{}/{}'.format(
-                self.config.paths.index,
-                self.uid,
-                self.config.paths.stat,
-            )
+            f'{self.config.paths.index}/{self.uid}/{self.config.paths.stat}'
         )
 
     def search(self, query, opt_params=None):
@@ -263,10 +250,7 @@ class Index():
             **opt_params
         }
         return self.http.post(
-            '{}/{}/{}'.format(
-                self.config.paths.index,
-                self.uid,
-                self.config.paths.search),
+            f'{self.config.paths.index}/{self.uid}/{self.config.paths.search}',
             body=body
         )
 
@@ -289,12 +273,7 @@ class Index():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(
-            '{}/{}/{}/{}'.format(
-                self.config.paths.index,
-                self.uid,
-                self.config.paths.document,
-                document_id
-            )
+            f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}/{document_id}'
         )
 
     def get_documents(self, parameters=None):
@@ -319,12 +298,8 @@ class Index():
             parameters = {}
 
         return self.http.get(
-            '{}/{}/{}?{}'.format(
-                self.config.paths.index,
-                self.uid,
-                self.config.paths.document,
-                urllib.parse.urlencode(parameters))
-            )
+            f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{urllib.parse.urlencode(parameters)}'
+        )
 
     def add_documents(self, documents, primary_key=None):
         """Add documents to the index.
@@ -348,18 +323,10 @@ class Index():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         if primary_key is None:
-            url = '{}/{}/{}'.format(
-                self.config.paths.index,
-                self.uid,
-                self.config.paths.document
-            )
+            url = f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}'
         else:
-            url = '{}/{}/{}?{}'.format(
-                self.config.paths.index,
-                self.uid,
-                self.config.paths.document,
-                urllib.parse.urlencode({'primaryKey': primary_key})
-            )
+            primary_key = urllib.parse.urlencode({'primaryKey': primary_key})
+            url = f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{primary_key}'
         return self.http.post(url, documents)
 
     def update_documents(self, documents, primary_key=None):
@@ -384,18 +351,10 @@ class Index():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         if primary_key is None:
-            url = '{}/{}/{}'.format(
-                self.config.paths.index,
-                self.uid,
-                self.config.paths.document
-            )
+            url = f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}'
         else:
-            url = '{}/{}/{}?{}'.format(
-                self.config.paths.index,
-                self.uid,
-                self.config.paths.document,
-                urllib.parse.urlencode({'primaryKey': primary_key})
-            )
+            primary_key = urllib.parse.urlencode({'primaryKey': primary_key})
+            url = f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{primary_key}'
         return self.http.put(url, documents)
 
 
@@ -419,12 +378,7 @@ class Index():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.delete(
-            '{}/{}/{}/{}'.format(
-                self.config.paths.index,
-                self.uid,
-                self.config.paths.document,
-                document_id
-            )
+            f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}/{document_id}'
         )
 
     def delete_documents(self, ids):
@@ -447,11 +401,7 @@ class Index():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.post(
-            '{}/{}/{}/delete-batch'.format(
-                self.config.paths.index,
-                self.uid,
-                self.config.paths.document
-            ),
+            f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}/delete-batch',
             ids
         )
 
@@ -470,11 +420,7 @@ class Index():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.delete(
-            '{}/{}/{}'.format(
-                self.config.paths.index,
-                self.uid,
-                self.config.paths.document
-            )
+            f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}'
         )
 
 
@@ -496,11 +442,7 @@ class Index():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(
-            '{}/{}/{}'.format(
-                self.config.paths.index,
-                self.uid,
-                self.config.paths.setting
-            )
+            f'{self.config.paths.index}/{self.uid}/{self.config.paths.setting}'
         )
 
     def update_settings(self, body):
@@ -527,11 +469,7 @@ class Index():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.post(
-            '{}/{}/{}'.format(
-                self.config.paths.index,
-                self.uid,
-                self.config.paths.setting
-            ),
+            f'{self.config.paths.index}/{self.uid}/{self.config.paths.setting}',
             body
         )
 
@@ -552,11 +490,7 @@ class Index():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.delete(
-            '{}/{}/{}'.format(
-                self.config.paths.index,
-                self.uid,
-                self.config.paths.setting
-            ),
+            f'{self.config.paths.index}/{self.uid}/{self.config.paths.setting}'
         )
 
     # RANKING RULES SUB-ROUTES
@@ -1002,9 +936,4 @@ class Index():
         )
 
     def __settings_url_for(self, sub_route):
-        return '{}/{}/{}/{}'.format(
-            self.config.paths.index,
-            self.uid,
-            self.config.paths.setting,
-            sub_route
-        )
+        return f'{self.config.paths.index}/{self.uid}/{self.config.paths.setting}/{sub_route}'
