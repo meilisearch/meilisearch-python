@@ -29,7 +29,7 @@ First of all, thank you for contributing to MeiliSearch! The goal of this docume
 ### Setup <!-- omit in toc -->
 
 ```bash
-$ pipenv install --dev
+pipenv install --dev
 ```
 
 ### Tests and Linter <!-- omit in toc -->
@@ -38,19 +38,19 @@ Each PR should pass the tests and the linter to be accepted.
 
 ```bash
 # Tests
-$ docker pull getmeili/meilisearch:latest # Fetch the latest version of MeiliSearch image from Docker Hub
-$ docker run -p 7700:7700 getmeili/meilisearch:latest ./meilisearch --master-key=masterKey --no-analytics=true
-$ pipenv run pytest meilisearch
+docker pull getmeili/meilisearch:latest # Fetch the latest version of MeiliSearch image from Docker Hub
+docker run -p 7700:7700 getmeili/meilisearch:latest ./meilisearch --master-key=masterKey --no-analytics=true
+pipenv run pytest meilisearch
 # Linter
-$ pipenv run pylint meilisearch
+pipenv run pylint meilisearch
 ```
 
 Optionally tox can be used to run test on all supported version of Python and linting.
 
 ```bash
-$ docker pull getmeili/meilisearch:latest # Fetch the latest version of MeiliSearch image from Docker Hub
-$ docker run -p 7700:7700 getmeili/meilisearch:latest ./meilisearch --master-key=masterKey --no-analytics=true
-$ pipenv run tox
+docker pull getmeili/meilisearch:latest # Fetch the latest version of MeiliSearch image from Docker Hub
+docker run -p 7700:7700 getmeili/meilisearch:latest ./meilisearch --master-key=masterKey --no-analytics=true
+pipenv run tox
 ```
 
 ### Want to debug? <!-- omit in toc -->
