@@ -286,7 +286,7 @@ search_guide_2: |-
   })
 getting_started_add_documents_md: |-
   ```bash
-  $ pip3 install meilisearch
+  pip3 install meilisearch
   ```
 
   ```python
