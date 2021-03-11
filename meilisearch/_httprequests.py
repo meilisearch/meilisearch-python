@@ -1,5 +1,9 @@
 import requests
-from meilisearch.errors import MeiliSearchApiError, MeiliSearchCommunicationError
+from meilisearch.errors import (
+    MeiliSearchApiError,
+    MeiliSearchCommunicationError,
+    MeiliSearchTimeoutError,
+)
 
 class HttpRequests:
 
@@ -30,6 +34,9 @@ class HttpRequests:
                     json=body,
                 )
             return self.__validate(request)
+
+        except requests.exceptions.Timeout as err:
+            raise MeiliSearchTimeoutError(err) from err
         except requests.exceptions.ConnectionError as err:
             raise MeiliSearchCommunicationError(err) from err
 

@@ -1,12 +1,16 @@
 # pylint: disable=invalid-name
 
+from unittest.mock import patch
 import pytest
+import requests
 import meilisearch
 from meilisearch.errors import MeiliSearchCommunicationError
 from meilisearch.tests import MASTER_KEY
 
 
-def test_meilisearch_communication_error_host():
-    client = meilisearch.Client("http://wrongurl:1234", MASTER_KEY, timeout=1)
+@patch("requests.post")
+def test_meilisearch_communication_error_host(mock_post):
+    mock_post.side_effect = requests.exceptions.ConnectionError()
+    client = meilisearch.Client("http://wrongurl:1234", MASTER_KEY, timeout=None)
     with pytest.raises(MeiliSearchCommunicationError):
         client.create_index("some_index")
