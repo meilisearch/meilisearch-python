@@ -27,7 +27,7 @@ def test_client_timeout_not_set():
 
 
 def test_client_timeout_error():
-    client = meilisearch.Client(BASE_URL, MASTER_KEY, timeout=1e-10)
+    client = meilisearch.Client("http://wrongurl:1234", MASTER_KEY, timeout=1)
 
     with pytest.raises(MeiliSearchTimeoutError):
         client.health()
