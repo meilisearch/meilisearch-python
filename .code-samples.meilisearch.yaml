@@ -300,13 +300,13 @@ getting_started_add_documents_md: |-
   client.index('movies').add_documents(movies)
   ```
 
-  [About this package](https://github.com/meilisearch/meilisearch-python/)
+  [About this SDK](https://github.com/meilisearch/meilisearch-python/)
 getting_started_search_md: |-
   ```python
   index.search('botman')
   ```
 
-  [About this package](https://github.com/meilisearch/meilisearch-python/)
+  [About this SDK](https://github.com/meilisearch/meilisearch-python/)
 faceted_search_update_settings_1: |-
   client.index('movies').update_attributes_for_faceting([
       'director',
