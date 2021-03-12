@@ -1,10 +1,8 @@
 # pylint: disable=invalid-name
 
-import pytest
-
 import meilisearch
-from meilisearch.errors import MeiliSearchTimeoutError
 from meilisearch.tests import BASE_URL, MASTER_KEY
+
 
 def test_get_client():
     """Tests getting a client instance."""
@@ -15,19 +13,16 @@ def test_get_client():
 
 
 def test_client_timeout_set():
-    client = meilisearch.Client(BASE_URL, MASTER_KEY, timeout=5)
+    timeout = 5
+    client = meilisearch.Client(BASE_URL, MASTER_KEY, timeout=timeout)
     response = client.health()
+    assert client.config.timeout == timeout
     assert response.status_code >= 200 and response.status_code < 400
 
 
 def test_client_timeout_not_set():
+    default_timeout = 10
     client = meilisearch.Client(BASE_URL, MASTER_KEY)
     response = client.health()
+    assert client.config.timeout == default_timeout
     assert response.status_code >= 200 and response.status_code < 400
-
-
-def test_client_timeout_error():
-    client = meilisearch.Client("http://wrongurl:1234", MASTER_KEY, timeout=1)
-
-    with pytest.raises(MeiliSearchTimeoutError):
-        client.health()
