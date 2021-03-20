@@ -1,7 +1,6 @@
 import pytest
 import meilisearch
-from meilisearch.errors import MeiliSearchTimeoutError
-from meilisearch.tests import BASE_URL, MASTER_KEY
+from meilisearch.tests import MASTER_KEY
 
 def test_client_timeout_set():
     timeout = 1
