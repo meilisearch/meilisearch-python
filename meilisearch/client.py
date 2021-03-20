@@ -14,7 +14,7 @@ class Client():
     config = None
     http = None
 
-    def __init__(self, url, apiKey=None, timeout=10):
+    def __init__(self, url, apiKey=None, timeout=None):
         """
         Parameters
         ----------

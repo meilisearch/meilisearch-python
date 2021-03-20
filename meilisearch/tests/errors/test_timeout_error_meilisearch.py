@@ -21,13 +21,3 @@ def test_client_timeout_set():
         client.health()
 
     assert client.config.timeout == timeout
-
-
-def test_client_timeout_not_set():
-    timeout = 10
-    client = meilisearch.Client("http://wrongurl:1234", MASTER_KEY)
-
-    with pytest.raises(Exception):
-        client.health()
-
-    assert client.config.timeout == timeout

@@ -23,7 +23,7 @@ class Config:
         attributes_for_faceting = 'attributes-for-faceting'
         dumps = 'dumps'
 
-    def __init__(self, url, api_key=None, timeout=10):
+    def __init__(self, url, api_key=None, timeout=None):
         """
         Parameters
         ----------
