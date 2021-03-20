@@ -14,7 +14,7 @@ class Client():
     config = None
     http = None
 
-    def __init__(self, url, apiKey=None):
+    def __init__(self, url, apiKey=None, timeout=None):
         """
         Parameters
         ----------
@@ -23,7 +23,8 @@ class Client():
         apiKey : str
             The optional API key for MeiliSearch
         """
-        self.config = Config(url, apiKey)
+        self.config = Config(url, apiKey, timeout=timeout)
+
         self.http = HttpRequests(self.config)
 
     def create_index(self, uid, options=None):
