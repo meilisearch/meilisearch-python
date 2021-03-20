@@ -1,16 +1,18 @@
+from unittest.mock import patch
 import pytest
+import requests
 import meilisearch
 from meilisearch.errors import MeiliSearchTimeoutError
 from meilisearch.tests import BASE_URL, MASTER_KEY
 
 
-@pytest.mark.usefixtures("indexes_sample")
-def test_client_timeout_error(small_movies):
-    client = meilisearch.Client(BASE_URL, MASTER_KEY, timeout=1e-99)
+@patch("requests.get")
+def test_client_timeout_error(mock_get):
+    mock_get.side_effect = requests.exceptions.Timeout()
+    client = meilisearch.Client(BASE_URL, MASTER_KEY, timeout=1)
 
     with pytest.raises(MeiliSearchTimeoutError):
-        index = client.index("indexUID")
-        index.add_documents(small_movies)
+        client.version()
 
 
 def test_client_timeout_set():
