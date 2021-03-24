@@ -152,7 +152,7 @@ class Client():
     def health(self):
         """Get health of the MeiliSearch server.
 
-        `204` HTTP status response when MeiliSearch is healthy.
+        `200` HTTP status response when MeiliSearch is healthy.
 
         Raises
         ------
