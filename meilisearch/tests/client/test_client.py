@@ -9,7 +9,7 @@ def test_get_client():
     client = meilisearch.Client(BASE_URL, MASTER_KEY)
     assert client.config
     response = client.health()
-    assert response.status_code >= 200 and response.status_code < 400
+    assert response['status'] == 'available'
 
 
 def test_client_timeout_set():
@@ -17,7 +17,7 @@ def test_client_timeout_set():
     client = meilisearch.Client(BASE_URL, MASTER_KEY, timeout=timeout)
     response = client.health()
     assert client.config.timeout == timeout
-    assert response.status_code >= 200 and response.status_code < 400
+    assert response['status'] == 'available'
 
 
 def test_client_timeout_not_set():
@@ -25,4 +25,4 @@ def test_client_timeout_not_set():
     client = meilisearch.Client(BASE_URL, MASTER_KEY)
     response = client.health()
     assert client.config.timeout == default_timeout
-    assert response.status_code >= 200 and response.status_code < 400
+    assert response['status'] == 'available'
