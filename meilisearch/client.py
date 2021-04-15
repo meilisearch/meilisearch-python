@@ -1,7 +1,7 @@
 from meilisearch.index import Index
 from meilisearch.config import Config
 from meilisearch._httprequests import HttpRequests
-from meilisearch.errors import MeiliSearchApiError
+from meilisearch.errors import MeiliSearchApiError, MeiliSearchError
 
 class Client():
     """
@@ -160,6 +160,21 @@ class Client():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(self.config.paths.health)
+
+    def is_healthy(self):
+        """Get health of the MeiliSearch server.
+
+        `200` HTTP status response when MeiliSearch is healthy.
+
+        Return
+        ------
+        health: True | False
+        """
+        try:
+            self.health()
+        except MeiliSearchError:
+            return False
+        return True
 
     def get_keys(self):
         """Get all keys.
