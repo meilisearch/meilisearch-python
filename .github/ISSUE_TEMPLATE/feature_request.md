@@ -6,8 +6,7 @@ labels: ''
 assignees: ''
 ---
 
-If the feature deserves to be added into multiple SDKs, open an issue in the [integration-guides](https://github.com/meilisearch/integration-guides/issues) instead.
-This template is not an exhaustive model but a help. No step is mandatory.
+[comment]: <> (This is not an exhaustive model but a help. No step is mandatory.)
 
 **Description**
 Brief explanation of the feature.

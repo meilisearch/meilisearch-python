@@ -1,13 +1,12 @@
 ---
-name: Bug report 🐞
+name: Bug Report 🐞
 about: Create a report to help us improve.
 title: ''
 labels: ''
 assignees: ''
 ---
 
-If the issue happens in multiple SDKs, open it in the [integration-guides](https://github.com/meilisearch/integration-guides/issues) instead.
-This is not an exhaustive model but a help. No step is mandatory.
+[comment]: <> (This is not an exhaustive model but a help. No step is mandatory.)
 
 **Description**
 Description of what the bug is about.
@@ -25,6 +24,3 @@ If applicable, add screenshots or logs to help explain your problem.
  - OS: [e.g. Debian GNU/Linux]
  - MeiliSearch version: [e.g. v.0.20.0]
  - meilisearch-python version: [e.g v0.14.1]
-
-**Other**
-Any other things you want to add.
