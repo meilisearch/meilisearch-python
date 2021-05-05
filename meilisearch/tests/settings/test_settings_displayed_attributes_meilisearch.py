@@ -24,6 +24,23 @@ def test_update_displayed_attributes(empty_index):
     for attribute in DISPLAYED_ATTRIBUTES:
         assert attribute in get_attributes_new
 
+def test_update_displayed_attributes_to_none(empty_index):
+    """Tests updating the displayed attributes at null."""
+    index = empty_index()
+    # Update the settings first
+    response = index.update_displayed_attributes(DISPLAYED_ATTRIBUTES)
+    update = index.wait_for_pending_update(response['updateId'])
+    assert update['status'] == 'processed'
+    # Check the settings have been correctly updated
+    get_attributes = index.get_displayed_attributes()
+    for attribute in DISPLAYED_ATTRIBUTES:
+        assert attribute in get_attributes
+    # Launch test to update at null the setting
+    response = index.update_displayed_attributes(None)
+    index.wait_for_pending_update(response['updateId'])
+    response = index.get_displayed_attributes()
+    assert response == ['*']
+
 def test_reset_displayed_attributes(empty_index):
     """Tests resetting the displayed attributes setting to its default value."""
     index = empty_index()

@@ -19,6 +19,23 @@ def test_update_attributes_for_faceting(empty_index):
     for attribute in ATTRIBUTES_FOR_FACETING:
         assert attribute in get_attributes
 
+def test_update_attributes_for_faceting_to_none(empty_index):
+    """Tests updating the attributes for faceting at null."""
+    index = empty_index()
+    # Update the settings first
+    response = index.update_attributes_for_faceting(ATTRIBUTES_FOR_FACETING)
+    update = index.wait_for_pending_update(response['updateId'])
+    assert update['status'] == 'processed'
+    # Check the settings have been correctly updated
+    get_attributes = index.get_attributes_for_faceting()
+    for attribute in ATTRIBUTES_FOR_FACETING:
+        assert attribute in get_attributes
+    # Launch test to update at null the setting
+    response = index.update_attributes_for_faceting(None)
+    index.wait_for_pending_update(response['updateId'])
+    response = index.get_attributes_for_faceting()
+    assert response == []
+
 def test_reset_attributes_for_faceting(empty_index):
     """Tests resetting the attributes for faceting setting to its default value"""
     index = empty_index()
