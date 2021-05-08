@@ -153,6 +153,10 @@ class Client():
         """Get health of the MeiliSearch server.
 
         `200` HTTP status response when MeiliSearch is healthy.
+        Returns
+        -------
+        health: `dict`
+            Dictionary containing the status of the MeiliSearch instance.
 
         Raises
         ------
