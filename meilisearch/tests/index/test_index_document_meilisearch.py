@@ -1,5 +1,7 @@
 # pylint: disable=invalid-name
 
+from math import ceil
+
 import pytest
 
 def test_get_documents_default(empty_index):
@@ -17,6 +19,30 @@ def test_add_documents(empty_index, small_movies):
     update = index.wait_for_pending_update(response['updateId'])
     assert index.get_primary_key() == 'id'
     assert update['status'] == 'processed'
+
+
+@pytest.mark.parametrize("batch_size", [2, 3, 1000])
+@pytest.mark.parametrize(
+    "primary_key, expected_primary_key", [("release_date", "release_date"), (None, "id")]
+)
+def test_add_documents_in_batches(
+    batch_size,
+    primary_key,
+    expected_primary_key,
+    empty_index,
+    small_movies,
+):
+    index = empty_index()
+    response = index.add_documents_in_batches(small_movies, batch_size, primary_key)
+    assert ceil(len(small_movies) / batch_size) == len(response)
+
+    for r in response:
+        assert "updateId" in r
+        update = index.wait_for_pending_update(r["updateId"])
+        assert update["status"] == "processed"
+
+    assert index.get_primary_key() == expected_primary_key
+
 
 def test_get_document(index_with_documents):
     """Tests getting one document from a populated index."""

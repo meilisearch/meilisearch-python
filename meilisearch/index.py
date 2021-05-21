@@ -329,6 +329,44 @@ class Index():
             url = f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{primary_key}'
         return self.http.post(url, documents)
 
+    def add_documents_in_batches(self, documents, batch_size=1000, primary_key=None):
+        """Add documents to the index in batches.
+
+        Parameters
+        ----------
+        documents: list
+            List of documents. Each document should be a dictionary.
+        batch_size (optional): int
+            The number of documents that should be included in each batch. Default = 1000
+        primary_key (optional): string
+            The primary-key used in index. Ignored if already set up.
+
+        Returns
+        -------
+        update: list[dict]
+            List of dictionaries containing an update ids to track the action:
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request.
+            MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+
+        def batch(documents, batch_size):
+            total_len = len(documents)
+            for i in range(0, total_len, batch_size):
+                yield documents[i : i + batch_size]
+
+        update_ids = []
+
+        for document_batch in batch(documents, batch_size):
+            update_id = self.add_documents(document_batch, primary_key)
+            update_ids.append(update_id)
+
+        return update_ids
+
     def update_documents(self, documents, primary_key=None):
         """Update documents in the index.
 
