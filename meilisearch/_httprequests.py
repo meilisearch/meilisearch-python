@@ -1,3 +1,4 @@
+import json
 import requests
 from meilisearch.errors import (
     MeiliSearchApiError,
@@ -20,19 +21,12 @@ class HttpRequests:
     def send_request(self, http_method, path, body=None):
         try:
             request_path = self.config.url + '/' + path
-            if body is None:
-                request = http_method(
-                    request_path,
-                    timeout=self.config.timeout,
-                    headers=self.headers,
-                )
-            else:
-                request = http_method(
-                    request_path,
-                    timeout=self.config.timeout,
-                    headers=self.headers,
-                    json=body,
-                )
+            request = http_method(
+                request_path,
+                timeout=self.config.timeout,
+                headers=self.headers,
+                data=json.dumps(body) if body else "null"
+            )
             return self.__validate(request)
 
         except requests.exceptions.Timeout as err:
