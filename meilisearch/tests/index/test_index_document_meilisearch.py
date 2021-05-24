@@ -90,6 +90,28 @@ def test_update_documents(index_with_documents, small_movies):
     response = index.get_documents()
     assert response[0]['title'] != 'Some title'
 
+@pytest.mark.parametrize("batch_size", [2, 3, 1000])
+@pytest.mark.parametrize(
+    "primary_key, expected_primary_key", [("release_date", "release_date"), (None, "id")]
+)
+def test_update_documents_in_batches(
+    batch_size,
+    primary_key,
+    expected_primary_key,
+    empty_index,
+    small_movies,
+):
+    index = empty_index()
+    response = index.update_documents_in_batches(small_movies, batch_size, primary_key)
+    assert ceil(len(small_movies) / batch_size) == len(response)
+
+    for r in response:
+        assert "updateId" in r
+        update = index.wait_for_pending_update(r["updateId"])
+        assert update["status"] == "processed"
+
+    assert index.get_primary_key() == expected_primary_key
+
 def test_delete_document(index_with_documents):
     """Tests deleting a single document."""
     index = index_with_documents()

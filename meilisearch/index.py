@@ -354,14 +354,9 @@ class Index():
             MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
 
-        def batch(documents, batch_size):
-            total_len = len(documents)
-            for i in range(0, total_len, batch_size):
-                yield documents[i : i + batch_size]
-
         update_ids = []
 
-        for document_batch in batch(documents, batch_size):
+        for document_batch in self._batch(documents, batch_size):
             update_id = self.add_documents(document_batch, primary_key)
             update_ids.append(update_id)
 
@@ -395,6 +390,38 @@ class Index():
             url = f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{primary_key}'
         return self.http.put(url, documents)
 
+    def update_documents_in_batches(self, documents, batch_size=1000, primary_key=None):
+        """Update documents to the index in batches.
+
+        Parameters
+        ----------
+        documents: list
+            List of documents. Each document should be a dictionary.
+        batch_size (optional): int
+            The number of documents that should be included in each batch. Default = 1000
+        primary_key (optional): string
+            The primary-key used in index. Ignored if already set up.
+
+        Returns
+        -------
+        update: list[dict]
+            List of dictionaries containing an update ids to track the action:
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request.
+            MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+
+        update_ids = []
+
+        for document_batch in self._batch(documents, batch_size):
+            update_id = self.update_documents(document_batch, primary_key)
+            update_ids.append(update_id)
+
+        return update_ids
 
     def delete_document(self, document_id):
         """Delete one document from the index.
@@ -972,6 +999,12 @@ class Index():
         return self.http.delete(
             self.__settings_url_for(self.config.paths.attributes_for_faceting),
         )
+
+    @staticmethod
+    def _batch(documents, batch_size):
+        total_len = len(documents)
+        for i in range(0, total_len, batch_size):
+            yield documents[i : i + batch_size]
 
     def __settings_url_for(self, sub_route):
         return f'{self.config.paths.index}/{self.uid}/{self.config.paths.setting}/{sub_route}'
