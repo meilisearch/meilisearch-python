@@ -20,7 +20,7 @@ def clear_indexes(client):
     # Deletes all the indexes in the MeiliSearch instance.
     indexes = client.get_indexes()
     for index in indexes:
-        client.index(index['uid']).delete()
+        client.index(index.uid).delete()
 
 @fixture(scope='function')
 def indexes_sample(client):
