@@ -20,7 +20,6 @@ def test_add_documents(empty_index, small_movies):
     assert index.get_primary_key() == 'id'
     assert update['status'] == 'processed'
 
-
 @pytest.mark.parametrize("batch_size", [2, 3, 1000])
 @pytest.mark.parametrize(
     "primary_key, expected_primary_key", [("release_date", "release_date"), (None, "id")]
@@ -42,7 +41,6 @@ def test_add_documents_in_batches(
         assert update["status"] == "processed"
 
     assert index.get_primary_key() == expected_primary_key
-
 
 def test_get_document(index_with_documents):
     """Tests getting one document from a populated index."""
