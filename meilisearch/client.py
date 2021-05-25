@@ -67,12 +67,12 @@ class Client():
         return [
             Index(
                 self.config,
-                x["uid"],
-                x["primaryKey"],
-                x["createdAt"],
-                x["updatedAt"],
+                index["uid"],
+                index["primaryKey"],
+                index["createdAt"],
+                index["updatedAt"],
             )
-            for x in response
+            for index in response
         ]
 
     def get_raw_indexes(self):
