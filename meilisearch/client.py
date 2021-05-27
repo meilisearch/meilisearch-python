@@ -55,6 +55,32 @@ class Client():
         Returns
         -------
         indexes: list
+            List of Index instances.
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        response = self.http.get(self.config.paths.index)
+
+        return [
+            Index(
+                self.config,
+                index["uid"],
+                index["primaryKey"],
+                index["createdAt"],
+                index["updatedAt"],
+            )
+            for index in response
+        ]
+
+    def get_raw_indexes(self):
+        """Get all indexes in dictionary format.
+
+        Returns
+        -------
+        indexes: list
             List of indexes in dictionary format. (e.g [{ 'uid': 'movies' 'primaryKey': 'objectID' }])
 
         Raises
@@ -84,6 +110,27 @@ class Client():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return Index(self.config, uid).fetch_info()
+
+    def get_raw_index(self, uid):
+        """Get the index as a dictionary.
+        This index should already exist.
+
+        Parameters
+        ----------
+        uid: str
+            UID of the index.
+
+        Returns
+        -------
+        index : dict
+            An index in dictionary format. (e.g { 'uid': 'movies' 'primaryKey': 'objectID' })
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.get(f'{self.config.paths.index}/{uid}')
 
     def index(self, uid):
         """Create a local reference to an index identified by UID, without doing an HTTP call.
