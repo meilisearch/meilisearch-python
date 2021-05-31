@@ -11,9 +11,6 @@ class Client():
     MeiliSearch and its permissions.
     """
 
-    config = None
-    http = None
-
     def __init__(self, url, apiKey=None, timeout=None):
         """
         Parameters

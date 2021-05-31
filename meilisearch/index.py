@@ -13,11 +13,6 @@ class Index():
     https://docs.meilisearch.com/reference/api/indexes.html
     """
 
-    config = None
-    http = None
-    uid = None
-    primary_key = None
-
     def __init__(self, config, uid, primary_key=None, created_at=None, updated_at=None):
         """
         Parameters

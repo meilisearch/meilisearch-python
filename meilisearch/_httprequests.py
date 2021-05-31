@@ -7,10 +7,6 @@ from meilisearch.errors import (
 )
 
 class HttpRequests:
-
-    config = None
-    headers = {}
-
     def __init__(self, config):
         self.config = config
         self.headers = {
