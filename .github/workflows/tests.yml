@@ -50,3 +50,5 @@ jobs:
         run: pipenv install --dev
       - name: Linter with pylint
         run: pipenv run pylint meilisearch
+      - name: mypy type check
+        run: pipenv run mypy meilisearch
