@@ -54,7 +54,7 @@ class Index():
 
         return self.http.delete(f'{self.config.paths.index}/{self.uid}')
 
-    def update(self, **body: Dict[str, Any]) -> "Index":
+    def update(self, **body: Dict[str, Any]) -> 'Index':
         """Update the index primary-key.
 
         Parameters
@@ -78,7 +78,7 @@ class Index():
         self.updated_at = self._iso_to_date_time(response['updatedAt'])
         return self
 
-    def fetch_info(self) -> "Index":
+    def fetch_info(self) -> 'Index':
         """Fetch the info of the index.
 
         Raises
@@ -108,9 +108,9 @@ class Index():
 
         Parameters
         ----------
-        uid
+        uid:
             UID of the index.
-        options
+        options:
             Options passed during index creation (ex: { 'primaryKey': 'name' }).
 
         Raises
@@ -182,7 +182,7 @@ class Index():
 
         Returns
         -------
-        update
+        update:
             Dictionary containing the details of the processed update status.
 
         Raises

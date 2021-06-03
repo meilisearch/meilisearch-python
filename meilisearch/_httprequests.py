@@ -1,8 +1,6 @@
 import json
 from typing import Any, Callable, Dict, List, Optional, Union
-
 import requests
-
 from meilisearch.config import Config
 from meilisearch.errors import (
     MeiliSearchApiError,

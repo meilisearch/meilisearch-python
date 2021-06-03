@@ -81,7 +81,7 @@ class Client():
 
         Returns
         -------
-        indexes
+        indexes:
             List of indexes in dictionary format. (e.g [{ 'uid': 'movies' 'primaryKey': 'objectID' }])
 
         Raises
@@ -97,12 +97,12 @@ class Client():
 
         Parameters
         ----------
-        uid
+        uid:
             UID of the index.
 
         Returns
         -------
-        index
+        index:
             An Index instance containing the information of the fetched index.
 
         Raises
@@ -139,7 +139,7 @@ class Client():
 
         Parameters
         ----------
-        uid
+        uid:
             UID of the index.
 
         Returns
