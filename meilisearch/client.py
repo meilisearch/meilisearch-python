@@ -1,3 +1,5 @@
+from typing import Any, Dict, List, Optional
+
 from meilisearch.index import Index
 from meilisearch.config import Config
 from meilisearch._httprequests import HttpRequests
@@ -11,20 +13,22 @@ class Client():
     MeiliSearch and its permissions.
     """
 
-    def __init__(self, url, apiKey=None, timeout=None):
+    def __init__(
+        self, url: str, apiKey: Optional[str] = None, timeout: Optional[int] = None
+    ) -> None:
         """
         Parameters
         ----------
-        url : str
+        url:
             The url to the MeiliSearch API (ex: http://localhost:7700)
-        apiKey : str
+        apiKey:
             The optional API key for MeiliSearch
         """
         self.config = Config(url, apiKey, timeout=timeout)
 
         self.http = HttpRequests(self.config)
 
-    def create_index(self, uid, options=None):
+    def create_index(self, uid: str, options: Optional[Dict[str, Any]] = None) -> Index:
         """Create an index.
 
         Parameters
@@ -46,12 +50,12 @@ class Client():
         """
         return Index.create(self.config, uid, options)
 
-    def get_indexes(self):
+    def get_indexes(self) -> List[Index]:
         """Get all indexes.
 
         Returns
         -------
-        indexes: list
+        indexes:
             List of Index instances.
 
         Raises
@@ -72,12 +76,12 @@ class Client():
             for index in response
         ]
 
-    def get_raw_indexes(self):
+    def get_raw_indexes(self) -> List[Dict[str, Any]]:
         """Get all indexes in dictionary format.
 
         Returns
         -------
-        indexes: list
+        indexes:
             List of indexes in dictionary format. (e.g [{ 'uid': 'movies' 'primaryKey': 'objectID' }])
 
         Raises
@@ -87,18 +91,18 @@ class Client():
         """
         return self.http.get(self.config.paths.index)
 
-    def get_index(self, uid):
+    def get_index(self, uid: str) -> Index:
         """Get the index.
         This index should already exist.
 
         Parameters
         ----------
-        uid: str
+        uid:
             UID of the index.
 
         Returns
         -------
-        index : Index
+        index:
             An Index instance containing the information of the fetched index.
 
         Raises
@@ -108,18 +112,18 @@ class Client():
         """
         return Index(self.config, uid).fetch_info()
 
-    def get_raw_index(self, uid):
+    def get_raw_index(self, uid: str) -> Dict[str, Any]:
         """Get the index as a dictionary.
         This index should already exist.
 
         Parameters
         ----------
-        uid: str
+        uid:
             UID of the index.
 
         Returns
         -------
-        index : dict
+        index:
             An index in dictionary format. (e.g { 'uid': 'movies' 'primaryKey': 'objectID' })
 
         Raises
@@ -129,37 +133,37 @@ class Client():
         """
         return self.http.get(f'{self.config.paths.index}/{uid}')
 
-    def index(self, uid):
+    def index(self, uid: str) -> Index:
         """Create a local reference to an index identified by UID, without doing an HTTP call.
         Calling this method doesn't create an index in the MeiliSearch instance, but grants access to all the other methods in the Index class.
 
         Parameters
         ----------
-        uid: str
+        uid:
             UID of the index.
 
         Returns
         -------
-        index : Index
+        index:
             An Index instance.
         """
         if uid is not None:
             return Index(self.config, uid=uid)
         raise Exception('The index UID should not be None')
 
-    def get_or_create_index(self, uid, options=None):
+    def get_or_create_index(self, uid: str, options: Optional[Dict[str, Any]] = None) -> Index:
         """Get an index, or create it if it doesn't exist.
 
         Parameters
         ----------
-        uid: str
+        uid:
             UID of the index
         options (optional): dict
             Options passed during index creation (ex: primaryKey)
 
         Returns
         -------
-        index : Index
+        index:
             An instance of Index containing the information of the retrieved or newly created index.
 
         Raises
@@ -175,7 +179,7 @@ class Client():
             index_instance = self.create_index(uid, options)
         return index_instance
 
-    def get_all_stats(self):
+    def get_all_stats(self) -> Dict[str, Any]:
         """Get all stats of MeiliSearch
 
         Get information about database size and all indexes
@@ -183,7 +187,7 @@ class Client():
 
         Returns
         -------
-        stats: `dict`
+        stats:
             Dictionary containing stats about your MeiliSearch instance.
 
         Raises
@@ -193,13 +197,12 @@ class Client():
         """
         return self.http.get(self.config.paths.stat)
 
-    def health(self):
+    def health(self) -> Dict[str, str]:
         """Get health of the MeiliSearch server.
 
-        `200` HTTP status response when MeiliSearch is healthy.
         Returns
         -------
-        health: `dict`
+        health:
             Dictionary containing the status of the MeiliSearch instance.
 
         Raises
@@ -209,14 +212,8 @@ class Client():
         """
         return self.http.get(self.config.paths.health)
 
-    def is_healthy(self):
+    def is_healthy(self) -> bool:
         """Get health of the MeiliSearch server.
-
-        `200` HTTP status response when MeiliSearch is healthy.
-
-        Return
-        ------
-        health: True | False
         """
         try:
             self.health()
@@ -224,14 +221,14 @@ class Client():
             return False
         return True
 
-    def get_keys(self):
+    def get_keys(self) -> Dict[str, str]:
         """Get all keys.
 
         Get the public and private keys.
 
         Returns
         -------
-        keys: dict
+        keys:
             Dictionary of keys and their information.
             https://docs.meilisearch.com/reference/api/keys.html#get-keys
 
@@ -242,12 +239,12 @@ class Client():
         """
         return self.http.get(self.config.paths.keys)
 
-    def get_version(self):
+    def get_version(self) -> Dict[str, str]:
         """Get version MeiliSearch
 
         Returns
         -------
-        version: dict
+        version:
             Information about the version of MeiliSearch.
 
         Raises
@@ -257,12 +254,12 @@ class Client():
         """
         return self.http.get(self.config.paths.version)
 
-    def version(self):
+    def version(self) -> Dict[str, str]:
         """Alias for get_version
 
         Returns
         -------
-        version: dict
+        version:
             Information about the version of MeiliSearch.
 
         Raises
@@ -272,12 +269,12 @@ class Client():
         """
         return self.get_version()
 
-    def create_dump(self):
+    def create_dump(self) -> Dict[str, str]:
         """Trigger the creation of a MeiliSearch dump.
 
         Returns
         -------
-        Dump: dict
+        Dump:
             Information about the dump.
             https://docs.meilisearch.com/reference/api/dump.html#create-a-dump
 
@@ -288,17 +285,17 @@ class Client():
         """
         return self.http.post(self.config.paths.dumps)
 
-    def get_dump_status(self, uid):
+    def get_dump_status(self, uid: str) -> Dict[str, str]:
         """Retrieve the status of a MeiliSearch dump creation.
 
         Parameters
         ----------
-        uid: str
+        uid:
             UID of the dump.
 
         Returns
         -------
-        Dump status: dict
+        Dump status:
             Information about the dump status.
             https://docs.meilisearch.com/reference/api/dump.html#get-dump-status
 
