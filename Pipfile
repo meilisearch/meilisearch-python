@@ -11,6 +11,7 @@ pdoc3 = "*"
 pytest-ordering = "*"
 tox = "*"
 tox-pipenv = "*"
+types-requests = "*"
 
 [packages]
 requests = "*"
