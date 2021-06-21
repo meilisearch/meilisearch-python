@@ -26,6 +26,25 @@ def test_update_searchable_attributes(empty_index):
     for attribute in NEW_SEARCHABLE_ATTRIBUTES:
         assert attribute in response
 
+def test_update_searchable_attributes_to_none(empty_index):
+    """Tests updating the searchable attributes at null."""
+    index = empty_index()
+    # Update the settings first
+    response = index.update_searchable_attributes(NEW_SEARCHABLE_ATTRIBUTES)
+    update = index.wait_for_pending_update(response['updateId'])
+    assert update['status'] == 'processed'
+    # Check the settings have been correctly updated
+    response = index.get_searchable_attributes()
+    for attribute in NEW_SEARCHABLE_ATTRIBUTES:
+        assert attribute in response
+    # Launch test to update at null the setting
+    response = index.update_searchable_attributes(None)
+    assert isinstance(response, dict)
+    assert 'updateId' in response
+    index.wait_for_pending_update(response['updateId'])
+    response = index.get_searchable_attributes()
+    assert response == ['*']
+
 def test_reset_searchable_attributes(empty_index):
     """Tests resetting the searchable attributes setting to its default value."""
     index = empty_index()

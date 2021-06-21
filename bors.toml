@@ -1,5 +1,6 @@
 status = [
   'pylint',
+  'mypy',
   'integration-tests (3.6)',
   'integration-tests (3.7)',
   'integration-tests (3.8)',

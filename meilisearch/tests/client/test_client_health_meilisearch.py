@@ -12,6 +12,6 @@ def test_is_healthy(client):
 
 def test_is_healthy_bad_route():
     """Tests checking if is_healthy returns false when trying to reach a bad URL."""
-    client = meilisearch.Client("http://wrongurl:1234")
+    client = meilisearch.Client("http://wrongurl:1234", timeout=1)
     response = client.is_healthy()
     assert response is False

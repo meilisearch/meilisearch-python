@@ -1,8 +1,12 @@
 # pylint: disable=invalid-name
 
+from datetime import datetime
+
 import pytest
+from meilisearch.client import Client
+from meilisearch.errors import MeiliSearchApiError
 from meilisearch.index import Index
-from meilisearch.tests import common
+from meilisearch.tests import BASE_URL, common, MASTER_KEY
 
 def test_create_index(client):
     """Tests creating an index."""
@@ -32,6 +36,16 @@ def test_create_index_with_uid_in_options(client):
 def test_get_indexes(client):
     """Tests getting all indexes."""
     response = client.get_indexes()
+    uids = [index.uid for index in response]
+    assert isinstance(response, list)
+    assert common.INDEX_UID in uids
+    assert common.INDEX_UID2 in uids
+    assert common.INDEX_UID3 in uids
+    assert len(response) == 3
+
+@pytest.mark.usefixtures("indexes_sample")
+def test_get_raw_indexes(client):
+    response = client.get_raw_indexes()
     uids = [index['uid'] for index in response]
     assert isinstance(response, list)
     assert common.INDEX_UID in uids
@@ -44,6 +58,8 @@ def test_index_with_any_uid(client):
     assert isinstance(index, Index)
     assert index.uid == 'anyUID'
     assert index.primary_key is None
+    assert index.created_at is None
+    assert index.updated_at is None
     assert index.config is not None
     assert index.http is not None
 
@@ -57,6 +73,8 @@ def test_get_index_with_valid_uid(client):
     response = client.get_index(uid=common.INDEX_UID)
     assert isinstance(response, Index)
     assert response.uid == common.INDEX_UID
+    assert isinstance(response.created_at, datetime)
+    assert isinstance(response.updated_at, datetime)
 
 def test_get_index_with_none_uid(client):
     """Test raising an exception if the index UID is None."""
@@ -67,6 +85,20 @@ def test_get_index_with_wrong_uid(client):
     """Tests get_index with an non-existing index."""
     with pytest.raises(Exception):
         client.get_index(uid='wrongUID')
+
+@pytest.mark.usefixtures("indexes_sample")
+def test_get_raw_index_with_valid_uid(client):
+    response = client.get_raw_index(uid=common.INDEX_UID)
+    assert isinstance(response, dict)
+    assert response["uid"] == common.INDEX_UID
+
+def test_get_raw_index_with_none_uid(client):
+    with pytest.raises(Exception):
+        client.get_raw_index(uid=None)
+
+def test_get_raw_index_with_wrong_uid(client):
+    with pytest.raises(Exception):
+        client.get_raw_index(uid='wrongUID')
 
 def test_get_or_create_index(client):
     """Test get_or_create_index method."""
@@ -135,6 +167,8 @@ def test_update_index(client):
     assert isinstance(response, Index)
     assert index.primary_key == 'objectID'
     assert index.get_primary_key() == 'objectID'
+    assert isinstance(index.created_at, datetime)
+    assert isinstance(index.updated_at, datetime)
 
 @pytest.mark.usefixtures("indexes_sample")
 def test_delete_index(client):
@@ -152,3 +186,33 @@ def test_delete_index(client):
     with pytest.raises(Exception):
         client.get_index(uid=common.INDEX_UID3)
     assert len(client.get_indexes()) == 0
+
+@pytest.mark.usefixtures("indexes_sample")
+def test_delete_if_exists(client):
+    assert client.get_index(uid=common.INDEX_UID)
+    deleted = Client(BASE_URL, MASTER_KEY).index(common.INDEX_UID).delete_if_exists()
+    assert deleted is True
+    with pytest.raises(MeiliSearchApiError):
+        client.get_index(uid=common.INDEX_UID)
+
+def test_delete_if_exists_no_delete(client):
+    with pytest.raises(MeiliSearchApiError):
+        client.get_index(uid="none")
+
+    deleted = Client(BASE_URL, MASTER_KEY).index("none").delete_if_exists()
+    assert deleted is False
+
+@pytest.mark.usefixtures("indexes_sample")
+def test_delete_index_if_exists(client):
+    assert client.get_index(uid=common.INDEX_UID)
+    deleted = client.delete_index_if_exists(common.INDEX_UID)
+    assert deleted is True
+    with pytest.raises(MeiliSearchApiError):
+        client.get_index(uid=common.INDEX_UID)
+
+def test_delete_index_if_exists_no_delete(client):
+    with pytest.raises(MeiliSearchApiError):
+        client.get_index(uid="none")
+
+    deleted = client.delete_index_if_exists("none")
+    assert deleted is False

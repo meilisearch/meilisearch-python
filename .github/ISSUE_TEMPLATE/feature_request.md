@@ -6,7 +6,7 @@ labels: ''
 assignees: ''
 ---
 
-[comment]: <> (This is not an exhaustive model but a help. No step is mandatory.)
+<!-- This is not an exhaustive model but a help. No step is mandatory. -->
 
 **Description**
 Brief explanation of the feature.

@@ -4,12 +4,14 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+mypy = "*"
 pylint = "*"
 pytest = "*"
 pdoc3 = "*"
 pytest-ordering = "*"
 tox = "*"
 tox-pipenv = "*"
+types-requests = "*"
 
 [packages]
 requests = "*"

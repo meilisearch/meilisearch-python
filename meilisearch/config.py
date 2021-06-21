@@ -1,3 +1,6 @@
+from typing import Optional
+
+
 class Config:
     """
     Client's credentials and configuration parameters
@@ -23,13 +26,18 @@ class Config:
         attributes_for_faceting = 'attributes-for-faceting'
         dumps = 'dumps'
 
-    def __init__(self, url, api_key=None, timeout=None):
+    def __init__(
+        self,
+        url: str,
+        api_key: Optional[str] = None,
+        timeout: Optional[int] = None
+    ) -> None:
         """
         Parameters
         ----------
-        url: str
+        url:
             The url to the MeiliSearch API (ex: http://localhost:7700)
-        api_key (optional): str
+        api_key:
             The optional API key to access MeiliSearch
         """
 

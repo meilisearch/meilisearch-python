@@ -8,7 +8,7 @@ setup(
         "requests"
     ],
     name="meilisearch",
-    version="0.14.2",
+    version="0.15.1",
     author="Charlotte Vermandel",
     author_email="charlotte@meilisearch.com",
     description="The python client for MeiliSearch API.",
@@ -28,6 +28,9 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
+    package_data = {
+        "meilisearch": ["py.typed"],
+    },
     include_package_data=True,
     python_requires=">=3",
 )
