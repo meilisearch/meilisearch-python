@@ -347,10 +347,11 @@
         },
         "types-requests": {
             "hashes": [
-                "sha256:24a51b692d36101e5b81f08733d74b944ccae3e90589fb712e4dfc6f36965c35"
+                "sha256:917d6d0a8d8fe2d084ab6dc28d379ec4e6fa34738e905908680bbfa0ce2d8485",
+                "sha256:f7e611082208358045fdeac6edb5d20422ce8cfc935d57dbbef6a6b3a59bfae2"
             ],
             "index": "pypi",
-            "version": "==0.1.9"
+            "version": "==0.1.13"
         },
         "typing-extensions": {
             "hashes": [
