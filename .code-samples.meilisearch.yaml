@@ -303,7 +303,7 @@ getting_started_add_documents_md: |-
   [About this SDK](https://github.com/meilisearch/meilisearch-python/)
 getting_started_search_md: |-
   ```python
-  index.search('botman')
+  index('movies').search('botman')
   ```
 
   [About this SDK](https://github.com/meilisearch/meilisearch-python/)
@@ -353,4 +353,4 @@ add_movies_json_1: |-
 
   json_file = open('movies.json')
   movies = json.load(json_file)
-  index.add_documents(movies)
+  client.index('movies').add_documents(movies)
