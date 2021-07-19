@@ -353,4 +353,4 @@ add_movies_json_1: |-
 
   json_file = open('movies.json')
   movies = json.load(json_file)
-  index('movies').add_documents(movies)
+   client..index('movies').add_documents(movies)
