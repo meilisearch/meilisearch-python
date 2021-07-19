@@ -1,59 +1,59 @@
 # pylint: disable=invalid-name
 
-ATTRIBUTES_FOR_FACETING = ['title', 'release_date']
+FILTERABLE_ATTRIBUTES = ['title', 'release_date']
 
-def test_get_attributes_for_faceting(empty_index):
+def test_get_filterable_attributes(empty_index):
     """Tests getting the attributes for faceting."""
-    response = empty_index().get_attributes_for_faceting()
+    response = empty_index().get_filterable_attributes()
     assert isinstance(response, list)
     assert response == []
 
-def test_update_attributes_for_faceting(empty_index):
+def test_update_filterable_attributes(empty_index):
     """Tests updating the attributes for faceting."""
     index = empty_index()
-    response = index.update_attributes_for_faceting(ATTRIBUTES_FOR_FACETING)
+    response = index.update_filterable_attributes(FILTERABLE_ATTRIBUTES)
     index.wait_for_pending_update(response['updateId'])
-    get_attributes_new = index.get_attributes_for_faceting()
-    assert len(get_attributes_new) == len(ATTRIBUTES_FOR_FACETING)
-    get_attributes = index.get_attributes_for_faceting()
-    for attribute in ATTRIBUTES_FOR_FACETING:
+    get_attributes_new = index.get_filterable_attributes()
+    assert len(get_attributes_new) == len(FILTERABLE_ATTRIBUTES)
+    get_attributes = index.get_filterable_attributes()
+    for attribute in FILTERABLE_ATTRIBUTES:
         assert attribute in get_attributes
 
-def test_update_attributes_for_faceting_to_none(empty_index):
+def test_update_filterable_attributes_to_none(empty_index):
     """Tests updating the attributes for faceting at null."""
     index = empty_index()
     # Update the settings first
-    response = index.update_attributes_for_faceting(ATTRIBUTES_FOR_FACETING)
+    response = index.update_filterable_attributes(FILTERABLE_ATTRIBUTES)
     update = index.wait_for_pending_update(response['updateId'])
     assert update['status'] == 'processed'
     # Check the settings have been correctly updated
-    get_attributes = index.get_attributes_for_faceting()
-    for attribute in ATTRIBUTES_FOR_FACETING:
+    get_attributes = index.get_filterable_attributes()
+    for attribute in FILTERABLE_ATTRIBUTES:
         assert attribute in get_attributes
     # Launch test to update at null the setting
-    response = index.update_attributes_for_faceting(None)
+    response = index.update_filterable_attributes(None)
     index.wait_for_pending_update(response['updateId'])
-    response = index.get_attributes_for_faceting()
+    response = index.get_filterable_attributes()
     assert response == []
 
-def test_reset_attributes_for_faceting(empty_index):
+def test_reset_filterable_attributes(empty_index):
     """Tests resetting the attributes for faceting setting to its default value"""
     index = empty_index()
     # Update the settings first
-    response = index.update_attributes_for_faceting(ATTRIBUTES_FOR_FACETING)
+    response = index.update_filterable_attributes(FILTERABLE_ATTRIBUTES)
     update = index.wait_for_pending_update(response['updateId'])
     assert update['status'] == 'processed'
     # Check the settings have been correctly updated
-    get_attributes_new = index.get_attributes_for_faceting()
-    assert len(get_attributes_new) == len(ATTRIBUTES_FOR_FACETING)
-    get_attributes = index.get_attributes_for_faceting()
-    for attribute in ATTRIBUTES_FOR_FACETING:
+    get_attributes_new = index.get_filterable_attributes()
+    assert len(get_attributes_new) == len(FILTERABLE_ATTRIBUTES)
+    get_attributes = index.get_filterable_attributes()
+    for attribute in FILTERABLE_ATTRIBUTES:
         assert attribute in get_attributes
     # Check the reset of the settings
-    response = index.reset_attributes_for_faceting()
+    response = index.reset_filterable_attributes()
     assert isinstance(response, dict)
     assert 'updateId' in response
     index.wait_for_pending_update(response['updateId'])
-    response = index.get_attributes_for_faceting()
+    response = index.get_filterable_attributes()
     assert isinstance(response, list)
     assert response == []
