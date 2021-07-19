@@ -115,7 +115,7 @@ def test_custom_search_params_with_string_list(index_with_documents):
 
 def test_custom_search_params_with_facets_distribution(index_with_documents):
     index = index_with_documents()
-    update = index.update_attributes_for_faceting(['genre'])
+    update = index.update_filterable_attributes(['genre'])
     index.wait_for_pending_update(update['updateId'])
     response = index.search(
         'world',
