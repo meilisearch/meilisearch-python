@@ -215,7 +215,7 @@ class Index():
         while elapsed_time < timeout_in_ms:
             get_update = self.get_update_status(update_id)
 
-            if get_update['status'] != 'enqueued':
+            if get_update['status'] != 'enqueued' and get_update['status'] != 'processing':
                 return get_update
             sleep(interval_in_ms / 1000)
             time_delta = datetime.now() - start_time
