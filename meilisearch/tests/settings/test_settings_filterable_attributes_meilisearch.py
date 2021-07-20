@@ -13,9 +13,8 @@ def test_update_filterable_attributes(empty_index):
     index = empty_index()
     response = index.update_filterable_attributes(FILTERABLE_ATTRIBUTES)
     index.wait_for_pending_update(response['updateId'])
-    get_attributes_new = index.get_filterable_attributes()
-    assert len(get_attributes_new) == len(FILTERABLE_ATTRIBUTES)
     get_attributes = index.get_filterable_attributes()
+    assert len(get_attributes) == len(FILTERABLE_ATTRIBUTES)
     for attribute in FILTERABLE_ATTRIBUTES:
         assert attribute in get_attributes
 
@@ -44,9 +43,8 @@ def test_reset_filterable_attributes(empty_index):
     update = index.wait_for_pending_update(response['updateId'])
     assert update['status'] == 'processed'
     # Check the settings have been correctly updated
-    get_attributes_new = index.get_filterable_attributes()
-    assert len(get_attributes_new) == len(FILTERABLE_ATTRIBUTES)
     get_attributes = index.get_filterable_attributes()
+    assert len(get_attributes) == len(FILTERABLE_ATTRIBUTES)
     for attribute in FILTERABLE_ATTRIBUTES:
         assert attribute in get_attributes
     # Check the reset of the settings
