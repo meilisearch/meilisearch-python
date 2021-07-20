@@ -132,3 +132,98 @@ def test_custom_search_params_with_facets_distribution(index_with_documents):
     assert response['facetsDistribution']['genre']['cartoon'] == 1
     assert response['facetsDistribution']['genre']['action'] == 3
     assert response['facetsDistribution']['genre']['fantasy'] == 1
+
+def test_custom_search_params_with_filter_string(index_with_documents):
+    index = index_with_documents()
+    update = index.update_filterable_attributes(['genre'])
+    index.wait_for_pending_update(update['updateId'])
+    response = index.search(
+        'world',
+        {
+            'filter': 'genre = action'
+        }
+    )
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 3
+    assert 'facetsDistribution' not in response
+    assert 'exhaustiveFacetsCount' not in response
+
+def test_custom_search_params_with_mutilple_filter_string(index_with_documents):
+    index = index_with_documents()
+    update = index.update_filterable_attributes(['genre', 'release_date'])
+    index.wait_for_pending_update(update['updateId'])
+    response = index.search(
+        'world',
+        {
+            'filter': 'genre = action AND release_date < 1550000000'
+        }
+    )
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 2
+    assert 'facetsDistribution' not in response
+    assert 'exhaustiveFacetsCount' not in response
+    assert response['hits'][0]['title'] == 'Avengers: Infinity War'
+
+def test_custom_search_params_with_filter(index_with_documents):
+    index = index_with_documents()
+    update = index.update_filterable_attributes(['genre'])
+    index.wait_for_pending_update(update['updateId'])
+    response = index.search(
+        'world',
+        {
+            'filter': [['genre = action']]
+        }
+    )
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 3
+    assert 'facetsDistribution' not in response
+    assert 'exhaustiveFacetsCount' not in response
+
+def test_custom_search_params_with_multiple_filter(index_with_documents):
+    index = index_with_documents()
+    update = index.update_filterable_attributes(['genre'])
+    index.wait_for_pending_update(update['updateId'])
+    response = index.search(
+        'world',
+        {
+            'filter': ['genre = action', ['genre = action', 'genre = action']]
+        }
+    )
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 3
+    assert 'facetsDistribution' not in response
+    assert 'exhaustiveFacetsCount' not in response
+
+def test_custom_search_params_with_many_params(index_with_documents):
+    index = index_with_documents()
+    update = index.update_filterable_attributes(['genre'])
+    index.wait_for_pending_update(update['updateId'])
+    response = index.search(
+        'world',
+        {
+            'filter': [['genre = action']],
+            'attributesToRetrieve': ['title', 'poster']
+        }
+    )
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 3
+    assert 'facetsDistribution' not in response
+    assert 'exhaustiveFacetsCount' not in response
+    assert 'title' in response['hits'][0]
+    assert 'poster' in response['hits'][0]
+    assert 'overview' not in response['hits'][0]
+    assert 'release_date' not in response['hits'][0]
+    assert response['hits'][0]['title'] == 'Avengers: Infinity War'
+
+def test_phrase_search(index_with_documents):
+    response = index_with_documents().search('coco "dumbo"')
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 1
+    assert 'facetsDistribution' not in response
+    assert 'exhaustiveFacetsCount' not in response
+    assert 'title' in response['hits'][0]
+    assert 'poster' in response['hits'][0]
+    assert 'overview' in response['hits'][0]
+    assert 'release_date' in response['hits'][0]
+    assert response['hits'][0]['title'] == 'Dumbo'
+    assert '_formatted' not in response['hits'][0]
