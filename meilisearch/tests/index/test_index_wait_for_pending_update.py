@@ -13,6 +13,7 @@ def test_wait_for_pending_update_default(index_with_documents):
     assert isinstance(update, dict)
     assert 'status' in update
     assert update['status'] != 'enqueued'
+    assert update['status'] != 'processing'
 
 def test_wait_for_pending_update_timeout(index_with_documents):
     """Tests timeout risen by waiting for an update."""
@@ -34,6 +35,7 @@ def test_wait_for_pending_update_interval_custom(index_with_documents, small_mov
     assert isinstance(wait_update, dict)
     assert 'status' in wait_update
     assert wait_update['status'] != 'enqueued'
+    assert wait_update['status'] != 'processing'
     assert time_delta.seconds >= 1
 
 def test_wait_for_pending_update_interval_zero(index_with_documents, small_movies):
@@ -49,3 +51,4 @@ def test_wait_for_pending_update_interval_zero(index_with_documents, small_movie
     assert isinstance(wait_update, dict)
     assert 'status' in wait_update
     assert wait_update['status'] != 'enqueued'
+    assert wait_update['status'] != 'processing'
