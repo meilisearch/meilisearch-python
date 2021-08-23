@@ -303,11 +303,7 @@ getting_started_add_documents_md: |-
   [About this SDK](https://github.com/meilisearch/meilisearch-python/)
 getting_started_search_md: |-
   ```python
-<<<<<<< HEAD
-  index('movies').search('botman')
-=======
   client.index('movies').search('botman')
->>>>>>> c478445fd41c92b867bd031f74b2bd35cd70bf99
   ```
 
   [About this SDK](https://github.com/meilisearch/meilisearch-python/)
