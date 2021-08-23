@@ -35,7 +35,7 @@ def small_movies():
     """
     Runs once per session. Provides the content of small_movies.json.
     """
-    with open('./datasets/small_movies.json', 'r', encoding=None) as movie_file:
+    with open('./datasets/small_movies.json', 'r', encoding="utf8") as movie_file:
         yield json.loads(movie_file.read())
 
 @fixture(scope='function')
