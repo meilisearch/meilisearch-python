@@ -9,7 +9,7 @@ def test_get_filterable_attributes(empty_index):
     assert response == []
 
 def test_update_filterable_attributes(empty_index):
-    """Tests updating the attributes for faceting."""
+    """Tests updating the filterable attributes."""
     index = empty_index()
     response = index.update_filterable_attributes(FILTERABLE_ATTRIBUTES)
     index.wait_for_pending_update(response['updateId'])
