@@ -19,7 +19,7 @@ def test_update_filterable_attributes(empty_index):
         assert attribute in get_attributes
 
 def test_update_filterable_attributes_to_none(empty_index):
-    """Tests updating the attributes for faceting at null."""
+    """Tests updating the filterable attributes at null."""
     index = empty_index()
     # Update the settings first
     response = index.update_filterable_attributes(FILTERABLE_ATTRIBUTES)
