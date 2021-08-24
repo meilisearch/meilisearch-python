@@ -973,7 +973,7 @@ class Index():
             self.__settings_url_for(self.config.paths.synonyms),
         )
 
-    # ATTRIBUTES FOR FACETING SUB-ROUTES
+    # FILTERABLE ATTRIBUTES SUB-ROUTES
 
     def get_filterable_attributes(self) -> List[str]:
         """
