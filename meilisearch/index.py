@@ -995,7 +995,7 @@ class Index():
 
     def update_filterable_attributes(self, body: List[str]) -> Dict[str, int]:
         """
-        Update attributes for faceting of the index.
+        Update filterable attributes of the index.
 
         Parameters
         ----------
