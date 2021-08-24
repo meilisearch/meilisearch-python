@@ -36,7 +36,7 @@ def test_update_filterable_attributes_to_none(empty_index):
     assert response == []
 
 def test_reset_filterable_attributes(empty_index):
-    """Tests resetting the attributes for faceting setting to its default value"""
+    """Tests resetting the filterable attributes setting to its default value"""
     index = empty_index()
     # Update the settings first
     response = index.update_filterable_attributes(FILTERABLE_ATTRIBUTES)
