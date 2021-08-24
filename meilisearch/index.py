@@ -151,7 +151,7 @@ class Index():
         Returns
         -------
         update:
-            List of all enqueued and processed actions of the index.
+            List of all enqueued, processing, processed or failed actions of the index.
 
         Raises
         ------
@@ -982,7 +982,7 @@ class Index():
         Returns
         -------
         settings:
-            List containing the attributes for faceting of the index
+            List containing the filterable attributes of the index
 
         Raises
         ------
@@ -1000,7 +1000,7 @@ class Index():
         Parameters
         ----------
         body:
-            List containing the attributes for faceting.
+            List containing the filterable attributes.
 
         Returns
         -------
