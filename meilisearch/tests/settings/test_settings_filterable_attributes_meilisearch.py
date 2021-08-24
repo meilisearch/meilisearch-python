@@ -3,7 +3,7 @@
 FILTERABLE_ATTRIBUTES = ['title', 'release_date']
 
 def test_get_filterable_attributes(empty_index):
-    """Tests getting the attributes for faceting."""
+    """Tests getting the filterable attributes."""
     response = empty_index().get_filterable_attributes()
     assert isinstance(response, list)
     assert response == []
