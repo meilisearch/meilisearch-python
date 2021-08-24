@@ -151,7 +151,7 @@ class Index():
         Returns
         -------
         update:
-            List of all enqueued and processed actions of the index.
+            List of all enqueued, processing, processed or failed actions of the index.
 
         Raises
         ------
@@ -215,7 +215,7 @@ class Index():
         while elapsed_time < timeout_in_ms:
             get_update = self.get_update_status(update_id)
 
-            if get_update['status'] != 'enqueued':
+            if get_update['status'] != 'enqueued' and get_update['status'] != 'processing':
                 return get_update
             sleep(interval_in_ms / 1000)
             time_delta = datetime.now() - start_time
@@ -973,16 +973,16 @@ class Index():
             self.__settings_url_for(self.config.paths.synonyms),
         )
 
-    # ATTRIBUTES FOR FACETING SUB-ROUTES
+    # FILTERABLE ATTRIBUTES SUB-ROUTES
 
-    def get_attributes_for_faceting(self) -> List[str]:
+    def get_filterable_attributes(self) -> List[str]:
         """
-        Get attributes for faceting of the index.
+        Get filterable attributes of the index.
 
         Returns
         -------
         settings:
-            List containing the attributes for faceting of the index
+            List containing the filterable attributes of the index
 
         Raises
         ------
@@ -990,17 +990,17 @@ class Index():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(
-            self.__settings_url_for(self.config.paths.attributes_for_faceting)
+            self.__settings_url_for(self.config.paths.filterable_attributes)
         )
 
-    def update_attributes_for_faceting(self, body: List[str]) -> Dict[str, int]:
+    def update_filterable_attributes(self, body: List[str]) -> Dict[str, int]:
         """
-        Update attributes for faceting of the index.
+        Update filterable attributes of the index.
 
         Parameters
         ----------
         body:
-            List containing the attributes for faceting.
+            List containing the filterable attributes.
 
         Returns
         -------
@@ -1014,12 +1014,12 @@ class Index():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.post(
-            self.__settings_url_for(self.config.paths.attributes_for_faceting),
+            self.__settings_url_for(self.config.paths.filterable_attributes),
             body
         )
 
-    def reset_attributes_for_faceting(self) -> Dict[str, int]:
-        """Reset attributes for faceting of the index to default values.
+    def reset_filterable_attributes(self) -> Dict[str, int]:
+        """Reset filterable attributes of the index to default values.
 
         Returns
         -------
@@ -1033,7 +1033,7 @@ class Index():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.delete(
-            self.__settings_url_for(self.config.paths.attributes_for_faceting),
+            self.__settings_url_for(self.config.paths.filterable_attributes),
         )
 
     @staticmethod

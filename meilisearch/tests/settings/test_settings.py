@@ -5,11 +5,10 @@ NEW_SETTINGS = {
 }
 
 DEFAULT_RANKING_RULES = [
-    'typo',
     'words',
+    'typo',
     'proximity',
     'attribute',
-    'wordsPosition',
     'exactness'
 ]
 
