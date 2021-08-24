@@ -977,7 +977,7 @@ class Index():
 
     def get_filterable_attributes(self) -> List[str]:
         """
-        Get attributes for faceting of the index.
+        Get filterable attributes of the index.
 
         Returns
         -------
