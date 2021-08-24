@@ -1019,7 +1019,7 @@ class Index():
         )
 
     def reset_filterable_attributes(self) -> Dict[str, int]:
-        """Reset attributes for faceting of the index to default values.
+        """Reset filterable attributes of the index to default values.
 
         Returns
         -------
