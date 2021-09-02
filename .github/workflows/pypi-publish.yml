@@ -15,7 +15,7 @@ jobs:
       with:
         python-version: '3.7'
     - name: Check release validity
-      run: sh scripts/check-release.sh
+      run: sh .github/scripts/check-release.sh
     - name: Install pipenv
       uses: dschep/install-pipenv-action@v1
     - name: Install dependencies
