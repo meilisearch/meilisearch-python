@@ -54,9 +54,10 @@ update_settings_1: |-
         'typo',
         'proximity',
         'attribute',
+        'sort',
         'exactness',
-        'desc(release_date)',
-        'desc(rank)'
+        'release_date:desc',
+        'rank:desc'
     ],
     'distinctAttribute': 'movie_id',
     'searchableAttributes': [
@@ -69,6 +70,10 @@ update_settings_1: |-
         'description',
         'genre',
         'release_date'
+    ],
+    'sortableAttributes': [
+        'price',
+        'author'
     ],
     'stopWords': [
         'the',
@@ -107,9 +112,10 @@ update_ranking_rules_1: |-
       'typo',
       'proximity',
       'attribute',
+      'sort',
       'exactness',
-      'asc(release_date)',
-      'desc(rank)'
+      'release_date:asc',
+      'rank:desc'
   ])
 reset_ranking_rules_1: |-
   client.index('movies').reset_ranking_rules()
@@ -149,6 +155,15 @@ update_displayed_attributes_1: |-
   ])
 reset_displayed_attributes_1: |-
   client.index('movies').reset_displayed_attributes()
+get_sortable_attributes_1: |-
+  client.index('books').get_sortable_attributes()
+update_sortable_attributes_1: |-
+  client.index('books').update_sortable_attributes([
+    'price',
+    'author'
+  ])
+reset_sortable_attributes_1: |-
+  client.index('books').reset_sortable_attributes()
 get_index_stats_1: |-
   client.index('movies').get_stats()
 get_indexes_stats_1: |-
@@ -350,3 +365,29 @@ get_dump_status_1: |-
   client.get_dump_status('20201101-110357260')
 phrase_search_1: |-
   client.index('movies').search('"african american" horror')
+sorting_guide_update_sortable_attributes_1: |-
+  client.index('books').update_sortable_attributes([
+    'author',
+    'price'
+  ])
+sorting_guide_update_ranking_rules_1: |-
+  client.index('books').update_ranking_rules([
+      'words',
+      'sort',
+      'typo',
+      'proximity',
+      'attribute',
+      'exactness'
+  ])
+sorting_guide_sort_parameter_1: |-
+  client.index('books').search('science fiction', {
+    'sort': ['price:asc']
+  })
+sorting_guide_sort_parameter_2: |-
+  client.index('books').search('butler', {
+    'sort': ['author:desc']
+  })
+search_parameter_guide_sort_1: |-
+  client.index('books').search('science fiction', {
+    'sort': ['price:asc']
+  })
