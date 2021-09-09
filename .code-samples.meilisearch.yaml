@@ -72,8 +72,8 @@ update_settings_1: |-
         'release_date'
     ],
     'sortableAttributes': [
-        'price',
-        'author'
+        'title',
+        'release_date'
     ],
     'stopWords': [
         'the',
