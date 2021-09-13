@@ -5,6 +5,7 @@ DEFAULT_RANKING_RULES = [
     'typo',
     'proximity',
     'attribute',
+    'sort',
     'exactness'
 ]
 

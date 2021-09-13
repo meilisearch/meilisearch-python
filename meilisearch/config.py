@@ -24,6 +24,7 @@ class Config:
         synonyms = 'synonyms'
         accept_new_fields = 'accept-new-fields'
         filterable_attributes = 'filterable-attributes'
+        sortable_attributes = 'sortable-attributes'
         dumps = 'dumps'
 
     def __init__(

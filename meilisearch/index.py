@@ -1036,6 +1036,70 @@ class Index():
             self.__settings_url_for(self.config.paths.filterable_attributes),
         )
 
+
+    # SORTABLE ATTRIBUTES SUB-ROUTES
+
+    def get_sortable_attributes(self) -> List[str]:
+        """
+        Get sortable attributes of the index.
+
+        Returns
+        -------
+        settings:
+            List containing the sortable attributes of the index
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.get(
+            self.__settings_url_for(self.config.paths.sortable_attributes)
+        )
+
+    def update_sortable_attributes(self, body: List[str]) -> Dict[str, int]:
+        """
+        Update sortable attributes of the index.
+
+        Parameters
+        ----------
+        body:
+            List containing the sortable attributes.
+
+        Returns
+        -------
+        update:
+            Dictionary containing an update id to track the action:
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.post(
+            self.__settings_url_for(self.config.paths.sortable_attributes),
+            body
+        )
+
+    def reset_sortable_attributes(self) -> Dict[str, int]:
+        """Reset sortable attributes of the index to default values.
+
+        Returns
+        -------
+        update:
+            Dictionary containing an update id to track the action:
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.delete(
+            self.__settings_url_for(self.config.paths.sortable_attributes),
+        )
+
     @staticmethod
     def _batch(
         documents: List[Dict[str, Any]], batch_size: int

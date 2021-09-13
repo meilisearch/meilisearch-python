@@ -215,6 +215,84 @@ def test_custom_search_params_with_many_params(index_with_documents):
     assert 'release_date' not in response['hits'][0]
     assert response['hits'][0]['title'] == 'Avengers: Infinity War'
 
+def test_custom_search_params_with_sort_string(index_with_documents):
+    index = index_with_documents()
+    response = index.update_ranking_rules([
+        'words',
+        'typo',
+        'sort',
+        'proximity',
+        'attribute',
+        'exactness'
+    ])
+    index.wait_for_pending_update(response['updateId'])
+    update = index.update_sortable_attributes(['title'])
+    index.wait_for_pending_update(update['updateId'])
+    response = index.search(
+        'world',
+        {
+            'sort': ['title:asc']
+        }
+    )
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 12
+    assert 'facetsDistribution' not in response
+    assert 'exhaustiveFacetsCount' not in response
+    assert response['hits'][0]['title'] == 'Alita: Battle Angel'
+    assert response['hits'][1]['title'] == 'Aquaman'
+
+def test_custom_search_params_with_sort_int(index_with_documents):
+    index = index_with_documents()
+    response = index.update_ranking_rules([
+        'words',
+        'typo',
+        'sort',
+        'proximity',
+        'attribute',
+        'exactness'
+    ])
+    index.wait_for_pending_update(response['updateId'])
+    update = index.update_sortable_attributes(['release_date'])
+    index.wait_for_pending_update(update['updateId'])
+    response = index.search(
+        'world',
+        {
+            'sort': ['release_date:asc']
+        }
+    )
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 12
+    assert 'facetsDistribution' not in response
+    assert 'exhaustiveFacetsCount' not in response
+    assert response['hits'][0]['title'] == 'Avengers: Infinity War'
+    assert response['hits'][1]['title'] == 'Redcon-1'
+
+def test_custom_search_params_with_multiple_sort(index_with_documents):
+    index = index_with_documents()
+    response = index.update_ranking_rules([
+        'words',
+        'typo',
+        'sort',
+        'proximity',
+        'attribute',
+        'exactness'
+    ])
+    index.wait_for_pending_update(response['updateId'])
+    update = index.update_sortable_attributes(['title', 'release_date'])
+    index.wait_for_pending_update(update['updateId'])
+    response = index.search(
+        'world',
+        {
+            'sort': ['title:asc', 'release_date:asc']
+        }
+    )
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 12
+    assert 'facetsDistribution' not in response
+    assert 'exhaustiveFacetsCount' not in response
+    assert response['hits'][0]['title'] == 'Alita: Battle Angel'
+    assert response['hits'][1]['title'] == 'Aquaman'
+
 def test_phrase_search(index_with_documents):
     response = index_with_documents().search('coco "dumbo"')
     assert isinstance(response, dict)
