@@ -217,6 +217,15 @@ def test_custom_search_params_with_many_params(index_with_documents):
 
 def test_custom_search_params_with_sort_string(index_with_documents):
     index = index_with_documents()
+    response = index.update_ranking_rules([
+        'words',
+        'typo',
+        'sort',
+        'proximity',
+        'attribute',
+        'exactness'
+    ])
+    index.wait_for_pending_update(response['updateId'])
     update = index.update_sortable_attributes(['title'])
     index.wait_for_pending_update(update['updateId'])
     response = index.search(
@@ -234,6 +243,15 @@ def test_custom_search_params_with_sort_string(index_with_documents):
 
 def test_custom_search_params_with_sort_int(index_with_documents):
     index = index_with_documents()
+    response = index.update_ranking_rules([
+        'words',
+        'typo',
+        'sort',
+        'proximity',
+        'attribute',
+        'exactness'
+    ])
+    index.wait_for_pending_update(response['updateId'])
     update = index.update_sortable_attributes(['release_date'])
     index.wait_for_pending_update(update['updateId'])
     response = index.search(
@@ -251,6 +269,15 @@ def test_custom_search_params_with_sort_int(index_with_documents):
 
 def test_custom_search_params_with_multiple_sort(index_with_documents):
     index = index_with_documents()
+    response = index.update_ranking_rules([
+        'words',
+        'typo',
+        'sort',
+        'proximity',
+        'attribute',
+        'exactness'
+    ])
+    index.wait_for_pending_update(response['updateId'])
     update = index.update_sortable_attributes(['title', 'release_date'])
     index.wait_for_pending_update(update['updateId'])
     response = index.search(
