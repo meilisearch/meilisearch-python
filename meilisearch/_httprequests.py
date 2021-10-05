@@ -21,15 +21,26 @@ class HttpRequests:
         http_method: Callable,
         path: str,
         body: Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str]]] = None,
+        content_type: Optional[str] = None,
     ) -> Any:
+        if content_type:
+            self.headers['Content-Type'] = content_type
         try:
             request_path = self.config.url + '/' + path
-            request = http_method(
-                request_path,
-                timeout=self.config.timeout,
-                headers=self.headers,
-                data=json.dumps(body) if body else "null"
-            )
+            if not content_type:
+                request = http_method(
+                    request_path,
+                    timeout=self.config.timeout,
+                    headers=self.headers,
+                    data=json.dumps(body) if body else "null"
+                )
+            else:
+                request = http_method(
+                    request_path,
+                    timeout=self.config.timeout,
+                    headers=self.headers,
+                    data=body
+                )
             return self.__validate(request)
 
         except requests.exceptions.Timeout as err:
@@ -46,8 +57,9 @@ class HttpRequests:
         self,
         path: str,
         body: Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str]]] = None,
+        content_type: Optional[str] = None,
     ) -> Any:
-        return self.send_request(requests.post, path, body)
+        return self.send_request(requests.post, path, body, content_type)
 
     def put(
         self,

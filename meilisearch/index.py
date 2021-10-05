@@ -391,6 +391,128 @@ class Index():
 
         return update_ids
 
+    def add_documents_json(
+        self,
+        str_documents: str,
+        primary_key: Optional[str] = None,
+    ) -> Dict[str, int]:
+        """Add string documents from JSON file to the index.
+
+        Parameters
+        ----------
+        str_documents:
+            String of document from a JSON file.
+        primary_key (optional):
+            The primary-key used in index. Ignored if already set up.
+
+        Returns
+        -------
+        update:
+            Dictionary containing an update id to track the action:
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.add_documents_raw(str_documents, primary_key, 'json')
+
+    def add_documents_csv(
+        self,
+        str_documents: str,
+        primary_key: Optional[str] = None,
+    ) -> Dict[str, int]:
+        """Add string documents from a CSV file to the index.
+
+        Parameters
+        ----------
+        str_documents:
+            String of document from a CSV file.
+        primary_key (optional):
+            The primary-key used in index. Ignored if already set up.
+
+        Returns
+        -------
+        update:
+            Dictionary containing an update id to track the action:
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.add_documents_raw(str_documents, primary_key, 'csv')
+
+    def add_documents_ndjson(
+        self,
+        str_documents: str,
+        primary_key: Optional[str] = None,
+    ) -> Dict[str, int]:
+        """Add string documents from a NDJSON file to the index.
+
+        Parameters
+        ----------
+        str_documents:
+            String of document from a NDJSON file.
+        primary_key (optional):
+            The primary-key used in index. Ignored if already set up.
+
+        Returns
+        -------
+        update:
+            Dictionary containing an update id to track the action:
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.add_documents_raw(str_documents, primary_key, 'jsonl')
+
+    def add_documents_raw(
+        self,
+        str_documents: str,
+        primary_key: Optional[str] = None,
+        doc_type: Optional[str] = None,
+    ) -> Dict[str, int]:
+        """Add string documents to the index.
+
+        Parameters
+        ----------
+        str_documents:
+            String of document.
+        primary_key (optional):
+            The primary-key used in index. Ignored if already set up.
+        type:
+            The type of document. Type available: 'csv', 'json', 'jsonl'
+
+        Returns
+        -------
+        update:
+            Dictionary containing an update id to track the action:
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        if primary_key is None:
+            url = f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}'
+        else:
+            primary_key = urllib.parse.urlencode({'primaryKey': primary_key})
+            url = f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{primary_key}'
+        if doc_type == "json":
+            content_type = 'application/json'
+        if doc_type == "jsonl":
+            content_type = 'application/x-ndjson'
+        if doc_type == "csv":
+            content_type = 'text/csv'
+        return self.http.post(url, str_documents, content_type)
+
     def update_documents(
         self,
         documents: List[Dict[str, Any]],
