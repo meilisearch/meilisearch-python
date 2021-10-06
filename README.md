@@ -72,18 +72,18 @@ import meilisearch
 client = meilisearch.Client('http://127.0.0.1:7700', 'masterKey')
 
 # An index is where the documents are stored.
-index = client.index('books')
+index = client.index('movies')
 
 documents = [
-  { 'book_id': 123,  'title': 'Pride and Prejudice' },
-  { 'book_id': 456,  'title': 'Le Petit Prince' },
-  { 'book_id': 1,    'title': 'Alice In Wonderland' },
-  { 'book_id': 1344, 'title': 'The Hobbit' },
-  { 'book_id': 4,    'title': 'Harry Potter and the Half-Blood Prince' },
-  { 'book_id': 42,   'title': 'The Hitchhiker\'s Guide to the Galaxy' }
+      { movie_id: 1, title: 'Carol', genres: ['Romance', 'Drama'] },
+      { movie_id: 2, title: 'Wonder Woman', genres: ['Action', 'Adventure'] },
+      { movie_id: 3, title: 'Life of Pi', genres: ['Adventure', 'Drama'] },
+      { movie_id: 4, title: 'Mad Max: Fury Road', genres: ['Adventure', 'Science Fiction'] },
+      { movie_id: 5, title: 'Moana', genres: ['Fantasy', 'Action']},
+      { movie_id: 6, title: 'Philadelphia', genres: ['Drama'] },
 ]
 
-# If the index 'books' does not exist, MeiliSearch creates it when you first add the documents.
+# If the index 'movies' does not exist, MeiliSearch creates it when you first add the documents.
 index.add_documents(documents) # => { "updateId": 0 }
 ```
 
@@ -93,23 +93,25 @@ With the `updateId`, you can check the status (`enqueued`, `processing`, `proces
 
 ``` python
 # MeiliSearch is typo-tolerant:
-index.search('harry pottre')
+index.search('Mad Mxa')
 ```
 
 Output:
 
-```python
+```json
 {
-  "hits" => [{
-    "book_id" => 4,
-    "title" => "Harry Potter and the Half-Blood Prince"
-  }],
-  "offset" => 0,
-  "limit" => 20,
-  "processingTimeMs" => 1,
-  "query" => "harry pottre"
+    "hits": [
+        {
+            "movie_id": 4,
+            "title": "Mad Max: Fury Road,
+            "genre": ["Adventure", "Science Fiction"]
+        }
+    ],
+    "offset": 0,
+    "limit": 20,
+    "processingTimeMs": 1,
+    "query": "Mad Mxa"
 }
-```
 
 #### Custom Search <!-- omit in toc -->
 
@@ -117,7 +119,7 @@ All the supported options are described in the [search parameters](https://docs.
 
 ```python
 index.search(
-  'hob',
+  'Phil',
   {
     'attributesToHighlight': ['*'],
   }
@@ -130,18 +132,19 @@ JSON output:
 {
     "hits": [
         {
-            "book_id": 1344,
-            "title": "The Hobbit",
+            "movie_id": 5,
+            "title": "Philadelphia",
             "_formatted": {
-                "book_id": 1344,
-                "title": "The <em>Hob</em>bit"
+                "movie_id": 5,
+                "title": "<em>Phil</em>adelphia",
+                "genre": ["Drama"]
             }
         }
     ],
     "offset": 0,
     "limit": 20,
     "processingTimeMs": 0,
-    "query": "hob"
+    "query": "Phil"
 }
 ```
 
