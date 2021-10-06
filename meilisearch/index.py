@@ -316,7 +316,6 @@ class Index():
         """
         if parameters is None:
             parameters = {}
-
         return self.http.get(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{urllib.parse.urlencode(parameters)}'
         )
@@ -346,11 +345,7 @@ class Index():
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        if primary_key is None:
-            url = f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}'
-        else:
-            primary_key = urllib.parse.urlencode({'primaryKey': primary_key})
-            url = f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{primary_key}'
+        url = self._build_url(primary_key)
         return self.http.post(url, documents)
 
     def add_documents_in_batches(
@@ -500,11 +495,7 @@ class Index():
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        if primary_key is None:
-            url = f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}'
-        else:
-            primary_key = urllib.parse.urlencode({'primaryKey': primary_key})
-            url = f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{primary_key}'
+        url = self._build_url(primary_key)
         if doc_type == "json":
             content_type = 'application/json'
         if doc_type == "jsonl":
@@ -538,11 +529,7 @@ class Index():
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        if primary_key is None:
-            url = f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}'
-        else:
-            primary_key = urllib.parse.urlencode({'primaryKey': primary_key})
-            url = f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{primary_key}'
+        url = self._build_url(primary_key)
         return self.http.put(url, documents)
 
     def update_documents_in_batches(
@@ -1256,3 +1243,13 @@ class Index():
 
     def __settings_url_for(self, sub_route: str) -> str:
         return f'{self.config.paths.index}/{self.uid}/{self.config.paths.setting}/{sub_route}'
+
+    def _build_url(
+        self,
+        primary_key: Optional[str] = None,
+    ):
+        if primary_key is None:
+            return f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}'
+        else:
+            primary_key = urllib.parse.urlencode({'primaryKey': primary_key})
+            return f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{primary_key}'
