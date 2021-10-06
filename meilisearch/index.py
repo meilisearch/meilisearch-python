@@ -411,7 +411,7 @@ class Index():
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.add_documents_raw(str_documents, primary_key, 'json')
+        return self.add_documents_raw(str_documents, primary_key, 'application/json')
 
     def add_documents_csv(
         self,
@@ -438,7 +438,7 @@ class Index():
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.add_documents_raw(str_documents, primary_key, 'csv')
+        return self.add_documents_raw(str_documents, primary_key, 'text/csv')
 
     def add_documents_ndjson(
         self,
@@ -465,13 +465,13 @@ class Index():
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.add_documents_raw(str_documents, primary_key, 'jsonl')
+        return self.add_documents_raw(str_documents, primary_key, 'application/x-ndjson')
 
     def add_documents_raw(
         self,
         str_documents: str,
         primary_key: Optional[str] = None,
-        doc_type: Optional[str] = None,
+        content_type: Optional[str] = None,
     ) -> Dict[str, int]:
         """Add string documents to the index.
 
@@ -496,12 +496,6 @@ class Index():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         url = self._build_url(primary_key)
-        if doc_type == "json":
-            content_type = 'application/json'
-        if doc_type == "jsonl":
-            content_type = 'application/x-ndjson'
-        if doc_type == "csv":
-            content_type = 'text/csv'
         return self.http.post(url, str_documents, content_type)
 
     def update_documents(
@@ -1250,6 +1244,5 @@ class Index():
     ):
         if primary_key is None:
             return f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}'
-        else:
-            primary_key = urllib.parse.urlencode({'primaryKey': primary_key})
-            return f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{primary_key}'
+        primary_key = urllib.parse.urlencode({'primaryKey': primary_key})
+        return f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{primary_key}'

@@ -19,7 +19,7 @@ class HttpRequests:
         self,
         http_method: Callable,
         path: str,
-        body: Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str]]] = None,
+        body: Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str], str]] = None,
         content_type: Optional[str] = None,
     ) -> Any:
         if content_type:
@@ -55,7 +55,7 @@ class HttpRequests:
     def post(
         self,
         path: str,
-        body: Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str]]] = None,
+        body: Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str], str]] = None,
         content_type: Optional[str] = 'application/json',
     ) -> Any:
         return self.send_request(requests.post, path, body, content_type)
