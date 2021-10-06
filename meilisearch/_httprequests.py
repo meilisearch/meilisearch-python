@@ -13,7 +13,6 @@ class HttpRequests:
         self.config = config
         self.headers = {
             'X-Meili-Api-Key': self.config.api_key,
-            'Content-Type': 'application/json'
         }
 
     def send_request(
@@ -27,7 +26,7 @@ class HttpRequests:
             self.headers['Content-Type'] = content_type
         try:
             request_path = self.config.url + '/' + path
-            if not content_type:
+            if not content_type or content_type == 'application/json':
                 request = http_method(
                     request_path,
                     timeout=self.config.timeout,
@@ -57,7 +56,7 @@ class HttpRequests:
         self,
         path: str,
         body: Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str]]] = None,
-        content_type: Optional[str] = None,
+        content_type: Optional[str] = 'application/json',
     ) -> Any:
         return self.send_request(requests.post, path, body, content_type)
 
@@ -65,8 +64,9 @@ class HttpRequests:
         self,
         path: str,
         body: Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str]]] = None,
+        content_type: Optional[str] = 'application/json',
     ) -> Any:
-        return self.send_request(requests.put, path, body)
+        return self.send_request(requests.put, path, body, content_type)
 
     def delete(
         self,
