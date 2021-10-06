@@ -75,7 +75,7 @@ client = meilisearch.Client('http://127.0.0.1:7700', 'masterKey')
 index = client.index('movies')
 
 documents = [
-     { movie_id: 1, title: 'Carol', genres: ['Romance', 'Drama'] },
+      { movie_id: 1, title: 'Carol', genres: ['Romance', 'Drama'] },
       { movie_id: 2, title: 'Wonder Woman', genres: ['Action', 'Adventure'] },
       { movie_id: 3, title: 'Life of Pi', genres: ['Adventure', 'Drama'] },
       { movie_id: 4, title: 'Mad Max: Fury Road', genres: ['Adventure', 'Science Fiction'] },
