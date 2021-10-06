@@ -81,7 +81,7 @@ documents = [
       { movie_id: 4, title: 'Mad Max: Fury Road', genres: ['Adventure', 'Science Fiction'] },
       { movie_id: 5, title: 'Moana', genres: ['Fantasy', 'Action']},
       { movie_id: 6, title: 'Philadelphia', genres: ['Drama'] },
-           ]
+]
 
 # If the index 'movies' does not exist, MeiliSearch creates it when you first add the documents.
 index.add_documents(documents) # => { "updateId": 0 }
