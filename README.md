@@ -98,18 +98,20 @@ index.search('Mad Mxa')
 
 Output:
 
-```python
+```json
 {
-  "hits" => [{
-    "movie_id" => 4,
-    "title" => "Mad Max: Fury Road"
-  }],
-  "offset" => 0,
-  "limit" => 20,
-  "processingTimeMs" => 1,
-  "query" => "Mad Mxa"
+    "hits": [
+        {
+            "movie_id": 4,
+            "title": "Mad Max: Fury Road,
+            "genre": ["Adventure", "Science Fiction"]
+        }
+    ],
+    "offset": 0,
+    "limit": 20,
+    "processingTimeMs": 1,
+    "query": "Mad Mxa"
 }
-```
 
 #### Custom Search <!-- omit in toc -->
 
@@ -134,7 +136,8 @@ JSON output:
             "title": "Philadelphia",
             "_formatted": {
                 "movie_id": 5,
-                "title": "<em>Phil</em>adelphia"
+                "title": "<em>Phil</em>adelphia",
+                "genre": ["Drama"]
             }
         }
     ],
