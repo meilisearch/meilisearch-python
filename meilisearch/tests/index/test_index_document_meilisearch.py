@@ -144,3 +144,36 @@ def test_delete_all_documents(index_with_documents):
     response = index.get_documents()
     assert isinstance(response, list)
     assert response == []
+
+def test_add_documents_csv(empty_index, songs_csv):
+    """Tests adding new documents to a clean index."""
+    index = empty_index()
+    response = index.add_documents_csv(songs_csv)
+    assert isinstance(response, dict)
+    assert 'updateId' in response
+    update = index.wait_for_pending_update(response['updateId'])
+    assert update['status'] == 'processed'
+    assert update['type']['number'] != 0
+    assert index.get_primary_key() == 'id'
+
+def test_add_documents_json(empty_index, small_movies_json_file):
+    """Tests adding new documents to a clean index."""
+    index = empty_index()
+    response = index.add_documents_json(small_movies_json_file)
+    assert isinstance(response, dict)
+    assert 'updateId' in response
+    update = index.wait_for_pending_update(response['updateId'])
+    assert update['status'] == 'processed'
+    assert update['type']['number'] != 0
+    assert index.get_primary_key() == 'id'
+
+def test_add_documents_ndjson(empty_index, songs_ndjson):
+    """Tests adding new documents to a clean index."""
+    index = empty_index()
+    response = index.add_documents_ndjson(songs_ndjson)
+    assert isinstance(response, dict)
+    assert 'updateId' in response
+    update = index.wait_for_pending_update(response['updateId'])
+    assert update['status'] == 'processed'
+    assert update['type']['number'] != 0
+    assert index.get_primary_key() == 'id'

@@ -1241,7 +1241,7 @@ class Index():
     def _build_url(
         self,
         primary_key: Optional[str] = None,
-    ):
+    ) -> str:
         if primary_key is None:
             return f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}'
         primary_key = urllib.parse.urlencode({'primaryKey': primary_key})
