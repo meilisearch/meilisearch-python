@@ -218,5 +218,13 @@
     "poster": "https://image.tmdb.org/t/p/w1280/oeZh7yEz3PMnZLgBPhrafFHRbVz.jpg",
     "overview": "Earl Stone, a man in his 80s who is broke, alone, and facing foreclosure of his business when he is offered a job that simply requires him to drive. Easy enough, but, unbeknownst to Earl, he’s just signed on as a drug courier for a Mexican cartel. He does so well that his cargo increases exponentially, and Earl hit the radar of hard-charging DEA agent Colin Bates.",
     "release_date": 1544745600
+  },
+  {
+    "id": "123456",
+    "title": "Hitchhiker's Guide to the Galaxy",
+    "poster": "https://www.themoviedb.org/t/p/w1280/yKiH7IIbo23uA72MmY318mXorjw.jpg",
+    "overview": "Don't Panic! The story of Arthur Dent, an average Englishman who life was spared by his friend, who turned out to be an alien, while the planet Earth is destroyed. His friend tells him about the Hitchhiker's Guide to the Galaxy, a guide with anything you ever needed, and wanted to know. They travel across the galaxy, meeting friendly, and not so friendly characters in order to find the great question (the answer being 42).",
+    "release_date": 1114669984,
+    "genre": "Sci Fi"
   }
 ]

@@ -148,6 +148,51 @@ def test_custom_search_params_with_filter_string(index_with_documents):
     assert 'facetsDistribution' not in response
     assert 'exhaustiveFacetsCount' not in response
 
+def test_custom_search_params_with_filter_string_with_space(index_with_documents):
+    index = index_with_documents()
+    update = index.update_filterable_attributes(['genre'])
+    index.wait_for_pending_update(update['updateId'])
+    response = index.search(
+        'galaxy',
+        {
+            'filter': "genre = 'sci fi'"
+        }
+    )
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 1
+    assert 'facetsDistribution' not in response
+    assert 'exhaustiveFacetsCount' not in response
+
+def test_custom_search_params_with_multiple_filter_string_with_space(index_with_documents):
+    index = index_with_documents()
+    update = index.update_filterable_attributes(['genre', 'release_date'])
+    index.wait_for_pending_update(update['updateId'])
+    response = index.search(
+        'galaxy',
+        {
+            'filter': "genre = 'sci fi' AND release_date < 1550000000"
+        }
+    )
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 1
+    assert 'facetsDistribution' not in response
+    assert 'exhaustiveFacetsCount' not in response
+
+def test_custom_search_params_with_array_filter_with_space(index_with_documents):
+    index = index_with_documents()
+    update = index.update_filterable_attributes(['genre', 'release_date'])
+    index.wait_for_pending_update(update['updateId'])
+    response = index.search(
+        'galaxy',
+        {
+            "filter": ["genre = 'sci fi'", "release_date < 1550000000"]
+        }
+    )
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 1
+    assert 'facetsDistribution' not in response
+    assert 'exhaustiveFacetsCount' not in response
+
 def test_custom_search_params_with_mutilple_filter_string(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(['genre', 'release_date'])
