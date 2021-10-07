@@ -75,12 +75,12 @@ client = meilisearch.Client('http://127.0.0.1:7700', 'masterKey')
 index = client.index('movies')
 
 documents = [
-      { movie_id: 1, title: 'Carol', genres: ['Romance', 'Drama'] },
-      { movie_id: 2, title: 'Wonder Woman', genres: ['Action', 'Adventure'] },
-      { movie_id: 3, title: 'Life of Pi', genres: ['Adventure', 'Drama'] },
-      { movie_id: 4, title: 'Mad Max: Fury Road', genres: ['Adventure', 'Science Fiction'] },
-      { movie_id: 5, title: 'Moana', genres: ['Fantasy', 'Action']},
-      { movie_id: 6, title: 'Philadelphia', genres: ['Drama'] },
+      { id: 1, title: 'Carol', genres: ['Romance', 'Drama'] },
+      { id: 2, title: 'Wonder Woman', genres: ['Action', 'Adventure'] },
+      { id: 3, title: 'Life of Pi', genres: ['Adventure', 'Drama'] },
+      { id: 4, title: 'Mad Max: Fury Road', genres: ['Adventure', 'Science Fiction'] },
+      { id: 5, title: 'Moana', genres: ['Fantasy', 'Action']},
+      { id: 6, title: 'Philadelphia', genres: ['Drama'] },
 ]
 
 # If the index 'movies' does not exist, MeiliSearch creates it when you first add the documents.
@@ -93,7 +93,7 @@ With the `updateId`, you can check the status (`enqueued`, `processing`, `proces
 
 ``` python
 # MeiliSearch is typo-tolerant:
-index.search('Mad Mxa')
+index.search('caorl')
 ```
 
 Output:
@@ -102,16 +102,17 @@ Output:
 {
     "hits": [
         {
-            "movie_id": 4,
-            "title": "Mad Max: Fury Road,
-            "genre": ["Adventure", "Science Fiction"]
+            "id": 1,
+            "title": "Carol",
+            "genre": ["Romance", "Drama"]
         }
     ],
     "offset": 0,
     "limit": 20,
     "processingTimeMs": 1,
-    "query": "Mad Mxa"
+    "query": "caorl"
 }
+```
 
 #### Custom Search <!-- omit in toc -->
 
@@ -119,7 +120,7 @@ All the supported options are described in the [search parameters](https://docs.
 
 ```python
 index.search(
-  'Phil',
+  'phil',
   {
     'attributesToHighlight': ['*'],
   }
@@ -132,10 +133,10 @@ JSON output:
 {
     "hits": [
         {
-            "movie_id": 5,
+            "id": 6,
             "title": "Philadelphia",
             "_formatted": {
-                "movie_id": 5,
+                "id": 6,
                 "title": "<em>Phil</em>adelphia",
                 "genre": ["Drama"]
             }
@@ -144,7 +145,7 @@ JSON output:
     "offset": 0,
     "limit": 20,
     "processingTimeMs": 0,
-    "query": "Phil"
+    "query": "phil"
 }
 ```
 
