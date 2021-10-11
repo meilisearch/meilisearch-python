@@ -100,17 +100,17 @@ Output:
 
 ```json
 {
-    'hits': [
+    "hits": [
         {
-            'id': 1,
-            'title': 'Carol',
-            'genre': ['Romance', 'Drama']
+            "id": 1,
+            "title": "Carol",
+            "genre": ["Romance", "Drama"]
         }
     ],
-    'offset': 0,
-    'limit': 20,
-    'processingTimeMs': 1,
-    'query': 'caorl'
+    "offset": 0,
+    "limit": 20,
+    "processingTimeMs": 1,
+    "query": "caorl"
 }
 ```
 
@@ -131,21 +131,21 @@ JSON output:
 
 ```json
 {
-    'hits': [
+    "hits": [
         {
-            'id': 6,
-            'title': 'Philadelphia',
-            '_formatted': {
-                'id': 6,
-                'title': '<em>Phil</em>adelphia',
-                'genre': ['Drama']
+            "id": 6,
+            "title": "Philadelphia",
+            "_formatted": {
+                "id": 6,
+                "title": "<em>Phil</em>adelphia",
+                "genre": ["Drama"]
             }
         }
     ],
-    'offset': 0,
-    'limit': 20,
-    'processingTimeMs': 0,
-    'query': 'phil'
+    "offset": 0,
+    "limit": 20,
+    "processingTimeMs": 0,
+    "query": "phil"
 }
 ```
 
