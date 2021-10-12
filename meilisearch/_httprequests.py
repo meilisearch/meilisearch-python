@@ -13,23 +13,33 @@ class HttpRequests:
         self.config = config
         self.headers = {
             'X-Meili-Api-Key': self.config.api_key,
-            'Content-Type': 'application/json'
         }
 
     def send_request(
         self,
         http_method: Callable,
         path: str,
-        body: Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str]]] = None,
+        body: Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str], str]] = None,
+        content_type: Optional[str] = None,
     ) -> Any:
+        if content_type:
+            self.headers['Content-Type'] = content_type
         try:
             request_path = self.config.url + '/' + path
-            request = http_method(
-                request_path,
-                timeout=self.config.timeout,
-                headers=self.headers,
-                data=json.dumps(body) if body else "null"
-            )
+            if isinstance(body, bytes):
+                request = http_method(
+                    request_path,
+                    timeout=self.config.timeout,
+                    headers=self.headers,
+                    data=body
+                )
+            else:
+                request = http_method(
+                    request_path,
+                    timeout=self.config.timeout,
+                    headers=self.headers,
+                    data=json.dumps(body) if body else "null"
+                )
             return self.__validate(request)
 
         except requests.exceptions.Timeout as err:
@@ -45,16 +55,18 @@ class HttpRequests:
     def post(
         self,
         path: str,
-        body: Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str]]] = None,
+        body: Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str], str]] = None,
+        content_type: Optional[str] = 'application/json',
     ) -> Any:
-        return self.send_request(requests.post, path, body)
+        return self.send_request(requests.post, path, body, content_type)
 
     def put(
         self,
         path: str,
         body: Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str]]] = None,
+        content_type: Optional[str] = 'application/json',
     ) -> Any:
-        return self.send_request(requests.put, path, body)
+        return self.send_request(requests.put, path, body, content_type)
 
     def delete(
         self,
