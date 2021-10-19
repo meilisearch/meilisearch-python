@@ -163,7 +163,7 @@ def test_get_primary_key(client):
 def test_update_index(client):
     """Tests updating an index."""
     index = client.index(uid=common.INDEX_UID)
-    response = index.update(primaryKey='objectID')
+    response = index.update(primary_key='objectID')
     assert isinstance(response, Index)
     assert index.primary_key == 'objectID'
     assert index.get_primary_key() == 'objectID'
