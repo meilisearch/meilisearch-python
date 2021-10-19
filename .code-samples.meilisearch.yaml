@@ -10,7 +10,7 @@ list_all_indexes_1: |-
 create_an_index_1: |-
   client.create_index('movies', {'primaryKey': 'movie_id'})
 update_an_index_1: |-
-  client.index('movies').update(primaryKey='movie_review_id')
+  client.index('movies').update(primary_key='movie_review_id')
 delete_an_index_1: |-
   client.index('movies').delete()
 get_one_document_1: |-
