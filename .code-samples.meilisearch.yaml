@@ -120,11 +120,11 @@ update_ranking_rules_1: |-
 reset_ranking_rules_1: |-
   client.index('movies').reset_ranking_rules()
 get_distinct_attribute_1: |-
-  client.index('movies').get_distinct_attribute()
+  client.index('shoes').get_distinct_attribute()
 update_distinct_attribute_1: |-
-  client.index('movies').update_distinct_attribute('movie_id')
+  client.index('shoes').update_distinct_attribute('skuid')
 reset_distinct_attribute_1: |-
-  client.index('movies').reset_distinct_attribute()
+  client.index('shoes').reset_distinct_attribute()
 get_filterable_attributes_1: |-
   client.index('movies').get_filterable_attributes()
 update_filterable_attributes_1: |-
