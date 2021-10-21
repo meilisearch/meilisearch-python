@@ -193,7 +193,6 @@ index.search(
   "processingTimeMs": 0,
   "query": "wonder"
 }
-
 ```
 
 ## 🤖 Compatibility with MeiliSearch
