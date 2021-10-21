@@ -158,8 +158,8 @@ If you want to enable filtering, you must add your attributes to the `filterable
 
 ```py
 index.update_filterable_attributes([
-    'director',
-    'genres',
+  'id',
+  'genres'
 ])
 ```
 
