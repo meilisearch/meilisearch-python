@@ -74,24 +74,20 @@ class Index():
                 raise error
             return False
 
-    def update(self, **body: Dict[str, Any]) -> 'Index':
+    def update(self, primary_key: str) -> 'Index':
         """Update the index primary-key.
 
         Parameters
         ----------
-        body:
-            Accepts primaryKey as an updatable parameter.
-            Ex: index.update(primaryKey='name')
+        primary_key:
+            The primary key to use for the index.
 
         Raises
         ------
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        payload = {}
-        primary_key = body.get('primaryKey')
-        if primary_key is not None:
-            payload['primaryKey'] = primary_key
+        payload = {'primaryKey': primary_key}
         response = self.http.put(f'{self.config.paths.index}/{self.uid}', payload)
         self.primary_key = response['primaryKey']
         self.created_at = self._iso_to_date_time(response['createdAt'])
