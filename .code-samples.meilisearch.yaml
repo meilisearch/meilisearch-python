@@ -289,6 +289,13 @@ settings_guide_displayed_1: |-
       'release_date'
     ]
   })
+settings_guide_sortable_1: |-
+  client.index('books').update_settings({
+    'sortableAttributes': [
+      'price',
+      'author'
+    ]
+  })
 add_movies_json_1: |-
   import json
 
