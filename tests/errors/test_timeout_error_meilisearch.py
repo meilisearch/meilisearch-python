@@ -3,7 +3,7 @@ import pytest
 import requests
 import meilisearch
 from meilisearch.errors import MeiliSearchTimeoutError
-from meilisearch.tests import BASE_URL, MASTER_KEY
+from tests import BASE_URL, MASTER_KEY
 
 
 @patch("requests.get")

@@ -1,7 +1,7 @@
 # pylint: disable=invalid-name
 
 import meilisearch
-from meilisearch.tests import BASE_URL, MASTER_KEY
+from tests import BASE_URL, MASTER_KEY
 
 
 def test_get_client():
