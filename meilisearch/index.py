@@ -1,4 +1,4 @@
-import urllib
+from urllib import parse
 from datetime import datetime
 from time import sleep
 from typing import Any, Dict, Generator, List, Optional, Union
@@ -313,7 +313,7 @@ class Index():
         if parameters is None:
             parameters = {}
         return self.http.get(
-            f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{urllib.parse.urlencode(parameters)}'
+            f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{parse.urlencode(parameters)}'
         )
 
     def add_documents(
@@ -1240,5 +1240,5 @@ class Index():
     ) -> str:
         if primary_key is None:
             return f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}'
-        primary_key = urllib.parse.urlencode({'primaryKey': primary_key})
+        primary_key = parse.urlencode({'primaryKey': primary_key})
         return f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{primary_key}'

@@ -6,7 +6,7 @@ import pytest
 from meilisearch.client import Client
 from meilisearch.errors import MeiliSearchApiError
 from meilisearch.index import Index
-from meilisearch.tests import BASE_URL, common, MASTER_KEY
+from tests import BASE_URL, common, MASTER_KEY
 
 def test_create_index(client):
     """Tests creating an index."""

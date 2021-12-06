@@ -5,7 +5,7 @@ import pytest
 import requests
 import meilisearch
 from meilisearch.errors import MeiliSearchApiError
-from meilisearch.tests import BASE_URL, MASTER_KEY
+from tests import BASE_URL, MASTER_KEY
 
 def test_meilisearch_api_error_no_master_key():
     client = meilisearch.Client(BASE_URL)

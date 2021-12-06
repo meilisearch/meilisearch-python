@@ -2,7 +2,7 @@
 import json
 from pytest import fixture
 
-from meilisearch.tests import common
+from tests import common
 import meilisearch
 
 @fixture(scope='session')
