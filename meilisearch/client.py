@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Optional
 from meilisearch.index import Index
 from meilisearch.config import Config
 from meilisearch._httprequests import HttpRequests
-from meilisearch.errors import MeiliSearchApiError, MeiliSearchError
+from meilisearch.errors import MeiliSearchError
 
 class Client():
     """
@@ -28,7 +28,7 @@ class Client():
 
         self.http = HttpRequests(self.config)
 
-    def create_index(self, uid: str, options: Optional[Dict[str, Any]] = None) -> Index:
+    def create_index(self, uid: str, options: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Create an index.
 
         Parameters
@@ -40,8 +40,9 @@ class Client():
 
         Returns
         -------
-        index : Index
-            An instance of Index containing the information of the newly created index.
+        task:
+            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-a-task
 
         Raises
         ------
@@ -50,8 +51,34 @@ class Client():
         """
         return Index.create(self.config, uid, options)
 
-    def delete_index_if_exists(self, uid: str) -> bool:
-        """Deletes an index if it already exists
+    # def delete_index_if_exists(self, uid: str) -> bool:
+    #     """Deletes an index if it already exists
+
+    #     Parameters
+    #     ----------
+    #     uid:
+    #         UID of the index.
+
+    #     Returns
+    #     --------
+    #     Returns True if an index was deleted or False if not
+
+    #     Raises
+    #     ------
+    #     MeiliSearchApiError
+    #         An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+    #     """
+
+    #     try:
+    #         self.http.delete(f'{self.config.paths.index}/{uid}')
+    #         return True
+    #     except MeiliSearchApiError as error:
+    #         if error.code != "index_not_found":
+    #             raise error
+    #         return False
+
+    def delete_index(self, uid: str) -> Dict[str, Any]:
+        """Deletes an index
 
         Parameters
         ----------
@@ -59,22 +86,17 @@ class Client():
             UID of the index.
 
         Returns
-        --------
-        Returns True if an index was deleted or False if not
+        -------
+        task:
+            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-a-task
 
         Raises
         ------
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-
-        try:
-            self.http.delete(f'{self.config.paths.index}/{uid}')
-            return True
-        except MeiliSearchApiError as error:
-            if error.code != "index_not_found":
-                raise error
-            return False
+        return self.http.delete(f'{self.config.paths.index}/{uid}')
 
     def get_indexes(self) -> List[Index]:
         """Get all indexes.
@@ -177,33 +199,33 @@ class Client():
             return Index(self.config, uid=uid)
         raise Exception('The index UID should not be None')
 
-    def get_or_create_index(self, uid: str, options: Optional[Dict[str, Any]] = None) -> Index:
-        """Get an index, or create it if it doesn't exist.
+    # def get_or_create_index(self, uid: str, options: Optional[Dict[str, Any]] = None) -> Index:
+    #     """Get an index, or create it if it doesn't exist.
 
-        Parameters
-        ----------
-        uid:
-            UID of the index
-        options (optional): dict
-            Options passed during index creation (ex: primaryKey)
+    #     Parameters
+    #     ----------
+    #     uid:
+    #         UID of the index
+    #     options (optional): dict
+    #         Options passed during index creation (ex: primaryKey)
 
-        Returns
-        -------
-        index:
-            An instance of Index containing the information of the retrieved or newly created index.
+    #     Returns
+    #     -------
+    #     index:
+    #         An instance of Index containing the information of the retrieved or newly created index.
 
-        Raises
-        ------
-        MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
-        """
-        try:
-            index_instance = self.get_index(uid)
-        except MeiliSearchApiError as err:
-            if err.code != 'index_not_found':
-                raise err
-            index_instance = self.create_index(uid, options)
-        return index_instance
+    #     Raises
+    #     ------
+    #     MeiliSearchApiError
+    #         An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+    #     """
+    #     try:
+    #         index_instance = self.get_index(uid)
+    #     except MeiliSearchApiError as err:
+    #         if err.code != 'index_not_found':
+    #             raise err
+    #         index_instance = self.create_index(uid, options)
+    #     return index_instance
 
     def get_all_stats(self) -> Dict[str, Any]:
         """Get all stats of MeiliSearch
@@ -333,3 +355,70 @@ class Client():
         return self.http.get(
             self.config.paths.dumps + '/' + str(uid) + '/status'
         )
+
+    def get_tasks(self) -> List[Dict[str, Any]]:
+        """Get all tasks.
+
+        Returns
+        -------
+        task:
+            List of all enqueued, processing, succeeded or failed actions of the index.
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.get(
+            f'{self.config.paths.task}'
+        )
+
+    def get_task(self, uid: int) -> Dict[str, Any]:
+        """Get one task.
+
+        Parameters
+        ----------
+        uid:
+            identifier of the task to retrieve
+
+        Returns
+        -------
+        task:
+            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.get(
+            f'{self.config.paths.task}/{uid}'
+        )
+
+    def wait_for_task(
+        self, uid: int,
+        timeout_in_ms: int = 5000,
+        interval_in_ms: int = 50,
+    ) -> Dict[str, Any]:
+        """Wait until MeiliSearch processes a task, and get its status as failed or succeeded.
+
+        Parameters
+        ----------
+        uid:
+            identifier of the task to retrieve
+        timeout_in_ms (optional):
+            time the method should wait before raising a MeiliSearchTimeoutError
+        interval_in_ms (optional):
+            time interval the method should wait (sleep) between requests
+
+        Returns
+        -------
+        task:
+            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+
+        Raises
+        ------
+        MeiliSearchTimeoutError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return Index(self.config, str(uid)).wait_for_task(uid, timeout_in_ms, interval_in_ms)

@@ -11,7 +11,7 @@ class Config:
         keys = 'keys'
         version = 'version'
         index = 'indexes'
-        update = 'updates'
+        task = 'tasks'
         stat = 'stats'
         search = 'search'
         document = 'documents'

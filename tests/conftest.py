@@ -26,7 +26,9 @@ def clear_indexes(client):
 def indexes_sample(client):
     indexes = []
     for index_args in common.INDEX_FIXTURE:
-        indexes.append(client.create_index(**index_args))
+        response = client.create_index(**index_args)
+        client.wait_for_task(response['uid'])
+        indexes.append(client.get_index(index_args['uid']))
     # Yields the indexes to the test to make them accessible.
     yield indexes
 
@@ -65,7 +67,9 @@ def songs_ndjson():
 @fixture(scope='function')
 def empty_index(client):
     def index_maker(index_name=common.INDEX_UID):
-        return client.create_index(uid=index_name)
+        task = client.create_index(uid=index_name)
+        client.wait_for_task(task['uid'])
+        return client.get_index(uid=index_name)
     return index_maker
 
 @fixture(scope='function')
@@ -73,6 +77,6 @@ def index_with_documents(empty_index, small_movies):
     def index_maker(index_name=common.INDEX_UID, documents=small_movies):
         index = empty_index(index_name)
         response = index.add_documents(documents)
-        index.wait_for_pending_update(response['updateId'])
+        index.wait_for_task(response['uid'])
         return index
     return index_maker
