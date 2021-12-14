@@ -12,7 +12,7 @@ class HttpRequests:
     def __init__(self, config: Config) -> None:
         self.config = config
         self.headers = {
-            'X-Meili-Api-Key': self.config.api_key,
+            'Authorization': f'Bearer {self.config.api_key}',
         }
 
     def send_request(
