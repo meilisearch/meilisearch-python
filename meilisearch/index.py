@@ -117,8 +117,8 @@ class Index():
         """
         return self.fetch_info().primary_key
 
-    @classmethod
-    def create(cls, config: Config, uid: str, options: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    @staticmethod
+    def create(config: Config, uid: str, options: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Create the index.
 
         Parameters
@@ -144,13 +144,13 @@ class Index():
         payload = {**options, 'uid': uid}
         return HttpRequests(config).post(config.paths.index, payload)
 
-    def get_tasks(self) -> List[Dict[str, Any]]:
+    def get_tasks(self) -> Dict[str, List[Dict[str, Any]]]:
         """Get all tasks of a specific index from the last one.
 
         Returns
         -------
         task:
-            List of all enqueued, processing, succeeded or failed actions of the index.
+            Dictionary containing a list of all enqueued, processing, succeeded or failed actions of the index.
 
         Raises
         ------
@@ -216,7 +216,7 @@ class Index():
                 f'{self.config.paths.task}/{uid}'
             )
 
-            if get_task['status'] != 'enqueued' and get_task['status'] != 'processing':
+            if get_task['status'] not in ('enqueued', 'processing'):
                 return get_task
             sleep(interval_in_ms / 1000)
             time_delta = datetime.now() - start_time

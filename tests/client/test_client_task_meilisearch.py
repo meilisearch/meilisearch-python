@@ -7,19 +7,16 @@ def test_get_tasks_default(client):
     """Tests getting the global tasks list."""
     tasks = client.get_tasks()
     assert isinstance(tasks, dict)
-    assert len(tasks) == 1
-    assert len(tasks['results']) != 0
+    assert 'results' in tasks
 
-def test_get_tasks(client, empty_index, small_movies):
+def test_get_tasks(client, empty_index):
     """Tests getting the global tasks list after populated an index."""
-    index = empty_index()
-    response = index.add_documents(small_movies)
-    assert 'uid' in response
-    response = index.add_documents(small_movies)
-    assert 'uid' in response
+    current_tasks = client.get_tasks()
+    pre_count = len(current_tasks["results"])
+    empty_index()
     tasks = client.get_tasks()
-    assert len(tasks) == 1
-    assert len(tasks['results']) != 0
+    assert isinstance(tasks, dict)
+    assert len(tasks['results']) == pre_count + 1
 
 def test_get_task(client):
     """Tests getting the tasks list of an empty index."""
@@ -29,13 +26,16 @@ def test_get_task(client):
     assert isinstance(task, dict)
     assert len(task) == 9
     assert 'uid' in task
+    assert 'indexUid' in task
     assert 'status' in task
     assert 'type' in task
     assert 'duration' in task
     assert 'enqueuedAt' in task
     assert 'finishedAt' in task
+    assert 'details' in task
+    assert 'startedAt' in task
 
 def test_get_task_inexistent(client):
     """Tests getting a task of an inexistent operation."""
     with pytest.raises(Exception):
-        client.get_task('999')
+        client.get_task('abc')

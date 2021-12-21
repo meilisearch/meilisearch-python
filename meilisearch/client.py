@@ -356,13 +356,13 @@ class Client():
             self.config.paths.dumps + '/' + str(uid) + '/status'
         )
 
-    def get_tasks(self) -> List[Dict[str, Any]]:
+    def get_tasks(self) -> Dict[str, List[Dict[str, Any]]]:
         """Get all tasks.
 
         Returns
         -------
         task:
-            List of all enqueued, processing, succeeded or failed actions of the index.
+            Dictionary containing a list of all enqueued, processing, succeeded or failed actions of the index.
 
         Raises
         ------

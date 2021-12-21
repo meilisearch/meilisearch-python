@@ -20,14 +20,15 @@ def clear_indexes(client):
     # Deletes all the indexes in the MeiliSearch instance.
     indexes = client.get_indexes()
     for index in indexes:
-        client.index(index.uid).delete()
+        task = client.index(index.uid).delete()
+        client.wait_for_task(task['uid'])
 
 @fixture(scope='function')
 def indexes_sample(client):
     indexes = []
     for index_args in common.INDEX_FIXTURE:
-        response = client.create_index(**index_args)
-        client.wait_for_task(response['uid'])
+        task = client.create_index(**index_args)
+        client.wait_for_task(task['uid'])
         indexes.append(client.get_index(index_args['uid']))
     # Yields the indexes to the test to make them accessible.
     yield indexes
@@ -76,7 +77,7 @@ def empty_index(client):
 def index_with_documents(empty_index, small_movies):
     def index_maker(index_name=common.INDEX_UID, documents=small_movies):
         index = empty_index(index_name)
-        response = index.add_documents(documents)
-        index.wait_for_task(response['uid'])
+        task = index.add_documents(documents)
+        index.wait_for_task(task['uid'])
         return index
     return index_maker

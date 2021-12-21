@@ -12,8 +12,7 @@ def test_wait_for_task_default(index_with_documents):
     update = index.wait_for_task(response['uid'])
     assert isinstance(update, dict)
     assert 'status' in update
-    assert update['status'] != 'enqueued'
-    assert update['status'] != 'processing'
+    assert update['status'] not in ('enqueued', 'processing')
 
 def test_wait_for_task_timeout(index_with_documents):
     """Tests timeout risen by waiting for an update."""

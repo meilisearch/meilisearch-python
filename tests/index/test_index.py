@@ -163,18 +163,19 @@ def test_get_primary_key(client):
     assert index.primary_key == 'book_id'
     assert index.get_primary_key() == 'book_id'
 
-@pytest.mark.usefixtures("indexes_sample")
-def test_update_index(client, empty_index):
+def test_update_index(empty_index):
     """Tests updating an index."""
     index = empty_index()
-    response = client.get_index(uid=common.INDEX_UID)
+    response = index.update(primary_key='objectID')
+    index.wait_for_task(response['uid'])
+    response = index.fetch_info()
     assert isinstance(response, Index)
     assert index.get_primary_key() == 'objectID'
     assert isinstance(index.created_at, datetime)
     assert isinstance(index.updated_at, datetime)
 
 @pytest.mark.usefixtures("indexes_sample")
-def test_delete_index(client):
+def test_delete_index_by_client(client):
     """Tests deleting an index."""
     response = client.index(uid=common.INDEX_UID).delete()
     assert response['status'] == 'enqueued'
