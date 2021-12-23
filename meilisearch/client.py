@@ -42,7 +42,7 @@ class Client():
         -------
         task:
             Dictionary containing a task to track the informations about the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-a-task
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
         ------
