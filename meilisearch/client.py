@@ -379,7 +379,7 @@ class Client():
         Parameters
         ----------
         uid:
-            identifier of the task to retrieve
+            identifier of the task.
 
         Returns
         -------
