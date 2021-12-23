@@ -36,6 +36,6 @@ def test_get_task(client):
     assert 'startedAt' in task
 
 def test_get_task_inexistent(client):
-    """Tests getting a task of an inexistent operation."""
+    """Tests getting a task that does not exists."""
     with pytest.raises(Exception):
         client.get_task('abc')
