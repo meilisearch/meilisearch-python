@@ -400,7 +400,7 @@ class Client():
         timeout_in_ms: int = 5000,
         interval_in_ms: int = 50,
     ) -> Dict[str, Any]:
-        """Wait until MeiliSearch processes a task, and get its status as failed or succeeded.
+        """Wait until MeiliSearch processes a task until it fails or succeeds.
 
         Parameters
         ----------
