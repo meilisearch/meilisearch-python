@@ -405,7 +405,7 @@ class Client():
         Parameters
         ----------
         uid:
-            identifier of the task to retrieve
+            identifier of the task to wait for being processed.
         timeout_in_ms (optional):
             time the method should wait before raising a MeiliSearchTimeoutError
         interval_in_ms (optional):
