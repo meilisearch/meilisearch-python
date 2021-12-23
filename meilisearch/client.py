@@ -362,7 +362,7 @@ class Client():
         Returns
         -------
         task:
-            Dictionary containing a list of all enqueued, processing, succeeded or failed actions of the index.
+            Dictionary containing a list of all enqueued, processing, succeeded or failed tasks of the index.
 
         Raises
         ------
