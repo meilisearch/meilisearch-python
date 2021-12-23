@@ -2,6 +2,7 @@ from typing import Any, Dict, List, Optional
 
 from meilisearch.index import Index
 from meilisearch.config import Config
+from meilisearch.task import Task
 from meilisearch._httprequests import HttpRequests
 from meilisearch.errors import MeiliSearchError
 
@@ -362,16 +363,14 @@ class Client():
         Returns
         -------
         task:
-            Dictionary containing a list of all enqueued, processing, succeeded or failed tasks of the index.
+            Dictionary containing a list of all enqueued, processing, succeeded or failed tasks.
 
         Raises
         ------
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.get(
-            f'{self.config.paths.task}'
-        )
+        return Task(self.config).get_tasks()
 
     def get_task(self, uid: int) -> Dict[str, Any]:
         """Get one task.
@@ -379,7 +378,7 @@ class Client():
         Parameters
         ----------
         uid:
-            identifier of the task.
+            Identifier of the task.
 
         Returns
         -------
@@ -391,9 +390,7 @@ class Client():
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.get(
-            f'{self.config.paths.task}/{uid}'
-        )
+        return Task(self.config).get_task(uid)
 
     def wait_for_task(
         self, uid: int,
@@ -405,11 +402,11 @@ class Client():
         Parameters
         ----------
         uid:
-            identifier of the task to wait for being processed.
+            Identifier of the task to wait for being processed.
         timeout_in_ms (optional):
-            time the method should wait before raising a MeiliSearchTimeoutError
+            Time the method should wait before raising a MeiliSearchTimeoutError
         interval_in_ms (optional):
-            time interval the method should wait (sleep) between requests
+            Time interval the method should wait (sleep) between requests
 
         Returns
         -------
@@ -421,4 +418,4 @@ class Client():
         MeiliSearchTimeoutError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return Index(self.config, str(uid)).wait_for_task(uid, timeout_in_ms, interval_in_ms)
+        return Task(self.config).wait_for_task(uid, timeout_in_ms, interval_in_ms)
