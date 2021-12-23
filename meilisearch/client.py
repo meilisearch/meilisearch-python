@@ -414,7 +414,7 @@ class Client():
         Returns
         -------
         task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+            Dictionary containing information about the processed asynchronous task.
 
         Raises
         ------
