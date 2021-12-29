@@ -52,32 +52,6 @@ class Client():
         """
         return Index.create(self.config, uid, options)
 
-    # def delete_index_if_exists(self, uid: str) -> bool:
-    #     """Deletes an index if it already exists
-
-    #     Parameters
-    #     ----------
-    #     uid:
-    #         UID of the index.
-
-    #     Returns
-    #     --------
-    #     Returns True if an index was deleted or False if not
-
-    #     Raises
-    #     ------
-    #     MeiliSearchApiError
-    #         An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
-    #     """
-
-    #     try:
-    #         self.http.delete(f'{self.config.paths.index}/{uid}')
-    #         return True
-    #     except MeiliSearchApiError as error:
-    #         if error.code != "index_not_found":
-    #             raise error
-    #         return False
-
     def delete_index(self, uid: str) -> Dict[str, Any]:
         """Deletes an index
 
@@ -97,6 +71,7 @@ class Client():
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
+
         return self.http.delete(f'{self.config.paths.index}/{uid}')
 
     def get_indexes(self) -> List[Index]:
@@ -199,34 +174,6 @@ class Client():
         if uid is not None:
             return Index(self.config, uid=uid)
         raise Exception('The index UID should not be None')
-
-    # def get_or_create_index(self, uid: str, options: Optional[Dict[str, Any]] = None) -> Index:
-    #     """Get an index, or create it if it doesn't exist.
-
-    #     Parameters
-    #     ----------
-    #     uid:
-    #         UID of the index
-    #     options (optional): dict
-    #         Options passed during index creation (ex: primaryKey)
-
-    #     Returns
-    #     -------
-    #     index:
-    #         An instance of Index containing the information of the retrieved or newly created index.
-
-    #     Raises
-    #     ------
-    #     MeiliSearchApiError
-    #         An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
-    #     """
-    #     try:
-    #         index_instance = self.get_index(uid)
-    #     except MeiliSearchApiError as err:
-    #         if err.code != 'index_not_found':
-    #             raise err
-    #         index_instance = self.create_index(uid, options)
-    #     return index_instance
 
     def get_all_stats(self) -> Dict[str, Any]:
         """Get all stats of MeiliSearch

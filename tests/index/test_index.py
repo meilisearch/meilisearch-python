@@ -104,33 +104,6 @@ def test_get_raw_index_with_wrong_uid(client):
     with pytest.raises(Exception):
         client.get_raw_index(uid='wrongUID')
 
-# def test_get_or_create_index(client):
-#     """Test get_or_create_index method."""
-#     index_1 = client.get_or_create_index(common.INDEX_UID4)
-#     index_2 = client.get_or_create_index(common.INDEX_UID4)
-#     index_3 = client.get_or_create_index(common.INDEX_UID4)
-#     assert index_1.uid == index_2.uid == index_3.uid == common.INDEX_UID4
-#     update = index_1.add_documents([{
-#         'book_id': 1,
-#         'name': "Some book"
-#     }])
-#     index_1.wait_for_task(update['uid'])
-#     documents = index_2.get_documents()
-#     assert len(documents) == 1
-#     index_2.delete()
-#     with pytest.raises(Exception):
-#         client.get_index(index_3)
-
-# def test_get_or_create_index_with_primary_key(client):
-#     """Test get_or_create_index method with primary key."""
-#     index_1 = client.get_or_create_index('books', {'primaryKey': common.INDEX_UID4})
-#     index_2 = client.get_or_create_index('books', {'primaryKey': 'some_wrong_key'})
-#     assert index_1.primary_key == common.INDEX_UID4
-#     assert index_1.get_primary_key() == common.INDEX_UID4
-#     assert index_2.primary_key == common.INDEX_UID4
-#     assert index_2.get_primary_key() == common.INDEX_UID4
-#     index_1.delete()
-
 @pytest.mark.usefixtures("indexes_sample")
 def test_index_fetch_info(client):
     """Tests fetching the index info."""
@@ -209,33 +182,3 @@ def test_delete_index(client):
     client.wait_for_task(deleted['uid'])
     with pytest.raises(MeiliSearchApiError):
         client.get_index(uid=common.INDEX_UID)
-
-# @pytest.mark.usefixtures("indexes_sample")
-# def test_delete_if_exists(client):
-#     assert client.get_index(uid=common.INDEX_UID)
-#     deleted = Client(BASE_URL, MASTER_KEY).index(common.INDEX_UID).delete_if_exists()
-#     assert deleted is True
-#     with pytest.raises(MeiliSearchApiError):
-#         client.get_index(uid=common.INDEX_UID)
-
-# def test_delete_if_exists_no_delete(client):
-#     with pytest.raises(MeiliSearchApiError):
-#         client.get_index(uid="none")
-
-#     deleted = Client(BASE_URL, MASTER_KEY).index("none").delete_if_exists()
-#     assert deleted is False
-
-# @pytest.mark.usefixtures("indexes_sample")
-# def test_delete_index_if_exists(client):
-#     assert client.get_index(uid=common.INDEX_UID)
-#     deleted = client.delete_index_if_exists(common.INDEX_UID)
-#     assert deleted is True
-#     with pytest.raises(MeiliSearchApiError):
-#         client.get_index(uid=common.INDEX_UID)
-
-# def test_delete_index_if_exists_no_delete(client):
-#     with pytest.raises(MeiliSearchApiError):
-#         client.get_index(uid="none")
-
-#     deleted = client.delete_index_if_exists("none")
-#     assert deleted is False
