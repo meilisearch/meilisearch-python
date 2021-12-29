@@ -4,7 +4,7 @@ from typing import Any, Dict, Generator, List, Optional, Union
 
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
-from meilisearch.task import Task
+from meilisearch.task import get_task, get_tasks, wait_for_task
 
 # pylint: disable=too-many-public-methods
 class Index():
@@ -156,7 +156,7 @@ class Index():
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return Task(self.config, self.uid).get_tasks()
+        return get_tasks(self.config, self.uid)
 
     def get_task(self, uid: int) -> Dict[str, Any]:
         """Get one task through the route of a specific index.
@@ -176,7 +176,7 @@ class Index():
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return Task(self.config, self.uid).get_task(uid)
+        return get_task(self.config, uid, self.uid)
 
     def wait_for_task(
         self, uid: int,
@@ -204,7 +204,7 @@ class Index():
         MeiliSearchTimeoutError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return Task(self.config).wait_for_task(uid, timeout_in_ms, interval_in_ms)
+        return wait_for_task(self.config, uid, timeout_in_ms, interval_in_ms)
 
     def get_stats(self) -> Dict[str, Any]:
         """Get stats of the index.

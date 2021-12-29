@@ -2,7 +2,7 @@ from typing import Any, Dict, List, Optional
 
 from meilisearch.index import Index
 from meilisearch.config import Config
-from meilisearch.task import Task
+from meilisearch.task import get_task, get_tasks, wait_for_task
 from meilisearch._httprequests import HttpRequests
 from meilisearch.errors import MeiliSearchError
 
@@ -370,7 +370,7 @@ class Client():
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return Task(self.config).get_tasks()
+        return get_tasks(self.config)
 
     def get_task(self, uid: int) -> Dict[str, Any]:
         """Get one task.
@@ -390,7 +390,7 @@ class Client():
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return Task(self.config).get_task(uid)
+        return get_task(self.config, uid)
 
     def wait_for_task(
         self, uid: int,
@@ -418,4 +418,4 @@ class Client():
         MeiliSearchTimeoutError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return Task(self.config).wait_for_task(uid, timeout_in_ms, interval_in_ms)
+        return wait_for_task(self.config, uid, timeout_in_ms, interval_in_ms)
