@@ -280,8 +280,6 @@ class Client():
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        if options is None:
-            options= {}
         payload = {**options}
         return self.http.post(f'{self.config.paths.keys}', payload)
 
@@ -312,8 +310,6 @@ class Client():
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        if options is None:
-            options= {}
         payload = {**options}
         url = f'{self.config.paths.keys}/{key}'
         return self.http.patch(url, payload)
