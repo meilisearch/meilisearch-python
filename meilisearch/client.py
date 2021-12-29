@@ -217,15 +217,34 @@ class Client():
             return False
         return True
 
-    def get_keys(self) -> Dict[str, str]:
-        """Get all keys.
+    def get_key(self, key: str) -> Dict[str, str]:
+        """Gets information about a specific API key.
 
-        Get the public and private keys.
+        Parameters
+        ----------
+        key:
+            The key for which to retrieve the information.
+
+        Returns
+        -------
+        key:
+            The API key.
+            https://docs.meilisearch.com/reference/api/keys.html#get-key
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.get(f'{self.config.paths.keys}/{key}')
+
+    def get_keys(self) -> Dict[str, str]:
+        """Gets the MeiliSearch API keys.
 
         Returns
         -------
         keys:
-            Dictionary of keys and their information.
+            API keys.
             https://docs.meilisearch.com/reference/api/keys.html#get-keys
 
         Raises
@@ -234,6 +253,90 @@ class Client():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(self.config.paths.keys)
+
+    def create_key(
+        self,
+        options: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, int]:
+        """Creates a new API key.
+
+        Parameters
+        ----------
+        options:
+            Options, the information to use in creating the key (ex: { 'actions': ['*'], 'indexes': ['movies'], 'description': 'Search Key', 'expiresAt': '22-01-01' }).
+            An `actions`, an `indexes` and a `expiresAt` fields are mandatory,`None` should be specified for no expiration date.
+            `actions`: A list of actions permitted for the key. ["*"] for all actions.
+            `indexes`: A list of indexes permitted for the key. ["*"] for all indexes.
+            Note that if an expires_at value is included it should be in UTC time.
+
+        Returns
+        -------
+        keys:
+            The new API key.
+            https://docs.meilisearch.com/reference/api/keys.html#get-keys
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        if options is None:
+            options= {}
+        payload = {**options}
+        return self.http.post(f'{self.config.paths.keys}', payload)
+
+    def udpate_key(
+        self,
+        key: str,
+        options: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, int]:
+        """Update an API key.
+
+        Parameters
+        ----------
+        key:
+            The information to use in updating the key. Note that if an expires_at value
+            is included it should be in UTC time.
+        options:
+            Options, the information to use in creating the key (ex: { 'description': 'Search Key', 'expiresAt': '22-01-01' }).
+
+        Returns
+        -------
+        key:
+            The updated API key.
+            https://docs.meilisearch.com/reference/api/keys.html#get-keys
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        if options is None:
+            options= {}
+        payload = {**options}
+        url = f'{self.config.paths.keys}/{key}'
+        return self.http.patch(url, payload)
+
+    def delete_key(self, key: str) -> Dict[str, int]:
+        """Deletes an API key.
+
+        Parameters
+        ----------
+        key:
+            The key to delete.
+
+        Returns
+        -------
+        keys:
+            The Response status code. 204 signifies a successful delete.
+            https://docs.meilisearch.com/reference/api/keys.html#get-keys
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.delete(f'{self.config.paths.keys}/{key}')
 
     def get_version(self) -> Dict[str, str]:
         """Get version MeiliSearch
