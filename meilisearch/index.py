@@ -55,26 +55,7 @@ class Index():
 
         return self.http.delete(f'{self.config.paths.index}/{self.uid}')
 
-    def delete_if_exists(self) -> bool:
-        """Deletes the index if it already exists
-
-        Returns
-        --------
-        Returns True if an index was deleted or False if not
-
-        Raises
-        MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
-        """
-        try:
-            self.delete()
-            return True
-        except MeiliSearchApiError as error:
-            if error.code != "index_not_found":
-                raise error
-            return False
-
-    def update(self, primary_key: str) -> 'Index':
+    def update(self, primary_key: str) -> Dict[str, Any]:
         """Update the index primary-key.
 
         Parameters
