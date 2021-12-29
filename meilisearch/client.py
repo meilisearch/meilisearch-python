@@ -217,7 +217,7 @@ class Client():
             return False
         return True
 
-    def get_key(self, key: str) -> Dict[str, str]:
+    def get_key(self, key: str) -> Dict[str, Any]:
         """Gets information about a specific API key.
 
         Parameters
@@ -238,7 +238,7 @@ class Client():
         """
         return self.http.get(f'{self.config.paths.keys}/{key}')
 
-    def get_keys(self) -> Dict[str, str]:
+    def get_keys(self) -> List[Dict[str, Any]]:
         """Gets the MeiliSearch API keys.
 
         Returns
@@ -256,7 +256,7 @@ class Client():
 
     def create_key(
         self,
-        options: Optional[Dict[str, Any]] = None
+        options: Dict[str, Any]
     ) -> Dict[str, int]:
         """Creates a new API key.
 
@@ -288,17 +288,18 @@ class Client():
     def udpate_key(
         self,
         key: str,
-        options: Optional[Dict[str, Any]] = None
+        options: Dict[str, Any]
     ) -> Dict[str, int]:
         """Update an API key.
 
         Parameters
+
         ----------
         key:
-            The information to use in updating the key. Note that if an expires_at value
-            is included it should be in UTC time.
+            The key for which to update the information.
         options:
-            Options, the information to use in creating the key (ex: { 'description': 'Search Key', 'expiresAt': '22-01-01' }).
+            The information to use in creating the key (ex: { 'description': 'Search Key', 'expiresAt': '22-01-01' }). Note that if an
+            expires_at value is included it should be in UTC time.
 
         Returns
         -------

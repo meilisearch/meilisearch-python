@@ -1,12 +1,12 @@
 import pytest
 from tests import common
-from datetime import datetime, timedelta
+from datetime import datetime
 
 def test_get_keys_default(client):
     """Tests if public and private keys have been generated and can be retrieved."""
     key = client.get_keys()
     assert isinstance(key, list)
-    assert len(key) >= 2
+    assert len(key) == 2
     assert 'actions' in key[0]
     assert 'indexes' in key[0]
     assert key[0]['key'] is not None
@@ -40,6 +40,7 @@ def test_create_keys_default(client):
     assert key['key'] is not None
     assert key['actions'] == ['*']
     assert key['indexes'] == [common.INDEX_UID]
+    client.delete_key(key['key'])
 
 def test_create_keys_with_options(client):
     """Tests the creation of a key with arguments."""
@@ -52,6 +53,7 @@ def test_create_keys_with_options(client):
     assert key['updatedAt'] is not None
     assert key['actions'] == ['*']
     assert key['indexes'] == [common.INDEX_UID]
+    client.delete_key(key['key'])
 
 def test_create_keys_without_actions(client):
     """Tests the creation of a key with missing arguments."""
@@ -66,6 +68,7 @@ def test_update_keys(client):
     assert update_key['key'] is not None
     assert update_key['expiresAt'] is None
     assert update_key['actions'] == ['search']
+    client.delete_key(update_key['key'])
 
 def test_delete_key(client):
     """Tests deleting a key."""
