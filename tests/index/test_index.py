@@ -8,9 +8,9 @@ from meilisearch.errors import MeiliSearchApiError
 from meilisearch.index import Index
 from tests import BASE_URL, common, MASTER_KEY
 
-def test_create_index(client):
+def test_create_index(client, empty_index):
     """Tests creating an index."""
-    index = client.create_index(uid=common.INDEX_UID)
+    index = empty_index()
     assert isinstance(index, Index)
     assert index.uid == common.INDEX_UID
     assert index.primary_key is None
@@ -18,7 +18,9 @@ def test_create_index(client):
 
 def test_create_index_with_primary_key(client):
     """Tests creating an index with a primary key."""
-    index = client.create_index(uid=common.INDEX_UID2, options={'primaryKey': 'book_id'})
+    response = client.create_index(uid=common.INDEX_UID2, options={'primaryKey': 'book_id'})
+    client.wait_for_task(response['uid'])
+    index = client.get_index(uid=common.INDEX_UID2)
     assert isinstance(index, Index)
     assert index.uid == common.INDEX_UID2
     assert index.primary_key == 'book_id'
@@ -26,7 +28,9 @@ def test_create_index_with_primary_key(client):
 
 def test_create_index_with_uid_in_options(client):
     """Tests creating an index with a primary key."""
-    index = client.create_index(uid=common.INDEX_UID3, options={'uid': 'wrong', 'primaryKey': 'book_id'})
+    response = client.create_index(uid=common.INDEX_UID3, options={'uid': 'wrong', 'primaryKey': 'book_id'})
+    client.wait_for_task(response['uid'])
+    index = client.get_index(uid=common.INDEX_UID3)
     assert isinstance(index, Index)
     assert index.uid == common.INDEX_UID3
     assert index.primary_key == 'book_id'
@@ -132,31 +136,49 @@ def test_get_primary_key(client):
     assert index.primary_key == 'book_id'
     assert index.get_primary_key() == 'book_id'
 
-@pytest.mark.usefixtures("indexes_sample")
-def test_update_index(client):
+def test_update_index(empty_index):
     """Tests updating an index."""
-    index = client.index(uid=common.INDEX_UID)
+    index = empty_index()
     response = index.update(primary_key='objectID')
+    index.wait_for_task(response['uid'])
+    response = index.fetch_info()
     assert isinstance(response, Index)
-    assert index.primary_key == 'objectID'
     assert index.get_primary_key() == 'objectID'
     assert isinstance(index.created_at, datetime)
     assert isinstance(index.updated_at, datetime)
 
 @pytest.mark.usefixtures("indexes_sample")
-def test_delete_index(client):
+def test_delete_index_by_client(client):
     """Tests deleting an index."""
     response = client.index(uid=common.INDEX_UID).delete()
-    assert response.status_code == 204
+    assert response['status'] == 'enqueued'
+    client.wait_for_task(response['uid'])
     with pytest.raises(Exception):
         client.get_index(uid=common.INDEX_UID)
     response = client.index(uid=common.INDEX_UID2).delete()
-    assert response.status_code == 204
+    assert response['status'] == 'enqueued'
+    client.wait_for_task(response['uid'])
     with pytest.raises(Exception):
         client.get_index(uid=common.INDEX_UID2)
     response = client.index(uid=common.INDEX_UID3).delete()
-    assert response.status_code == 204
+    assert response['status'] == 'enqueued'
+    client.wait_for_task(response['uid'])
     with pytest.raises(Exception):
         client.get_index(uid=common.INDEX_UID3)
     assert len(client.get_indexes()) == 0
 
+@pytest.mark.usefixtures("indexes_sample")
+def test_delete(client):
+    assert client.get_index(uid=common.INDEX_UID)
+    deleted = Client(BASE_URL, MASTER_KEY).index(common.INDEX_UID).delete()
+    client.wait_for_task(deleted['uid'])
+    with pytest.raises(MeiliSearchApiError):
+        client.get_index(uid=common.INDEX_UID)
+
+@pytest.mark.usefixtures("indexes_sample")
+def test_delete_index(client):
+    assert client.get_index(uid=common.INDEX_UID)
+    deleted = Client(BASE_URL, MASTER_KEY).delete_index(uid=common.INDEX_UID)
+    client.wait_for_task(deleted['uid'])
+    with pytest.raises(MeiliSearchApiError):
+        client.get_index(uid=common.INDEX_UID)

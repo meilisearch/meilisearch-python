@@ -12,7 +12,7 @@ def test_update_sortable_attributes(empty_index):
     """Tests updating the sortable attributes."""
     index = empty_index()
     response = index.update_sortable_attributes(SORTABLE_ATTRIBUTES)
-    index.wait_for_pending_update(response['updateId'])
+    index.wait_for_task(response['uid'])
     get_attributes = index.get_sortable_attributes()
     assert len(get_attributes) == len(SORTABLE_ATTRIBUTES)
     for attribute in SORTABLE_ATTRIBUTES:
@@ -23,15 +23,15 @@ def test_update_sortable_attributes_to_none(empty_index):
     index = empty_index()
     # Update the settings first
     response = index.update_sortable_attributes(SORTABLE_ATTRIBUTES)
-    update = index.wait_for_pending_update(response['updateId'])
-    assert update['status'] == 'processed'
+    update = index.wait_for_task(response['uid'])
+    assert update['status'] == 'succeeded'
     # Check the settings have been correctly updated
     get_attributes = index.get_sortable_attributes()
     for attribute in SORTABLE_ATTRIBUTES:
         assert attribute in get_attributes
     # Launch test to update at null the setting
     response = index.update_sortable_attributes(None)
-    index.wait_for_pending_update(response['updateId'])
+    index.wait_for_task(response['uid'])
     response = index.get_sortable_attributes()
     assert response == []
 
@@ -40,8 +40,8 @@ def test_reset_sortable_attributes(empty_index):
     index = empty_index()
     # Update the settings first
     response = index.update_sortable_attributes(SORTABLE_ATTRIBUTES)
-    update = index.wait_for_pending_update(response['updateId'])
-    assert update['status'] == 'processed'
+    update = index.wait_for_task(response['uid'])
+    assert update['status'] == 'succeeded'
     # Check the settings have been correctly updated
     get_attributes = index.get_sortable_attributes()
     assert len(get_attributes) == len(SORTABLE_ATTRIBUTES)
@@ -50,8 +50,8 @@ def test_reset_sortable_attributes(empty_index):
     # Check the reset of the settings
     response = index.reset_sortable_attributes()
     assert isinstance(response, dict)
-    assert 'updateId' in response
-    index.wait_for_pending_update(response['updateId'])
+    assert 'uid' in response
+    index.wait_for_task(response['uid'])
     response = index.get_sortable_attributes()
     assert isinstance(response, list)
     assert response == []

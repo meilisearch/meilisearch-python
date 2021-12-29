@@ -2,8 +2,9 @@ from typing import Any, Dict, List, Optional
 
 from meilisearch.index import Index
 from meilisearch.config import Config
+from meilisearch.task import get_task, get_tasks, wait_for_task
 from meilisearch._httprequests import HttpRequests
-from meilisearch.errors import MeiliSearchApiError, MeiliSearchError
+from meilisearch.errors import MeiliSearchError
 
 class Client():
     """
@@ -28,7 +29,7 @@ class Client():
 
         self.http = HttpRequests(self.config)
 
-    def create_index(self, uid: str, options: Optional[Dict[str, Any]] = None) -> Index:
+    def create_index(self, uid: str, options: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Create an index.
 
         Parameters
@@ -40,8 +41,9 @@ class Client():
 
         Returns
         -------
-        index : Index
-            An instance of Index containing the information of the newly created index.
+        task:
+            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
         ------
@@ -59,8 +61,10 @@ class Client():
             UID of the index.
 
         Returns
-        --------
-        Returns True if an index was deleted or False if not
+        -------
+        task:
+            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
         ------
@@ -299,3 +303,66 @@ class Client():
         return self.http.get(
             self.config.paths.dumps + '/' + str(uid) + '/status'
         )
+
+    def get_tasks(self) -> Dict[str, List[Dict[str, Any]]]:
+        """Get all tasks.
+
+        Returns
+        -------
+        task:
+            Dictionary containing a list of all enqueued, processing, succeeded or failed tasks.
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return get_tasks(self.config)
+
+    def get_task(self, uid: int) -> Dict[str, Any]:
+        """Get one task.
+
+        Parameters
+        ----------
+        uid:
+            Identifier of the task.
+
+        Returns
+        -------
+        task:
+            Dictionary containing information about the processed asynchronous task.
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return get_task(self.config, uid)
+
+    def wait_for_task(
+        self, uid: int,
+        timeout_in_ms: int = 5000,
+        interval_in_ms: int = 50,
+    ) -> Dict[str, Any]:
+        """Wait until MeiliSearch processes a task until it fails or succeeds.
+
+        Parameters
+        ----------
+        uid:
+            Identifier of the task to wait for being processed.
+        timeout_in_ms (optional):
+            Time the method should wait before raising a MeiliSearchTimeoutError
+        interval_in_ms (optional):
+            Time interval the method should wait (sleep) between requests
+
+        Returns
+        -------
+        task:
+            Dictionary containing information about the processed asynchronous task.
+
+        Raises
+        ------
+        MeiliSearchTimeoutError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return wait_for_task(self.config, uid, timeout_in_ms, interval_in_ms)
