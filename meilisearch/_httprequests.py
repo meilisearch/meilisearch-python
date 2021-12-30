@@ -60,6 +60,14 @@ class HttpRequests:
     ) -> Any:
         return self.send_request(requests.post, path, body, content_type)
 
+    def patch(
+        self,
+        path: str,
+        body: Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str], str]] = None,
+        content_type: Optional[str] = 'application/json',
+    ) -> Any:
+        return self.send_request(requests.patch, path, body, content_type)
+
     def put(
         self,
         path: str,

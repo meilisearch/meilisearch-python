@@ -4,6 +4,7 @@ from pytest import fixture
 
 from tests import common
 import meilisearch
+from meilisearch.errors import MeiliSearchApiError
 
 @fixture(scope='session')
 def client():
@@ -81,3 +82,30 @@ def index_with_documents(empty_index, small_movies):
         index.wait_for_task(task['uid'])
         return index
     return index_maker
+
+@fixture(scope='function')
+def test_key(client):
+    key_info = {'description': 'test', 'actions': ['search'], 'indexes': ['movies'], 'expiresAt': None}
+
+    key = client.create_key(key_info)
+
+    yield key
+
+    try:
+        client.delete_key(key['key'])
+    except MeiliSearchApiError:
+        pass
+
+
+@fixture(scope='function')
+def test_key_info(client):
+    key_info = {'description': 'test', 'actions': ['search'], 'indexes': [common.INDEX_UID], 'expiresAt': None}
+
+    yield key_info
+
+    try:
+        keys = client.get_keys()
+        key = next(x for x in keys if x['description'] == key_info['description'])
+        client.delete_key(key['key'])
+    except MeiliSearchApiError:
+        pass
