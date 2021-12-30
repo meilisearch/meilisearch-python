@@ -257,7 +257,7 @@ class Client():
     def create_key(
         self,
         options: Dict[str, Any]
-    ) -> Dict[str, int]:
+    ) -> Dict[str, Any]:
         """Creates a new API key.
 
         Parameters
@@ -286,7 +286,7 @@ class Client():
         self,
         key: str,
         options: Dict[str, Any]
-    ) -> Dict[str, int]:
+    ) -> Dict[str, Any]:
         """Update an API key.
 
         Parameters

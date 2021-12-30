@@ -5,17 +5,16 @@ from meilisearch.errors import MeiliSearchApiError
 
 def test_get_keys_default(client):
     """Tests if public and private keys have been generated and can be retrieved."""
-    key = client.get_keys()
-    assert isinstance(key, list)
-    assert len(key) == 2
-    assert 'actions' in key[0]
-    assert 'indexes' in key[0]
-    assert key[0]['key'] is not None
-    assert key[1]['key'] is not None
+    keys = client.get_keys()
+    assert isinstance(keys, list)
+    assert len(keys) == 2
+    assert 'actions' in keys[0]
+    assert 'indexes' in keys[0]
+    assert keys[0]['key'] is not None
+    assert keys[1]['key'] is not None
 
 def test_get_key(client, test_key):
     """Tests if a key can be retrieved."""
-    keys = client.get_keys()
     key = client.get_key(test_key['key'])
     assert isinstance(key, dict)
     assert 'actions' in key
