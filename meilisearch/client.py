@@ -280,8 +280,7 @@ class Client():
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        payload = {**options}
-        return self.http.post(f'{self.config.paths.keys}', payload)
+        return self.http.post(f'{self.config.paths.keys}', options)
 
     def udpate_key(
         self,
@@ -310,9 +309,8 @@ class Client():
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        payload = {**options}
         url = f'{self.config.paths.keys}/{key}'
-        return self.http.patch(url, payload)
+        return self.http.patch(url, options)
 
     def delete_key(self, key: str) -> Dict[str, int]:
         """Deletes an API key.

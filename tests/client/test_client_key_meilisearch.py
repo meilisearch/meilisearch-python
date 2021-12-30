@@ -1,6 +1,7 @@
 import pytest
 from tests import common
 from datetime import datetime
+from meilisearch.errors import MeiliSearchApiError
 
 def test_get_keys_default(client):
     """Tests if public and private keys have been generated and can be retrieved."""
@@ -12,10 +13,10 @@ def test_get_keys_default(client):
     assert key[0]['key'] is not None
     assert key[1]['key'] is not None
 
-def test_get_key(client):
+def test_get_key(client, test_key):
     """Tests if a key can be retrieved."""
     keys = client.get_keys()
-    key = client.get_key(keys[0]['key'])
+    key = client.get_key(test_key['key'])
     assert isinstance(key, dict)
     assert 'actions' in key
     assert 'indexes' in key
@@ -26,9 +27,9 @@ def test_get_key_inexistent(client):
     with pytest.raises(Exception):
         client.get_key('No existing key')
 
-def test_create_keys_default(client):
+def test_create_keys_default(client, test_key_info):
     """Tests the creation of a key with no optional argument."""
-    key = client.create_key(options={ 'actions': ['*'], 'indexes': [common.INDEX_UID], 'expiresAt': None })
+    key = client.create_key(test_key_info)
     assert isinstance(key, dict)
     assert 'key' in key
     assert 'actions' in key
@@ -38,45 +39,43 @@ def test_create_keys_default(client):
     assert key['createdAt'] is not None
     assert key['updatedAt'] is not None
     assert key['key'] is not None
-    assert key['actions'] == ['*']
-    assert key['indexes'] == [common.INDEX_UID]
-    client.delete_key(key['key'])
+    assert key['actions'] == test_key_info['actions']
+    assert key['indexes'] == test_key_info['indexes']
 
-def test_create_keys_with_options(client):
+def test_create_keys_with_options(client, test_key_info):
     """Tests the creation of a key with arguments."""
-    key = client.create_key(options={ 'actions': ['*'], 'indexes': [common.INDEX_UID], 'description': 'Test key', 'expiresAt': datetime(2030, 6, 4, 21, 8, 12, 32).isoformat()[:-3]+'Z' })
+    key = client.create_key(options={'description': test_key_info['description'], 'actions': test_key_info['actions'], 'indexes': test_key_info['indexes'], 'expiresAt': datetime(2030, 6, 4, 21, 8, 12, 32).isoformat()[:-3]+'Z' })
     assert isinstance(key, dict)
     assert key['key'] is not None
-    assert key['description'] == 'Test key'
+    assert key['description'] == test_key_info['description']
     assert key['expiresAt'] is not None
     assert key['createdAt'] is not None
     assert key['updatedAt'] is not None
-    assert key['actions'] == ['*']
-    assert key['indexes'] == [common.INDEX_UID]
-    client.delete_key(key['key'])
+    assert key['actions'] == test_key_info['actions']
+    assert key['indexes'] == test_key_info['indexes']
 
 def test_create_keys_without_actions(client):
     """Tests the creation of a key with missing arguments."""
-    with pytest.raises(Exception):
+    with pytest.raises(MeiliSearchApiError):
         client.create_key(options={'indexes': [common.INDEX_UID]})
 
-def test_update_keys(client):
+def test_update_keys(client, test_key_info):
     """Tests updating a key."""
-    key = client.create_key(options={ 'actions': ['*'], 'indexes': ['*'], 'expiresAt': None })
-    assert key['actions'] == ['*']
+    key = client.create_key(test_key_info)
+    assert key['actions'] == test_key_info['actions']
     update_key = client.udpate_key(key=key['key'], options={ 'actions': ['search'] })
     assert update_key['key'] is not None
     assert update_key['expiresAt'] is None
     assert update_key['actions'] == ['search']
-    client.delete_key(update_key['key'])
 
-def test_delete_key(client):
+def test_delete_key(client, test_key):
     """Tests deleting a key."""
-    key = client.create_key(options={ 'actions': ['*'], 'indexes': ['*'], 'expiresAt': None })
-    resp = client.delete_key(key['key'])
+    resp = client.delete_key(test_key['key'])
     assert resp.status_code == 204
+    with pytest.raises(MeiliSearchApiError):
+        client.get_key(test_key['key'])
 
 def test_delete_key_inexisting(client):
     """Tests deleting a key that does not exists."""
-    with pytest.raises(Exception):
+    with pytest.raises(MeiliSearchApiError):
         client.delete_key('No existing key')
