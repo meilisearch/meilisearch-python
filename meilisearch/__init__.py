@@ -1,1 +1,1 @@
-from meilisearch.client import Client
+from meilisearch.client import Client as Client
