@@ -1,4 +1,4 @@
-import urllib
+from urllib import parse
 from datetime import datetime
 from time import sleep
 from typing import Any, Dict, Generator, List, Optional, Union
@@ -70,28 +70,24 @@ class Index():
             self.delete()
             return True
         except MeiliSearchApiError as error:
-            if error.error_code != "index_not_found":
+            if error.code != "index_not_found":
                 raise error
             return False
 
-    def update(self, **body: Dict[str, Any]) -> 'Index':
+    def update(self, primary_key: str) -> 'Index':
         """Update the index primary-key.
 
         Parameters
         ----------
-        body:
-            Accepts primaryKey as an updatable parameter.
-            Ex: index.update(primaryKey='name')
+        primary_key:
+            The primary key to use for the index.
 
         Raises
         ------
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        payload = {}
-        primary_key = body.get('primaryKey')
-        if primary_key is not None:
-            payload['primaryKey'] = primary_key
+        payload = {'primaryKey': primary_key}
         response = self.http.put(f'{self.config.paths.index}/{self.uid}', payload)
         self.primary_key = response['primaryKey']
         self.created_at = self._iso_to_date_time(response['createdAt'])
@@ -151,7 +147,7 @@ class Index():
         Returns
         -------
         update:
-            List of all enqueued and processed actions of the index.
+            List of all enqueued, processing, processed or failed actions of the index.
 
         Raises
         ------
@@ -215,7 +211,7 @@ class Index():
         while elapsed_time < timeout_in_ms:
             get_update = self.get_update_status(update_id)
 
-            if get_update['status'] != 'enqueued':
+            if get_update['status'] != 'enqueued' and get_update['status'] != 'processing':
                 return get_update
             sleep(interval_in_ms / 1000)
             time_delta = datetime.now() - start_time
@@ -316,9 +312,8 @@ class Index():
         """
         if parameters is None:
             parameters = {}
-
         return self.http.get(
-            f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{urllib.parse.urlencode(parameters)}'
+            f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{parse.urlencode(parameters)}'
         )
 
     def add_documents(
@@ -346,11 +341,7 @@ class Index():
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        if primary_key is None:
-            url = f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}'
-        else:
-            primary_key = urllib.parse.urlencode({'primaryKey': primary_key})
-            url = f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{primary_key}'
+        url = self._build_url(primary_key)
         return self.http.post(url, documents)
 
     def add_documents_in_batches(
@@ -391,6 +382,118 @@ class Index():
 
         return update_ids
 
+    def add_documents_json(
+        self,
+        str_documents: str,
+        primary_key: Optional[str] = None,
+    ) -> Dict[str, int]:
+        """Add string documents from JSON file to the index.
+
+        Parameters
+        ----------
+        str_documents:
+            String of document from a JSON file.
+        primary_key (optional):
+            The primary-key used in index. Ignored if already set up.
+
+        Returns
+        -------
+        update:
+            Dictionary containing an update id to track the action:
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.add_documents_raw(str_documents, primary_key, 'application/json')
+
+    def add_documents_csv(
+        self,
+        str_documents: str,
+        primary_key: Optional[str] = None,
+    ) -> Dict[str, int]:
+        """Add string documents from a CSV file to the index.
+
+        Parameters
+        ----------
+        str_documents:
+            String of document from a CSV file.
+        primary_key (optional):
+            The primary-key used in index. Ignored if already set up.
+
+        Returns
+        -------
+        update:
+            Dictionary containing an update id to track the action:
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.add_documents_raw(str_documents, primary_key, 'text/csv')
+
+    def add_documents_ndjson(
+        self,
+        str_documents: str,
+        primary_key: Optional[str] = None,
+    ) -> Dict[str, int]:
+        """Add string documents from a NDJSON file to the index.
+
+        Parameters
+        ----------
+        str_documents:
+            String of document from a NDJSON file.
+        primary_key (optional):
+            The primary-key used in index. Ignored if already set up.
+
+        Returns
+        -------
+        update:
+            Dictionary containing an update id to track the action:
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.add_documents_raw(str_documents, primary_key, 'application/x-ndjson')
+
+    def add_documents_raw(
+        self,
+        str_documents: str,
+        primary_key: Optional[str] = None,
+        content_type: Optional[str] = None,
+    ) -> Dict[str, int]:
+        """Add string documents to the index.
+
+        Parameters
+        ----------
+        str_documents:
+            String of document.
+        primary_key (optional):
+            The primary-key used in index. Ignored if already set up.
+        type:
+            The type of document. Type available: 'csv', 'json', 'jsonl'
+
+        Returns
+        -------
+        update:
+            Dictionary containing an update id to track the action:
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        url = self._build_url(primary_key)
+        return self.http.post(url, str_documents, content_type)
+
     def update_documents(
         self,
         documents: List[Dict[str, Any]],
@@ -416,11 +519,7 @@ class Index():
         MeiliSearchApiError
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        if primary_key is None:
-            url = f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}'
-        else:
-            primary_key = urllib.parse.urlencode({'primaryKey': primary_key})
-            url = f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{primary_key}'
+        url = self._build_url(primary_key)
         return self.http.put(url, documents)
 
     def update_documents_in_batches(
@@ -973,16 +1072,16 @@ class Index():
             self.__settings_url_for(self.config.paths.synonyms),
         )
 
-    # ATTRIBUTES FOR FACETING SUB-ROUTES
+    # FILTERABLE ATTRIBUTES SUB-ROUTES
 
-    def get_attributes_for_faceting(self) -> List[str]:
+    def get_filterable_attributes(self) -> List[str]:
         """
-        Get attributes for faceting of the index.
+        Get filterable attributes of the index.
 
         Returns
         -------
         settings:
-            List containing the attributes for faceting of the index
+            List containing the filterable attributes of the index
 
         Raises
         ------
@@ -990,17 +1089,17 @@ class Index():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(
-            self.__settings_url_for(self.config.paths.attributes_for_faceting)
+            self.__settings_url_for(self.config.paths.filterable_attributes)
         )
 
-    def update_attributes_for_faceting(self, body: List[str]) -> Dict[str, int]:
+    def update_filterable_attributes(self, body: List[str]) -> Dict[str, int]:
         """
-        Update attributes for faceting of the index.
+        Update filterable attributes of the index.
 
         Parameters
         ----------
         body:
-            List containing the attributes for faceting.
+            List containing the filterable attributes.
 
         Returns
         -------
@@ -1014,12 +1113,12 @@ class Index():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.post(
-            self.__settings_url_for(self.config.paths.attributes_for_faceting),
+            self.__settings_url_for(self.config.paths.filterable_attributes),
             body
         )
 
-    def reset_attributes_for_faceting(self) -> Dict[str, int]:
-        """Reset attributes for faceting of the index to default values.
+    def reset_filterable_attributes(self) -> Dict[str, int]:
+        """Reset filterable attributes of the index to default values.
 
         Returns
         -------
@@ -1033,7 +1132,71 @@ class Index():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.delete(
-            self.__settings_url_for(self.config.paths.attributes_for_faceting),
+            self.__settings_url_for(self.config.paths.filterable_attributes),
+        )
+
+
+    # SORTABLE ATTRIBUTES SUB-ROUTES
+
+    def get_sortable_attributes(self) -> List[str]:
+        """
+        Get sortable attributes of the index.
+
+        Returns
+        -------
+        settings:
+            List containing the sortable attributes of the index
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.get(
+            self.__settings_url_for(self.config.paths.sortable_attributes)
+        )
+
+    def update_sortable_attributes(self, body: List[str]) -> Dict[str, int]:
+        """
+        Update sortable attributes of the index.
+
+        Parameters
+        ----------
+        body:
+            List containing the sortable attributes.
+
+        Returns
+        -------
+        update:
+            Dictionary containing an update id to track the action:
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.post(
+            self.__settings_url_for(self.config.paths.sortable_attributes),
+            body
+        )
+
+    def reset_sortable_attributes(self) -> Dict[str, int]:
+        """Reset sortable attributes of the index to default values.
+
+        Returns
+        -------
+        update:
+            Dictionary containing an update id to track the action:
+            https://docs.meilisearch.com/reference/api/updates.html#get-an-update-status
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.delete(
+            self.__settings_url_for(self.config.paths.sortable_attributes),
         )
 
     @staticmethod
@@ -1070,3 +1233,12 @@ class Index():
 
     def __settings_url_for(self, sub_route: str) -> str:
         return f'{self.config.paths.index}/{self.uid}/{self.config.paths.setting}/{sub_route}'
+
+    def _build_url(
+        self,
+        primary_key: Optional[str] = None,
+    ) -> str:
+        if primary_key is None:
+            return f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}'
+        primary_key = parse.urlencode({'primaryKey': primary_key})
+        return f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{primary_key}'

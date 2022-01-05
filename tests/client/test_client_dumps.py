@@ -1,7 +1,7 @@
 # pylint: disable=invalid-name
 
 import pytest
-from meilisearch.tests import wait_for_dump_creation
+from tests import wait_for_dump_creation
 from meilisearch.errors import MeiliSearchApiError
 
 def test_dump_creation(client, index_with_documents):

@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-with open("README.md", "r") as fh:
+with open("README.md", "r", encoding="utf8") as fh:
     long_description = fh.read()
 
 setup(
@@ -8,14 +8,14 @@ setup(
         "requests"
     ],
     name="meilisearch",
-    version="0.15.1",
+    version="0.17.0",
     author="Charlotte Vermandel",
     author_email="charlotte@meilisearch.com",
     description="The python client for MeiliSearch API.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/meilisearch/meilisearch-python",
-    packages=find_packages(),
+    packages=find_packages(exclude=("tests*",)),
     project_urls={"Documentation": "https://docs.meilisearch.com/",},
     keywords="search python meilisearch",
     platform="any",
@@ -25,6 +25,7 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],

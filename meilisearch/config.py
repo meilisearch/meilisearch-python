@@ -23,7 +23,8 @@ class Config:
         stop_words = 'stop-words'
         synonyms = 'synonyms'
         accept_new_fields = 'accept-new-fields'
-        attributes_for_faceting = 'attributes-for-faceting'
+        filterable_attributes = 'filterable-attributes'
+        sortable_attributes = 'sortable-attributes'
         dumps = 'dumps'
 
     def __init__(

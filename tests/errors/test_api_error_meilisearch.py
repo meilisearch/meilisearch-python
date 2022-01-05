@@ -5,7 +5,7 @@ import pytest
 import requests
 import meilisearch
 from meilisearch.errors import MeiliSearchApiError
-from meilisearch.tests import BASE_URL, MASTER_KEY
+from tests import BASE_URL, MASTER_KEY
 
 def test_meilisearch_api_error_no_master_key():
     client = meilisearch.Client(BASE_URL)
@@ -18,7 +18,7 @@ def test_meilisearch_api_error_wrong_master_key():
         client.create_index("some_index")
 
 @patch('requests.post')
-def test_meilisearch_api_error_no_error_code(mock_post):
+def test_meilisearch_api_error_no_code(mock_post):
     """Here to test for regressions related to https://github.com/meilisearch/meilisearch-python/issues/305."""
 
     mock_response = requests.models.Response()

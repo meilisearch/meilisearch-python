@@ -72,7 +72,7 @@ class Client():
             self.http.delete(f'{self.config.paths.index}/{uid}')
             return True
         except MeiliSearchApiError as error:
-            if error.error_code != "index_not_found":
+            if error.code != "index_not_found":
                 raise error
             return False
 
@@ -200,7 +200,7 @@ class Client():
         try:
             index_instance = self.get_index(uid)
         except MeiliSearchApiError as err:
-            if err.error_code != 'index_not_found':
+            if err.code != 'index_not_found':
                 raise err
             index_instance = self.create_index(uid, options)
         return index_instance

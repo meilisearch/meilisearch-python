@@ -17,21 +17,21 @@ class MeiliSearchApiError(MeiliSearchError):
 
     def __init__(self, error: str, request: Response) -> None:
         self.status_code = request.status_code
-        self.error_code = None
-        self.error_link = None
+        self.code = None
+        self.link = None
 
         if request.text:
             json_data = json.loads(request.text)
             self.message = json_data.get('message')
-            self.error_code = json_data.get('errorCode')
-            self.error_link = json_data.get('errorLink')
+            self.code = json_data.get('code')
+            self.link = json_data.get('link')
         else:
             self.message = error
         super().__init__(self.message)
 
     def __str__(self) -> str:
-        if self.error_code and self.error_link:
-            return f'MeiliSearchApiError. Error code: {self.error_code}. Error message: {self.message}. Error documentation: {self.error_link}'
+        if self.code and self.link:
+            return f'MeiliSearchApiError. Error code: {self.code}. Error message: {self.message}. Error documentation: {self.link}'
 
         return f'MeiliSearchApiError. {self.message}'
 

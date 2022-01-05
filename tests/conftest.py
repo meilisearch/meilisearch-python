@@ -2,7 +2,7 @@
 import json
 from pytest import fixture
 
-from meilisearch.tests import common
+from tests import common
 import meilisearch
 
 @fixture(scope='session')
@@ -35,8 +35,32 @@ def small_movies():
     """
     Runs once per session. Provides the content of small_movies.json.
     """
-    with open('./datasets/small_movies.json', 'r', encoding=None) as movie_file:
+    with open('./datasets/small_movies.json', 'r', encoding='utf-8') as movie_file:
         yield json.loads(movie_file.read())
+
+@fixture(scope='session')
+def small_movies_json_file():
+    """
+    Runs once per session. Provides the content of small_movies.json from read.
+    """
+    with open('./datasets/small_movies.json', 'r', encoding='utf-8') as movie_json_file:
+        return movie_json_file.read().encode('utf-8')
+
+@fixture(scope='session')
+def songs_csv():
+    """
+    Runs once per session. Provides the content of songs.csv from read..
+    """
+    with open('./datasets/songs.csv', 'r', encoding='utf-8') as song_csv_file:
+        return song_csv_file.read().encode('utf-8')
+
+@fixture(scope='session')
+def songs_ndjson():
+    """
+    Runs once per session. Provides the content of songs.ndjson from read..
+    """
+    with open('./datasets/songs.ndjson', 'r', encoding='utf-8') as song_ndjson_file:
+        return song_ndjson_file.read().encode('utf-8')
 
 @fixture(scope='function')
 def empty_index(client):

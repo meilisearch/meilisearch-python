@@ -5,7 +5,7 @@ import pytest
 import requests
 import meilisearch
 from meilisearch.errors import MeiliSearchCommunicationError
-from meilisearch.tests import MASTER_KEY
+from tests import MASTER_KEY
 
 
 @patch("requests.post")
