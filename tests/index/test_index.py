@@ -171,6 +171,19 @@ def test_update_index(client):
     assert isinstance(index.updated_at, datetime)
 
 @pytest.mark.usefixtures("indexes_sample")
+def test_format_extras(client):
+    """Test for the format_extras method"""
+    index = client.index(uid=common.INDEX_UID)
+    index.format_extras({
+        'primaryKey': '1',
+        'createdAt': '2021-12-10T12:00:00.1000Z',
+        'updatedAt': '2022-01-07T05:00:00.1000Z'
+    })
+    assert index.primary_key == '1'
+    assert index.created_at == datetime(2021, 12, 10, 12, 0, 0, 100000)
+    assert index.updated_at == datetime(2022, 1, 7, 5, 0, 0, 100000)
+
+@pytest.mark.usefixtures("indexes_sample")
 def test_delete_index(client):
     """Tests deleting an index."""
     response = client.index(uid=common.INDEX_UID).delete()

@@ -44,6 +44,18 @@ class Index():
         self.created_at = self._iso_to_date_time(created_at)
         self.updated_at = self._iso_to_date_time(updated_at)
 
+    def format_extras(self, payload: dict) -> None:
+        """
+        Format/Set the primary_key and dates to the current object
+
+        Returns
+        --------
+        Returns None, because the update is made for object attributes
+        """
+        self.primary_key = payload['primaryKey']
+        self.created_at = self._iso_to_date_time(payload['createdAt'])
+        self.updated_at = self._iso_to_date_time(payload['updatedAt'])
+
     def delete(self) -> Response:
         """Delete the index.
 
@@ -89,9 +101,7 @@ class Index():
         """
         payload = {'primaryKey': primary_key}
         response = self.http.put(f'{self.config.paths.index}/{self.uid}', payload)
-        self.primary_key = response['primaryKey']
-        self.created_at = self._iso_to_date_time(response['createdAt'])
-        self.updated_at = self._iso_to_date_time(response['updatedAt'])
+        self.format_extras(response)
         return self
 
     def fetch_info(self) -> 'Index':
@@ -103,9 +113,7 @@ class Index():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         index_dict = self.http.get(f'{self.config.paths.index}/{self.uid}')
-        self.primary_key = index_dict['primaryKey']
-        self.created_at = self._iso_to_date_time(index_dict['createdAt'])
-        self.updated_at = self._iso_to_date_time(index_dict['updatedAt'])
+        self.format_extras(index_dict)
         return self
 
     def get_primary_key(self) -> Optional[str]:
