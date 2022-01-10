@@ -282,7 +282,7 @@ class Client():
         """
         return self.http.post(f'{self.config.paths.keys}', options)
 
-    def udpate_key(
+    def update_key(
         self,
         key: str,
         options: Dict[str, Any]

@@ -62,7 +62,7 @@ def test_update_keys(client, test_key_info):
     """Tests updating a key."""
     key = client.create_key(test_key_info)
     assert key['actions'] == test_key_info['actions']
-    update_key = client.udpate_key(key=key['key'], options={ 'actions': ['search'] })
+    update_key = client.update_key(key=key['key'], options={ 'actions': ['search'] })
     assert update_key['key'] is not None
     assert update_key['expiresAt'] is None
     assert update_key['actions'] == ['search']
