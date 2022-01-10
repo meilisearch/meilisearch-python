@@ -421,11 +421,18 @@
         },
         "types-requests": {
             "hashes": [
-                "sha256:ad18284931c5ddbf050ccdd138f200d18fd56f88aa3567019d8da9b2d4fe0344",
-                "sha256:d63fa617846dcefff5aa2d59e47ab4ffd806e4bb0567115f7adbb5e438302fe4"
+                "sha256:9c9390b18b222956155af6678570f452edafa3bb94bd5a4efe67da1105aa128c",
+                "sha256:a67dc1a8512312b8cb89f3ba95f9a0e69ef3436ae77c9bd4f328cd88f17adda2"
             ],
             "index": "pypi",
-            "version": "==2.26.3"
+            "version": "==2.27.5"
+        },
+        "types-urllib3": {
+            "hashes": [
+                "sha256:580c784925d5902d5fb3b67c0c1019b3d20b8f2d54050f0bb07862d52b93ad03",
+                "sha256:e0c57152d7efc408a877adfc9073316dcd3e3ffb39962e90544f7597696c0d7c"
+            ],
+            "version": "==1.26.3"
         },
         "typing-extensions": {
             "hashes": [
