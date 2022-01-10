@@ -10,7 +10,7 @@ class MeiliSearchError(Exception):
         super().__init__(self.message)
 
     def __str__(self) -> str:
-        return f'MeiliSearchError. Error message: {self.message}.'
+        return f'MeiliSearchError. Error message: {self.message}'
 
 class MeiliSearchApiError(MeiliSearchError):
     """Error sent by MeiliSearch API"""
@@ -33,7 +33,7 @@ class MeiliSearchApiError(MeiliSearchError):
 
     def __str__(self) -> str:
         if self.code and self.link:
-            return f'MeiliSearchApiError. Error code: {self.code}. Error message: {self.message}. Error documentation: {self.link}. Error type: {self.type}'
+            return f'MeiliSearchApiError. Error code: {self.code}. Error message: {self.message} Error documentation: {self.link} Error type: {self.type}'
 
         return f'MeiliSearchApiError. {self.message}'
 
