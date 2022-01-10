@@ -15,17 +15,17 @@ class Client():
     """
 
     def __init__(
-        self, url: str, apiKey: Optional[str] = None, timeout: Optional[int] = None
+        self, url: str, api_key: Optional[str] = None, timeout: Optional[int] = None
     ) -> None:
         """
         Parameters
         ----------
         url:
             The url to the MeiliSearch API (ex: http://localhost:7700)
-        apiKey:
+        api_key:
             The optional API key for MeiliSearch
         """
-        self.config = Config(url, apiKey, timeout=timeout)
+        self.config = Config(url, api_key, timeout=timeout)
 
         self.http = HttpRequests(self.config)
 
