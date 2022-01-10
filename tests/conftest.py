@@ -104,7 +104,7 @@ def test_key_info(client):
     yield key_info
 
     try:
-        keys = client.get_keys()
+        keys = client.get_keys()['results']
         key = next(x for x in keys if x['description'] == key_info['description'])
         client.delete_key(key['key'])
     except MeiliSearchApiError:

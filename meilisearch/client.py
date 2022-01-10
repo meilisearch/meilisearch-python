@@ -238,7 +238,7 @@ class Client():
         """
         return self.http.get(f'{self.config.paths.keys}/{key}')
 
-    def get_keys(self) -> List[Dict[str, Any]]:
+    def get_keys(self) -> Dict[str, Any]:
         """Gets the MeiliSearch API keys.
 
         Returns
