@@ -50,7 +50,7 @@ get_task_1: |-
 get_all_tasks_by_index_1: |-
   client.index('movies').get_tasks()
 get_one_key_1: |-
-  client.get_key(d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4)
+  client.get_key('d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4')
 get_all_keys_1: |-
   client.get_keys()
 create_a_key_1: |-
@@ -69,7 +69,7 @@ update_a_key_1: |-
       'expiresAt': '2042-04-02T00:42:42Z'
   })
 delete_a_key_1: |-
-  client.delete_key(d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4)
+  client.delete_key('d0552b41536279a0ad88bd595327b96f01176a60c2243e906c52ac02375f9bc4')
 get_settings_1: |-
   client.index('movies').get_settings()
 update_settings_1: |-
