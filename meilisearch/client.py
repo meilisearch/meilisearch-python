@@ -2,8 +2,9 @@ from typing import Any, Dict, List, Optional
 
 from meilisearch.index import Index
 from meilisearch.config import Config
+from meilisearch.task import get_task, get_tasks, wait_for_task
 from meilisearch._httprequests import HttpRequests
-from meilisearch.errors import MeiliSearchApiError, MeiliSearchError
+from meilisearch.errors import MeiliSearchError
 
 class Client():
     """
@@ -28,7 +29,7 @@ class Client():
 
         self.http = HttpRequests(self.config)
 
-    def create_index(self, uid: str, options: Optional[Dict[str, Any]] = None) -> Index:
+    def create_index(self, uid: str, options: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Create an index.
 
         Parameters
@@ -40,8 +41,9 @@ class Client():
 
         Returns
         -------
-        index : Index
-            An instance of Index containing the information of the newly created index.
+        task:
+            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
         ------
@@ -50,8 +52,8 @@ class Client():
         """
         return Index.create(self.config, uid, options)
 
-    def delete_index_if_exists(self, uid: str) -> bool:
-        """Deletes an index if it already exists
+    def delete_index(self, uid: str) -> Dict[str, Any]:
+        """Deletes an index
 
         Parameters
         ----------
@@ -59,8 +61,10 @@ class Client():
             UID of the index.
 
         Returns
-        --------
-        Returns True if an index was deleted or False if not
+        -------
+        task:
+            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
         ------
@@ -68,13 +72,7 @@ class Client():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
 
-        try:
-            self.http.delete(f'{self.config.paths.index}/{uid}')
-            return True
-        except MeiliSearchApiError as error:
-            if error.code != "index_not_found":
-                raise error
-            return False
+        return self.http.delete(f'{self.config.paths.index}/{uid}')
 
     def get_indexes(self) -> List[Index]:
         """Get all indexes.
@@ -177,34 +175,6 @@ class Client():
             return Index(self.config, uid=uid)
         raise Exception('The index UID should not be None')
 
-    def get_or_create_index(self, uid: str, options: Optional[Dict[str, Any]] = None) -> Index:
-        """Get an index, or create it if it doesn't exist.
-
-        Parameters
-        ----------
-        uid:
-            UID of the index
-        options (optional): dict
-            Options passed during index creation (ex: primaryKey)
-
-        Returns
-        -------
-        index:
-            An instance of Index containing the information of the retrieved or newly created index.
-
-        Raises
-        ------
-        MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
-        """
-        try:
-            index_instance = self.get_index(uid)
-        except MeiliSearchApiError as err:
-            if err.code != 'index_not_found':
-                raise err
-            index_instance = self.create_index(uid, options)
-        return index_instance
-
     def get_all_stats(self) -> Dict[str, Any]:
         """Get all stats of MeiliSearch
 
@@ -247,15 +217,34 @@ class Client():
             return False
         return True
 
-    def get_keys(self) -> Dict[str, str]:
-        """Get all keys.
+    def get_key(self, key: str) -> Dict[str, Any]:
+        """Gets information about a specific API key.
 
-        Get the public and private keys.
+        Parameters
+        ----------
+        key:
+            The key for which to retrieve the information.
+
+        Returns
+        -------
+        key:
+            The API key.
+            https://docs.meilisearch.com/reference/api/keys.html#get-key
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.get(f'{self.config.paths.keys}/{key}')
+
+    def get_keys(self) -> Dict[str, Any]:
+        """Gets the MeiliSearch API keys.
 
         Returns
         -------
         keys:
-            Dictionary of keys and their information.
+            API keys.
             https://docs.meilisearch.com/reference/api/keys.html#get-keys
 
         Raises
@@ -264,6 +253,85 @@ class Client():
             An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(self.config.paths.keys)
+
+    def create_key(
+        self,
+        options: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Creates a new API key.
+
+        Parameters
+        ----------
+        options:
+            Options, the information to use in creating the key (ex: { 'actions': ['*'], 'indexes': ['movies'], 'description': 'Search Key', 'expiresAt': '22-01-01' }).
+            An `actions`, an `indexes` and a `expiresAt` fields are mandatory,`None` should be specified for no expiration date.
+            `actions`: A list of actions permitted for the key. ["*"] for all actions.
+            `indexes`: A list of indexes permitted for the key. ["*"] for all indexes.
+            Note that if an expires_at value is included it should be in UTC time.
+
+        Returns
+        -------
+        keys:
+            The new API key.
+            https://docs.meilisearch.com/reference/api/keys.html#get-keys
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.post(f'{self.config.paths.keys}', options)
+
+    def update_key(
+        self,
+        key: str,
+        options: Dict[str, Any]
+    ) -> Dict[str, Any]:
+        """Update an API key.
+
+        Parameters
+
+        ----------
+        key:
+            The key for which to update the information.
+        options:
+            The information to use in creating the key (ex: { 'description': 'Search Key', 'expiresAt': '22-01-01' }). Note that if an
+            expires_at value is included it should be in UTC time.
+
+        Returns
+        -------
+        key:
+            The updated API key.
+            https://docs.meilisearch.com/reference/api/keys.html#get-keys
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        url = f'{self.config.paths.keys}/{key}'
+        return self.http.patch(url, options)
+
+    def delete_key(self, key: str) -> Dict[str, int]:
+        """Deletes an API key.
+
+        Parameters
+        ----------
+        key:
+            The key to delete.
+
+        Returns
+        -------
+        keys:
+            The Response status code. 204 signifies a successful delete.
+            https://docs.meilisearch.com/reference/api/keys.html#get-keys
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.delete(f'{self.config.paths.keys}/{key}')
 
     def get_version(self) -> Dict[str, str]:
         """Get version MeiliSearch
@@ -333,3 +401,66 @@ class Client():
         return self.http.get(
             self.config.paths.dumps + '/' + str(uid) + '/status'
         )
+
+    def get_tasks(self) -> Dict[str, List[Dict[str, Any]]]:
+        """Get all tasks.
+
+        Returns
+        -------
+        task:
+            Dictionary containing a list of all enqueued, processing, succeeded or failed tasks.
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return get_tasks(self.config)
+
+    def get_task(self, uid: int) -> Dict[str, Any]:
+        """Get one task.
+
+        Parameters
+        ----------
+        uid:
+            Identifier of the task.
+
+        Returns
+        -------
+        task:
+            Dictionary containing information about the processed asynchronous task.
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return get_task(self.config, uid)
+
+    def wait_for_task(
+        self, uid: int,
+        timeout_in_ms: int = 5000,
+        interval_in_ms: int = 50,
+    ) -> Dict[str, Any]:
+        """Wait until MeiliSearch processes a task until it fails or succeeds.
+
+        Parameters
+        ----------
+        uid:
+            Identifier of the task to wait for being processed.
+        timeout_in_ms (optional):
+            Time the method should wait before raising a MeiliSearchTimeoutError
+        interval_in_ms (optional):
+            Time interval the method should wait (sleep) between requests
+
+        Returns
+        -------
+        task:
+            Dictionary containing information about the processed asynchronous task.
+
+        Raises
+        ------
+        MeiliSearchTimeoutError
+            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return wait_for_task(self.config, uid, timeout_in_ms, interval_in_ms)

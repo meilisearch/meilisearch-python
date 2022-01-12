@@ -4,30 +4,29 @@ from datetime import datetime
 import pytest
 from meilisearch.errors import MeiliSearchTimeoutError
 
-def test_wait_for_pending_update_default(index_with_documents):
+def test_wait_for_task_default(index_with_documents):
     """Tests waiting for an update with default parameters."""
     index = index_with_documents()
     response = index.add_documents([{'id': 1, 'title': 'Le Petit Prince'}])
-    assert 'updateId' in response
-    update = index.wait_for_pending_update(response['updateId'])
+    assert 'uid' in response
+    update = index.wait_for_task(response['uid'])
     assert isinstance(update, dict)
     assert 'status' in update
-    assert update['status'] != 'enqueued'
-    assert update['status'] != 'processing'
+    assert update['status'] not in ('enqueued', 'processing')
 
-def test_wait_for_pending_update_timeout(index_with_documents):
+def test_wait_for_task_timeout(index_with_documents):
     """Tests timeout risen by waiting for an update."""
     with pytest.raises(MeiliSearchTimeoutError):
-        index_with_documents().wait_for_pending_update(2, timeout_in_ms=0)
+        index_with_documents().wait_for_task(2, timeout_in_ms=0)
 
-def test_wait_for_pending_update_interval_custom(index_with_documents, small_movies):
+def test_wait_for_task_interval_custom(index_with_documents, small_movies):
     """Tests call to wait for an update with custom interval."""
     index = index_with_documents()
     response = index.add_documents(small_movies)
-    assert 'updateId' in response
+    assert 'uid' in response
     start_time = datetime.now()
-    wait_update = index.wait_for_pending_update(
-        response['updateId'],
+    wait_update = index.wait_for_task(
+        response['uid'],
         interval_in_ms=1000,
         timeout_in_ms=6000
     )
@@ -38,13 +37,13 @@ def test_wait_for_pending_update_interval_custom(index_with_documents, small_mov
     assert wait_update['status'] != 'processing'
     assert time_delta.seconds >= 1
 
-def test_wait_for_pending_update_interval_zero(index_with_documents, small_movies):
+def test_wait_for_task_interval_zero(index_with_documents, small_movies):
     """Tests call to wait for an update with custom interval."""
     index = index_with_documents()
     response = index.add_documents(small_movies)
-    assert 'updateId' in response
-    wait_update = index.wait_for_pending_update(
-        response['updateId'],
+    assert 'uid' in response
+    wait_update = index.wait_for_task(
+        response['uid'],
         interval_in_ms=0,
         timeout_in_ms=6000
     )
