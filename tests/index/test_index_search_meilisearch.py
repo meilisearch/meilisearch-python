@@ -116,7 +116,7 @@ def test_custom_search_params_with_string_list(index_with_documents):
 def test_custom_search_params_with_facets_distribution(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(['genre'])
-    index.wait_for_pending_update(update['updateId'])
+    index.wait_for_task(update['uid'])
     response = index.search(
         'world',
         {
@@ -136,7 +136,7 @@ def test_custom_search_params_with_facets_distribution(index_with_documents):
 def test_custom_search_params_with_filter_string(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(['genre'])
-    index.wait_for_pending_update(update['updateId'])
+    index.wait_for_task(update['uid'])
     response = index.search(
         'world',
         {
@@ -151,7 +151,7 @@ def test_custom_search_params_with_filter_string(index_with_documents):
 def test_custom_search_params_with_filter_string_with_space(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(['genre'])
-    index.wait_for_pending_update(update['updateId'])
+    index.wait_for_task(update['uid'])
     response = index.search(
         'galaxy',
         {
@@ -166,7 +166,7 @@ def test_custom_search_params_with_filter_string_with_space(index_with_documents
 def test_custom_search_params_with_multiple_filter_string_with_space(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(['genre', 'release_date'])
-    index.wait_for_pending_update(update['updateId'])
+    index.wait_for_task(update['uid'])
     response = index.search(
         'galaxy',
         {
@@ -181,7 +181,7 @@ def test_custom_search_params_with_multiple_filter_string_with_space(index_with_
 def test_custom_search_params_with_array_filter_with_space(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(['genre', 'release_date'])
-    index.wait_for_pending_update(update['updateId'])
+    index.wait_for_task(update['uid'])
     response = index.search(
         'galaxy',
         {
@@ -196,7 +196,7 @@ def test_custom_search_params_with_array_filter_with_space(index_with_documents)
 def test_custom_search_params_with_mutilple_filter_string(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(['genre', 'release_date'])
-    index.wait_for_pending_update(update['updateId'])
+    index.wait_for_task(update['uid'])
     response = index.search(
         'world',
         {
@@ -212,7 +212,7 @@ def test_custom_search_params_with_mutilple_filter_string(index_with_documents):
 def test_custom_search_params_with_filter(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(['genre'])
-    index.wait_for_pending_update(update['updateId'])
+    index.wait_for_task(update['uid'])
     response = index.search(
         'world',
         {
@@ -227,7 +227,7 @@ def test_custom_search_params_with_filter(index_with_documents):
 def test_custom_search_params_with_multiple_filter(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(['genre'])
-    index.wait_for_pending_update(update['updateId'])
+    index.wait_for_task(update['uid'])
     response = index.search(
         'world',
         {
@@ -242,7 +242,7 @@ def test_custom_search_params_with_multiple_filter(index_with_documents):
 def test_custom_search_params_with_many_params(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(['genre'])
-    index.wait_for_pending_update(update['updateId'])
+    index.wait_for_task(update['uid'])
     response = index.search(
         'world',
         {
@@ -270,9 +270,9 @@ def test_custom_search_params_with_sort_string(index_with_documents):
         'attribute',
         'exactness'
     ])
-    index.wait_for_pending_update(response['updateId'])
+    index.wait_for_task(response['uid'])
     update = index.update_sortable_attributes(['title'])
-    index.wait_for_pending_update(update['updateId'])
+    index.wait_for_task(update['uid'])
     response = index.search(
         'world',
         {
@@ -296,9 +296,9 @@ def test_custom_search_params_with_sort_int(index_with_documents):
         'attribute',
         'exactness'
     ])
-    index.wait_for_pending_update(response['updateId'])
+    index.wait_for_task(response['uid'])
     update = index.update_sortable_attributes(['release_date'])
-    index.wait_for_pending_update(update['updateId'])
+    index.wait_for_task(update['uid'])
     response = index.search(
         'world',
         {
@@ -322,9 +322,9 @@ def test_custom_search_params_with_multiple_sort(index_with_documents):
         'attribute',
         'exactness'
     ])
-    index.wait_for_pending_update(response['updateId'])
+    index.wait_for_task(response['uid'])
     update = index.update_sortable_attributes(['title', 'release_date'])
-    index.wait_for_pending_update(update['updateId'])
+    index.wait_for_task(update['uid'])
     response = index.search(
         'world',
         {
