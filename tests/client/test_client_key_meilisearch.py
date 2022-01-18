@@ -4,7 +4,7 @@ from datetime import datetime
 from meilisearch.errors import MeiliSearchApiError
 
 def test_get_keys_default(client):
-    """Tests if public and private keys have been generated and can be retrieved."""
+    """Tests if search and admin keys have been generated and can be retrieved."""
     keys = client.get_keys()
     assert isinstance(keys, dict)
     assert len(keys['results']) == 2
