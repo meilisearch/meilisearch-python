@@ -27,7 +27,7 @@ class Index():
         Parameters
         ----------
         config:
-            Config object containing permission and location of MeiliSearch.
+            Config object containing permission and location of Meilisearch.
         uid:
             UID of the index on which to perform the index actions.
         primary_key:
@@ -46,7 +46,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
 
         return self.http.delete(f'{self.config.paths.index}/{self.uid}')
@@ -68,7 +68,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         payload = {'primaryKey': primary_key}
         return self.http.put(f'{self.config.paths.index}/{self.uid}', payload)
@@ -79,7 +79,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         index_dict = self.http.get(f'{self.config.paths.index}/{self.uid}')
         self.primary_key = index_dict['primaryKey']
@@ -93,7 +93,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.fetch_info().primary_key
 
@@ -117,7 +117,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         if options is None:
             options = {}
@@ -135,7 +135,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return get_tasks(self.config, self.uid)
 
@@ -155,7 +155,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return get_task(self.config, uid, self.uid)
 
@@ -164,7 +164,7 @@ class Index():
         timeout_in_ms: int = 5000,
         interval_in_ms: int = 50,
     ) -> Dict[str, Any]:
-        """Wait until MeiliSearch processes a task until it fails or succeeds.
+        """Wait until Meilisearch processes a task until it fails or succeeds.
 
         Parameters
         ----------
@@ -183,7 +183,7 @@ class Index():
         Raises
         ------
         MeiliSearchTimeoutError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return wait_for_task(self.config, uid, timeout_in_ms, interval_in_ms)
 
@@ -201,7 +201,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.stat}'
@@ -226,7 +226,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         if opt_params is None:
             opt_params = {}
@@ -255,7 +255,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}/{document_id}'
@@ -277,7 +277,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         if parameters is None:
             parameters = {}
@@ -308,7 +308,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         url = self._build_url(primary_key)
         return self.http.post(url, documents)
@@ -339,8 +339,8 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request.
-            MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request.
+            Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
 
         uids = []
@@ -374,7 +374,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.add_documents_raw(str_documents, primary_key, 'application/json')
 
@@ -401,7 +401,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.add_documents_raw(str_documents, primary_key, 'text/csv')
 
@@ -428,7 +428,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.add_documents_raw(str_documents, primary_key, 'application/x-ndjson')
 
@@ -458,7 +458,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         url = self._build_url(primary_key)
         return self.http.post(url, str_documents, content_type)
@@ -486,7 +486,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         url = self._build_url(primary_key)
         return self.http.put(url, documents)
@@ -517,8 +517,8 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request.
-            MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request.
+            Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
 
         uids = []
@@ -546,7 +546,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.delete(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}/{document_id}'
@@ -569,7 +569,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.post(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}/delete-batch',
@@ -588,7 +588,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.delete(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}'
@@ -609,7 +609,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.setting}'
@@ -636,7 +636,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.post(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.setting}',
@@ -657,7 +657,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.delete(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.setting}'
@@ -677,7 +677,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(
             self.__settings_url_for(self.config.paths.ranking_rules)
@@ -701,7 +701,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.post(
             self.__settings_url_for(self.config.paths.ranking_rules),
@@ -720,7 +720,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.delete(
             self.__settings_url_for(self.config.paths.ranking_rules),
@@ -740,7 +740,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(
             self.__settings_url_for(self.config.paths.distinct_attribute)
@@ -764,7 +764,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.post(
             self.__settings_url_for(self.config.paths.distinct_attribute),
@@ -783,7 +783,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.delete(
             self.__settings_url_for(self.config.paths.distinct_attribute),
@@ -803,7 +803,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(
             self.__settings_url_for(self.config.paths.searchable_attributes)
@@ -827,7 +827,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.post(
             self.__settings_url_for(self.config.paths.searchable_attributes),
@@ -846,7 +846,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.delete(
             self.__settings_url_for(self.config.paths.searchable_attributes),
@@ -866,7 +866,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(
             self.__settings_url_for(self.config.paths.displayed_attributes)
@@ -890,7 +890,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.post(
             self.__settings_url_for(self.config.paths.displayed_attributes),
@@ -909,7 +909,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.delete(
             self.__settings_url_for(self.config.paths.displayed_attributes),
@@ -929,7 +929,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(
             self.__settings_url_for(self.config.paths.stop_words)
@@ -953,7 +953,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.post(
             self.__settings_url_for(self.config.paths.stop_words),
@@ -972,7 +972,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.delete(
             self.__settings_url_for(self.config.paths.stop_words),
@@ -992,7 +992,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(
             self.__settings_url_for(self.config.paths.synonyms)
@@ -1016,7 +1016,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.post(
             self.__settings_url_for(self.config.paths.synonyms),
@@ -1035,7 +1035,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.delete(
             self.__settings_url_for(self.config.paths.synonyms),
@@ -1055,7 +1055,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(
             self.__settings_url_for(self.config.paths.filterable_attributes)
@@ -1079,7 +1079,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.post(
             self.__settings_url_for(self.config.paths.filterable_attributes),
@@ -1098,7 +1098,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.delete(
             self.__settings_url_for(self.config.paths.filterable_attributes),
@@ -1119,7 +1119,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(
             self.__settings_url_for(self.config.paths.sortable_attributes)
@@ -1143,7 +1143,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.post(
             self.__settings_url_for(self.config.paths.sortable_attributes),
@@ -1162,7 +1162,7 @@ class Index():
         Raises
         ------
         MeiliSearchApiError
-            An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.delete(
             self.__settings_url_for(self.config.paths.sortable_attributes),
@@ -1179,8 +1179,8 @@ class Index():
     @staticmethod
     def _iso_to_date_time(iso_date: Optional[Union[datetime, str]]) -> Optional[datetime]:
         """
-        MeiliSearch returns the date time information in iso format. Python's implementation of
-        datetime can only handle up to 6 digits in microseconds, however MeiliSearch sometimes
+        Meilisearch returns the date time information in iso format. Python's implementation of
+        datetime can only handle up to 6 digits in microseconds, however Meilisearch sometimes
         returns more digits than this in the micosecond sections so when that happens this method
         reduces the number of microseconds so Python can handle it. If the value passed is either
         None or already in datetime format the original value is returned.
