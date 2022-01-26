@@ -11,7 +11,7 @@ setup(
     version="0.18.0",
     author="Charlotte Vermandel",
     author_email="charlotte@meilisearch.com",
-    description="The python client for MeiliSearch API.",
+    description="The python client for Meilisearch API.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/meilisearch/meilisearch-python",

@@ -37,9 +37,9 @@ class Config:
         Parameters
         ----------
         url:
-            The url to the MeiliSearch API (ex: http://localhost:7700)
+            The url to the Meilisearch API (ex: http://localhost:7700)
         api_key:
-            The optional API key to access MeiliSearch
+            The optional API key to access Meilisearch
         """
 
         self.url = url

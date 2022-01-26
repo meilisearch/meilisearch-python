@@ -5,7 +5,7 @@ from tests import wait_for_dump_creation
 from meilisearch.errors import MeiliSearchApiError
 
 def test_dump_creation(client, index_with_documents):
-    """Tests the creation of a MeiliSearch dump."""
+    """Tests the creation of a Meilisearch dump."""
     index_with_documents("indexUID-dump-creation")
     dump = client.create_dump()
     assert dump['uid'] is not None
@@ -13,7 +13,7 @@ def test_dump_creation(client, index_with_documents):
     wait_for_dump_creation(client, dump['uid'])
 
 def test_dump_status_route(client, index_with_documents):
-    """Tests the route for getting a MeiliSearch dump status."""
+    """Tests the route for getting a Meilisearch dump status."""
     index_with_documents("indexUID-dump-status")
     dump = client.create_dump()
     assert dump['uid'] is not None

@@ -1,12 +1,12 @@
 import meilisearch
 
 def test_health(client):
-    """Tests checking the health of the MeiliSearch instance."""
+    """Tests checking the health of the Meilisearch instance."""
     response = client.health()
     assert response['status'] == 'available'
 
 def test_is_healthy(client):
-    """Tests checking if is_healthy return true when MeiliSearch instance is available."""
+    """Tests checking if is_healthy return true when Meilisearch instance is available."""
     response = client.is_healthy()
     assert response is True
 

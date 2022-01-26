@@ -12,7 +12,7 @@ def get_tasks(config: Config, index_id: Optional[str] = None) -> Dict[str, List[
     Parameters
     ----------
     config:
-        Config object containing permission and location of MeiliSearch.
+        Config object containing permission and location of Meilisearch.
     index_id:
         The id of the `Index`.
 
@@ -24,7 +24,7 @@ def get_tasks(config: Config, index_id: Optional[str] = None) -> Dict[str, List[
     Raises
     ------
     MeiliSearchApiError
-        An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
     """
     http = HttpRequests(config)
     if index_id is None:
@@ -41,7 +41,7 @@ def get_task(config: Config, uid: int, index_id: Optional[str] = None) -> Dict[s
     Parameters
     ----------
     config:
-        Config object containing permission and location of MeiliSearch.
+        Config object containing permission and location of Meilisearch.
     uid:
         Identifier of the task.
     index_id:
@@ -55,7 +55,7 @@ def get_task(config: Config, uid: int, index_id: Optional[str] = None) -> Dict[s
     Raises
     ------
     MeiliSearchApiError
-        An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
     """
     http = HttpRequests(config)
     if index_id is None:
@@ -73,7 +73,7 @@ def wait_for_task(
     timeout_in_ms: int = 5000,
     interval_in_ms: int = 50,
 ) -> Dict[str, Any]:
-    """Wait until the task fails or succeeds in MeiliSearch.
+    """Wait until the task fails or succeeds in Meilisearch.
 
     Parameters
     ----------
@@ -92,7 +92,7 @@ def wait_for_task(
     Raises
     ------
     MeiliSearchTimeoutError
-        An error containing details about why MeiliSearch can't process your request. MeiliSearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
     """
     start_time = datetime.now()
     elapsed_time = 0.
