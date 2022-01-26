@@ -1,6 +1,6 @@
 # Contributing <!-- omit in toc -->
 
-First of all, thank you for contributing to MeiliSearch! The goal of this document is to provide everything you need to know in order to contribute to MeiliSearch and its different integrations.
+First of all, thank you for contributing to meilisearch! The goal of this document is to provide everything you need to know in order to contribute to meilisearch and its different integrations.
 
 - [Assumptions](#assumptions)
 - [How to Contribute](#how-to-contribute)
@@ -11,8 +11,8 @@ First of all, thank you for contributing to MeiliSearch! The goal of this docume
 ## Assumptions
 
 1. **You're familiar with [GitHub](https://github.com) and the [Pull Request](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests)(PR) workflow.**
-2. **You've read the MeiliSearch [documentation](https://docs.meilisearch.com) and the [README](/README.md).**
-3. **You know about the [MeiliSearch community](https://docs.meilisearch.com/learn/what_is_meilisearch/contact.html). Please use this for help.**
+2. **You've read the meilisearch [documentation](https://docs.meilisearch.com) and the [README](/README.md).**
+3. **You know about the [meilisearch community](https://docs.meilisearch.com/learn/what_is_meilisearch/contact.html). Please use this for help.**
 
 ## How to Contribute
 
@@ -38,8 +38,8 @@ Each PR should pass the tests, mypy type checking, and the linter to be accepted
 
 ```bash
 # Tests
-curl -L https://install.meilisearch.com | sh # download MeiliSearch
-./meilisearch --master-key=masterKey --no-analytics=true # run MeiliSearch
+curl -L https://install.meilisearch.com | sh # download meilisearch
+./meilisearch --master-key=masterKey --no-analytics=true # run meilisearch
 pipenv run pytest meilisearch
 # MyPy
 pipenv run mypy meilisearch
@@ -50,7 +50,7 @@ pipenv run pylint meilisearch
 Optionally tox can be used to run test on all supported version of Python, mypy, and linting.
 
 ```bash
-docker pull getmeili/meilisearch:latest # Fetch the latest version of MeiliSearch image from Docker Hub
+docker pull getmeili/meilisearch:latest # Fetch the latest version of meilisearch image from Docker Hub
 docker run -p 7700:7700 getmeili/meilisearch:latest ./meilisearch --master-key=masterKey --no-analytics=true
 pipenv run tox
 ```
@@ -98,7 +98,7 @@ Some notes on GitHub PRs:
 
 ## Release Process (for internal team only)
 
-MeiliSearch tools follow the [Semantic Versioning Convention](https://semver.org/).
+meilisearch tools follow the [Semantic Versioning Convention](https://semver.org/).
 
 ### Automation to Rebase and Merge the PRs <!-- omit in toc -->
 
