@@ -5,6 +5,10 @@ from meilisearch.config import Config
 from meilisearch.task import get_task, get_tasks, wait_for_task
 from meilisearch._httprequests import HttpRequests
 from meilisearch.errors import MeiliSearchError
+import base64
+import hashlib
+import hmac
+import json
 
 class Client():
     """
@@ -464,3 +468,34 @@ class Client():
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return wait_for_task(self.config, uid, timeout_in_ms, interval_in_ms)
+
+    def base64url_encode(
+        self,
+        input: bytes
+    ) -> str:
+        return base64.urlsafe_b64encode(input).decode('utf-8').replace('=','')
+
+    def generate_tenant_token(
+        self,
+        parentApiKey: str,
+        payload: str
+    ) -> str:
+
+        header = {
+            "typ": "JWT",
+            "alg": "HS256"
+        }
+
+        payload['apiKeyPrefix'] = parentApiKey[0:8]
+
+        json_header = json.dumps(header, separators=(",",":")).encode()
+        json_payload = json.dumps(payload, separators=(",",":")).encode()
+
+        header_encode = self.base64url_encode(json_header)
+        header_payload = self.base64url_encode(json_payload)
+
+        secret_encoded = parentApiKey.encode()
+        signature = hmac.new(secret_encoded, (header_encode + "." + header_payload).encode(), hashlib.sha256).digest()
+        jwt_token = header_encode + '.' + header_payload + '.' + self.base64url_encode(signature)
+
+        return jwt_token
