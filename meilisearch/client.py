@@ -471,19 +471,23 @@ class Client():
 
     def generate_tenant_token(
         self,
-        options: Dict[str, Any],
-        parent_api_key: Optional[str] = None
+        search_rules: Dict[str, Any],
+        expired_at: Optional[float] = None,
+        api_key: Optional[str] = None
     ) -> str:
         """Generate a JWT token for the use of multitenancy.
 
         Parameters
         ----------
-        options:
-            Options, the information to generate the token (ex: { 'searchRules': ['*'], 'exp': '1645089029' }).
-            `searchRules`: A Dictionary which contains the rules to be enforced at search time for all or specific
+        search_rules:
+            A Dictionary or an object which contains the rules to be enforced at search time for all or specific
             accessible indexes for the signing API Key.
             In the specific case of you want to have any restrictions you can also use a array ["*"].
-            Note that if an exp value is included it should a `timestamp`.
+        expired_at (optional):
+            Date and time when the key will expire.
+            Note that if an expired_at value is included it should a `timestamp`.
+        api_key (optional):
+            The API key parent of the token. If you let it empty the client API Key will be used.
 
         Returns
         -------
@@ -495,24 +499,34 @@ class Client():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
+        # Standard JWT header for encryption with SHA256/HS256 algorithm
         header = {
             "typ": "JWT",
             "alg": "HS256"
         }
 
-        api_key = str(self.config.api_key) if parent_api_key is None else str(parent_api_key)
+        api_key = str(self.config.api_key) if api_key is None else str(api_key)
 
-        options['apiKeyPrefix'] = api_key[0:8]
+        # Add the required fields to the payload
+        payload = {
+            'apiKeyPrefix': api_key[0:8],
+            'searchRules': search_rules,
+            'exp': expired_at if expired_at is not None else None
+        }
 
+        # Serialize the header and the payload
         json_header = json.dumps(header, separators=(",",":")).encode()
-        json_options = json.dumps(options, separators=(",",":")).encode()
+        json_payload = json.dumps(payload, separators=(",",":")).encode()
 
+        # Encode the header and the payload to Base64Url String
         header_encode = self._base64url_encode(json_header)
-        header_options = self._base64url_encode(json_options)
+        header_payload = self._base64url_encode(json_payload)
 
         secret_encoded = api_key.encode()
-        signature = hmac.new(secret_encoded, (header_encode + "." + header_options).encode(), hashlib.sha256).digest()
-        jwt_token = header_encode + '.' + header_options + '.' + self._base64url_encode(signature)
+        # Create Signature Hash
+        signature = hmac.new(secret_encoded, (header_encode + "." + header_payload).encode(), hashlib.sha256).digest()
+        # Create JWT
+        jwt_token = header_encode + '.' + header_payload + '.' + self._base64url_encode(signature)
 
         return jwt_token
 

@@ -109,3 +109,9 @@ def test_key_info(client):
         client.delete_key(key['key'])
     except MeiliSearchApiError:
         pass
+
+@fixture(scope='function')
+def get_private_key(client):
+    keys = client.get_keys()['results']
+    key = next(x for x in keys if 'Default Admin API' in x['description'])
+    return key
