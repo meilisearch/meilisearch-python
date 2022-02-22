@@ -472,7 +472,7 @@ class Client():
     def generate_tenant_token(
         self,
         search_rules: Dict[str, Any],
-        expired_at: Optional[float] = None,
+        expires_at: Optional[int] = None,
         api_key: Optional[str] = None
     ) -> str:
         """Generate a JWT token for the use of multitenancy.
@@ -483,9 +483,9 @@ class Client():
             A Dictionary or an object which contains the rules to be enforced at search time for all or specific
             accessible indexes for the signing API Key.
             In the specific case of you want to have any restrictions you can also use a array ["*"].
-        expired_at (optional):
+        expires_at (optional):
             Date and time when the key will expire.
-            Note that if an expired_at value is included it should a `timestamp`.
+            Note that if an expires_at value is included it should a `timestamp`.
         api_key (optional):
             The API key parent of the token. If you let it empty the client API Key will be used.
 
@@ -493,11 +493,8 @@ class Client():
         -------
         jwt_token:
            A string containing the jwt tenant token.
-
-        Raises
-        ------
-        MeiliSearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+           Note: If your token does not work remember that the searchrules is madatory and should be well formatted.
+           `exp` must be a timestamp in the future.
         """
         # Standard JWT header for encryption with SHA256/HS256 algorithm
         header = {
@@ -511,7 +508,7 @@ class Client():
         payload = {
             'apiKeyPrefix': api_key[0:8],
             'searchRules': search_rules,
-            'exp': expired_at if expired_at is not None else None
+            'exp': expires_at if expires_at is not None else None
         }
 
         # Serialize the header and the payload
