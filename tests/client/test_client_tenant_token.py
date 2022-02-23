@@ -36,7 +36,7 @@ def test_generate_tenant_token_with_api_key(client, get_private_key, index_with_
     assert response['query'] == ''
 
 def test_generate_tenant_token_with_expires_at(client, get_private_key, index_with_documents):
-    """Tests create a tenant token with only search rules."""
+    """Tests create a tenant token with search rules and expiration date."""
     index_with_documents()
     key = get_private_key
 
@@ -54,7 +54,7 @@ def test_generate_tenant_token_with_expires_at(client, get_private_key, index_wi
     assert response['query'] == ''
 
 def test_generate_tenant_token_without_search_rules(get_private_key, index_with_documents):
-    """Tests create a tenant token with only search rules."""
+    """Tests create a tenant token without search rules."""
     index_with_documents()
     key = get_private_key
 
@@ -67,10 +67,8 @@ def test_generate_tenant_token_without_search_rules(get_private_key, index_with_
         token_client.index('indexUID').search('')
 
 def test_generate_tenant_token_with_master_key(client, get_private_key, index_with_documents):
-    """Tests create a tenant token with only search rules."""
+    """Tests create a tenant token with master key."""
     index_with_documents()
-    key = get_private_key
-
     token = client.generate_tenant_token(search_rules=['*'])
 
     token_client = meilisearch.Client(BASE_URL, token)

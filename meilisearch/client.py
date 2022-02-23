@@ -9,6 +9,7 @@ from meilisearch.config import Config
 from meilisearch.task import get_task, get_tasks, wait_for_task
 from meilisearch._httprequests import HttpRequests
 from meilisearch.errors import MeiliSearchError
+from typing import Any, Dict, List, Optional, Union
 
 class Client():
     """
@@ -471,7 +472,7 @@ class Client():
 
     def generate_tenant_token(
         self,
-        search_rules: Dict[str, Any],
+        search_rules: Union[Dict[str, Any], List[str]],
         expires_at: Optional[int] = None,
         api_key: Optional[str] = None
     ) -> str:
@@ -480,20 +481,20 @@ class Client():
         Parameters
         ----------
         search_rules:
-            A Dictionary or an object which contains the rules to be enforced at search time for all or specific
+            A Dictionary or list of string which contains the rules to be enforced at search time for all or specific
             accessible indexes for the signing API Key.
-            In the specific case of you want to have any restrictions you can also use a array ["*"].
+            In the specific case where you do not want to have any restrictions you can also use a list ["*"].
         expires_at (optional):
             Date and time when the key will expire.
             Note that if an expires_at value is included it should a `timestamp`.
         api_key (optional):
-            The API key parent of the token. If you let it empty the client API Key will be used.
+            The API key parent of the token. If you leave it empty the client API Key will be used.
 
         Returns
         -------
         jwt_token:
            A string containing the jwt tenant token.
-           Note: If your token does not work remember that the searchrules is madatory and should be well formatted.
+           Note: If your token does not work remember that the search_rules is mandatory and should be well formatted.
            `exp` must be a timestamp in the future.
         """
         # Standard JWT header for encryption with SHA256/HS256 algorithm
@@ -508,7 +509,7 @@ class Client():
         payload = {
             'apiKeyPrefix': api_key[0:8],
             'searchRules': search_rules,
-            'exp': expires_at if expires_at is not None else None
+            'exp': expires_at
         }
 
         # Serialize the header and the payload
