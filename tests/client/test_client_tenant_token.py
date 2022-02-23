@@ -23,7 +23,7 @@ def test_generate_tenant_token_with_search_rules(get_private_key, index_with_doc
     assert response['query'] == ''
 
 def test_generate_tenant_token_with_search_rules_on_one_index(get_private_key, empty_index):
-    """Tests create a tenant token with only search rules."""
+    """Tests create a tenant token with search rules set for one index."""
     empty_index()
     empty_index('tenant_token')
     client = meilisearch.Client(BASE_URL, get_private_key['key'])
@@ -38,7 +38,7 @@ def test_generate_tenant_token_with_search_rules_on_one_index(get_private_key, e
         response = token_client.index('tenant_token').search('')
 
 def test_generate_tenant_token_with_api_key(client, get_private_key, empty_index):
-    """Tests create a tenant token with only search rules."""
+    """Tests create a tenant token with search rules and an api key."""
     empty_index()
     token = client.generate_tenant_token(search_rules=["*"], api_key=get_private_key['key'])
 
@@ -89,7 +89,7 @@ def test_generate_tenant_token_with_empty_search_rules_in_dict(get_private_key):
         client.generate_tenant_token(search_rules={''})
 
 def test_generate_tenant_token_with_bad_expires_at(client, get_private_key):
-    """Tests create a tenant token with only search rules."""
+    """Tests create a tenant token with a bad expires at."""
     client = meilisearch.Client(BASE_URL, get_private_key['key'])
 
     yesterday = datetime.datetime.utcnow() + datetime.timedelta(days=-1)
@@ -98,7 +98,7 @@ def test_generate_tenant_token_with_bad_expires_at(client, get_private_key):
         client.generate_tenant_token(search_rules=["*"], expires_at=yesterday)
 
 def test_generate_tenant_token_with_no_api_key(client):
-    """Tests create a tenant token with only search rules."""
+    """Tests create a tenant token with no api key."""
     client = meilisearch.Client(BASE_URL)
 
     with pytest.raises(Exception):
