@@ -472,6 +472,7 @@ class Client():
     def generate_tenant_token(
         self,
         search_rules: Union[Dict[str, Any], List[str]],
+        *,
         expires_at: Optional[datetime.datetime] = None,
         api_key: Optional[str] = None
     ) -> str:
