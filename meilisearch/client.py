@@ -485,7 +485,7 @@ class Client():
             accessible indexes for the signing API Key.
             In the specific case where you do not want to have any restrictions you can also use a list ["*"].
         expires_at (optional):
-            Date and time when the key will expire.
+            Date and time when the key will expire. Note that if an expires_at value is included it should be in UTC time.
         api_key (optional):
             The API key parent of the token. If you leave it empty the client API Key will be used.
 
@@ -501,7 +501,7 @@ class Client():
             raise Exception('An api key is required in the client or should be passed as an argument.')
         if not search_rules or search_rules == ['']:
             raise Exception('The search_rules field is mandatory and should be defined.')
-        if expires_at and expires_at < datetime.datetime.now():
+        if expires_at and expires_at < datetime.datetime.utcnow():
             raise Exception('The date expires_at should be in the future.')
 
         # Standard JWT header for encryption with SHA256/HS256 algorithm
