@@ -81,7 +81,7 @@ def test_generate_tenant_token_without_search_rules_in_dict(get_private_key):
     with pytest.raises(Exception):
         client.generate_tenant_token(search_rules={})
 
-def test_generate_tenant_token_wit_empty_search_rules_in_dict(get_private_key):
+def test_generate_tenant_token_with_empty_search_rules_in_dict(get_private_key):
     """Tests create a tenant token without search rules."""
     client = meilisearch.Client(BASE_URL, get_private_key['key'])
 
