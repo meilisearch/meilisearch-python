@@ -499,9 +499,7 @@ class Client():
         # Validate all fields
         if api_key == '' or api_key is None and self.config.api_key is None:
             raise Exception('An api key is required in the client or should be passed as an argument.')
-        if isinstance(search_rules, Dict) and search_rules == {} or search_rules == {''}:
-            raise Exception('The search_rules field is mandatory and should be defined.')
-        if isinstance(search_rules, List) and search_rules == [] or search_rules == ['']:
+        if not search_rules or search_rules == ['']:
             raise Exception('The search_rules field is mandatory and should be defined.')
         if expires_at and expires_at < datetime.datetime.now():
             raise Exception('The date expires_at should be in the future.')
