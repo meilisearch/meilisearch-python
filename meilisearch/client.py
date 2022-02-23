@@ -1,15 +1,14 @@
-from typing import Any, Dict, List, Optional
-
 import base64
 import hashlib
 import hmac
 import json
+import datetime
+from typing import Any, Dict, List, Optional, Union
 from meilisearch.index import Index
 from meilisearch.config import Config
 from meilisearch.task import get_task, get_tasks, wait_for_task
 from meilisearch._httprequests import HttpRequests
 from meilisearch.errors import MeiliSearchError
-from typing import Any, Dict, List, Optional, Union
 
 class Client():
     """
@@ -473,7 +472,7 @@ class Client():
     def generate_tenant_token(
         self,
         search_rules: Union[Dict[str, Any], List[str]],
-        expires_at: Optional[int] = None,
+        expires_at: Optional[datetime.datetime] = None,
         api_key: Optional[str] = None
     ) -> str:
         """Generate a JWT token for the use of multitenancy.
@@ -486,7 +485,6 @@ class Client():
             In the specific case where you do not want to have any restrictions you can also use a list ["*"].
         expires_at (optional):
             Date and time when the key will expire.
-            Note that if an expires_at value is included it should a `timestamp`.
         api_key (optional):
             The API key parent of the token. If you leave it empty the client API Key will be used.
 
@@ -495,8 +493,17 @@ class Client():
         jwt_token:
            A string containing the jwt tenant token.
            Note: If your token does not work remember that the search_rules is mandatory and should be well formatted.
-           `exp` must be a timestamp in the future.
+           `exp` must be a `datetime` in the future. It's not possible to create a token from the master key.
         """
+        if api_key == '' or api_key is None and self.config.api_key is None:
+            raise Exception('An api key is required in the client or should be passed as an argument.')
+        if isinstance(search_rules, Dict) and search_rules == {} or search_rules == {''}:
+            raise Exception('The search_rules field is mandatory and should be defined.')
+        if isinstance(search_rules, List) and search_rules == [] or search_rules == ['']:
+            raise Exception('The search_rules field is mandatory and should be defined.')
+        if expires_at and expires_at < datetime.datetime.now():
+            raise Exception('The date expires_at should be in the future.')
+
         # Standard JWT header for encryption with SHA256/HS256 algorithm
         header = {
             "typ": "JWT",
@@ -509,7 +516,7 @@ class Client():
         payload = {
             'apiKeyPrefix': api_key[0:8],
             'searchRules': search_rules,
-            'exp': expires_at
+            'exp': int(datetime.datetime.timestamp(expires_at)) if expires_at is not None else None
         }
 
         # Serialize the header and the payload
