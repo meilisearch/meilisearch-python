@@ -496,6 +496,7 @@ class Client():
            Note: If your token does not work remember that the search_rules is mandatory and should be well formatted.
            `exp` must be a `datetime` in the future. It's not possible to create a token from the master key.
         """
+        # Validate all fields
         if api_key == '' or api_key is None and self.config.api_key is None:
             raise Exception('An api key is required in the client or should be passed as an argument.')
         if isinstance(search_rules, Dict) and search_rules == {} or search_rules == {''}:
@@ -505,13 +506,21 @@ class Client():
         if expires_at and expires_at < datetime.datetime.now():
             raise Exception('The date expires_at should be in the future.')
 
+        api_key = str(self.config.api_key) if api_key is None else api_key
+
+        # Check if the api_key is not the master key
+        try:
+            client = Client(self.config.url, api_key)
+            client.get_keys()
+            raise Exception('The master key can be used to generated a token.')
+        except MeiliSearchError:
+            pass
+
         # Standard JWT header for encryption with SHA256/HS256 algorithm
         header = {
             "typ": "JWT",
             "alg": "HS256"
         }
-
-        api_key = str(self.config.api_key) if api_key is None else str(api_key)
 
         # Add the required fields to the payload
         payload = {

@@ -75,11 +75,8 @@ def test_generate_tenant_token_wit_empty_search_rules_in_dict(get_private_key, i
 
 def test_generate_tenant_token_with_master_key(client, index_with_documents):
     """Tests create a tenant token with master key."""
-    token = client.generate_tenant_token(search_rules=['*'])
-
-    token_client = meilisearch.Client(BASE_URL, token)
-    with pytest.raises(MeiliSearchApiError):
-        token_client.index('indexUID').search('')
+    with pytest.raises(Exception):
+        client.generate_tenant_token(search_rules=['*'])
 
 def test_generate_tenant_token_with_bad_expires_at(client, get_private_key):
     """Tests create a tenant token with only search rules."""
