@@ -88,11 +88,6 @@ def test_generate_tenant_token_wit_empty_search_rules_in_dict(get_private_key):
     with pytest.raises(Exception):
         client.generate_tenant_token(search_rules={''})
 
-def test_generate_tenant_token_with_master_key(client):
-    """Tests create a tenant token with master key."""
-    with pytest.raises(Exception):
-        client.generate_tenant_token(search_rules=['*'])
-
 def test_generate_tenant_token_with_bad_expires_at(client, get_private_key):
     """Tests create a tenant token with only search rules."""
     client = meilisearch.Client(BASE_URL, get_private_key['key'])
