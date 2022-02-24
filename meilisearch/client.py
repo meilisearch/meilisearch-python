@@ -1,5 +1,9 @@
-from typing import Any, Dict, List, Optional
-
+import base64
+import hashlib
+import hmac
+import json
+import datetime
+from typing import Any, Dict, List, Optional, Union
 from meilisearch.index import Index
 from meilisearch.config import Config
 from meilisearch.task import get_task, get_tasks, wait_for_task
@@ -464,3 +468,75 @@ class Client():
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return wait_for_task(self.config, uid, timeout_in_ms, interval_in_ms)
+
+    def generate_tenant_token(
+        self,
+        search_rules: Union[Dict[str, Any], List[str]],
+        *,
+        expires_at: Optional[datetime.datetime] = None,
+        api_key: Optional[str] = None
+    ) -> str:
+        """Generate a JWT token for the use of multitenancy.
+
+        Parameters
+        ----------
+        search_rules:
+            A Dictionary or list of string which contains the rules to be enforced at search time for all or specific
+            accessible indexes for the signing API Key.
+            In the specific case where you do not want to have any restrictions you can also use a list ["*"].
+        expires_at (optional):
+            Date and time when the key will expire. Note that if an expires_at value is included it should be in UTC time.
+        api_key (optional):
+            The API key parent of the token. If you leave it empty the client API Key will be used.
+
+        Returns
+        -------
+        jwt_token:
+           A string containing the jwt tenant token.
+           Note: If your token does not work remember that the search_rules is mandatory and should be well formatted.
+           `exp` must be a `datetime` in the future. It's not possible to create a token from the master key.
+        """
+        # Validate all fields
+        if api_key == '' or api_key is None and self.config.api_key is None:
+            raise Exception('An api key is required in the client or should be passed as an argument.')
+        if not search_rules or search_rules == ['']:
+            raise Exception('The search_rules field is mandatory and should be defined.')
+        if expires_at and expires_at < datetime.datetime.utcnow():
+            raise Exception('The date expires_at should be in the future.')
+
+        # Standard JWT header for encryption with SHA256/HS256 algorithm
+        header = {
+            "typ": "JWT",
+            "alg": "HS256"
+        }
+
+        api_key = str(self.config.api_key) if api_key is None else api_key
+
+        # Add the required fields to the payload
+        payload = {
+            'apiKeyPrefix': api_key[0:8],
+            'searchRules': search_rules,
+            'exp': int(datetime.datetime.timestamp(expires_at)) if expires_at is not None else None
+        }
+
+        # Serialize the header and the payload
+        json_header = json.dumps(header, separators=(",",":")).encode()
+        json_payload = json.dumps(payload, separators=(",",":")).encode()
+
+        # Encode the header and the payload to Base64Url String
+        header_encode = self._base64url_encode(json_header)
+        header_payload = self._base64url_encode(json_payload)
+
+        secret_encoded = api_key.encode()
+        # Create Signature Hash
+        signature = hmac.new(secret_encoded, (header_encode + "." + header_payload).encode(), hashlib.sha256).digest()
+        # Create JWT
+        jwt_token = header_encode + '.' + header_payload + '.' + self._base64url_encode(signature)
+
+        return jwt_token
+
+    @staticmethod
+    def _base64url_encode(
+        data: bytes
+    ) -> str:
+        return base64.urlsafe_b64encode(data).decode('utf-8').replace('=','')

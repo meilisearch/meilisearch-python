@@ -5,6 +5,7 @@ from pytest import fixture
 from tests import common
 import meilisearch
 from meilisearch.errors import MeiliSearchApiError
+from typing import Optional
 
 @fixture(scope='session')
 def client():
@@ -67,8 +68,9 @@ def songs_ndjson():
         return song_ndjson_file.read().encode('utf-8')
 
 @fixture(scope='function')
-def empty_index(client):
-    def index_maker(index_name=common.INDEX_UID):
+def empty_index(client, index_uid: Optional[str] = None):
+    index_uid = index_uid if index_uid else common.INDEX_UID
+    def index_maker(index_name=index_uid):
         task = client.create_index(uid=index_name)
         client.wait_for_task(task['uid'])
         return client.get_index(uid=index_name)
@@ -109,3 +111,9 @@ def test_key_info(client):
         client.delete_key(key['key'])
     except MeiliSearchApiError:
         pass
+
+@fixture(scope='function')
+def get_private_key(client):
+    keys = client.get_keys()['results']
+    key = next(x for x in keys if 'Default Search API' in x['description'])
+    return key
