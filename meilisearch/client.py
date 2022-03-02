@@ -529,9 +529,9 @@ class Client():
 
         secret_encoded = api_key.encode()
         # Create Signature Hash
-        signature = hmac.new(secret_encoded, (header_encode + "." + header_payload).encode(), hashlib.sha256).digest()
+        signature = hmac.new(secret_encoded, (header_encode + "." + payload_encode).encode(), hashlib.sha256).digest()
         # Create JWT
-        jwt_token = header_encode + '.' + header_payload + '.' + self._base64url_encode(signature)
+        jwt_token = header_encode + '.' + payload_encode + '.' + self._base64url_encode(signature)
 
         return jwt_token
 
