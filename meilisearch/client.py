@@ -525,7 +525,7 @@ class Client():
 
         # Encode the header and the payload to Base64Url String
         header_encode = self._base64url_encode(json_header)
-        header_payload = self._base64url_encode(json_payload)
+        payload_encode = self._base64url_encode(json_payload)
 
         secret_encoded = api_key.encode()
         # Create Signature Hash
