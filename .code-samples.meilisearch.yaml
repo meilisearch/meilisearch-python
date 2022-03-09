@@ -481,7 +481,7 @@ tenant_token_guide_generate_sdk_1: |-
       'filter': 'user_id = 1'
     }
   }
-  token = client.generate_tenant_token(search_rules=["*"], api_key=api_key, expires_at=expires_at)
+  token = client.generate_tenant_token(search_rules=search_rules, api_key=api_key, expires_at=expires_at)
 tenant_token_guide_search_sdk_1: |-
   front_end_client = Client('http://127.0.0.1:7700', token)
   front_end_client.index('patient_medical_records').search('blood test')
