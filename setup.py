@@ -1,4 +1,5 @@
 from setuptools import setup, find_packages
+from meilisearch.version import __version__
 
 with open("README.md", "r", encoding="utf8") as fh:
     long_description = fh.read()
@@ -8,7 +9,7 @@ setup(
         "requests"
     ],
     name="meilisearch",
-    version="0.18.0",
+    version=__version__,
     author="Charlotte Vermandel",
     author_email="charlotte@meilisearch.com",
     description="The python client for Meilisearch API.",
