@@ -39,7 +39,7 @@ Each PR should pass the tests, mypy type checking, and the linter to be accepted
 ```bash
 # Tests
 curl -L https://install.meilisearch.com | sh # download Meilisearch
-./meilisearch --master-key=masterKey --no-analytics=true # run Meilisearch
+./meilisearch --master-key=masterKey --no-analytics # run Meilisearch
 pipenv run pytest meilisearch
 # MyPy
 pipenv run mypy meilisearch
@@ -51,7 +51,7 @@ Optionally tox can be used to run test on all supported version of Python, mypy,
 
 ```bash
 docker pull getmeili/meilisearch:latest # Fetch the latest version of Meilisearch image from Docker Hub
-docker run -p 7700:7700 getmeili/meilisearch:latest ./meilisearch --master-key=masterKey --no-analytics=true
+docker run -p 7700:7700 getmeili/meilisearch:latest ./meilisearch --master-key=masterKey --no-analytics
 pipenv run tox
 ```
 
