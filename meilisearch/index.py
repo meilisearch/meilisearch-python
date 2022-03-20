@@ -239,7 +239,7 @@ class Index():
             body=body
         )
 
-    def get_document(self, document_id: str) -> Dict[str, Any]:
+    def get_document(self, document_id: int) -> Dict[str, Any]:
         """Get one document with given document identifier.
 
         Parameters
