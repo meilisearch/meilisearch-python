@@ -529,7 +529,7 @@ class Index():
 
         return uids
 
-    def delete_document(self, document_id: str) -> Dict[str, Any]:
+    def delete_document(self, document_id: int) -> Dict[str, Any]:
         """Delete one document from the index.
 
         Parameters
@@ -552,7 +552,7 @@ class Index():
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}/{document_id}'
         )
 
-    def delete_documents(self, ids: List[str]) -> Dict[str, int]:
+    def delete_documents(self, ids: List[int]) -> Dict[str, int]:
         """Delete multiple documents from the index.
 
         Parameters
@@ -573,7 +573,7 @@ class Index():
         """
         return self.http.post(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}/delete-batch',
-            ids
+            str(ids)
         )
 
     def delete_all_documents(self) -> Dict[str, int]:

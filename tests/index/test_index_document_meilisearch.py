@@ -118,7 +118,7 @@ def test_update_documents_in_batches(
 def test_delete_document(index_with_documents):
     """Tests deleting a single document."""
     index = index_with_documents()
-    response = index.delete_document('500682')
+    response = index.delete_document(500682)
     assert isinstance(response, dict)
     assert 'uid' in response
     index.wait_for_task(response['uid'])
