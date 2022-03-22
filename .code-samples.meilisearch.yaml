@@ -332,6 +332,8 @@ documents_guide_add_movie_1: |-
     'movie_id': '123sq178',
     'title': 'Amélie Poulain'
   }])
+getting_started_check_task_status_md: |-
+  client.index('movies').get_task(0)
 search_guide_1: |-
   client.index('movies').search('shifu', {
     'limit': 5,
@@ -364,6 +366,71 @@ getting_started_search_md: |-
   ```
 
   [About this SDK](https://github.com/meilisearch/meilisearch-python/)
+getting_started_add_meteorites_md: |-
+  import json
+
+  json_file = open('meteorites.json')
+  movies = json.load(json_file)
+  client.index('meteorites').add_documents(meteorites)
+getting_started_update_ranking_rules_md: |-
+  client.index('movies').update_ranking_rules([
+      'exactness',
+      'words',
+      'typo',
+      'proximity',
+      'attribute',
+      'sort',
+      'release_date:asc',
+      'rank:desc'
+  ])
+getting_started_update_displayed_attributes_md: |-
+  client.index('movies').update_displayed_attributes([
+      'title',
+      'overview',
+      'poster'
+  ])
+getting_started_update_searchable_attributes_md: |-
+  client.index('movies').update_searchable_attributes([
+      'title'
+  ])
+getting_started_update_stop_words_md: |-
+  client.index('movies').update_stop_words(['the'])
+getting_started_synonyms_md: |-
+  client.index('movies').update_synonyms({
+    "winnie": ["piglet"],
+    "piglet": ["winnie"]
+  })
+getting_started_filtering_md: |-
+  client.index('meteorites').search('', {
+    'filter': 'mass < 200'
+  })
+getting_started_geoRadius_md: |-
+  client.index('meteorites').search('', {
+    'filter': '_geoRadius(46.9480, 7.4474, 210000)'
+  })
+getting_started_geoPoint_md: |-
+  client.index('meteorites').search('', {
+    'sort': ['_geoPoint(48.8583701,2.2922926):asc']
+  })
+getting_started_sorting_md: |-
+  client.index('meteorites').search('', {
+    'filter': 'mass < 200',
+    'sort': ['mass:asc']
+  })
+getting_started_configure_settings: |-
+  client.index('movies').meteorites({
+    'filterableAttributes': [
+        'mass',
+        '_geo'
+    ],
+    'sortableAttributes': [
+        'mass',
+        '_geo'
+    ]
+  })
+getting_started_communicating_with_a_protected_instance: |-
+  client = Client('http://127.0.0.1:7700', 'apiKey')
+  client.index('movies').search()
 faceted_search_update_settings_1: |-
   client.index('movies').update_filterable_attributes([
       'director',
