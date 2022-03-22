@@ -87,13 +87,13 @@ update_settings_1: |-
     'distinctAttribute': 'movie_id',
     'searchableAttributes': [
         'title',
-        'description',
-        'genre'
+        'overview',
+        'genres'
     ],
     'displayedAttributes': [
         'title',
-        'description',
-        'genre',
+        'overview',
+        'genres',
         'release_date'
     ],
     'sortableAttributes': [
@@ -164,7 +164,7 @@ get_searchable_attributes_1: |-
 update_searchable_attributes_1: |-
   client.index('movies').update_searchable_attributes([
       'title',
-      'description',
+      'overview',
       'uid'
   ])
 reset_searchable_attributes_1: |-
@@ -174,8 +174,8 @@ get_displayed_attributes_1: |-
 update_displayed_attributes_1: |-
   client.index('movies').update_displayed_attributes([
       'title',
-      'description',
-      'genre',
+      'overview',
+      'genres',
       'release_date'
   ])
 reset_displayed_attributes_1: |-
@@ -203,15 +203,15 @@ field_properties_guide_searchable_1: |-
   client.index('movies').update_settings({
     'searchableAttributes': [
         'title',
-        'description',
-        'genre'
+        'overview',
+        'genres'
   ]})
 field_properties_guide_displayed_1: |-
   client.index('movies').update_settings({
     'displayedAttributes': [
         'title',
-        'description',
-        'genre',
+        'overview',
+        'genres',
         'release_date'
   ]})
 filtering_guide_1: |-
@@ -301,16 +301,16 @@ settings_guide_searchable_1: |-
   client.index('movies').update_settings({
     'searchableAttributes': [
       'title',
-      'description',
-      'genre'
+      'overview',
+      'genres'
     ]
   })
 settings_guide_displayed_1: |-
   client.index('movies').update_settings({
     'displayedAttributes': [
       'title',
-      'description',
-      'genre',
+      'overview',
+      'genres',
       'release_date'
     ]
   })
