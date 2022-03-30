@@ -7,12 +7,14 @@ from meilisearch.errors import (
     MeiliSearchCommunicationError,
     MeiliSearchTimeoutError,
 )
+from meilisearch.version import qualified_version
 
 class HttpRequests:
     def __init__(self, config: Config) -> None:
         self.config = config
         self.headers = {
             'Authorization': f'Bearer {self.config.api_key}',
+            'User-Agent': qualified_version(),
         }
 
     def send_request(
