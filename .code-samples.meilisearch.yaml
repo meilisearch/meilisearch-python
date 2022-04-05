@@ -483,6 +483,16 @@ geosearch_guide_sort_usage_2: |-
   client.index('restaurants').search('', {
     'sort': ['_geoPoint(48.8583701,2.2922926):asc', 'rating:desc']
   })
+document_guide_create_index_primary_key: |-
+  client.create_index('movies', {'primaryKey': 'reference_number'})
+document_guide_add_document_primary_key: |-
+  client.index('movies').add_documents([{
+    'id': 287947,
+    'title': 'Shazam',
+    'poster': 'https://image.tmdb.org/t/p/w1280/xnopI5Xtky18MPhK40cZAGAOVeV.jpg',
+    'overview': 'A boy is given the ability to become an adult superhero in times of need with a single magic word.',
+    'release_date': '2019-03-23'
+  }], reference_number)
 security_guide_search_key_1: |-
   client = Client('http://127.0.0.1:7700', 'apiKey')
   client.index('patient_medical_records').search()
