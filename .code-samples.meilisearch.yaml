@@ -315,6 +315,17 @@ add_movies_json_1: |-
   json_file = open('movies.json')
   movies = json.load(json_file)
   client.index('movies').add_documents(movies)
+landing_getting_started_1: |-
+  client = meilisearch.Client('http://127.0.0.1:7700')
+
+  client.index('movies').add_documents([
+    { "id": 1, "title": 'Carol' },
+    { "id": 2, "title": 'Wonder Woman' },
+    { "id": 3, "title": 'Life of Pi' },
+    { "id": 4, "title": 'Mad Max: Fury Road' },
+    { "id": 5, "title": 'Moana' },
+    { "id": 6, "title": 'Philadelphia'}
+  ])
 documents_guide_add_movie_1: |-
   client.index('movies').add_documents([{
     'movie_id': '123sq178',
