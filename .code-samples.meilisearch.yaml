@@ -410,7 +410,7 @@ getting_started_sorting: |-
     'sort': ['mass:asc']
   })
 getting_started_configure_settings: |-
-  client.index('movies').meteorites({
+  client.index('meteorites').update_settings({
     'filterableAttributes': [
         'mass',
         '_geo'
@@ -500,7 +500,7 @@ document_guide_create_index_primary_key: |-
   client.create_index('movies', {'primaryKey': 'reference_number'})
 document_guide_add_document_primary_key: |-
   client.index('movies').add_documents([{
-    'id': 287947,
+    'reference_number': 287947,
     'title': 'Shazam',
     'poster': 'https://image.tmdb.org/t/p/w1280/xnopI5Xtky18MPhK40cZAGAOVeV.jpg',
     'overview': 'A boy is given the ability to become an adult superhero in times of need with a single magic word.',
