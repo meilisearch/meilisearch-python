@@ -319,12 +319,12 @@ landing_getting_started_1: |-
   client = meilisearch.Client('http://127.0.0.1:7700', 'masterKey')
 
   client.index('movies').add_documents([
-    { "id": 1, "title": 'Carol' },
-    { "id": 2, "title": 'Wonder Woman' },
-    { "id": 3, "title": 'Life of Pi' },
-    { "id": 4, "title": 'Mad Max: Fury Road' },
-    { "id": 5, "title": 'Moana' },
-    { "id": 6, "title": 'Philadelphia'}
+    { 'id': 1, 'title': 'Carol' },
+    { 'id': 2, 'title': 'Wonder Woman' },
+    { 'id': 3, 'title': 'Life of Pi' },
+    { 'id': 4, 'title': 'Mad Max: Fury Road' },
+    { 'id': 5, 'title': 'Moana' },
+    { 'id': 6, 'title': 'Philadelphia'}
   ])
 documents_guide_add_movie_1: |-
   client.index('movies').add_documents([{
@@ -389,8 +389,8 @@ getting_started_update_stop_words: |-
   client.index('movies').update_stop_words(['the'])
 getting_started_synonyms: |-
   client.index('movies').update_synonyms({
-    "winnie": ["piglet"],
-    "piglet": ["winnie"]
+    'winnie': ['piglet'],
+    'piglet': ['winnie']
   })
 getting_started_filtering: |-
   client.index('meteorites').search('', {
