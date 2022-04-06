@@ -316,7 +316,7 @@ add_movies_json_1: |-
   movies = json.load(json_file)
   client.index('movies').add_documents(movies)
 landing_getting_started_1: |-
-  client = meilisearch.Client('http://127.0.0.1:7700')
+  client = meilisearch.Client('http://127.0.0.1:7700', 'masterKey')
 
   client.index('movies').add_documents([
     { "id": 1, "title": 'Carol' },
@@ -332,7 +332,9 @@ documents_guide_add_movie_1: |-
     'title': 'Amélie Poulain'
   }])
 getting_started_check_task_status_md: |-
+  ```python
   client.index('movies').get_task(0)
+  ```
 getting_started_add_documents_md: |-
   ```bash
   pip3 install meilisearch
@@ -360,7 +362,7 @@ getting_started_add_meteorites: |-
   import json
 
   json_file = open('meteorites.json')
-  movies = json.load(json_file)
+  meteorites = json.load(json_file)
   client.index('meteorites').add_documents(meteorites)
 getting_started_update_rankingRules: |-
   client.index('movies').update_ranking_rules([
@@ -503,7 +505,7 @@ document_guide_add_document_primary_key: |-
     'poster': 'https://image.tmdb.org/t/p/w1280/xnopI5Xtky18MPhK40cZAGAOVeV.jpg',
     'overview': 'A boy is given the ability to become an adult superhero in times of need with a single magic word.',
     'release_date': '2019-03-23'
-  }], reference_number)
+  }], 'reference_number')
 security_guide_search_key_1: |-
   client = Client('http://127.0.0.1:7700', 'apiKey')
   client.index('patient_medical_records').search()
