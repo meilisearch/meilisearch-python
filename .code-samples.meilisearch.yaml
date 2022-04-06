@@ -356,13 +356,13 @@ getting_started_search_md: |-
   ```
 
   [About this SDK](https://github.com/meilisearch/meilisearch-python/)
-getting_started_add_meteorites_md: |-
+getting_started_add_meteorites: |-
   import json
 
   json_file = open('meteorites.json')
   movies = json.load(json_file)
   client.index('meteorites').add_documents(meteorites)
-getting_started_update_ranking_rules_md: |-
+getting_started_update_rankingRules: |-
   client.index('movies').update_ranking_rules([
       'exactness',
       'words',
@@ -373,36 +373,36 @@ getting_started_update_ranking_rules_md: |-
       'release_date:asc',
       'rank:desc'
   ])
-getting_started_update_displayed_attributes_md: |-
+getting_started_update_displayedAttributes: |-
   client.index('movies').update_displayed_attributes([
       'title',
       'overview',
       'poster'
   ])
-getting_started_update_searchable_attributes_md: |-
+getting_started_update_searchableAttributes: |-
   client.index('movies').update_searchable_attributes([
       'title'
   ])
-getting_started_update_stop_words_md: |-
+getting_started_update_stop_words: |-
   client.index('movies').update_stop_words(['the'])
-getting_started_synonyms_md: |-
+getting_started_synonyms: |-
   client.index('movies').update_synonyms({
     "winnie": ["piglet"],
     "piglet": ["winnie"]
   })
-getting_started_filtering_md: |-
+getting_started_filtering: |-
   client.index('meteorites').search('', {
     'filter': 'mass < 200'
   })
-getting_started_geoRadius_md: |-
+getting_started_geoRadius: |-
   client.index('meteorites').search('', {
     'filter': '_geoRadius(46.9480, 7.4474, 210000)'
   })
-getting_started_geoPoint_md: |-
+getting_started_geoPoint: |-
   client.index('meteorites').search('', {
     'sort': ['_geoPoint(48.8583701,2.2922926):asc']
   })
-getting_started_sorting_md: |-
+getting_started_sorting: |-
   client.index('meteorites').search('', {
     'filter': 'mass < 200',
     'sort': ['mass:asc']
@@ -476,11 +476,11 @@ geosearch_guide_filter_settings_1: |-
   ])
 geosearch_guide_filter_usage_1: |-
   client.index('restaurants').search('', {
-    'filter': '_geoRadius(45.4628328, 9.1076931, 2000)'
+    'filter': '_geoRadius(45.472735, 9.184019, 2000)'
   })
 geosearch_guide_filter_usage_2: |-
   client.index('restaurants').search('', {
-    'filter': '_geoRadius(45.4628328, 9.1076931, 2000) AND type = pizza'
+    'filter': '_geoRadius(45.472735, 9.184019, 2000) AND type = pizza'
   })
 geosearch_guide_sort_settings_1: |-
   client.index('restaurants').update_sortable_attributes([
@@ -488,11 +488,11 @@ geosearch_guide_sort_settings_1: |-
   ])
 geosearch_guide_sort_usage_1: |-
   client.index('restaurants').search('', {
-    'sort': ['_geoPoint(48.8583701,2.2922926):asc']
+    'sort': ['_geoPoint(48.8561446,2.2978204):asc']
   })
 geosearch_guide_sort_usage_2: |-
   client.index('restaurants').search('', {
-    'sort': ['_geoPoint(48.8583701,2.2922926):asc', 'rating:desc']
+    'sort': ['_geoPoint(48.8561446,2.2978204):asc', 'rating:desc']
   })
 document_guide_create_index_primary_key: |-
   client.create_index('movies', {'primaryKey': 'reference_number'})
