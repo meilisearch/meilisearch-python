@@ -165,7 +165,7 @@ update_searchable_attributes_1: |-
   client.index('movies').update_searchable_attributes([
       'title',
       'overview',
-      'uid'
+      'genres'
   ])
 reset_searchable_attributes_1: |-
   client.index('movies').reset_searchable_attributes()
