@@ -8,9 +8,9 @@ get_one_index_1: |-
 list_all_indexes_1: |-
   client.get_indexes()
 create_an_index_1: |-
-  client.create_index('movies', {'primaryKey': 'movie_id'})
+  client.create_index('movies', {'primaryKey': 'id'})
 update_an_index_1: |-
-  client.index('movies').update(primary_key='movie_review_id')
+  client.index('movies').update(primary_key='id')
 delete_an_index_1: |-
   client.delete_index('movies')
   // OR
@@ -331,10 +331,8 @@ documents_guide_add_movie_1: |-
     'movie_id': '123sq178',
     'title': 'Amélie Poulain'
   }])
-getting_started_check_task_status_md: |-
-  ```python
+getting_started_check_task_status: |-
   client.index('movies').get_task(0)
-  ```
 getting_started_add_documents_md: |-
   ```bash
   pip3 install meilisearch
