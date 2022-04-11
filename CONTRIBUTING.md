@@ -51,7 +51,7 @@ Optionally tox can be used to run test on all supported version of Python, mypy,
 
 ```bash
 docker pull getmeili/meilisearch:latest # Fetch the latest version of Meilisearch image from Docker Hub
-docker run -p 7700:7700 getmeili/meilisearch:latest ./meilisearch --master-key=masterKey --no-analytics
+docker run -p 7700:7700 getmeili/meilisearch:latest meilisearch --master-key=masterKey --no-analytics
 pipenv run tox
 ```
 
