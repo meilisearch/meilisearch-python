@@ -289,7 +289,7 @@ class Index():
         self,
         documents: List[Dict[str, Any]],
         primary_key: Optional[str] = None,
-    ) -> Dict[str, int]:
+    ) -> Dict[str, Any]:
         """Add documents to the index.
 
         Parameters
@@ -318,7 +318,7 @@ class Index():
         documents: List[Dict[str, Any]],
         batch_size: int = 1000,
         primary_key: Optional[str] = None,
-    ) -> List[Dict[str, int]]:
+    ) -> List[Dict[str, Any]]:
         """Add documents to the index in batches.
 
         Parameters
@@ -355,7 +355,7 @@ class Index():
         self,
         str_documents: str,
         primary_key: Optional[str] = None,
-    ) -> Dict[str, int]:
+    ) -> Dict[str, Any]:
         """Add string documents from JSON file to the index.
 
         Parameters
@@ -382,7 +382,7 @@ class Index():
         self,
         str_documents: str,
         primary_key: Optional[str] = None,
-    ) -> Dict[str, int]:
+    ) -> Dict[str, Any]:
         """Add string documents from a CSV file to the index.
 
         Parameters
@@ -409,7 +409,7 @@ class Index():
         self,
         str_documents: str,
         primary_key: Optional[str] = None,
-    ) -> Dict[str, int]:
+    ) -> Dict[str, Any]:
         """Add string documents from a NDJSON file to the index.
 
         Parameters
@@ -437,7 +437,7 @@ class Index():
         str_documents: str,
         primary_key: Optional[str] = None,
         content_type: Optional[str] = None,
-    ) -> Dict[str, int]:
+    ) -> Dict[str, Any]:
         """Add string documents to the index.
 
         Parameters
@@ -467,7 +467,7 @@ class Index():
         self,
         documents: List[Dict[str, Any]],
         primary_key: Optional[str] = None
-    ) -> Dict[str, int]:
+    ) -> Dict[str, Any]:
         """Update documents in the index.
 
         Parameters
@@ -615,7 +615,7 @@ class Index():
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.setting}'
         )
 
-    def update_settings(self, body: Dict[str, Any]) -> Dict[str, int]:
+    def update_settings(self, body: Dict[str, Any]) -> Dict[str, Any]:
         """Update settings of the index.
 
         https://docs.meilisearch.com/reference/api/settings.html#update-settings
@@ -643,7 +643,7 @@ class Index():
             body
         )
 
-    def reset_settings(self) -> Dict[str, int]:
+    def reset_settings(self) -> Dict[str, Any]:
         """Reset settings of the index to default values.
 
         https://docs.meilisearch.com/reference/api/settings.html#reset-settings
@@ -683,7 +683,7 @@ class Index():
             self.__settings_url_for(self.config.paths.ranking_rules)
         )
 
-    def update_ranking_rules(self, body: List[str]) -> Dict[str, int]:
+    def update_ranking_rules(self, body: List[str]) -> Dict[str, Any]:
         """
         Update ranking rules of the index.
 
@@ -708,7 +708,7 @@ class Index():
             body
         )
 
-    def reset_ranking_rules(self) -> Dict[str, int]:
+    def reset_ranking_rules(self) -> Dict[str, Any]:
         """Reset ranking rules of the index to default values.
 
         Returns
@@ -746,7 +746,7 @@ class Index():
             self.__settings_url_for(self.config.paths.distinct_attribute)
         )
 
-    def update_distinct_attribute(self, body: Dict[str, Any]) -> Dict[str, int]:
+    def update_distinct_attribute(self, body: Dict[str, Any]) -> Dict[str, Any]:
         """
         Update distinct attribute of the index.
 
@@ -771,7 +771,7 @@ class Index():
             body
         )
 
-    def reset_distinct_attribute(self) -> Dict[str, int]:
+    def reset_distinct_attribute(self) -> Dict[str, Any]:
         """Reset distinct attribute of the index to default values.
 
         Returns
@@ -809,7 +809,7 @@ class Index():
             self.__settings_url_for(self.config.paths.searchable_attributes)
         )
 
-    def update_searchable_attributes(self, body: List[str]) -> Dict[str, int]:
+    def update_searchable_attributes(self, body: List[str]) -> Dict[str, Any]:
         """
         Update searchable attributes of the index.
 
@@ -834,7 +834,7 @@ class Index():
             body
         )
 
-    def reset_searchable_attributes(self) -> Dict[str, int]:
+    def reset_searchable_attributes(self) -> Dict[str, Any]:
         """Reset searchable attributes of the index to default values.
 
         Returns
@@ -872,7 +872,7 @@ class Index():
             self.__settings_url_for(self.config.paths.displayed_attributes)
         )
 
-    def update_displayed_attributes(self, body: List[str]) -> Dict[str, int]:
+    def update_displayed_attributes(self, body: List[str]) -> Dict[str, Any]:
         """
         Update displayed attributes of the index.
 
@@ -897,7 +897,7 @@ class Index():
             body
         )
 
-    def reset_displayed_attributes(self) -> Dict[str, int]:
+    def reset_displayed_attributes(self) -> Dict[str, Any]:
         """Reset displayed attributes of the index to default values.
 
         Returns
@@ -935,7 +935,7 @@ class Index():
             self.__settings_url_for(self.config.paths.stop_words)
         )
 
-    def update_stop_words(self, body: List[str]) -> Dict[str, int]:
+    def update_stop_words(self, body: List[str]) -> Dict[str, Any]:
         """
         Update stop words of the index.
 
@@ -960,7 +960,7 @@ class Index():
             body
         )
 
-    def reset_stop_words(self) -> Dict[str, int]:
+    def reset_stop_words(self) -> Dict[str, Any]:
         """Reset stop words of the index to default values.
 
         Returns
@@ -998,7 +998,7 @@ class Index():
             self.__settings_url_for(self.config.paths.synonyms)
         )
 
-    def update_synonyms(self, body: Dict[str, List[str]]) -> Dict[str, int]:
+    def update_synonyms(self, body: Dict[str, List[str]]) -> Dict[str, Any]:
         """
         Update synonyms of the index.
 
@@ -1023,7 +1023,7 @@ class Index():
             body
         )
 
-    def reset_synonyms(self) -> Dict[str, int]:
+    def reset_synonyms(self) -> Dict[str, Any]:
         """Reset synonyms of the index to default values.
 
         Returns
@@ -1061,7 +1061,7 @@ class Index():
             self.__settings_url_for(self.config.paths.filterable_attributes)
         )
 
-    def update_filterable_attributes(self, body: List[str]) -> Dict[str, int]:
+    def update_filterable_attributes(self, body: List[str]) -> Dict[str, Any]:
         """
         Update filterable attributes of the index.
 
@@ -1086,7 +1086,7 @@ class Index():
             body
         )
 
-    def reset_filterable_attributes(self) -> Dict[str, int]:
+    def reset_filterable_attributes(self) -> Dict[str, Any]:
         """Reset filterable attributes of the index to default values.
 
         Returns
@@ -1125,7 +1125,7 @@ class Index():
             self.__settings_url_for(self.config.paths.sortable_attributes)
         )
 
-    def update_sortable_attributes(self, body: List[str]) -> Dict[str, int]:
+    def update_sortable_attributes(self, body: List[str]) -> Dict[str, Any]:
         """
         Update sortable attributes of the index.
 
@@ -1150,7 +1150,7 @@ class Index():
             body
         )
 
-    def reset_sortable_attributes(self) -> Dict[str, int]:
+    def reset_sortable_attributes(self) -> Dict[str, Any]:
         """Reset sortable attributes of the index to default values.
 
         Returns
@@ -1166,6 +1166,69 @@ class Index():
         """
         return self.http.delete(
             self.__settings_url_for(self.config.paths.sortable_attributes),
+        )
+
+    # TYPO TOLERANCE SUB-ROUTES
+
+    def get_typo_tolerance(self) -> Dict[str, Any]:
+        """
+        Get typo tolerance of the index.
+
+        Returns
+        -------
+        settings: dict
+            Dictionary containing the typo tolerance of the index.
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.get(
+            self.__settings_url_for(self.config.paths.typo_tolerance)
+        )
+
+    def update_typo_tolerance(self, body: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Update typo tolerance of the index.
+
+        Parameters
+        ----------
+        body: dict
+            Dictionary containing the typo tolerance.
+
+        Returns
+        -------
+        task:
+            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.post(
+            self.__settings_url_for(self.config.paths.typo_tolerance),
+            body
+        )
+
+    def reset_typo_tolerance(self) -> Dict[str, Any]:
+        """Reset typo tolerance of the index to default values.
+
+        Returns
+        -------
+        task:
+            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.delete(
+            self.__settings_url_for(self.config.paths.typo_tolerance),
         )
 
     @staticmethod
