@@ -113,6 +113,72 @@ def test_custom_search_params_with_string_list(index_with_documents):
     assert 'title' in response['hits'][0]['_formatted']
     assert 'overview' in response['hits'][0]['_formatted']
 
+def test_custom_search_params_with_crop_marker(index_with_documents):
+    """Tests search with a list of one string in query params."""
+    response = index_with_documents().search(
+        'dragon',
+        {
+            'limit': 1,
+            'attributesToCrop': ['overview'],
+            'cropLength': 10,
+        }
+    )
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 1
+    assert '_formatted' in response['hits'][0]
+    assert 'overview' in response['hits'][0]['_formatted']
+    assert response['hits'][0]['_formatted']['overview'].count(' ') < 10
+    assert response['hits'][0]['_formatted']['overview'].count('…') == 2
+
+def test_custom_search_params_with_customized_crop_marker(index_with_documents):
+    """Tests search with a list of one string in query params."""
+    response = index_with_documents().search(
+        'dragon',
+        {
+            'limit': 1,
+            'attributesToCrop': ['overview'],
+            'cropLength': 10,
+            'cropMarker': '(ꈍᴗꈍ)',
+        }
+    )
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 1
+    assert '_formatted' in response['hits'][0]
+    assert 'overview' in response['hits'][0]['_formatted']
+    assert response['hits'][0]['_formatted']['overview'].count('(ꈍᴗꈍ)') == 2
+
+def test_custom_search_params_with_highlight_tag(index_with_documents):
+    """Tests search with a list of one string in query params."""
+    response = index_with_documents().search(
+        'dragon',
+        {
+            'limit': 1,
+            'attributesToHighlight': ['*'],
+        }
+    )
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 1
+    assert '_formatted' in response['hits'][0]
+    assert 'title' in response['hits'][0]['_formatted']
+    assert response['hits'][0]['_formatted']['title'] == 'How to Train Your <em>Dragon</em>: The Hidden World'
+
+def test_custom_search_params_with_customized_highlight_tag(index_with_documents):
+    """Tests search with a list of one string in query params."""
+    response = index_with_documents().search(
+        'dragon',
+        {
+            'limit': 1,
+            'attributesToHighlight': ['*'],
+            'highlightPreTag': '(⊃｡•́‿•̀｡)⊃ ',
+            'highlightPostTag': ' ⊂(´• ω •`⊂)',
+        }
+    )
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 1
+    assert '_formatted' in response['hits'][0]
+    assert 'title' in response['hits'][0]['_formatted']
+    assert response['hits'][0]['_formatted']['title'] == 'How to Train Your (⊃｡•́‿•̀｡)⊃ Dragon ⊂(´• ω •`⊂): The Hidden World'
+
 def test_custom_search_params_with_facets_distribution(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(['genre'])
