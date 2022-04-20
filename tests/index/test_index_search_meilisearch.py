@@ -350,3 +350,37 @@ def test_phrase_search(index_with_documents):
     assert 'release_date' in response['hits'][0]
     assert response['hits'][0]['title'] == 'Dumbo'
     assert '_formatted' not in response['hits'][0]
+
+def test_basic_search_on_nested_documents(index_with_documents, nested_movies):
+    """Tests search with an simple query on nested fields."""
+    response = index_with_documents('nested_fields_index', nested_movies).search('An awesome')
+    assert isinstance(response, dict)
+    assert response['hits'][0]['id'] == 5
+    assert len(response['hits']) == 1
+
+def test_search_on_nested_documents_with_searchable_attributes(index_with_documents, nested_movies):
+    """Tests search on nested fields with searchable attribute."""
+    index = index_with_documents('nested_fields_index', nested_movies)
+    response_searchable_attributes = index.update_searchable_attributes(['title', 'info.comment'])
+    index.wait_for_task(response_searchable_attributes['uid'])
+    response = index.search('An awesome')
+    assert isinstance(response, dict)
+    assert response['hits'][0]['id'] == 5
+    assert len(response['hits']) == 1
+
+def test_search_on_nested_documents_with_sortable_attributes(index_with_documents, nested_movies):
+    """Tests search on nested fields with searchable attribute and sortable attributes."""
+    index = index_with_documents('nested_fields_index', nested_movies)
+    response_settings = index.update_settings({
+        'searchableAttributes': ['title', 'info.comment'],
+        'sortableAttributes': ['info.reviewNb'],
+    })
+    index.wait_for_task(response_settings['uid'])
+    response = index.search(
+        '',
+        {
+            'sort': ['info.reviewNb:desc']
+        }
+    )
+    assert isinstance(response, dict)
+    assert response['hits'][0]['id'] == 6
