@@ -1,6 +1,6 @@
 DEFAUT_TYPO_TOLERANCE =   {
     'enabled': True,
-    'minWordLengthForTypo': {
+    'minWordSizeForTypos': {
         'oneTypo': 5,
         'twoTypos': 9,
     },
@@ -10,7 +10,7 @@ DEFAUT_TYPO_TOLERANCE =   {
 
 NEW_TYPO_TOLERANCE =   {
     'enabled': True,
-    'minWordLengthForTypo': {
+    'minWordSizeForTypos': {
         'oneTypo': 6,
         'twoTypos': 10,
     },
@@ -23,6 +23,7 @@ def test_get_typo_tolerance_default(empty_index):
     response = empty_index().get_typo_tolerance()
     assert isinstance(response, dict)
     assert response == DEFAUT_TYPO_TOLERANCE
+    print(response)
 
 def test_update_typo_tolerance(empty_index):
     """Tests updating typo_tolerance."""
