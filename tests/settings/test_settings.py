@@ -13,7 +13,7 @@ DEFAULT_RANKING_RULES = [
     'exactness'
 ]
 
-DEFAUT_TYPO_TOLERANCE =   {
+DEFAULT_TYPO_TOLERANCE =   {
     'enabled': True,
     'minWordSizeForTypos': {
         'oneTypo': 5,
@@ -29,7 +29,7 @@ def test_get_settings_default(empty_index):
     assert isinstance(response, dict)
     for rule in DEFAULT_RANKING_RULES:
         assert rule in response['rankingRules']
-    for typo in DEFAUT_TYPO_TOLERANCE:
+    for typo in DEFAULT_TYPO_TOLERANCE:
         assert typo in response['typoTolerance']
     assert response['distinctAttribute'] is None
     assert response['searchableAttributes'] == ['*']
@@ -81,7 +81,7 @@ def test_reset_settings(empty_index):
     response = index.get_settings()
     for rule in DEFAULT_RANKING_RULES:
         assert rule in response['rankingRules']
-    for typo in DEFAUT_TYPO_TOLERANCE:
+    for typo in DEFAULT_TYPO_TOLERANCE:
         assert typo in response['typoTolerance']
     assert response['distinctAttribute'] is None
     assert response['displayedAttributes'] == ['*']

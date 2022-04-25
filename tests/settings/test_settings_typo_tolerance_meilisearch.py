@@ -1,4 +1,4 @@
-DEFAUT_TYPO_TOLERANCE =   {
+DEFAULT_TYPO_TOLERANCE =   {
     'enabled': True,
     'minWordSizeForTypos': {
         'oneTypo': 5,
@@ -22,7 +22,7 @@ def test_get_typo_tolerance_default(empty_index):
     """Tests getting default typo_tolerance."""
     response = empty_index().get_typo_tolerance()
     assert isinstance(response, dict)
-    assert response == DEFAUT_TYPO_TOLERANCE
+    assert response == DEFAULT_TYPO_TOLERANCE
     print(response)
 
 def test_update_typo_tolerance(empty_index):
@@ -57,4 +57,4 @@ def test_reset_typo_tolerance(empty_index):
     update = index.wait_for_task(response['uid'])
     assert update['status'] == 'succeeded'
     response = index.get_typo_tolerance()
-    assert response == DEFAUT_TYPO_TOLERANCE
+    assert response == DEFAULT_TYPO_TOLERANCE
