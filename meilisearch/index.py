@@ -666,8 +666,7 @@ class Index():
     # RANKING RULES SUB-ROUTES
 
     def get_ranking_rules(self) -> List[str]:
-        """
-        Get ranking rules of the index.
+        """Get ranking rules of the index.
 
         Returns
         -------
@@ -684,8 +683,7 @@ class Index():
         )
 
     def update_ranking_rules(self, body: List[str]) -> Dict[str, Any]:
-        """
-        Update ranking rules of the index.
+        """Update ranking rules of the index.
 
         Parameters
         ----------
@@ -729,8 +727,7 @@ class Index():
     # DISTINCT ATTRIBUTE SUB-ROUTES
 
     def get_distinct_attribute(self) -> Optional[str]:
-        """
-        Get distinct attribute of the index.
+        """Get distinct attribute of the index.
 
         Returns
         -------
@@ -747,8 +744,7 @@ class Index():
         )
 
     def update_distinct_attribute(self, body: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Update distinct attribute of the index.
+        """Update distinct attribute of the index.
 
         Parameters
         ----------
@@ -792,8 +788,7 @@ class Index():
     # SEARCHABLE ATTRIBUTES SUB-ROUTES
 
     def get_searchable_attributes(self) -> List[str]:
-        """
-        Get searchable attributes of the index.
+        """Get searchable attributes of the index.
 
         Returns
         -------
@@ -810,8 +805,7 @@ class Index():
         )
 
     def update_searchable_attributes(self, body: List[str]) -> Dict[str, Any]:
-        """
-        Update searchable attributes of the index.
+        """Update searchable attributes of the index.
 
         Parameters
         ----------
@@ -855,8 +849,7 @@ class Index():
     # DISPLAYED ATTRIBUTES SUB-ROUTES
 
     def get_displayed_attributes(self) -> List[str]:
-        """
-        Get displayed attributes of the index.
+        """Get displayed attributes of the index.
 
         Returns
         -------
@@ -873,8 +866,7 @@ class Index():
         )
 
     def update_displayed_attributes(self, body: List[str]) -> Dict[str, Any]:
-        """
-        Update displayed attributes of the index.
+        """Update displayed attributes of the index.
 
         Parameters
         ----------
@@ -918,8 +910,7 @@ class Index():
     # STOP WORDS SUB-ROUTES
 
     def get_stop_words(self) -> List[str]:
-        """
-        Get stop words of the index.
+        """Get stop words of the index.
 
         Returns
         -------
@@ -936,8 +927,7 @@ class Index():
         )
 
     def update_stop_words(self, body: List[str]) -> Dict[str, Any]:
-        """
-        Update stop words of the index.
+        """Update stop words of the index.
 
         Parameters
         ----------
@@ -981,8 +971,7 @@ class Index():
     # SYNONYMS SUB-ROUTES
 
     def get_synonyms(self) -> Dict[str, List[str]]:
-        """
-        Get synonyms of the index.
+        """Get synonyms of the index.
 
         Returns
         -------
@@ -999,8 +988,7 @@ class Index():
         )
 
     def update_synonyms(self, body: Dict[str, List[str]]) -> Dict[str, Any]:
-        """
-        Update synonyms of the index.
+        """Update synonyms of the index.
 
         Parameters
         ----------
@@ -1044,8 +1032,7 @@ class Index():
     # FILTERABLE ATTRIBUTES SUB-ROUTES
 
     def get_filterable_attributes(self) -> List[str]:
-        """
-        Get filterable attributes of the index.
+        """Get filterable attributes of the index.
 
         Returns
         -------
@@ -1062,8 +1049,7 @@ class Index():
         )
 
     def update_filterable_attributes(self, body: List[str]) -> Dict[str, Any]:
-        """
-        Update filterable attributes of the index.
+        """Update filterable attributes of the index.
 
         Parameters
         ----------
@@ -1108,8 +1094,7 @@ class Index():
     # SORTABLE ATTRIBUTES SUB-ROUTES
 
     def get_sortable_attributes(self) -> List[str]:
-        """
-        Get sortable attributes of the index.
+        """Get sortable attributes of the index.
 
         Returns
         -------
@@ -1126,8 +1111,7 @@ class Index():
         )
 
     def update_sortable_attributes(self, body: List[str]) -> Dict[str, Any]:
-        """
-        Update sortable attributes of the index.
+        """Update sortable attributes of the index.
 
         Parameters
         ----------
@@ -1171,8 +1155,7 @@ class Index():
     # TYPO TOLERANCE SUB-ROUTES
 
     def get_typo_tolerance(self) -> Dict[str, Any]:
-        """
-        Get typo tolerance of the index.
+        """Get typo tolerance of the index.
 
         Returns
         -------
@@ -1189,8 +1172,7 @@ class Index():
         )
 
     def update_typo_tolerance(self, body: Dict[str, Any]) -> Dict[str, Any]:
-        """
-        Update typo tolerance of the index.
+        """Update typo tolerance of the index.
 
         Parameters
         ----------
