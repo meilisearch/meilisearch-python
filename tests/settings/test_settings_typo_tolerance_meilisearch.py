@@ -37,6 +37,7 @@ def test_update_typo_tolerance(empty_index):
     assert isinstance(response, dict)
     for typo_tolerance in NEW_TYPO_TOLERANCE:
         assert typo_tolerance in response
+        assert NEW_TYPO_TOLERANCE.get(typo_tolerance) == response[typo_tolerance]
 
 def test_reset_typo_tolerance(empty_index):
     """Tests resetting the typo_tolerance setting to its default value."""
@@ -50,6 +51,7 @@ def test_reset_typo_tolerance(empty_index):
     assert isinstance(response, dict)
     for typo_tolerance in NEW_TYPO_TOLERANCE:
         assert typo_tolerance in response
+        assert NEW_TYPO_TOLERANCE.get(typo_tolerance) == response[typo_tolerance]
     # Check the reset of the settings
     response = index.reset_typo_tolerance()
     assert isinstance(response, dict)

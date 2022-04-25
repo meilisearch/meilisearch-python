@@ -31,6 +31,7 @@ def test_get_settings_default(empty_index):
         assert rule in response['rankingRules']
     for typo in DEFAULT_TYPO_TOLERANCE:
         assert typo in response['typoTolerance']
+        assert DEFAULT_TYPO_TOLERANCE.get(typo) == response['typoTolerance'][typo]
     assert response['distinctAttribute'] is None
     assert response['searchableAttributes'] == ['*']
     assert response['displayedAttributes'] == ['*']
@@ -83,6 +84,7 @@ def test_reset_settings(empty_index):
         assert rule in response['rankingRules']
     for typo in DEFAULT_TYPO_TOLERANCE:
         assert typo in response['typoTolerance']
+        assert DEFAULT_TYPO_TOLERANCE.get(typo) == response['typoTolerance'][typo]
     assert response['distinctAttribute'] is None
     assert response['displayedAttributes'] == ['*']
     assert response['searchableAttributes'] == ['*']
