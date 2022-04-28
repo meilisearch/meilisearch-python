@@ -195,8 +195,8 @@ update_typo_tolerance_1: |-
         'twoTypos': 10
       },
       'disableOnAttributes': [
-        'title'
-    ]
+         'title'
+      ]
   })
 reset_typo_tolerance_1: |-
   client.index('books').reset_typo_tolerance()
