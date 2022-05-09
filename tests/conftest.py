@@ -67,6 +67,14 @@ def songs_ndjson():
     with open('./datasets/songs.ndjson', 'r', encoding='utf-8') as song_ndjson_file:
         return song_ndjson_file.read().encode('utf-8')
 
+@fixture(scope='session')
+def nested_movies():
+    """
+    Runs once per session. Provides the content of nested_movies.json.
+    """
+    with open('./datasets/nested_movies.json', 'r', encoding='utf-8') as nested_movie_file:
+        yield json.loads(nested_movie_file.read())
+
 @fixture(scope='function')
 def empty_index(client, index_uid: Optional[str] = None):
     index_uid = index_uid if index_uid else common.INDEX_UID

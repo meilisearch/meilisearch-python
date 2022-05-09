@@ -25,6 +25,7 @@ class Config:
         accept_new_fields = 'accept-new-fields'
         filterable_attributes = 'filterable-attributes'
         sortable_attributes = 'sortable-attributes'
+        typo_tolerance = 'typo-tolerance'
         dumps = 'dumps'
 
     def __init__(

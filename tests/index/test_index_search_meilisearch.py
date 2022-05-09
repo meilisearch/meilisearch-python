@@ -113,6 +113,72 @@ def test_custom_search_params_with_string_list(index_with_documents):
     assert 'title' in response['hits'][0]['_formatted']
     assert 'overview' in response['hits'][0]['_formatted']
 
+def test_custom_search_params_with_crop_marker(index_with_documents):
+    """Tests search with a list of one string in query params."""
+    response = index_with_documents().search(
+        'dragon',
+        {
+            'limit': 1,
+            'attributesToCrop': ['overview'],
+            'cropLength': 10,
+        }
+    )
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 1
+    assert '_formatted' in response['hits'][0]
+    assert 'overview' in response['hits'][0]['_formatted']
+    assert response['hits'][0]['_formatted']['overview'].count(' ') < 10
+    assert response['hits'][0]['_formatted']['overview'].count('…') == 2
+
+def test_custom_search_params_with_customized_crop_marker(index_with_documents):
+    """Tests search with a list of one string in query params."""
+    response = index_with_documents().search(
+        'dragon',
+        {
+            'limit': 1,
+            'attributesToCrop': ['overview'],
+            'cropLength': 10,
+            'cropMarker': '(ꈍᴗꈍ)',
+        }
+    )
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 1
+    assert '_formatted' in response['hits'][0]
+    assert 'overview' in response['hits'][0]['_formatted']
+    assert response['hits'][0]['_formatted']['overview'].count('(ꈍᴗꈍ)') == 2
+
+def test_custom_search_params_with_highlight_tag(index_with_documents):
+    """Tests search with a list of one string in query params."""
+    response = index_with_documents().search(
+        'dragon',
+        {
+            'limit': 1,
+            'attributesToHighlight': ['*'],
+        }
+    )
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 1
+    assert '_formatted' in response['hits'][0]
+    assert 'title' in response['hits'][0]['_formatted']
+    assert response['hits'][0]['_formatted']['title'] == 'How to Train Your <em>Dragon</em>: The Hidden World'
+
+def test_custom_search_params_with_customized_highlight_tag(index_with_documents):
+    """Tests search with a list of one string in query params."""
+    response = index_with_documents().search(
+        'dragon',
+        {
+            'limit': 1,
+            'attributesToHighlight': ['*'],
+            'highlightPreTag': '(⊃｡•́‿•̀｡)⊃ ',
+            'highlightPostTag': ' ⊂(´• ω •`⊂)',
+        }
+    )
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 1
+    assert '_formatted' in response['hits'][0]
+    assert 'title' in response['hits'][0]['_formatted']
+    assert response['hits'][0]['_formatted']['title'] == 'How to Train Your (⊃｡•́‿•̀｡)⊃ Dragon ⊂(´• ω •`⊂): The Hidden World'
+
 def test_custom_search_params_with_facets_distribution(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(['genre'])
@@ -350,3 +416,37 @@ def test_phrase_search(index_with_documents):
     assert 'release_date' in response['hits'][0]
     assert response['hits'][0]['title'] == 'Dumbo'
     assert '_formatted' not in response['hits'][0]
+
+def test_basic_search_on_nested_documents(index_with_documents, nested_movies):
+    """Tests search with an simple query on nested fields."""
+    response = index_with_documents('nested_fields_index', nested_movies).search('An awesome')
+    assert isinstance(response, dict)
+    assert response['hits'][0]['id'] == 5
+    assert len(response['hits']) == 1
+
+def test_search_on_nested_documents_with_searchable_attributes(index_with_documents, nested_movies):
+    """Tests search on nested fields with searchable attribute."""
+    index = index_with_documents('nested_fields_index', nested_movies)
+    response_searchable_attributes = index.update_searchable_attributes(['title', 'info.comment'])
+    index.wait_for_task(response_searchable_attributes['uid'])
+    response = index.search('An awesome')
+    assert isinstance(response, dict)
+    assert response['hits'][0]['id'] == 5
+    assert len(response['hits']) == 1
+
+def test_search_on_nested_documents_with_sortable_attributes(index_with_documents, nested_movies):
+    """Tests search on nested fields with searchable attribute and sortable attributes."""
+    index = index_with_documents('nested_fields_index', nested_movies)
+    response_settings = index.update_settings({
+        'searchableAttributes': ['title', 'info.comment'],
+        'sortableAttributes': ['info.reviewNb'],
+    })
+    index.wait_for_task(response_settings['uid'])
+    response = index.search(
+        '',
+        {
+            'sort': ['info.reviewNb:desc']
+        }
+    )
+    assert isinstance(response, dict)
+    assert response['hits'][0]['id'] == 6
