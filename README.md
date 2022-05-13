@@ -173,7 +173,7 @@ Then, you can perform the search:
 index.search(
   'wonder',
   {
-    filter: ['id > 1 AND genres = Action']
+    'filter': ['id > 1 AND genres = Action']
   }
 )
 ```
