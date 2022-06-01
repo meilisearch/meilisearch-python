@@ -3,6 +3,16 @@
 # the documentation on build
 # You can read more on https://github.com/meilisearch/documentation/tree/master/.vuepress/code-samples
 ---
+updating_guide_get_displayed_attributes_old: |- 
+updating_guide_reset_displayed_attributes_old: |-
+updating_guide_check_version: |-
+updating_guide_create_dump: |-
+updating_guide_get_dump_status: |-
+updating_guide_get_settings: |-
+updating_guide_retrieve_documents: |-
+updating_guide_update_settings: |-
+updating_guide_add_documents: |-
+
 get_one_index_1: |-
   client.get_index('movies')
 list_all_indexes_1: |-
@@ -421,7 +431,7 @@ getting_started_add_meteorites: |-
   json_file = open('meteorites.json')
   meteorites = json.load(json_file)
   client.index('meteorites').add_documents(meteorites)
-getting_started_update_rankingRules: |-
+getting_started_update_ranking_rules: |-
   client.index('movies').update_ranking_rules([
       'exactness',
       'words',
@@ -432,13 +442,13 @@ getting_started_update_rankingRules: |-
       'release_date:asc',
       'rank:desc'
   ])
-getting_started_update_displayedAttributes: |-
+getting_started_update_displayed_attributes: |-
   client.index('movies').update_displayed_attributes([
       'title',
       'overview',
       'poster'
   ])
-getting_started_update_searchableAttributes: |-
+getting_started_update_searchable_attributes: |-
   client.index('movies').update_searchable_attributes([
       'title'
   ])
@@ -453,11 +463,11 @@ getting_started_filtering: |-
   client.index('meteorites').search('', {
     'filter': 'mass < 200'
   })
-getting_started_geoRadius: |-
+getting_started_geo_radius: |-
   client.index('meteorites').search('', {
     'filter': '_geoRadius(46.9480, 7.4474, 210000)'
   })
-getting_started_geoPoint: |-
+getting_started_geo_point: |-
   client.index('meteorites').search('', {
     'sort': ['_geoPoint(48.8583701,2.2922926):asc']
   })
@@ -553,9 +563,9 @@ geosearch_guide_sort_usage_2: |-
   client.index('restaurants').search('', {
     'sort': ['_geoPoint(48.8561446,2.2978204):asc', 'rating:desc']
   })
-document_guide_create_index_primary_key: |-
+primary_field_guide_create_index_primary_key: |-
   client.create_index('movies', {'primaryKey': 'reference_number'})
-document_guide_add_document_primary_key: |-
+primary_field_guide_add_document_primary_key: |-
   client.index('movies').add_documents([{
     'reference_number': 287947,
     'title': 'Shazam',
