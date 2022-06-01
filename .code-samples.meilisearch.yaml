@@ -3,16 +3,6 @@
 # the documentation on build
 # You can read more on https://github.com/meilisearch/documentation/tree/master/.vuepress/code-samples
 ---
-updating_guide_get_displayed_attributes_old: |- 
-updating_guide_reset_displayed_attributes_old: |-
-updating_guide_check_version: |-
-updating_guide_create_dump: |-
-updating_guide_get_dump_status: |-
-updating_guide_get_settings: |-
-updating_guide_retrieve_documents: |-
-updating_guide_update_settings: |-
-updating_guide_add_documents: |-
-
 get_one_index_1: |-
   client.get_index('movies')
 list_all_indexes_1: |-
@@ -564,14 +554,14 @@ geosearch_guide_sort_usage_2: |-
     'sort': ['_geoPoint(48.8561446,2.2978204):asc', 'rating:desc']
   })
 primary_field_guide_create_index_primary_key: |-
-  client.create_index('movies', {'primaryKey': 'reference_number'})
+  client.create_index('books', {'primaryKey': 'reference_number'})
 primary_field_guide_add_document_primary_key: |-
-  client.index('movies').add_documents([{
+  client.index('books').add_documents([{
     'reference_number': 287947,
-    'title': 'Shazam',
-    'poster': 'https://image.tmdb.org/t/p/w1280/xnopI5Xtky18MPhK40cZAGAOVeV.jpg',
-    'overview': 'A boy is given the ability to become an adult superhero in times of need with a single magic word.',
-    'release_date': '2019-03-23'
+    'title': 'Diary of a Wimpy Kid',
+    'author': 'Jeff Kinney',
+    'genres': ['comedy', 'humor'],
+    'price': 5.00
   }], 'reference_number')
 security_guide_search_key_1: |-
   client = Client('http://127.0.0.1:7700', 'apiKey')
@@ -610,3 +600,55 @@ tenant_token_guide_generate_sdk_1: |-
 tenant_token_guide_search_sdk_1: |-
   front_end_client = Client('http://127.0.0.1:7700', token)
   front_end_client.index('patient_medical_records').search('blood test')
+updating_guide_check_version: |-
+  client = Client('http://127.0.0.1:7700', 'apiKey')
+  client.get_version()
+updating_guide_get_displayed_attributes_new: |-
+  # whenever you see {index_uid}, replace it with your index's unique id
+  client = Client('http://127.0.0.1:7700', 'apiKey')
+  client.index({index_uid}).get_displayed_attributes()
+updating_guide_get_displayed_attributes_old: |-
+  # whenever you see {index_uid}, replace it with your index's unique id
+  client = Client('http://127.0.0.1:7700', 'apiKey')
+  client.index({index_uid}).get_displayed_attributes()
+updating_guide_reset_displayed_attributes_new: |-
+  client = Client('http://127.0.0.1:7700', 'apiKey')
+  client.index({index_uid}).reset_displayed_attributes()
+updating_guide_reset_displayed_attributes_old: |-
+  client = Client('http://127.0.0.1:7700', 'apiKey')
+  client.index({index_uid}).reset_displayed_attributes()
+updating_guide_create_dump: |-
+  client = Client('http://127.0.0.1:7700', 'apiKey')
+  client.create_dump()
+updating_guide_get_dump_status: |-
+  # replace {dump_uid} with the uid returned by the previous command
+  client = Client('http://127.0.0.1:7700', 'apiKey')
+  client.get_dump_status({dump_uid})
+updating_guide_get_settings: |-
+  import json
+
+  client = Client('http://127.0.0.1:7700', 'apiKey')
+  settings = client.index({index_uid}).get_settings()
+  with open('mysettings.json', 'w') as json_file:
+    json.dump(settings, json_file)
+updating_guide_retrieve_documents: |-
+  import json
+
+  client = Client('http://127.0.0.1:7700', 'apiKey')
+  documents = client.index({index_uid}).get_documents()
+  with open('mydocuments.json', 'w') as json_file:
+    json.dump(documents, json_file)
+updating_guide_update_settings: |-
+  # update your settings
+  import json
+
+  json_file = open('mysettings.json')
+  settings = json.load(json_file)
+  client.index({index_uid}).update_settings(settings)
+updating_guide_add_documents: |-
+  # then, add your documents
+  import json
+
+  json_file = open('mydocuments.json')
+  documents = json.load(json_file)
+  client.index({index_uid}).add_documents(documents)
