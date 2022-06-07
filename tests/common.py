@@ -1,7 +1,7 @@
 import os
 
 MASTER_KEY = 'masterKey'
-BASE_URL = os.getenv('MEILISEARCH_HOST') || 'http://127.0.0.1:7700'
+BASE_URL = os.getenv('MEILISEARCH_HOST') if os.getenv('MEILISEARCH_HOST') else 'http://127.0.0.1:7700'
 
 INDEX_UID = 'indexUID'
 INDEX_UID2 = 'indexUID2'
