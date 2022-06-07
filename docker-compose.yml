@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   package:
-    image: python:3.8.4-buster
+    build: .
     tty: true
     stdin_open: true
     working_dir: /home/package

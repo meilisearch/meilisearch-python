@@ -32,7 +32,7 @@ You can set up your local environment natively or using `docker`, check out the 
 
 Example of running all the checks with docker:
 ```bash
-docker-compose run --rm package bash -c "pip3 install pipenv && pipenv install --dev && pipenv run mypy meilisearch && pipenv run pylint meilisearch"
+docker-compose run --rm package bash -c "pipenv run mypy meilisearch && pipenv run pylint meilisearch && pipenv run pytest tests"
 ```
 
 To install dependencies:
@@ -50,7 +50,7 @@ Each PR should pass the tests, mypy type checking, and the linter to be accepted
 # Tests
 curl -L https://install.meilisearch.com | sh # download Meilisearch
 ./meilisearch --master-key=masterKey --no-analytics # run Meilisearch
-pipenv run pytest meilisearch
+pipenv run pytest tests
 # MyPy
 pipenv run mypy meilisearch
 # Linter
