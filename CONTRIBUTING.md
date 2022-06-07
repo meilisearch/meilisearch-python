@@ -32,11 +32,10 @@ You can set up your local environment natively or using `docker`, check out the 
 
 Example of running all the checks with docker:
 ```bash
-docker-compose run --rm package
+docker-compose run --rm package bash -c "pipenv run mypy meilisearch && pipenv run pylint meilisearch && pipenv run pytest tests"
 ```
 
 To install dependencies:
-
 
 ```bash
 pipenv install --dev
