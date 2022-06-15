@@ -23,14 +23,14 @@ def clear_indexes(client):
     indexes = client.get_indexes()
     for index in indexes:
         task = client.index(index.uid).delete()
-        client.wait_for_task(task['uid'])
+        client.wait_for_task(task['taskUid'])
 
 @fixture(scope='function')
 def indexes_sample(client):
     indexes = []
     for index_args in common.INDEX_FIXTURE:
         task = client.create_index(**index_args)
-        client.wait_for_task(task['uid'])
+        client.wait_for_task(task['taskUid'])
         indexes.append(client.get_index(index_args['uid']))
     # Yields the indexes to the test to make them accessible.
     yield indexes
@@ -78,18 +78,18 @@ def nested_movies():
 @fixture(scope='function')
 def empty_index(client, index_uid: Optional[str] = None):
     index_uid = index_uid if index_uid else common.INDEX_UID
-    def index_maker(index_name=index_uid):
-        task = client.create_index(uid=index_name)
-        client.wait_for_task(task['uid'])
-        return client.get_index(uid=index_name)
+    def index_maker(index_uid=index_uid):
+        task = client.create_index(uid=index_uid)
+        client.wait_for_task(task['taskUid'])
+        return client.get_index(uid=index_uid)
     return index_maker
 
 @fixture(scope='function')
 def index_with_documents(empty_index, small_movies):
-    def index_maker(index_name=common.INDEX_UID, documents=small_movies):
-        index = empty_index(index_name)
+    def index_maker(index_uid=common.INDEX_UID, documents=small_movies):
+        index = empty_index(index_uid)
         task = index.add_documents(documents)
-        index.wait_for_task(task['uid'])
+        index.wait_for_task(task['taskUid'])
         return index
     return index_maker
 

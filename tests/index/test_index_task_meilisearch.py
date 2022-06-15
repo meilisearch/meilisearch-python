@@ -14,18 +14,18 @@ def test_get_tasks(empty_index, small_movies):
     """Tests getting the tasks list of a populated index."""
     index = empty_index()
     current_tasks = index.get_tasks()
-    pre_count = len(current_tasks["results"])
+    pre_count = current_tasks["from"]
     response = index.add_documents(small_movies)
-    assert 'uid' in response
-    task = index.get_tasks()
-    assert len(task['results']) == pre_count + 1
+    assert 'taskUid' in response
+    tasks = index.get_tasks()
+    assert tasks["from"] == pre_count + 1
 
 def test_get_task(client):
     """Tests getting a task of a operation."""
     task = client.create_index(uid=common.INDEX_UID)
-    client.wait_for_task(task['uid'])
+    client.wait_for_task(task['taskUid'])
     index = client.get_index(uid=common.INDEX_UID)
-    task = index.get_task(task['uid'])
+    task = index.get_task(task['taskUid'])
     assert isinstance(task, dict)
     assert len(task) == 9
     assert 'uid' in task
