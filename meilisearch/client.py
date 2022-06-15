@@ -383,29 +383,6 @@ class Client():
         """
         return self.http.post(self.config.paths.dumps)
 
-    def get_dump_status(self, uid: str) -> Dict[str, str]:
-        """Retrieve the status of a Meilisearch dump creation.
-
-        Parameters
-        ----------
-        uid:
-            UID of the dump.
-
-        Returns
-        -------
-        Dump status:
-            Information about the dump status.
-            https://docs.meilisearch.com/reference/api/dump.html#get-dump-status
-
-        Raises
-        ------
-        MeiliSearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
-        """
-        return self.http.get(
-            self.config.paths.dumps + '/' + str(uid) + '/status'
-        )
-
     def get_tasks(self) -> Dict[str, List[Dict[str, Any]]]:
         """Get all tasks.
 
