@@ -101,7 +101,7 @@ class Client():
                 index["createdAt"],
                 index["updatedAt"],
             )
-            for index in response
+            for index in response['results']
         ]
 
     def get_raw_indexes(self) -> List[Dict[str, Any]]:

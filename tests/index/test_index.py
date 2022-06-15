@@ -49,7 +49,7 @@ def test_get_indexes(client):
 
 @pytest.mark.usefixtures("indexes_sample")
 def test_get_raw_indexes(client):
-    response = client.get_raw_indexes()
+    response = client.get_raw_indexes()['results']
     uids = [index['uid'] for index in response]
     assert isinstance(response, list)
     assert common.INDEX_UID in uids
