@@ -109,7 +109,7 @@ def test_key(client):
 
 @fixture(scope='function')
 def test_key_info(client):
-    key_info = {'description': 'test', 'actions': ['search'], 'indexes': [common.INDEX_UID], 'expiresAt': None}
+    key_info = {'name': 'testKeyName', 'description': 'test', 'actions': ['search'], 'indexes': [common.INDEX_UID], 'expiresAt': None}
 
     yield key_info
 
