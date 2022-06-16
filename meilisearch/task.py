@@ -6,7 +6,7 @@ from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
 from meilisearch.errors import MeiliSearchTimeoutError
 
-def get_tasks(config: Config, index_id: Optional[str] = None) -> Dict[str, List[Dict[str, Any]]]:
+def get_tasks(config: Config, index_ids: Optional[List[str]] = None) -> Dict[str, List[Dict[str, Any]]]:
     """Get all tasks.
 
     Parameters
@@ -27,12 +27,12 @@ def get_tasks(config: Config, index_id: Optional[str] = None) -> Dict[str, List[
         An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
     """
     http = HttpRequests(config)
-    if index_id is None:
+    if index_ids is None:
         return http.get(
             f'{config.paths.task}'
         )
     return http.get(
-        f'{config.paths.task}?indexUid={index_id}'
+        f"{config.paths.task}?indexUid={','.join(index_ids)}"
     )
 
 def get_task(config: Config, uid: int) -> Dict[str, Any]:
