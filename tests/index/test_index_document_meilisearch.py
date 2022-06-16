@@ -40,7 +40,6 @@ def test_add_documents_in_batches(
     for r in response:
         assert 'taskUid' in r
         update = index.wait_for_task(r['taskUid'])
-        print(index.get_task(r['taskUid']), '\n')
         assert update['status'] == 'succeeded'
 
     assert index.get_primary_key() == expected_primary_key

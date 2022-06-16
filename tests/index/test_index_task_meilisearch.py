@@ -5,20 +5,20 @@ from tests import common
 
 def test_get_tasks_default(empty_index):
     """Tests getting the tasks list of an empty index."""
-    task = empty_index().get_tasks()
-    assert isinstance(task, dict)
-    assert 'results' in task
-    assert len(task['results']) != 0
+    tasks = empty_index().get_tasks()
+    assert isinstance(tasks, dict)
+    assert 'results' in tasks
+    assert len(tasks['results']) != 0
 
 def test_get_tasks(empty_index, small_movies):
     """Tests getting the tasks list of a populated index."""
     index = empty_index()
     current_tasks = index.get_tasks()
-    pre_count = current_tasks["from"]
+    pre_count = len(current_tasks['results'])
     response = index.add_documents(small_movies)
     assert 'taskUid' in response
     tasks = index.get_tasks()
-    assert tasks["from"] == pre_count + 1
+    assert len(tasks['results']) == pre_count + 1
 
 def test_get_task(client):
     """Tests getting a task of a operation."""
