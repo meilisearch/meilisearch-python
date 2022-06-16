@@ -5,7 +5,6 @@ def test_dump_creation(client, index_with_documents):
     index_with_documents("indexUID-dump-creation")
     dump = client.create_dump()
     assert dump['taskUid'] is not None
-    assert dump['status'] == 'enqueued'
     client.wait_for_task(dump['taskUid'])
     dump_status = client.get_task(dump['taskUid'])
     assert dump_status['status'] == 'succeeded'
