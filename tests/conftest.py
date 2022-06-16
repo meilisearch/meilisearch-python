@@ -21,7 +21,7 @@ def clear_indexes(client):
     yield
     # Deletes all the indexes in the Meilisearch instance.
     indexes = client.get_indexes()
-    for index in indexes:
+    for index in indexes['results']:
         task = client.index(index.uid).delete()
         client.wait_for_task(task['uid'])
 

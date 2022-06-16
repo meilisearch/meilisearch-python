@@ -93,16 +93,18 @@ class Client():
         """
         response = self.http.get(self.config.paths.index)
 
-        return [
-            Index(
-                self.config,
-                index["uid"],
-                index["primaryKey"],
-                index["createdAt"],
-                index["updatedAt"],
-            )
-            for index in response['results']
-        ]
+        return {
+            'results' : [
+                Index(
+                    self.config,
+                    index["uid"],
+                    index["primaryKey"],
+                    index["createdAt"],
+                    index["updatedAt"],
+                )
+                for index in response['results']
+            ]
+        }
 
     def get_raw_indexes(self) -> List[Dict[str, Any]]:
         """Get all indexes in dictionary format.
