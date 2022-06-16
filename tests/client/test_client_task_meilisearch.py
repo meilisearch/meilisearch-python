@@ -10,7 +10,7 @@ def test_get_tasks_default(client):
     assert 'results' in tasks
 
 def test_get_tasks(client, empty_index):
-    """Tests getting the global tasks list after populated an index."""
+    """Tests getting the global tasks list after populating an index."""
     current_tasks = client.get_tasks()
     pre_count = current_tasks["from"]
     empty_index()
