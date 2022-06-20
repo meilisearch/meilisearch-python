@@ -137,7 +137,7 @@ class Index():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return get_tasks(self.config, self.uid)
+        return get_tasks(self.config, [self.uid])
 
     def get_task(self, uid: int) -> Dict[str, Any]:
         """Get one task through the route of a specific index.
