@@ -499,8 +499,6 @@ faceted_search_walkthrough_filter_1: |-
   })
 post_dump_1: |-
   client.create_dump()
-get_dump_status_1: |-
-  client.get_dump_status('20201101-110357260')
 phrase_search_1: |-
   client.index('movies').search('"african american" horror')
 sorting_guide_update_sortable_attributes_1: |-
