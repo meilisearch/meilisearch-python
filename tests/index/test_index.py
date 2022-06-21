@@ -41,21 +41,33 @@ def test_get_indexes(client):
     """Tests getting all indexes."""
     response = client.get_indexes()
     uids = [index.uid for index in response['results']]
-    assert isinstance(response, list)
+    assert isinstance(response['results'], list)
     assert common.INDEX_UID in uids
     assert common.INDEX_UID2 in uids
     assert common.INDEX_UID3 in uids
-    assert len(response) == 3
+    assert len(response['results']) == 3
+
+@pytest.mark.usefixtures("indexes_sample")
+def test_get_indexes_with_resource_query(client):
+    """Tests getting all indexes."""
+    response = client.get_indexes(resource_query={'limit':1, 'offset': 1})
+    assert len(response['results']) == 1
 
 @pytest.mark.usefixtures("indexes_sample")
 def test_get_raw_indexes(client):
-    response = client.get_raw_indexes()['results']
-    uids = [index['uid'] for index in response]
-    assert isinstance(response, list)
+    response = client.get_raw_indexes()
+    uids = [index['uid'] for index in response['results']]
+    assert isinstance(response['results'], list)
     assert common.INDEX_UID in uids
     assert common.INDEX_UID2 in uids
     assert common.INDEX_UID3 in uids
-    assert len(response) == 3
+    assert len(response['results']) == 3
+
+@pytest.mark.usefixtures("indexes_sample")
+def test_get_raw_indexeswith_resource_query(client):
+    response = client.get_raw_indexes(resource_query={'limit':1, 'offset': 1})
+    assert isinstance(response['results'], list)
+    assert len(response['results']) == 1
 
 def test_index_with_any_uid(client):
     index = client.index('anyUID')
