@@ -261,13 +261,13 @@ class Index():
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}/{document_id}'
         )
 
-    def get_documents(self, resource_query: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+    def get_documents(self, parameters: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
         """Get a set of documents from the index.
 
         Parameters
         ----------
-        resource_query (optional):
-            resource_query accepted by the get documents route: https://docs.meilisearch.com/reference/api/documents.html#get-documents
+        parameters (optional):
+            parameters accepted by the get documents route: https://docs.meilisearch.com/reference/api/documents.html#get-documents
 
         Returns
         -------
@@ -279,10 +279,10 @@ class Index():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        if resource_query is None:
-            resource_query = {}
+        if parameters is None:
+            parameters = {}
         return self.http.get(
-            f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{parse.urlencode(resource_query)}'
+            f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{parse.urlencode(parameters)}'
         )
 
     def add_documents(
