@@ -79,13 +79,13 @@ class Client():
 
         return self.http.delete(f'{self.config.paths.index}/{uid}')
 
-    def get_indexes(self, resource_query: Optional[Dict[str, Any]] = None) -> Dict[str, List[Index]]:
+    def get_indexes(self, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, List[Index]]:
         """Get all indexes.
 
         Parameters
         ----------
-        resource_query (optional):
-            resource_query accepted by the get indexes route: https://docs.meilisearch.com/reference/api/indexes.html#list-all-indexes
+        parameters (optional):
+            parameters accepted by the get indexes route: https://docs.meilisearch.com/reference/api/indexes.html#list-all-indexes
 
         Returns
         -------
@@ -97,10 +97,10 @@ class Client():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        if resource_query is None:
-            resource_query = {}
+        if parameters is None:
+            parameters = {}
         response = self.http.get(
-            f'{self.config.paths.index}?{parse.urlencode(resource_query)}'
+            f'{self.config.paths.index}?{parse.urlencode(parameters)}'
         )
         response['results'] = [
                 Index(
@@ -114,13 +114,13 @@ class Client():
             ]
         return response
 
-    def get_raw_indexes(self, resource_query: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+    def get_raw_indexes(self, parameters: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
         """Get all indexes in dictionary format.
 
         Parameters
         ----------
-        resource_query (optional):
-            resource_query accepted by the get indexes route: https://docs.meilisearch.com/reference/api/indexes.html#list-all-indexes
+        parameters (optional):
+            parameters accepted by the get indexes route: https://docs.meilisearch.com/reference/api/indexes.html#list-all-indexes
 
         Returns
         -------
@@ -132,10 +132,10 @@ class Client():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        if resource_query is None:
-            resource_query = {}
+        if parameters is None:
+            parameters = {}
         return self.http.get(
-            f'{self.config.paths.index}?{parse.urlencode(resource_query)}'
+            f'{self.config.paths.index}?{parse.urlencode(parameters)}'
         )
 
     def get_index(self, uid: str) -> Index:

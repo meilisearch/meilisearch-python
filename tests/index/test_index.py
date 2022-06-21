@@ -48,9 +48,9 @@ def test_get_indexes(client):
     assert len(response['results']) == 3
 
 @pytest.mark.usefixtures("indexes_sample")
-def test_get_indexes_with_resource_query(client):
+def test_get_indexes_with_parameters(client):
     """Tests getting all indexes."""
-    response = client.get_indexes(resource_query={'limit':1, 'offset': 1})
+    response = client.get_indexes(parameters={'limit':1, 'offset': 1})
     assert len(response['results']) == 1
 
 @pytest.mark.usefixtures("indexes_sample")
@@ -64,8 +64,8 @@ def test_get_raw_indexes(client):
     assert len(response['results']) == 3
 
 @pytest.mark.usefixtures("indexes_sample")
-def test_get_raw_indexeswith_resource_query(client):
-    response = client.get_raw_indexes(resource_query={'limit':1, 'offset': 1})
+def test_get_raw_indexeswith_parameters(client):
+    response = client.get_raw_indexes(parameters={'limit':1, 'offset': 1})
     assert isinstance(response['results'], list)
     assert len(response['results']) == 1
 
