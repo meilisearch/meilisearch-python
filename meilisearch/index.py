@@ -124,8 +124,13 @@ class Index():
         payload = {**options, 'uid': uid}
         return HttpRequests(config).post(config.paths.index, payload)
 
-    def get_tasks(self) -> Dict[str, List[Dict[str, Any]]]:
+    def get_tasks(self, resourceQuery: Optional[Dict[str, Any]] = None) -> Dict[str, List[Dict[str, Any]]]:
         """Get all tasks of a specific index from the last one.
+
+        Parameters
+        ----------
+        resourceQuery (optional):
+            resourceQuery accepted by the get tasks route: https://docs.meilisearch.com/reference/api/tasks.html#get-all-tasks
 
         Returns
         -------
@@ -137,7 +142,7 @@ class Index():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return get_tasks(self.config, [self.uid])
+        return get_tasks(self.config, index_ids=[self.uid], resourceQuery=resourceQuery)
 
     def get_task(self, uid: int) -> Dict[str, Any]:
         """Get one task through the route of a specific index.
