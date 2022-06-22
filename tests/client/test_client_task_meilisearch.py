@@ -18,18 +18,18 @@ def test_get_tasks(client, empty_index):
     assert isinstance(tasks, dict)
     assert tasks['from'] == pre_count + 1
 
-def test_get_tasks_with_limit(client):
-    """Tests getting the global tasks list after populating an index."""
-    tasks = client.get_tasks({'limit': 1})
-    assert isinstance(tasks, dict)
-    assert len(tasks['results']) == 1
-
-def test_get_tasks_with_from(client):
+def test_get_tasks_with_parameters(client):
     """Tests getting the global tasks list after populating an index."""
     tasks = client.get_tasks({'limit': 1, 'from': 1})
     assert isinstance(tasks, dict)
     assert len(tasks['results']) == 1
     assert tasks['results'][0]['uid'] == 1
+
+def test_get_tasks_with_index_uid(client):
+    """Tests getting the global tasks list after populating an index."""
+    tasks = client.get_tasks({'limit': 1, 'indexUid': [common.INDEX_UID]})
+    assert isinstance(tasks, dict)
+    assert len(tasks['results']) == 1
 
 def test_get_task(client):
     """Tests getting the tasks list of an empty index."""

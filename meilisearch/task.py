@@ -7,17 +7,16 @@ from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
 from meilisearch.errors import MeiliSearchTimeoutError
 
-def get_tasks(config: Config, index_ids: Optional[List[str]] = None, task_query: Optional[Dict[str, Any]] = None) -> Dict[str, List[Dict[str, Any]]]:
+def get_tasks(config: Config, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, List[Dict[str, Any]]]:
     """Get all tasks.
 
     Parameters
     ----------
     config:
         Config object containing permission and location of Meilisearch.
-    index_id:
-        The id of the `Index`.
-    task_query (optional):
-        task_query accepted by the get tasks route: https://docs.meilisearch.com/reference/api/tasks.html#get-all-tasks
+    parameters (optional):
+        parameters accepted by the get tasks route: https://docs.meilisearch.com/reference/api/tasks.html#get-all-tasks.
+        `indexUid` should be set as a List.
 
     Returns
     -------
@@ -30,13 +29,12 @@ def get_tasks(config: Config, index_ids: Optional[List[str]] = None, task_query:
         An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
     """
     http = HttpRequests(config)
-    {parse.urlencode(task_query)}
-    if task_query is None:
-        task_query = {}
-    if task_query['indexUID'] is not None:
-        task_query['indexUID'] = task_query['indexUID'] + ',' + index_ids
+    if parameters is None:
+        parameters = {}
+    else:
+       parameters['indexUid'] = ",".join(parameters['indexUid'])
     return http.get(
-        f"{config.paths.task}?{parse.urlencode(task_query)}"
+        f"{config.paths.task}?{parse.urlencode(parameters)}"
     )
 
 def get_task(config: Config, uid: int) -> Dict[str, Any]:

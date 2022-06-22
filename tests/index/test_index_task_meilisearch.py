@@ -20,6 +20,20 @@ def test_get_tasks(empty_index, small_movies):
     tasks = index.get_tasks()
     assert len(tasks['results']) == pre_count + 1
 
+def test_get_tasks_with_parameters(empty_index):
+    """Tests getting the tasks list of a populated index."""
+    index = empty_index()
+    tasks = index.get_tasks({'limit': 1})
+    assert isinstance(tasks, dict)
+    assert len(tasks['results']) == 1
+
+def test_get_tasks_with_index_uid(empty_index):
+    """Tests getting the tasks list of a populated index."""
+    index = empty_index()
+    tasks = index.get_tasks({'limit': 1, 'indexUid': [common.INDEX_UID]})
+    assert isinstance(tasks, dict)
+    assert len(tasks['results']) == 1
+
 def test_get_task(client):
     """Tests getting a task of a operation."""
     task = client.create_index(uid=common.INDEX_UID)
