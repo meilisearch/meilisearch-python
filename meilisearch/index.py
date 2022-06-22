@@ -136,7 +136,7 @@ class Index():
         Returns
         -------
         task:
-            Dictionary containing a list of all enqueued, processing, succeeded or failed tasks of the index.
+            Dictionary with limit, from, next and results containing a list of all enqueued, processing, succeeded or failed tasks of the index.
 
         Raises
         ------

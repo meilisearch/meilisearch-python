@@ -395,7 +395,7 @@ class Client():
         Returns
         -------
         task:
-            Dictionary containing a list of all enqueued, processing, succeeded or failed tasks.
+            Dictionary with limit, from, next and results containing a list of all enqueued, processing, succeeded or failed tasks.
 
         Raises
         ------

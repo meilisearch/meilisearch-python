@@ -21,7 +21,7 @@ def get_tasks(config: Config, parameters: Optional[Dict[str, Any]] = None) -> Di
     Returns
     -------
     task:
-        Dictionary containing a list of all enqueued, processing, succeeded or failed tasks.
+        Dictionary with limit, from, next and results containing a list of all enqueued, processing, succeeded or failed tasks.
 
     Raises
     ------
@@ -29,10 +29,10 @@ def get_tasks(config: Config, parameters: Optional[Dict[str, Any]] = None) -> Di
         An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
     """
     http = HttpRequests(config)
-    if parameters is None:
+    if parameters is None or parameters == {}:
         parameters = {}
     else:
-       parameters['indexUid'] = ",".join(parameters['indexUid'])
+        parameters['indexUid'] = ",".join(parameters['indexUid'])
     return http.get(
         f"{config.paths.task}?{parse.urlencode(parameters)}"
     )

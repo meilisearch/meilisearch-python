@@ -34,6 +34,13 @@ def test_get_tasks_with_index_uid(empty_index):
     assert isinstance(tasks, dict)
     assert len(tasks['results']) == 1
 
+def test_get_tasks_empty_parameters(empty_index):
+    """Tests getting the global tasks list after populating an index."""
+    index = empty_index()
+    tasks = index.get_tasks({})
+    assert isinstance(tasks, dict)
+    assert isinstance(tasks['results'], list)
+
 def test_get_task(client):
     """Tests getting a task of a operation."""
     task = client.create_index(uid=common.INDEX_UID)
