@@ -36,7 +36,6 @@ def test_add_documents_in_batches(
     response = index.add_documents_in_batches(small_movies, batch_size, primary_key)
     assert ceil(len(small_movies) / batch_size) == len(response)
 
-    print(response, '\n', '\n')
     for r in response:
         assert 'uid' in r
         update = index.wait_for_task(r['uid'])
