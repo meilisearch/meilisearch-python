@@ -79,13 +79,13 @@ class Client():
 
         return self.http.delete(f'{self.config.paths.index}/{uid}')
 
-    def get_indexes(self, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, List[Index]]:
+    def get_indexes(self, indexes_query: Optional[Dict[str, Any]] = None) -> Dict[str, List[Index]]:
         """Get all indexes.
 
         Parameters
         ----------
-        parameters (optional):
-            parameters accepted by the get indexes route: https://docs.meilisearch.com/reference/api/indexes.html#list-all-indexes
+        indexes_query (optional):
+            indexes_query accepted by the get indexes route: https://docs.meilisearch.com/reference/api/indexes.html#list-all-indexes
 
         Returns
         -------
@@ -97,10 +97,10 @@ class Client():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        if parameters is None:
-            parameters = {}
+        if indexes_query is None:
+            indexes_query = {}
         response = self.http.get(
-            f'{self.config.paths.index}?{parse.urlencode(parameters)}'
+            f'{self.config.paths.index}?{parse.urlencode(indexes_query)}'
         )
         response['results'] = [
                 Index(
