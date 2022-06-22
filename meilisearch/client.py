@@ -90,7 +90,7 @@ class Client():
         Returns
         -------
         indexes:
-            List of Index instances.
+            Dictionary with limit, offset, total and results a list of Index instances.
 
         Raises
         ------
