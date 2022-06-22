@@ -272,7 +272,7 @@ class Index():
         Returns
         -------
         document:
-            List of dictionaries containing the documents information.
+            Dictionary with limit, offset, total and results a list of dictionaries containing the documents information.
 
         Raises
         ------
