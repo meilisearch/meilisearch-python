@@ -240,13 +240,13 @@ class Client():
             return False
         return True
 
-    def get_key(self, key: str) -> Dict[str, Any]:
+    def get_key(self, key_or_uid: str) -> Dict[str, Any]:
         """Gets information about a specific API key.
 
         Parameters
         ----------
-        key:
-            The key for which to retrieve the information.
+        key_or_uid:
+            The key or the uid for which to retrieve the information.
 
         Returns
         -------
@@ -259,7 +259,7 @@ class Client():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.get(f'{self.config.paths.keys}/{key}')
+        return self.http.get(f'{self.config.paths.keys}/{key_or_uid}')
 
     def get_keys(self) -> Dict[str, Any]:
         """Gets the Meilisearch API keys.
@@ -267,7 +267,7 @@ class Client():
         Returns
         -------
         keys:
-            API keys.
+            Dictionary with limit, offset, total and results a list of dictionaries containing the key information.
             https://docs.meilisearch.com/reference/api/keys.html#get-keys
 
         Raises
