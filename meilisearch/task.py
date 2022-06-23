@@ -31,7 +31,7 @@ def get_tasks(config: Config, parameters: Optional[Dict[str, Any]] = None) -> Di
     http = HttpRequests(config)
     if parameters is None or parameters == {}:
         parameters = {}
-    else:
+    elif 'indexUid' in parameters:
         parameters['indexUid'] = ",".join(parameters['indexUid'])
     return http.get(
         f"{config.paths.task}?{parse.urlencode(parameters)}"
