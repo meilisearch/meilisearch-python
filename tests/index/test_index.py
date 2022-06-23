@@ -40,22 +40,34 @@ def test_create_index_with_uid_in_options(client):
 def test_get_indexes(client):
     """Tests getting all indexes."""
     response = client.get_indexes()
-    uids = [index.uid for index in response]
-    assert isinstance(response, list)
+    uids = [index.uid for index in response['results']]
+    assert isinstance(response['results'], list)
     assert common.INDEX_UID in uids
     assert common.INDEX_UID2 in uids
     assert common.INDEX_UID3 in uids
-    assert len(response) == 3
+    assert len(response['results']) == 3
+
+@pytest.mark.usefixtures("indexes_sample")
+def test_get_indexes_with_parameters(client):
+    """Tests getting all indexes."""
+    response = client.get_indexes(parameters={'limit':1, 'offset': 1})
+    assert len(response['results']) == 1
 
 @pytest.mark.usefixtures("indexes_sample")
 def test_get_raw_indexes(client):
     response = client.get_raw_indexes()
-    uids = [index['uid'] for index in response]
-    assert isinstance(response, list)
+    uids = [index['uid'] for index in response['results']]
+    assert isinstance(response['results'], list)
     assert common.INDEX_UID in uids
     assert common.INDEX_UID2 in uids
     assert common.INDEX_UID3 in uids
-    assert len(response) == 3
+    assert len(response['results']) == 3
+
+@pytest.mark.usefixtures("indexes_sample")
+def test_get_raw_indexeswith_parameters(client):
+    response = client.get_raw_indexes(parameters={'limit':1, 'offset': 1})
+    assert isinstance(response['results'], list)
+    assert len(response['results']) == 1
 
 def test_index_with_any_uid(client):
     index = client.index('anyUID')
@@ -165,7 +177,7 @@ def test_delete_index_by_client(client):
     client.wait_for_task(response['taskUid'])
     with pytest.raises(Exception):
         client.get_index(uid=common.INDEX_UID3)
-    assert len(client.get_indexes()) == 0
+    assert len(client.get_indexes()['results']) == 0
 
 @pytest.mark.usefixtures("indexes_sample")
 def test_delete(client):

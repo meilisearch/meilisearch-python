@@ -3,6 +3,7 @@ import hashlib
 import hmac
 import json
 import datetime
+from urllib import parse
 from typing import Any, Dict, List, Optional, Union
 from meilisearch.index import Index
 from meilisearch.config import Config
@@ -78,46 +79,64 @@ class Client():
 
         return self.http.delete(f'{self.config.paths.index}/{uid}')
 
-    def get_indexes(self) -> List[Index]:
+    def get_indexes(self, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, List[Index]]:
         """Get all indexes.
 
+        Parameters
+        ----------
+        parameters (optional):
+            parameters accepted by the get indexes route: https://docs.meilisearch.com/reference/api/indexes.html#list-all-indexes
+
         Returns
         -------
         indexes:
-            List of Index instances.
+            Dictionary with limit, offset, total and results a list of Index instances.
 
         Raises
         ------
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        response = self.http.get(self.config.paths.index)
+        if parameters is None:
+            parameters = {}
+        response = self.http.get(
+            f'{self.config.paths.index}?{parse.urlencode(parameters)}'
+        )
+        response['results'] = [
+                Index(
+                    self.config,
+                    index["uid"],
+                    index["primaryKey"],
+                    index["createdAt"],
+                    index["updatedAt"],
+                )
+                for index in response['results']
+            ]
+        return response
 
-        return [
-            Index(
-                self.config,
-                index["uid"],
-                index["primaryKey"],
-                index["createdAt"],
-                index["updatedAt"],
-            )
-            for index in response
-        ]
-
-    def get_raw_indexes(self) -> List[Dict[str, Any]]:
+    def get_raw_indexes(self, parameters: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
         """Get all indexes in dictionary format.
 
+        Parameters
+        ----------
+        parameters (optional):
+            parameters accepted by the get indexes route: https://docs.meilisearch.com/reference/api/indexes.html#list-all-indexes
+
         Returns
         -------
         indexes:
-            List of indexes in dictionary format. (e.g [{ 'uid': 'movies' 'primaryKey': 'objectID' }])
+            Dictionary with limit, offset, total and results a list of indexes in dictionary format. (e.g [{ 'uid': 'movies' 'primaryKey': 'objectID' }])
 
         Raises
         ------
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.get(self.config.paths.index)
+        if parameters is None:
+            parameters = {}
+        return self.http.get(
+            f'{self.config.paths.index}?{parse.urlencode(parameters)}'
+        )
 
     def get_index(self, uid: str) -> Index:
         """Get the index.
