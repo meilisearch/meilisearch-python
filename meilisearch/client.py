@@ -125,7 +125,7 @@ class Client():
         Returns
         -------
         indexes:
-            List of indexes in dictionary format. (e.g [{ 'uid': 'movies' 'primaryKey': 'objectID' }])
+            Dictionary with limit, offset, total and results a list of indexes in dictionary format. (e.g [{ 'uid': 'movies' 'primaryKey': 'objectID' }])
 
         Raises
         ------
