@@ -277,12 +277,12 @@ class Index():
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the get documents route: https://docs.meilisearch.com/reference/api/documents.html#get-all-documents
+            parameters accepted by the get documents route: https://docs.meilisearch.com/reference/api/documents.html#get-documents
 
         Returns
         -------
         document:
-            List of dictionaries containing the documents information.
+            Dictionary with limit, offset, total and results a list of dictionaries containing the documents information.
 
         Raises
         ------
