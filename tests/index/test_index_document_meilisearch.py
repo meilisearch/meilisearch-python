@@ -16,8 +16,8 @@ def test_add_documents(empty_index, small_movies):
     index = empty_index()
     response = index.add_documents(small_movies)
     assert isinstance(response, dict)
-    assert 'uid' in response
-    update = index.wait_for_task(response['uid'])
+    assert 'taskUid' in response
+    update = index.wait_for_task(response['taskUid'])
     assert index.get_primary_key() == 'id'
     assert update['status'] == 'succeeded'
 
@@ -38,9 +38,8 @@ def test_add_documents_in_batches(
 
     print(response, '\n', '\n')
     for r in response:
-        assert 'uid' in r
-        update = index.wait_for_task(r['uid'])
-        print(index.get_task(r['uid']), '\n')
+        assert 'taskUid' in r
+        update = index.wait_for_task(r['taskUid'])
         assert update['status'] == 'succeeded'
 
     assert index.get_primary_key() == expected_primary_key
@@ -84,12 +83,12 @@ def test_update_documents(index_with_documents, small_movies):
     response[0]['title'] = 'Some title'
     update = index.update_documents([response[0]])
     assert isinstance(update, dict)
-    assert 'uid' in update
-    index.wait_for_task(update['uid'])
+    assert 'taskUid' in update
+    index.wait_for_task(update['taskUid'])
     response = index.get_documents()
     assert response[0]['title'] == 'Some title'
     update = index.update_documents(small_movies)
-    index.wait_for_task(update['uid'])
+    index.wait_for_task(update['taskUid'])
     response = index.get_documents()
     assert response[0]['title'] != 'Some title'
 
@@ -109,8 +108,8 @@ def test_update_documents_in_batches(
     assert ceil(len(small_movies) / batch_size) == len(response)
 
     for r in response:
-        assert 'uid' in r
-        update = index.wait_for_task(r['uid'])
+        assert 'taskUid' in r
+        update = index.wait_for_task(r['taskUid'])
         assert update['status'] == 'succeeded'
 
     assert index.get_primary_key() == expected_primary_key
@@ -120,8 +119,8 @@ def test_delete_document(index_with_documents):
     index = index_with_documents()
     response = index.delete_document('500682')
     assert isinstance(response, dict)
-    assert 'uid' in response
-    index.wait_for_task(response['uid'])
+    assert 'taskUid' in response
+    index.wait_for_task(response['taskUid'])
     with pytest.raises(Exception):
         index.get_document('500682')
 
@@ -131,8 +130,8 @@ def test_delete_documents(index_with_documents):
     index = index_with_documents()
     response = index.delete_documents(to_delete)
     assert isinstance(response, dict)
-    assert 'uid' in response
-    index.wait_for_task(response['uid'])
+    assert 'taskUid' in response
+    index.wait_for_task(response['taskUid'])
     for document in to_delete:
         with pytest.raises(Exception):
             index.get_document(document)
@@ -142,8 +141,8 @@ def test_delete_all_documents(index_with_documents):
     index = index_with_documents()
     response = index.delete_all_documents()
     assert isinstance(response, dict)
-    assert 'uid' in response
-    index.wait_for_task(response['uid'])
+    assert 'taskUid' in response
+    index.wait_for_task(response['taskUid'])
     response = index.get_documents()
     assert isinstance(response, list)
     assert response == []
@@ -153,8 +152,8 @@ def test_add_documents_csv(empty_index, songs_csv):
     index = empty_index()
     response = index.add_documents_csv(songs_csv)
     assert isinstance(response, dict)
-    assert 'uid' in response
-    task = index.wait_for_task(response['uid'])
+    assert 'taskUid' in response
+    task = index.wait_for_task(response['taskUid'])
     assert task['status'] == 'succeeded'
     assert index.get_primary_key() == 'id'
 
@@ -163,8 +162,8 @@ def test_add_documents_json(empty_index, small_movies_json_file):
     index = empty_index()
     response = index.add_documents_json(small_movies_json_file)
     assert isinstance(response, dict)
-    assert 'uid' in response
-    task = index.wait_for_task(response['uid'])
+    assert 'taskUid' in response
+    task = index.wait_for_task(response['taskUid'])
     assert task['status'] == 'succeeded'
     assert index.get_primary_key() == 'id'
 
@@ -173,7 +172,7 @@ def test_add_documents_ndjson(empty_index, songs_ndjson):
     index = empty_index()
     response = index.add_documents_ndjson(songs_ndjson)
     assert isinstance(response, dict)
-    assert 'uid' in response
-    task = index.wait_for_task(response['uid'])
+    assert 'taskUid' in response
+    task = index.wait_for_task(response['taskUid'])
     assert task['status'] == 'succeeded'
     assert index.get_primary_key() == 'id'

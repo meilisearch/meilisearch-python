@@ -383,20 +383,26 @@ class Client():
         """
         return self.http.post(self.config.paths.dumps)
 
-    def get_tasks(self) -> Dict[str, List[Dict[str, Any]]]:
+    def get_tasks(self, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, List[Dict[str, Any]]]:
         """Get all tasks.
+
+        Parameters
+        ----------
+        parameters (optional):
+            parameters accepted by the get tasks route: https://docs.meilisearch.com/reference/api/tasks.html#get-all-tasks.
+            `indexUid` should be set as a List.
 
         Returns
         -------
         task:
-            Dictionary containing a list of all enqueued, processing, succeeded or failed tasks.
+            Dictionary with limit, from, next and results containing a list of all enqueued, processing, succeeded or failed tasks.
 
         Raises
         ------
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return get_tasks(self.config)
+        return get_tasks(self.config, parameters=parameters)
 
     def get_task(self, uid: int) -> Dict[str, Any]:
         """Get one task.

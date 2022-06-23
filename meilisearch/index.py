@@ -124,20 +124,30 @@ class Index():
         payload = {**options, 'uid': uid}
         return HttpRequests(config).post(config.paths.index, payload)
 
-    def get_tasks(self) -> Dict[str, List[Dict[str, Any]]]:
+    def get_tasks(self, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, List[Dict[str, Any]]]:
         """Get all tasks of a specific index from the last one.
+
+        Parameters
+        ----------
+        parameters (optional):
+            parameters accepted by the get tasks route: https://docs.meilisearch.com/reference/api/tasks.html#get-all-tasks.
+            `indexUid` should be set as a List.
 
         Returns
         -------
         task:
-            Dictionary containing a list of all enqueued, processing, succeeded or failed tasks of the index.
+            Dictionary with limit, from, next and results containing a list of all enqueued, processing, succeeded or failed tasks of the index.
 
         Raises
         ------
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return get_tasks(self.config, self.uid)
+        if parameters is not None:
+            parameters.setdefault('indexUid', []).append(self.uid)
+        else:
+            parameters = {'indexUid': self.uid}
+        return get_tasks(self.config, parameters=parameters)
 
     def get_task(self, uid: int) -> Dict[str, Any]:
         """Get one task through the route of a specific index.
@@ -157,7 +167,7 @@ class Index():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return get_task(self.config, uid, self.uid)
+        return get_task(self.config, uid)
 
     def wait_for_task(
         self, uid: int,
