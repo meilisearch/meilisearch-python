@@ -28,7 +28,7 @@ def test_generate_tenant_token_with_search_rules_on_one_index(get_private_key, e
     empty_index('tenant_token')
     client = meilisearch.Client(BASE_URL, get_private_key['key'])
 
-    token = client.generate_tenant_token(uid=get_private_key['uid'], search_rules=['indexUID'])
+    token = client.generate_tenant_token(api_key_uid=get_private_key['uid'], search_rules=['indexUID'])
 
     token_client = meilisearch.Client(BASE_URL, token)
     response = token_client.index('indexUID').search('')
