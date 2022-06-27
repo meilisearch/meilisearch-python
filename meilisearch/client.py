@@ -475,7 +475,7 @@ class Client():
 
     def generate_tenant_token(
         self,
-        uid: str,
+        api_key_uid: str,
         search_rules: Union[Dict[str, Any], List[str]],
         *,
         expires_at: Optional[datetime.datetime] = None,
@@ -485,7 +485,7 @@ class Client():
 
         Parameters
         ----------
-        uid:
+        api_key_uid:
             The uid of the API key used as issuer of the token.
         search_rules:
             A Dictionary or list of string which contains the rules to be enforced at search time for all or specific
@@ -506,7 +506,7 @@ class Client():
         # Validate all fields
         if api_key == '' or api_key is None and self.config.api_key is None:
             raise Exception('An api key is required in the client or should be passed as an argument.')
-        if uid == '' or uid is None or self._valid_uuid(uid) is False:
+        if api_key_uid == '' or api_key_uid is None or self._valid_uuid(api_key_uid) is False:
             raise Exception('An uid is required and must comply to the uuid4 format.')
         if not search_rules or search_rules == ['']:
             raise Exception('The search_rules field is mandatory and should be defined.')
@@ -523,7 +523,7 @@ class Client():
 
         # Add the required fields to the payload
         payload = {
-            'apiKeyUid': uid,
+            'apiKeyUid': api_key_uid,
             'searchRules': search_rules,
             'exp': int(datetime.datetime.timestamp(expires_at)) if expires_at is not None else None
         }
