@@ -95,7 +95,7 @@ def test_generate_tenant_token_with_bad_expires_at(client, get_private_key):
     yesterday = datetime.datetime.utcnow() + datetime.timedelta(days=-1)
 
     with pytest.raises(Exception):
-        client.generate_tenant_token(uid=get_private_key['uid'], search_rules=["*"], expires_at=yesterday)
+        client.generate_tenant_token(api_key_uid=get_private_key['uid'], search_rules=["*"], expires_at=yesterday)
 
 def test_generate_tenant_token_with_no_api_key(client):
     """Tests create a tenant token with no api key."""
