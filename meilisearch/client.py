@@ -1,3 +1,4 @@
+import re
 import base64
 import hashlib
 import hmac
@@ -5,6 +6,7 @@ import json
 import datetime
 from urllib import parse
 from typing import Any, Dict, List, Optional, Union
+from xmlrpc.client import Boolean
 from meilisearch.index import Index
 from meilisearch.config import Config
 from meilisearch.task import get_task, get_tasks, wait_for_task
@@ -473,6 +475,7 @@ class Client():
 
     def generate_tenant_token(
         self,
+        api_key_uid: str,
         search_rules: Union[Dict[str, Any], List[str]],
         *,
         expires_at: Optional[datetime.datetime] = None,
@@ -482,6 +485,8 @@ class Client():
 
         Parameters
         ----------
+        api_key_uid:
+            The uid of the API key used as issuer of the token.
         search_rules:
             A Dictionary or list of string which contains the rules to be enforced at search time for all or specific
             accessible indexes for the signing API Key.
@@ -501,6 +506,8 @@ class Client():
         # Validate all fields
         if api_key == '' or api_key is None and self.config.api_key is None:
             raise Exception('An api key is required in the client or should be passed as an argument.')
+        if api_key_uid == '' or api_key_uid is None or self._valid_uuid(api_key_uid) is False:
+            raise Exception('An uid is required and must comply to the uuid4 format.')
         if not search_rules or search_rules == ['']:
             raise Exception('The search_rules field is mandatory and should be defined.')
         if expires_at and expires_at < datetime.datetime.utcnow():
@@ -516,7 +523,7 @@ class Client():
 
         # Add the required fields to the payload
         payload = {
-            'apiKeyPrefix': api_key[0:8],
+            'apiKeyUid': api_key_uid,
             'searchRules': search_rules,
             'exp': int(datetime.datetime.timestamp(expires_at)) if expires_at is not None else None
         }
@@ -542,3 +549,11 @@ class Client():
         data: bytes
     ) -> str:
         return base64.urlsafe_b64encode(data).decode('utf-8').replace('=','')
+
+    @staticmethod
+    def _valid_uuid(
+        uuid: str
+    ) -> bool:
+        uuid4hex = re.compile(r'^[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}', re.I)
+        match = uuid4hex.match(uuid)
+        return bool(match)
