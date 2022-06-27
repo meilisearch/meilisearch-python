@@ -109,4 +109,4 @@ def test_generate_tenant_token_with_no_uid(client, get_private_key):
     client = meilisearch.Client(BASE_URL, get_private_key['key'])
 
     with pytest.raises(Exception):
-        client.generate_tenant_token(uid=None, search_rules=["*"])
+        client.generate_tenant_token(api_key_uid=None, search_rules=["*"])
