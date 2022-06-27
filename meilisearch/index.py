@@ -146,7 +146,7 @@ class Index():
         if parameters is not None:
             parameters.setdefault('indexUid', []).append(self.uid)
         else:
-            parameters = {'indexUid': self.uid}
+            parameters = {'indexUid': [self.uid]}
         return get_tasks(self.config, parameters=parameters)
 
     def get_task(self, uid: int) -> Dict[str, Any]:

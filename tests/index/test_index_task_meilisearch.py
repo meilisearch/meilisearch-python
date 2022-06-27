@@ -3,9 +3,9 @@
 import pytest
 from tests import common
 
-def test_get_tasks_default(empty_index):
+def test_get_tasks_default(index_with_documents):
     """Tests getting the tasks list of an empty index."""
-    tasks = empty_index().get_tasks()
+    tasks = index_with_documents().get_tasks()
     assert isinstance(tasks, dict)
     assert 'results' in tasks
     assert len(tasks['results']) != 0
@@ -17,6 +17,7 @@ def test_get_tasks(empty_index, small_movies):
     pre_count = len(current_tasks['results'])
     response = index.add_documents(small_movies)
     assert 'taskUid' in response
+    index.wait_for_task(response['taskUid'])
     tasks = index.get_tasks()
     assert len(tasks['results']) == pre_count + 1
 
