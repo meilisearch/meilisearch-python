@@ -6,7 +6,6 @@ import json
 import datetime
 from urllib import parse
 from typing import Any, Dict, List, Optional, Union
-from xmlrpc.client import Boolean
 from meilisearch.index import Index
 from meilisearch.config import Config
 from meilisearch.task import get_task, get_tasks, wait_for_task
@@ -309,7 +308,7 @@ class Client():
 
     def update_key(
         self,
-        key: str,
+        key_or_uid: str,
         options: Dict[str, Any]
     ) -> Dict[str, Any]:
         """Update an API key.
@@ -318,7 +317,7 @@ class Client():
 
         ----------
         key:
-            The key for which to update the information.
+            The key or the uid of the key for which to update the information.
         options:
             The information to use in creating the key (ex: { 'description': 'Search Key', 'expiresAt': '22-01-01' }). Note that if an
             expires_at value is included it should be in UTC time.
@@ -334,16 +333,16 @@ class Client():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        url = f'{self.config.paths.keys}/{key}'
+        url = f'{self.config.paths.keys}/{key_or_uid}'
         return self.http.patch(url, options)
 
-    def delete_key(self, key: str) -> Dict[str, int]:
+    def delete_key(self, key_or_uid: str) -> Dict[str, int]:
         """Deletes an API key.
 
         Parameters
         ----------
         key:
-            The key to delete.
+            The key or the uid of the key to delete.
 
         Returns
         -------
@@ -356,7 +355,7 @@ class Client():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.delete(f'{self.config.paths.keys}/{key}')
+        return self.http.delete(f'{self.config.paths.keys}/{key_or_uid}')
 
     def get_version(self) -> Dict[str, str]:
         """Get version Meilisearch
