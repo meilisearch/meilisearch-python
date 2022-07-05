@@ -249,7 +249,7 @@ class Index():
             body=body
         )
 
-    def get_document(self, document_id: str, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def get_document(self, document_id: str, fields: Optional[List[str]] = None) -> Dict[str, Any]:
         """Get one document with given document identifier.
 
         Parameters
@@ -267,8 +267,10 @@ class Index():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        if parameters is None:
+        if fields is None:
             parameters = {}
+        else:
+            parameters = {'fields': ",".join(fields)}
         return self.http.get(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}/{document_id}?{parse.urlencode(parameters)}'
         )
@@ -293,6 +295,8 @@ class Index():
         """
         if parameters is None:
             parameters = {}
+        elif 'fields' in parameters and isinstance(parameters, list):
+            parameters['fields'] = ",".join(parameters['fields'])
         return self.http.get(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{parse.urlencode(parameters)}'
         )
