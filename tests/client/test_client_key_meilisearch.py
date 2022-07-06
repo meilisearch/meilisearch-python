@@ -13,6 +13,12 @@ def test_get_keys_default(client):
     assert keys['results'][0]['key'] is not None
     assert keys['results'][1]['key'] is not None
 
+def test_get_keys_with_parameters(client):
+    """Tests if search and admin keys have been generated and can be retrieved."""
+    keys = client.get_keys({'limit': 1})
+    assert isinstance(keys, dict)
+    assert len(keys['results']) == 1
+
 def test_get_key(client, test_key):
     """Tests if a key can be retrieved."""
     key = client.get_key(test_key['key'])
@@ -65,7 +71,7 @@ def test_update_keys(client, test_key_info):
     """Tests updating a key."""
     key = client.create_key(test_key_info)
     assert key['name'] == test_key_info['name']
-    update_key = client.update_key(key=key['key'], options={ 'name': 'keyTest' })
+    update_key = client.update_key(key_or_uid=key['key'], options={ 'name': 'keyTest' })
     assert update_key['key'] is not None
     assert update_key['expiresAt'] is None
     assert update_key['name'] == 'keyTest'
