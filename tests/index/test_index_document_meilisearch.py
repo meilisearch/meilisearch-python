@@ -52,7 +52,7 @@ def test_get_document(index_with_documents):
 
 def test_get_document_with_fields(index_with_documents):
     """Tests getting one document from a populated index."""
-    response = index_with_documents().get_document('500682', ['id', 'title'])
+    response = index_with_documents().get_document('500682', {'fields' : ['id', 'title']})
     assert isinstance(response, dict)
     assert 'title' in response
     assert 'poster' not in response
@@ -81,6 +81,7 @@ def test_get_documents_offset_optional_params(index_with_documents):
         'fields': 'title'
     })
     assert len(response_offset_limit['results']) == 3
+    assert 'title' in response_offset_limit['results'][0]
     assert response_offset_limit['results'][0]['title'] == response['results'][1]['title']
 
 def test_update_documents(index_with_documents, small_movies):
