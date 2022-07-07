@@ -29,10 +29,11 @@ def get_tasks(config: Config, parameters: Optional[Dict[str, Any]] = None) -> Di
         An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
     """
     http = HttpRequests(config)
-    if parameters is None or parameters == {}:
+    if parameters is None:
         parameters = {}
-    elif 'indexUid' in parameters:
-        parameters['indexUid'] = ",".join(parameters['indexUid'])
+    for param in parameters:
+        if isinstance(parameters[param], list):
+            parameters[param] = ",".join(parameters[param])
     return http.get(
         f"{config.paths.task}?{parse.urlencode(parameters)}"
     )
