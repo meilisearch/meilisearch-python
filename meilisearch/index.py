@@ -256,6 +256,8 @@ class Index():
         ----------
         document_id:
             Unique identifier of the document.
+        parameters (optional):
+            parameters accepted by the get document route: https://docs.meilisearch.com/reference/api/documents.html#get-one-document
 
         Returns
         -------
