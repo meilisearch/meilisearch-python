@@ -17,7 +17,7 @@ delete_an_index_1: |-
   client.index('movies').delete()
 get_one_document_1: |-
   client.index('movies').get_document(25684, {
-    'fields': ['id','title', 'poster', 'release_date']
+    'fields': ['id', 'title', 'poster', 'release_date']
   })
 get_documents_1: |-
   client.index('movies').get_documents({'limit':2})
