@@ -1,8 +1,10 @@
+import re
 import base64
 import hashlib
 import hmac
 import json
 import datetime
+from urllib import parse
 from typing import Any, Dict, List, Optional, Union
 from meilisearch.index import Index
 from meilisearch.config import Config
@@ -78,46 +80,64 @@ class Client():
 
         return self.http.delete(f'{self.config.paths.index}/{uid}')
 
-    def get_indexes(self) -> List[Index]:
+    def get_indexes(self, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, List[Index]]:
         """Get all indexes.
 
+        Parameters
+        ----------
+        parameters (optional):
+            parameters accepted by the get indexes route: https://docs.meilisearch.com/reference/api/indexes.html#list-all-indexes
+
         Returns
         -------
         indexes:
-            List of Index instances.
+            Dictionary with limit, offset, total and results a list of Index instances.
 
         Raises
         ------
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        response = self.http.get(self.config.paths.index)
+        if parameters is None:
+            parameters = {}
+        response = self.http.get(
+            f'{self.config.paths.index}?{parse.urlencode(parameters)}'
+        )
+        response['results'] = [
+                Index(
+                    self.config,
+                    index["uid"],
+                    index["primaryKey"],
+                    index["createdAt"],
+                    index["updatedAt"],
+                )
+                for index in response['results']
+            ]
+        return response
 
-        return [
-            Index(
-                self.config,
-                index["uid"],
-                index["primaryKey"],
-                index["createdAt"],
-                index["updatedAt"],
-            )
-            for index in response
-        ]
-
-    def get_raw_indexes(self) -> List[Dict[str, Any]]:
+    def get_raw_indexes(self, parameters: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
         """Get all indexes in dictionary format.
 
+        Parameters
+        ----------
+        parameters (optional):
+            parameters accepted by the get indexes route: https://docs.meilisearch.com/reference/api/indexes.html#list-all-indexes
+
         Returns
         -------
         indexes:
-            List of indexes in dictionary format. (e.g [{ 'uid': 'movies' 'primaryKey': 'objectID' }])
+            Dictionary with limit, offset, total and results a list of indexes in dictionary format. (e.g [{ 'uid': 'movies' 'primaryKey': 'objectID' }])
 
         Raises
         ------
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.get(self.config.paths.index)
+        if parameters is None:
+            parameters = {}
+        return self.http.get(
+            f'{self.config.paths.index}?{parse.urlencode(parameters)}'
+        )
 
     def get_index(self, uid: str) -> Index:
         """Get the index.
@@ -221,13 +241,13 @@ class Client():
             return False
         return True
 
-    def get_key(self, key: str) -> Dict[str, Any]:
+    def get_key(self, key_or_uid: str) -> Dict[str, Any]:
         """Gets information about a specific API key.
 
         Parameters
         ----------
-        key:
-            The key for which to retrieve the information.
+        key_or_uid:
+            The key or the uid for which to retrieve the information.
 
         Returns
         -------
@@ -240,15 +260,20 @@ class Client():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.get(f'{self.config.paths.keys}/{key}')
+        return self.http.get(f'{self.config.paths.keys}/{key_or_uid}')
 
-    def get_keys(self) -> Dict[str, Any]:
+    def get_keys(self, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Gets the Meilisearch API keys.
+
+        Parameters
+        ----------
+        parameters (optional):
+            parameters accepted by the get keys route: https://docs.meilisearch.com/reference/api/keys.html#get-all-keys
 
         Returns
         -------
         keys:
-            API keys.
+            Dictionary with limit, offset, total and results a list of dictionaries containing the key information.
             https://docs.meilisearch.com/reference/api/keys.html#get-keys
 
         Raises
@@ -256,7 +281,11 @@ class Client():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.get(self.config.paths.keys)
+        if parameters is None:
+            parameters = {}
+        return self.http.get(
+            f'{self.config.paths.keys}?{parse.urlencode(parameters)}'
+        )
 
     def create_key(
         self,
@@ -288,7 +317,7 @@ class Client():
 
     def update_key(
         self,
-        key: str,
+        key_or_uid: str,
         options: Dict[str, Any]
     ) -> Dict[str, Any]:
         """Update an API key.
@@ -297,7 +326,7 @@ class Client():
 
         ----------
         key:
-            The key for which to update the information.
+            The key or the uid of the key for which to update the information.
         options:
             The information to use in creating the key (ex: { 'description': 'Search Key', 'expiresAt': '22-01-01' }). Note that if an
             expires_at value is included it should be in UTC time.
@@ -313,16 +342,16 @@ class Client():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        url = f'{self.config.paths.keys}/{key}'
+        url = f'{self.config.paths.keys}/{key_or_uid}'
         return self.http.patch(url, options)
 
-    def delete_key(self, key: str) -> Dict[str, int]:
+    def delete_key(self, key_or_uid: str) -> Dict[str, int]:
         """Deletes an API key.
 
         Parameters
         ----------
         key:
-            The key to delete.
+            The key or the uid of the key to delete.
 
         Returns
         -------
@@ -335,7 +364,7 @@ class Client():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.delete(f'{self.config.paths.keys}/{key}')
+        return self.http.delete(f'{self.config.paths.keys}/{key_or_uid}')
 
     def get_version(self) -> Dict[str, str]:
         """Get version Meilisearch
@@ -383,43 +412,26 @@ class Client():
         """
         return self.http.post(self.config.paths.dumps)
 
-    def get_dump_status(self, uid: str) -> Dict[str, str]:
-        """Retrieve the status of a Meilisearch dump creation.
+    def get_tasks(self, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, List[Dict[str, Any]]]:
+        """Get all tasks.
 
         Parameters
         ----------
-        uid:
-            UID of the dump.
-
-        Returns
-        -------
-        Dump status:
-            Information about the dump status.
-            https://docs.meilisearch.com/reference/api/dump.html#get-dump-status
-
-        Raises
-        ------
-        MeiliSearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
-        """
-        return self.http.get(
-            self.config.paths.dumps + '/' + str(uid) + '/status'
-        )
-
-    def get_tasks(self) -> Dict[str, List[Dict[str, Any]]]:
-        """Get all tasks.
+        parameters (optional):
+            parameters accepted by the get tasks route: https://docs.meilisearch.com/reference/api/tasks.html#get-all-tasks.
+            `indexUid` should be set as a List.
 
         Returns
         -------
         task:
-            Dictionary containing a list of all enqueued, processing, succeeded or failed tasks.
+            Dictionary with limit, from, next and results containing a list of all enqueued, processing, succeeded or failed tasks.
 
         Raises
         ------
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return get_tasks(self.config)
+        return get_tasks(self.config, parameters=parameters)
 
     def get_task(self, uid: int) -> Dict[str, Any]:
         """Get one task.
@@ -471,6 +483,7 @@ class Client():
 
     def generate_tenant_token(
         self,
+        api_key_uid: str,
         search_rules: Union[Dict[str, Any], List[str]],
         *,
         expires_at: Optional[datetime.datetime] = None,
@@ -480,6 +493,8 @@ class Client():
 
         Parameters
         ----------
+        api_key_uid:
+            The uid of the API key used as issuer of the token.
         search_rules:
             A Dictionary or list of string which contains the rules to be enforced at search time for all or specific
             accessible indexes for the signing API Key.
@@ -499,6 +514,8 @@ class Client():
         # Validate all fields
         if api_key == '' or api_key is None and self.config.api_key is None:
             raise Exception('An api key is required in the client or should be passed as an argument.')
+        if api_key_uid == '' or api_key_uid is None or self._valid_uuid(api_key_uid) is False:
+            raise Exception('An uid is required and must comply to the uuid4 format.')
         if not search_rules or search_rules == ['']:
             raise Exception('The search_rules field is mandatory and should be defined.')
         if expires_at and expires_at < datetime.datetime.utcnow():
@@ -514,7 +531,7 @@ class Client():
 
         # Add the required fields to the payload
         payload = {
-            'apiKeyPrefix': api_key[0:8],
+            'apiKeyUid': api_key_uid,
             'searchRules': search_rules,
             'exp': int(datetime.datetime.timestamp(expires_at)) if expires_at is not None else None
         }
@@ -540,3 +557,11 @@ class Client():
         data: bytes
     ) -> str:
         return base64.urlsafe_b64encode(data).decode('utf-8').replace('=','')
+
+    @staticmethod
+    def _valid_uuid(
+        uuid: str
+    ) -> bool:
+        uuid4hex = re.compile(r'^[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}', re.I)
+        match = uuid4hex.match(uuid)
+        return bool(match)
