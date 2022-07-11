@@ -43,8 +43,8 @@ def test_update_settings(empty_index):
     index = empty_index()
     response = index.update_settings(NEW_SETTINGS)
     assert isinstance(response, dict)
-    assert 'uid' in response
-    update = index.wait_for_task(response['uid'])
+    assert 'taskUid' in response
+    update = index.wait_for_task(response['taskUid'])
     assert update['status'] == 'succeeded'
     response = index.get_settings()
     for rule in NEW_SETTINGS['rankingRules']:
@@ -61,7 +61,7 @@ def test_reset_settings(empty_index):
     index = empty_index()
     # Update settings first
     response = index.update_settings(NEW_SETTINGS)
-    update = index.wait_for_task(response['uid'])
+    update = index.wait_for_task(response['taskUid'])
     assert update['status'] == 'succeeded'
     # Check the settings have been correctly updated
     response = index.get_settings()
@@ -76,8 +76,8 @@ def test_reset_settings(empty_index):
     # Check the reset of the settings
     response = index.reset_settings()
     assert isinstance(response, dict)
-    assert 'uid' in response
-    update = index.wait_for_task(response['uid'])
+    assert 'taskUid' in response
+    update = index.wait_for_task(response['taskUid'])
     assert update['status'] == 'succeeded'
     response = index.get_settings()
     for rule in DEFAULT_RANKING_RULES:

@@ -282,7 +282,7 @@ search_parameter_guide_highlight_tag_1: |-
   })
 search_parameter_guide_matches_1: |-
   client.index('movies').search('winter feast', {
-    'matches': 'true'
+    'showMatchesPosition': 'true'
   })
 settings_guide_synonyms_1: |-
   client.index('tops').update_settings({
@@ -421,7 +421,7 @@ getting_started_add_meteorites: |-
   json_file = open('meteorites.json')
   meteorites = json.load(json_file)
   client.index('meteorites').add_documents(meteorites)
-getting_started_update_rankingRules: |-
+getting_started_update_ranking_rules: |-
   client.index('movies').update_ranking_rules([
       'exactness',
       'words',
@@ -432,13 +432,13 @@ getting_started_update_rankingRules: |-
       'release_date:asc',
       'rank:desc'
   ])
-getting_started_update_displayedAttributes: |-
+getting_started_update_displayed_attributes: |-
   client.index('movies').update_displayed_attributes([
       'title',
       'overview',
       'poster'
   ])
-getting_started_update_searchableAttributes: |-
+getting_started_update_searchable_attributes: |-
   client.index('movies').update_searchable_attributes([
       'title'
   ])
@@ -453,11 +453,11 @@ getting_started_filtering: |-
   client.index('meteorites').search('', {
     'filter': 'mass < 200'
   })
-getting_started_geoRadius: |-
+getting_started_geo_radius: |-
   client.index('meteorites').search('', {
     'filter': '_geoRadius(46.9480, 7.4474, 210000)'
   })
-getting_started_geoPoint: |-
+getting_started_geo_point: |-
   client.index('meteorites').search('', {
     'sort': ['_geoPoint(48.8583701,2.2922926):asc']
   })
@@ -491,7 +491,7 @@ faceted_search_filter_1: |-
   })
 faceted_search_facets_distribution_1: |-
   client.index('movies').search('Batman', {
-    'facetsDistribution': ['genres']
+    'facets': ['genres']
   })
 faceted_search_walkthrough_filter_1: |-
   client.index('movies').search('thriller', {
@@ -499,8 +499,6 @@ faceted_search_walkthrough_filter_1: |-
   })
 post_dump_1: |-
   client.create_dump()
-get_dump_status_1: |-
-  client.get_dump_status('20201101-110357260')
 phrase_search_1: |-
   client.index('movies').search('"african american" horror')
 sorting_guide_update_sortable_attributes_1: |-
@@ -553,15 +551,17 @@ geosearch_guide_sort_usage_2: |-
   client.index('restaurants').search('', {
     'sort': ['_geoPoint(48.8561446,2.2978204):asc', 'rating:desc']
   })
-document_guide_create_index_primary_key: |-
-  client.create_index('movies', {'primaryKey': 'reference_number'})
-document_guide_add_document_primary_key: |-
-  client.index('movies').add_documents([{
+primary_field_guide_update_document_primary_key: |-
+  client.index('books').update(primary_key='title')
+primary_field_guide_create_index_primary_key: |-
+  client.create_index('books', {'primaryKey': 'reference_number'})
+primary_field_guide_add_document_primary_key: |-
+  client.index('books').add_documents([{
     'reference_number': 287947,
-    'title': 'Shazam',
-    'poster': 'https://image.tmdb.org/t/p/w1280/xnopI5Xtky18MPhK40cZAGAOVeV.jpg',
-    'overview': 'A boy is given the ability to become an adult superhero in times of need with a single magic word.',
-    'release_date': '2019-03-23'
+    'title': 'Diary of a Wimpy Kid',
+    'author': 'Jeff Kinney',
+    'genres': ['comedy', 'humor'],
+    'price': 5.00
   }], 'reference_number')
 security_guide_search_key_1: |-
   client = Client('http://127.0.0.1:7700', 'apiKey')
@@ -589,6 +589,7 @@ authorization_header_1: |-
   client = Client('http://127.0.0.1:7700', 'masterKey')
   client.get_keys()
 tenant_token_guide_generate_sdk_1: |-
+  uid = '85c3c2f9-bdd6-41f1-abd8-11fcf80e0f76';
   api_key = 'B5KdX2MY2jV6EXfUs6scSfmC...'
   expires_at = datetime(2025, 12, 20)
   search_rules = {
@@ -596,7 +597,7 @@ tenant_token_guide_generate_sdk_1: |-
       'filter': 'user_id = 1'
     }
   }
-  token = client.generate_tenant_token(search_rules=search_rules, api_key=api_key, expires_at=expires_at)
+  token = client.generate_tenant_token(api_key_uid=uid, search_rules=search_rules, api_key=api_key, expires_at=expires_at)
 tenant_token_guide_search_sdk_1: |-
   front_end_client = Client('http://127.0.0.1:7700', token)
   front_end_client.index('patient_medical_records').search('blood test')

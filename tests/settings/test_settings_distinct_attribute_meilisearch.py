@@ -12,8 +12,8 @@ def test_update_distinct_attribute(empty_index):
     index = empty_index()
     response = index.update_distinct_attribute(NEW_DISTINCT_ATTRIBUTE)
     assert isinstance(response, dict)
-    assert 'uid' in response
-    index.wait_for_task(response['uid'])
+    assert 'taskUid' in response
+    index.wait_for_task(response['taskUid'])
     response = index.get_distinct_attribute()
     assert isinstance(response, str)
     assert response == NEW_DISTINCT_ATTRIBUTE
@@ -23,7 +23,7 @@ def test_update_distinct_at_to_none(empty_index):
     index = empty_index()
     # Update the settings first
     response = index.update_distinct_attribute(NEW_DISTINCT_ATTRIBUTE)
-    update = index.wait_for_task(response['uid'])
+    update = index.wait_for_task(response['taskUid'])
     assert update['status'] == 'succeeded'
     # Check the settings have been correctly updated
     response = index.get_distinct_attribute()
@@ -31,8 +31,8 @@ def test_update_distinct_at_to_none(empty_index):
     # Launch test to update at null the setting
     response = index.update_distinct_attribute(None)
     assert isinstance(response, dict)
-    assert 'uid' in response
-    index.wait_for_task(response['uid'])
+    assert 'taskUid' in response
+    index.wait_for_task(response['taskUid'])
     response = index.get_distinct_attribute()
     assert response == DEFAULT_DISTINCT_ATTRIBUTE
 
@@ -41,7 +41,7 @@ def test_reset_distinct_attribute(empty_index):
     index = empty_index()
     # Update the settings first
     response = index.update_distinct_attribute(NEW_DISTINCT_ATTRIBUTE)
-    update = index.wait_for_task(response['uid'])
+    update = index.wait_for_task(response['taskUid'])
     assert update['status'] == 'succeeded'
     # Check the settings have been correctly updated
     response = index.get_distinct_attribute()
@@ -50,7 +50,7 @@ def test_reset_distinct_attribute(empty_index):
     # Check the reset of the settings
     response = index.reset_distinct_attribute()
     assert isinstance(response, dict)
-    assert 'uid' in response
-    index.wait_for_task(response['uid'])
+    assert 'taskUid' in response
+    index.wait_for_task(response['taskUid'])
     response = index.get_distinct_attribute()
     assert response == DEFAULT_DISTINCT_ATTRIBUTE
