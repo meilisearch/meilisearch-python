@@ -21,16 +21,16 @@ def clear_indexes(client):
     yield
     # Deletes all the indexes in the Meilisearch instance.
     indexes = client.get_indexes()
-    for index in indexes:
+    for index in indexes['results']:
         task = client.index(index.uid).delete()
-        client.wait_for_task(task['uid'])
+        client.wait_for_task(task['taskUid'])
 
 @fixture(scope='function')
 def indexes_sample(client):
     indexes = []
     for index_args in common.INDEX_FIXTURE:
         task = client.create_index(**index_args)
-        client.wait_for_task(task['uid'])
+        client.wait_for_task(task['taskUid'])
         indexes.append(client.get_index(index_args['uid']))
     # Yields the indexes to the test to make them accessible.
     yield indexes
@@ -78,18 +78,18 @@ def nested_movies():
 @fixture(scope='function')
 def empty_index(client, index_uid: Optional[str] = None):
     index_uid = index_uid if index_uid else common.INDEX_UID
-    def index_maker(index_name=index_uid):
-        task = client.create_index(uid=index_name)
-        client.wait_for_task(task['uid'])
-        return client.get_index(uid=index_name)
+    def index_maker(index_uid=index_uid):
+        task = client.create_index(uid=index_uid)
+        client.wait_for_task(task['taskUid'])
+        return client.get_index(uid=index_uid)
     return index_maker
 
 @fixture(scope='function')
 def index_with_documents(empty_index, small_movies):
-    def index_maker(index_name=common.INDEX_UID, documents=small_movies):
-        index = empty_index(index_name)
+    def index_maker(index_uid=common.INDEX_UID, documents=small_movies):
+        index = empty_index(index_uid)
         task = index.add_documents(documents)
-        index.wait_for_task(task['uid'])
+        index.wait_for_task(task['taskUid'])
         return index
     return index_maker
 
@@ -109,7 +109,7 @@ def test_key(client):
 
 @fixture(scope='function')
 def test_key_info(client):
-    key_info = {'description': 'test', 'actions': ['search'], 'indexes': [common.INDEX_UID], 'expiresAt': None}
+    key_info = {'name': 'testKeyName', 'description': 'test', 'actions': ['search'], 'indexes': [common.INDEX_UID], 'expiresAt': None}
 
     yield key_info
 
@@ -123,5 +123,5 @@ def test_key_info(client):
 @fixture(scope='function')
 def get_private_key(client):
     keys = client.get_keys()['results']
-    key = next(x for x in keys if 'Default Search API' in x['description'])
+    key = next(x for x in keys if 'Default Search API' in x['name'])
     return key

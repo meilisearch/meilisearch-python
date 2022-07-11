@@ -21,8 +21,8 @@ def test_update_ranking_rules(empty_index):
     index = empty_index()
     response = index.update_ranking_rules(NEW_RANKING_RULES)
     assert isinstance(response, dict)
-    assert 'uid' in response
-    index.wait_for_task(response['uid'])
+    assert 'taskUid' in response
+    index.wait_for_task(response['taskUid'])
     response = index.get_ranking_rules()
     assert isinstance(response, list)
     for rule in NEW_RANKING_RULES:
@@ -33,7 +33,7 @@ def test_update_ranking_rules_none(empty_index):
     index = empty_index()
     # Update the settings first
     response = index.update_ranking_rules(NEW_RANKING_RULES)
-    update = index.wait_for_task(response['uid'])
+    update = index.wait_for_task(response['taskUid'])
     assert update['status'] == 'succeeded'
     # Check the settings have been correctly updated
     response = index.get_ranking_rules()
@@ -42,8 +42,8 @@ def test_update_ranking_rules_none(empty_index):
     # Launch test to update at null the setting
     response = index.update_ranking_rules(None)
     assert isinstance(response, dict)
-    assert 'uid' in response
-    index.wait_for_task(response['uid'])
+    assert 'taskUid' in response
+    index.wait_for_task(response['taskUid'])
     response = index.get_ranking_rules()
     assert isinstance(response, list)
     for rule in DEFAULT_RANKING_RULES:
@@ -54,7 +54,7 @@ def test_reset_ranking_rules(empty_index):
     index = empty_index()
     # Update the settings first
     response = index.update_ranking_rules(NEW_RANKING_RULES)
-    update = index.wait_for_task(response['uid'])
+    update = index.wait_for_task(response['taskUid'])
     assert update['status'] == 'succeeded'
     # Check the settings have been correctly updated
     response = index.get_ranking_rules()
@@ -64,8 +64,8 @@ def test_reset_ranking_rules(empty_index):
     # Check the reset of the settings
     response = index.reset_ranking_rules()
     assert isinstance(response, dict)
-    assert 'uid' in response
-    index.wait_for_task(response['uid'])
+    assert 'taskUid' in response
+    index.wait_for_task(response['taskUid'])
     response = index.get_ranking_rules()
     for rule in DEFAULT_RANKING_RULES:
         assert rule in response

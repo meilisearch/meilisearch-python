@@ -282,7 +282,7 @@ search_parameter_guide_highlight_tag_1: |-
   })
 search_parameter_guide_matches_1: |-
   client.index('movies').search('winter feast', {
-    'matches': 'true'
+    'showMatchesPosition': 'true'
   })
 settings_guide_synonyms_1: |-
   client.index('tops').update_settings({
@@ -491,7 +491,7 @@ faceted_search_filter_1: |-
   })
 faceted_search_facets_distribution_1: |-
   client.index('movies').search('Batman', {
-    'facetsDistribution': ['genres']
+    'facets': ['genres']
   })
 faceted_search_walkthrough_filter_1: |-
   client.index('movies').search('thriller', {
@@ -499,8 +499,6 @@ faceted_search_walkthrough_filter_1: |-
   })
 post_dump_1: |-
   client.create_dump()
-get_dump_status_1: |-
-  client.get_dump_status('20201101-110357260')
 phrase_search_1: |-
   client.index('movies').search('"african american" horror')
 sorting_guide_update_sortable_attributes_1: |-
@@ -591,6 +589,7 @@ authorization_header_1: |-
   client = Client('http://127.0.0.1:7700', 'masterKey')
   client.get_keys()
 tenant_token_guide_generate_sdk_1: |-
+  uid = '85c3c2f9-bdd6-41f1-abd8-11fcf80e0f76';
   api_key = 'B5KdX2MY2jV6EXfUs6scSfmC...'
   expires_at = datetime(2025, 12, 20)
   search_rules = {
@@ -598,7 +597,7 @@ tenant_token_guide_generate_sdk_1: |-
       'filter': 'user_id = 1'
     }
   }
-  token = client.generate_tenant_token(search_rules=search_rules, api_key=api_key, expires_at=expires_at)
+  token = client.generate_tenant_token(api_key_uid=uid, search_rules=search_rules, api_key=api_key, expires_at=expires_at)
 tenant_token_guide_search_sdk_1: |-
   front_end_client = Client('http://127.0.0.1:7700', token)
   front_end_client.index('patient_medical_records').search('blood test')
