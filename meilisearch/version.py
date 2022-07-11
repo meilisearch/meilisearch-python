@@ -1,4 +1,4 @@
-__version__ = "0.18.3"
+__version__ = "0.19.0"
 
 def qualified_version() -> str:
     """Get the qualified version of this module."""
