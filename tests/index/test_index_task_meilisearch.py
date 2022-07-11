@@ -12,7 +12,7 @@ def test_get_tasks_default(index_with_documents):
 
 def test_get_tasks(empty_index, small_movies):
     """Tests getting the tasks list of a populated index."""
-    index = empty_index()
+    index = empty_index("test_task")
     current_tasks = index.get_tasks()
     pre_count = len(current_tasks['results'])
     response = index.add_documents(small_movies)
