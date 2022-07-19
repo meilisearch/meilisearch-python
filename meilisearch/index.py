@@ -277,7 +277,7 @@ class Index():
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}/{document_id}?{parse.urlencode(parameters)}'
         )
 
-    def get_documents(self, parameters: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+    def get_documents(self, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Get a set of documents from the index.
 
         Parameters
