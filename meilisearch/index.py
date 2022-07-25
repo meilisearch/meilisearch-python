@@ -1231,6 +1231,63 @@ class Index():
             self.__settings_url_for(self.config.paths.typo_tolerance),
         )
 
+    def get_pagination_settings(self) -> Dict[str, Any]:
+        """Get pagination settngs of the index.
+
+        Returns
+        -------
+        settings: dict
+            Dictionary containing the pagination settings of the index.
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.get(self.__settings_url_for(self.config.paths.pagination))
+
+    def update_pagination_settings(self, body: Dict[str, Any]) -> Dict[str, Any]:
+        """Update the pagination settings of the index.
+
+        Parameters
+        ----------
+        body: dict
+            Dictionary containing the pagination settings.
+            https://docs.meilisearch.com/reference/api/pagination.html#update-pagination-settings
+
+        Returns
+        -------
+        task:
+            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.patch(
+            path=self.__settings_url_for(self.config.paths.pagination),
+            body=body
+        )
+
+
+    def reset_pagination_settings(self) -> Dict[str, Any]:
+        """Reset pagination settings of the index to default values.
+
+        Returns
+        -------
+        task:
+            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.delete(self.__settings_url_for(self.config.paths.pagination))
+
     @staticmethod
     def _batch(
         documents: List[Dict[str, Any]], batch_size: int
