@@ -27,6 +27,7 @@ class Config:
         sortable_attributes = 'sortable-attributes'
         typo_tolerance = 'typo-tolerance'
         dumps = 'dumps'
+        pagination = 'pagination'
 
     def __init__(
         self,
