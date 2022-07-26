@@ -28,6 +28,7 @@ class Config:
         typo_tolerance = 'typo-tolerance'
         dumps = 'dumps'
         pagination = 'pagination'
+        faceting = 'faceting'
 
     def __init__(
         self,
