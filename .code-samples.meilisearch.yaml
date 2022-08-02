@@ -3,6 +3,8 @@
 # the documentation on build
 # You can read more on https://github.com/meilisearch/documentation/tree/master/.vuepress/code-samples
 ---
+getting_started_typo_tolerance: |-
+
 get_one_index_1: |-
   client.get_index('movies')
 list_all_indexes_1: |-
@@ -377,7 +379,7 @@ add_movies_json_1: |-
   movies = json.load(json_file)
   client.index('movies').add_documents(movies)
 landing_getting_started_1: |-
-  client = meilisearch.Client('http://127.0.0.1:7700', 'masterKey')
+  client = meilisearch.Client('http://localhost:7700', 'masterKey')
 
   client.index('movies').add_documents([
     { 'id': 1, 'title': 'Carol' },
@@ -403,7 +405,7 @@ getting_started_add_documents_md: |-
   import meilisearch
   import json
 
-  client = meilisearch.Client('http://127.0.0.1:7700')
+  client = meilisearch.Client('http://localhost:7700')
 
   json_file = open('movies.json')
   movies = json.load(json_file)
@@ -480,7 +482,7 @@ getting_started_configure_settings: |-
     ]
   })
 getting_started_communicating_with_a_protected_instance: |-
-  client = Client('http://127.0.0.1:7700', 'apiKey')
+  client = Client('http://localhost:7700', 'apiKey')
   client.index('movies').search()
 faceted_search_update_settings_1: |-
   client.index('movies').update_filterable_attributes([
@@ -566,15 +568,15 @@ primary_field_guide_add_document_primary_key: |-
     'price': 5.00
   }], 'reference_number')
 security_guide_search_key_1: |-
-  client = Client('http://127.0.0.1:7700', 'apiKey')
+  client = Client('http://localhost:7700', 'apiKey')
   client.index('patient_medical_records').search()
 security_guide_update_key_1: |-
-  client = Client('http://127.0.0.1:7700', 'masterKey')
+  client = Client('http://localhost:7700', 'masterKey')
   client.update_key(key_or_uid='74c9c733-3368-4738-bbe5-1d18a5fecb37', options={
     'description': 'Default Search API Key'
   })
 security_guide_create_key_1: |-
-  client = Client('http://127.0.0.1:7700', 'masterKey')
+  client = Client('http://localhost:7700', 'masterKey')
     client.create_key(options={
     'description': 'Search patient records key',
     'actions': ['search'],
@@ -582,13 +584,13 @@ security_guide_create_key_1: |-
     'expiresAt': '2023-01-01T00:00:00Z'
   })
 security_guide_list_keys_1: |-
-  client = Client('http://127.0.0.1:7700', 'masterKey')
+  client = Client('http://localhost:7700', 'masterKey')
   client.get_keys()
 security_guide_delete_key_1: |-
-  client = Client('http://127.0.0.1:7700', 'masterKey')
+  client = Client('http://localhost:7700', 'masterKey')
   client.delete_key('ac5cd97d-5a4b-4226-a868-2d0eb6d197ab')
 authorization_header_1: |-
-  client = Client('http://127.0.0.1:7700', 'masterKey')
+  client = Client('http://localhost:7700', 'masterKey')
   client.get_keys()
 tenant_token_guide_generate_sdk_1: |-
   uid = '85c3c2f9-bdd6-41f1-abd8-11fcf80e0f76';
@@ -601,7 +603,7 @@ tenant_token_guide_generate_sdk_1: |-
   }
   token = client.generate_tenant_token(api_key_uid=uid, search_rules=search_rules, api_key=api_key, expires_at=expires_at)
 tenant_token_guide_search_sdk_1: |-
-  front_end_client = Client('http://127.0.0.1:7700', token)
+  front_end_client = Client('http://localhost:7700', token)
   front_end_client.index('patient_medical_records').search('blood test')
 get_all_tasks_filtering_1: |-
   client.index.('movies').get_tasks()
