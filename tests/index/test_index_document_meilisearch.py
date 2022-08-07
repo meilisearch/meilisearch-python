@@ -2,14 +2,15 @@
 
 from math import ceil
 from meilisearch.client import Client
+from meilisearch.models import Task
 
 import pytest
 
 def test_get_documents_default(empty_index):
     """Tests getting documents on a clean index."""
     response = empty_index().get_documents()
-    assert isinstance(response['results'], list)
-    assert response['results'] == []
+    assert isinstance(response.results, list)
+    assert response.results == []
 
 def test_add_documents(empty_index, small_movies):
     """Tests adding new documents to a clean index."""
@@ -66,39 +67,39 @@ def test_get_document_inexistent(empty_index):
 def test_get_documents_populated(index_with_documents):
     """Tests getting documents from a populated index."""
     response = index_with_documents().get_documents()
-    assert isinstance(response['results'], list)
-    assert len(response['results']) == 20
+    assert isinstance(response.results, list)
+    assert len(response.results) == 20
 
 def test_get_documents_offset_optional_params(index_with_documents):
     """Tests getting documents from a populated index with optional parameters."""
     index = index_with_documents()
     response = index.get_documents()
-    assert isinstance(response['results'], list)
-    assert len(response['results']) == 20
+    assert isinstance(response.results, list)
+    assert len(response.results) == 20
     response_offset_limit = index.get_documents({
         'limit': 3,
         'offset': 1,
         'fields': 'title'
     })
-    assert len(response_offset_limit['results']) == 3
-    assert 'title' in response_offset_limit['results'][0]
-    assert response_offset_limit['results'][0]['title'] == response['results'][1]['title']
+    assert len(response_offset_limit.results) == 3
+    assert 'title' in response_offset_limit.results[0]
+    assert response_offset_limit.results[0]['title'] == response.results[1]['title']
 
 def test_update_documents(index_with_documents, small_movies):
     """Tests updating a single document and a set of documents."""
     index = index_with_documents()
     response = index.get_documents()
-    response['results'][0]['title'] = 'Some title'
-    update = index.update_documents([response['results'][0]])
+    response.results[0]['title'] = 'Some title'
+    update = index.update_documents([response.results[0]])
     assert isinstance(update, dict)
     assert 'taskUid' in update
     index.wait_for_task(update['taskUid'])
     response = index.get_documents()
-    assert response['results'][0]['title'] == 'Some title'
+    assert response.results[0]['title'] == 'Some title'
     update = index.update_documents(small_movies)
     index.wait_for_task(update['taskUid'])
     response = index.get_documents()
-    assert response['results'][0]['title'] != 'Some title'
+    assert response.results[0]['title'] != 'Some title'
 
 @pytest.mark.parametrize('batch_size', [2, 3, 1000])
 @pytest.mark.parametrize(
@@ -152,16 +153,16 @@ def test_delete_all_documents(index_with_documents):
     assert 'taskUid' in response
     index.wait_for_task(response['taskUid'])
     response = index.get_documents()
-    assert isinstance(response['results'], list)
-    assert response['results'] == []
+    assert isinstance(response.results, list)
+    assert response.results == []
 
 def test_add_documents_csv(empty_index, songs_csv):
     """Tests adding new documents to a clean index."""
     index = empty_index()
     response = index.add_documents_csv(songs_csv)
-    assert isinstance(response, dict)
-    assert 'taskUid' in response
-    task = index.wait_for_task(response['taskUid'])
+    assert isinstance(response, Task)
+    assert response.task_uid != None
+    task = index.wait_for_task(response.task_uid)
     assert task['status'] == 'succeeded'
     assert index.get_primary_key() == 'id'
 
@@ -169,9 +170,9 @@ def test_add_documents_json(empty_index, small_movies_json_file):
     """Tests adding new documents to a clean index."""
     index = empty_index()
     response = index.add_documents_json(small_movies_json_file)
-    assert isinstance(response, dict)
-    assert 'taskUid' in response
-    task = index.wait_for_task(response['taskUid'])
+    assert isinstance(response, Task)
+    assert response.task_uid != None
+    task = index.wait_for_task(response.task_uid)
     assert task['status'] == 'succeeded'
     assert index.get_primary_key() == 'id'
 
@@ -179,8 +180,8 @@ def test_add_documents_ndjson(empty_index, songs_ndjson):
     """Tests adding new documents to a clean index."""
     index = empty_index()
     response = index.add_documents_ndjson(songs_ndjson)
-    assert isinstance(response, dict)
-    assert 'taskUid' in response
-    task = index.wait_for_task(response['taskUid'])
+    assert isinstance(response, Task)
+    assert response.task_uid != None
+    task = index.wait_for_task(response.task_uid)
     assert task['status'] == 'succeeded'
     assert index.get_primary_key() == 'id'
