@@ -2,7 +2,7 @@
 
 from math import ceil
 from meilisearch.client import Client
-from meilisearch.models import Task
+from meilisearch.models import TaskInfo
 
 import pytest
 
@@ -160,7 +160,7 @@ def test_add_documents_csv(empty_index, songs_csv):
     """Tests adding new documents to a clean index."""
     index = empty_index()
     response = index.add_documents_csv(songs_csv)
-    assert isinstance(response, Task)
+    assert isinstance(response, TaskInfo)
     assert response.task_uid != None
     task = index.wait_for_task(response.task_uid)
     assert task['status'] == 'succeeded'
@@ -170,7 +170,7 @@ def test_add_documents_json(empty_index, small_movies_json_file):
     """Tests adding new documents to a clean index."""
     index = empty_index()
     response = index.add_documents_json(small_movies_json_file)
-    assert isinstance(response, Task)
+    assert isinstance(response, TaskInfo)
     assert response.task_uid != None
     task = index.wait_for_task(response.task_uid)
     assert task['status'] == 'succeeded'
@@ -180,7 +180,7 @@ def test_add_documents_ndjson(empty_index, songs_ndjson):
     """Tests adding new documents to a clean index."""
     index = empty_index()
     response = index.add_documents_ndjson(songs_ndjson)
-    assert isinstance(response, Task)
+    assert isinstance(response, TaskInfo)
     assert response.task_uid != None
     task = index.wait_for_task(response.task_uid)
     assert task['status'] == 'succeeded'

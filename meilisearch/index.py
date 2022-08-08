@@ -5,7 +5,7 @@ from typing import Any, Dict, Generator, List, Optional, Union
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
 from meilisearch.task import get_task, get_tasks, wait_for_task
-from meilisearch.models import MultiDocument, Task, PaginatedTasks, IndexStats
+from meilisearch.models import DocumentsResults, TaskInfo, TaskResults, IndexStatsResults
 
 # pylint: disable=too-many-public-methods
 class Index():
@@ -125,8 +125,7 @@ class Index():
         payload = {**options, 'uid': uid}
         return HttpRequests(config).post(config.paths.index, payload)
 
-    def get_tasks(self, parameters: Optional[Dict[str, Any]] = None) -> PaginatedTasks:
-    # def get_tasks(self, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, List[Dict[str, Any]]]:
+    def get_tasks(self, parameters: Optional[Dict[str, Any]] = None) -> TaskResults:
         """Get all tasks of a specific index from the last one.
 
         Parameters
@@ -151,9 +150,9 @@ class Index():
             parameters = {'indexUid': [self.uid]}
 
         tasks = get_tasks(self.config, parameters=parameters)
-        return PaginatedTasks(tasks)
+        return TaskResults(tasks)
 
-    def get_task(self, uid: int) -> Task:
+    def get_task(self, uid: int) -> TaskInfo:
         """Get one task through the route of a specific index.
 
         Parameters
@@ -172,7 +171,7 @@ class Index():
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         task = get_task(self.config, uid)
-        return Task(**task)
+        return TaskInfo(**task)
 
     def wait_for_task(
         self, uid: int,
@@ -202,8 +201,7 @@ class Index():
         """
         return wait_for_task(self.config, uid, timeout_in_ms, interval_in_ms)
 
-    # def get_stats(self) -> Dict[str, Any]:
-    def get_stats(self) -> IndexStats:
+    def get_stats(self) -> IndexStatsResults:
         """Get stats of the index.
 
         Get information about the number of documents, field frequencies, ...
@@ -222,7 +220,7 @@ class Index():
         stats = self.http.get(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.stat}'
         )
-        return IndexStats(**stats)
+        return IndexStatsResults(**stats)
 
     def search(self, query: str, opt_params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Search in the index.
@@ -284,7 +282,7 @@ class Index():
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}/{document_id}?{parse.urlencode(parameters)}'
         )
 
-    def get_documents(self, parameters: Optional[Dict[str, Any]] = None) -> MultiDocument:
+    def get_documents(self, parameters: Optional[Dict[str, Any]] = None) -> DocumentsResults:
         """Get a set of documents from the index.
 
         Parameters
@@ -310,7 +308,7 @@ class Index():
         response = self.http.get(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{parse.urlencode(parameters)}'
         )
-        return MultiDocument(**response)
+        return DocumentsResults(**response)
 
     def add_documents(
         self,
@@ -382,7 +380,7 @@ class Index():
         self,
         str_documents: str,
         primary_key: Optional[str] = None,
-    ) -> Task:
+    ) -> TaskInfo:
         """Add string documents from JSON file to the index.
 
         Parameters
@@ -409,7 +407,7 @@ class Index():
         self,
         str_documents: str,
         primary_key: Optional[str] = None,
-    ) -> Task:
+    ) -> TaskInfo:
         """Add string documents from a CSV file to the index.
 
         Parameters
@@ -436,7 +434,7 @@ class Index():
         self,
         str_documents: str,
         primary_key: Optional[str] = None,
-    ) -> Task:
+    ) -> TaskInfo:
         """Add string documents from a NDJSON file to the index.
 
         Parameters
@@ -464,7 +462,7 @@ class Index():
         str_documents: str,
         primary_key: Optional[str] = None,
         content_type: Optional[str] = None,
-    ) -> Task:
+    ) -> TaskInfo:
         """Add string documents to the index.
 
         Parameters
@@ -489,7 +487,7 @@ class Index():
         """
         url = self._build_url(primary_key)
         response = self.http.post(url, str_documents, content_type)
-        return Task(**response)
+        return TaskInfo(**response)
 
     def update_documents(
         self,

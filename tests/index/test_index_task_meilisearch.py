@@ -2,12 +2,12 @@
 
 import pytest
 from tests import common
-from meilisearch.models import Task, PaginatedTasks
+from meilisearch.models import TaskInfo, TaskResults
 
 def test_get_tasks_default(index_with_documents):
     """Tests getting the tasks list of an empty index."""
     tasks = index_with_documents().get_tasks()
-    assert isinstance(tasks, PaginatedTasks)
+    assert isinstance(tasks, TaskResults)
     assert hasattr(tasks, "results")
     assert len(tasks.results) != 0
 
@@ -26,21 +26,21 @@ def test_get_tasks_with_parameters(empty_index):
     """Tests getting the tasks list of a populated index."""
     index = empty_index()
     tasks = index.get_tasks({'limit': 1})
-    assert isinstance(tasks, PaginatedTasks)
+    assert isinstance(tasks, TaskResults)
     assert len(tasks.results) == 1
 
 def test_get_tasks_with_index_uid(empty_index):
     """Tests getting the tasks list of a populated index."""
     index = empty_index()
     tasks = index.get_tasks({'limit': 1, 'indexUid': [common.INDEX_UID]})
-    assert isinstance(tasks, PaginatedTasks)
+    assert isinstance(tasks, TaskResults)
     assert len(tasks.results) == 1
 
 def test_get_tasks_empty_parameters(empty_index):
     """Tests getting the global tasks list after populating an index."""
     index = empty_index()
     tasks = index.get_tasks({})
-    assert isinstance(tasks, PaginatedTasks)
+    assert isinstance(tasks, TaskResults)
     assert isinstance(tasks.results, list)
 
 def test_get_task(client):
@@ -49,7 +49,7 @@ def test_get_task(client):
     client.wait_for_task(task['taskUid'])
     index = client.get_index(uid=common.INDEX_UID)
     task = index.get_task(task['taskUid'])
-    assert isinstance(task, Task)
+    assert isinstance(task, TaskInfo)
     assert task.uid != None
     assert task.status != None
     assert task.type != None
