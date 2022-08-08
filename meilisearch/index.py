@@ -177,7 +177,7 @@ class Index():
         self, uid: int,
         timeout_in_ms: int = 5000,
         interval_in_ms: int = 50,
-    ) -> Dict[str, Any]:
+    ) -> TaskInfo:
         """Wait until Meilisearch processes a task until it fails or succeeds.
 
         Parameters
@@ -199,7 +199,8 @@ class Index():
         MeiliSearchTimeoutError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return wait_for_task(self.config, uid, timeout_in_ms, interval_in_ms)
+        task = wait_for_task(self.config, uid, timeout_in_ms, interval_in_ms)
+        return TaskInfo(**task)
 
     def get_stats(self) -> IndexStatsResults:
         """Get stats of the index.

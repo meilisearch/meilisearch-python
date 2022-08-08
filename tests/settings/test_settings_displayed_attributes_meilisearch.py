@@ -30,7 +30,7 @@ def test_update_displayed_attributes_to_none(empty_index):
     # Update the settings first
     response = index.update_displayed_attributes(DISPLAYED_ATTRIBUTES)
     update = index.wait_for_task(response['taskUid'])
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
     # Check the settings have been correctly updated
     get_attributes = index.get_displayed_attributes()
     for attribute in DISPLAYED_ATTRIBUTES:
@@ -47,7 +47,7 @@ def test_reset_displayed_attributes(empty_index):
     # Update the settings first
     response = index.update_displayed_attributes(DISPLAYED_ATTRIBUTES)
     update = index.wait_for_task(response['taskUid'])
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
     # Check the settings have been correctly updated
     get_attributes_new = index.get_displayed_attributes()
     assert len(get_attributes_new) == len(DISPLAYED_ATTRIBUTES)

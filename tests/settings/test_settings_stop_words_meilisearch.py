@@ -14,7 +14,7 @@ def test_update_stop_words(empty_index):
     assert isinstance(response, dict)
     assert 'taskUid' in response
     update = index.wait_for_task(response['taskUid'])
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
     response = index.get_stop_words()
     assert isinstance(response, list)
     for stop_word in NEW_STOP_WORDS:
@@ -26,7 +26,7 @@ def test_reset_stop_words(empty_index):
     # Update the settings first
     response = index.update_stop_words(NEW_STOP_WORDS)
     update = index.wait_for_task(response['taskUid'])
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
     # Check the settings have been correctly updated
     response = index.get_stop_words()
     assert isinstance(response, list)
@@ -37,6 +37,6 @@ def test_reset_stop_words(empty_index):
     assert isinstance(response, dict)
     assert 'taskUid' in response
     update = index.wait_for_task(response['taskUid'])
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
     response = index.get_stop_words()
     assert response == []

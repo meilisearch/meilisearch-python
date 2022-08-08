@@ -32,7 +32,7 @@ def test_update_searchable_attributes_to_none(empty_index):
     # Update the settings first
     response = index.update_searchable_attributes(NEW_SEARCHABLE_ATTRIBUTES)
     update = index.wait_for_task(response['taskUid'])
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
     # Check the settings have been correctly updated
     response = index.get_searchable_attributes()
     for attribute in NEW_SEARCHABLE_ATTRIBUTES:
@@ -51,7 +51,7 @@ def test_reset_searchable_attributes(empty_index):
     # Update the settings first
     response = index.update_searchable_attributes(NEW_SEARCHABLE_ATTRIBUTES)
     update = index.wait_for_task(response['taskUid'])
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
     # Check the settings have been correctly updated
     response = index.get_searchable_attributes()
     assert len(response) == len(NEW_SEARCHABLE_ATTRIBUTES)

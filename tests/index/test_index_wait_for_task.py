@@ -3,6 +3,7 @@
 from datetime import datetime
 import pytest
 from meilisearch.errors import MeiliSearchTimeoutError
+from meilisearch.models import TaskInfo
 
 def test_wait_for_task_default(index_with_documents):
     """Tests waiting for an update with default parameters."""
@@ -10,9 +11,9 @@ def test_wait_for_task_default(index_with_documents):
     response = index.add_documents([{'id': 1, 'title': 'Le Petit Prince'}])
     assert 'taskUid' in response
     update = index.wait_for_task(response['taskUid'])
-    assert isinstance(update, dict)
-    assert 'status' in update
-    assert update['status'] not in ('enqueued', 'processing')
+    assert isinstance(update, TaskInfo)
+    assert update.status != None
+    assert update.status not in ('enqueued', 'processing')
 
 def test_wait_for_task_timeout(index_with_documents):
     """Tests timeout risen by waiting for an update."""
@@ -31,10 +32,10 @@ def test_wait_for_task_interval_custom(index_with_documents, small_movies):
         timeout_in_ms=6000
     )
     time_delta = datetime.now() - start_time
-    assert isinstance(wait_update, dict)
-    assert 'status' in wait_update
-    assert wait_update['status'] != 'enqueued'
-    assert wait_update['status'] != 'processing'
+    assert isinstance(wait_update, TaskInfo)
+    assert wait_update.status != None
+    assert wait_update.status != 'enqueued'
+    assert wait_update.status != 'processing'
     assert time_delta.seconds >= 1
 
 def test_wait_for_task_interval_zero(index_with_documents, small_movies):
@@ -47,7 +48,7 @@ def test_wait_for_task_interval_zero(index_with_documents, small_movies):
         interval_in_ms=0,
         timeout_in_ms=6000
     )
-    assert isinstance(wait_update, dict)
-    assert 'status' in wait_update
-    assert wait_update['status'] != 'enqueued'
-    assert wait_update['status'] != 'processing'
+    assert isinstance(wait_update, TaskInfo)
+    assert wait_update.status != None
+    assert wait_update.status != 'enqueued'
+    assert wait_update.status != 'processing'

@@ -20,7 +20,7 @@ def test_add_documents(empty_index, small_movies):
     assert 'taskUid' in response
     update = index.wait_for_task(response['taskUid'])
     assert index.get_primary_key() == 'id'
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
 
 @pytest.mark.parametrize('batch_size', [2, 3, 1000])
 @pytest.mark.parametrize(
@@ -40,7 +40,7 @@ def test_add_documents_in_batches(
     for r in response:
         assert 'taskUid' in r
         update = index.wait_for_task(r['taskUid'])
-        assert update['status'] == 'succeeded'
+        assert update.status == 'succeeded'
 
     assert index.get_primary_key() == expected_primary_key
 
@@ -119,7 +119,7 @@ def test_update_documents_in_batches(
     for r in response:
         assert 'taskUid' in r
         update = index.wait_for_task(r['taskUid'])
-        assert update['status'] == 'succeeded'
+        assert update.status == 'succeeded'
 
     assert index.get_primary_key() == expected_primary_key
 
@@ -163,7 +163,7 @@ def test_add_documents_csv(empty_index, songs_csv):
     assert isinstance(response, TaskInfo)
     assert response.task_uid != None
     task = index.wait_for_task(response.task_uid)
-    assert task['status'] == 'succeeded'
+    assert task.status == 'succeeded'
     assert index.get_primary_key() == 'id'
 
 def test_add_documents_json(empty_index, small_movies_json_file):
@@ -173,7 +173,7 @@ def test_add_documents_json(empty_index, small_movies_json_file):
     assert isinstance(response, TaskInfo)
     assert response.task_uid != None
     task = index.wait_for_task(response.task_uid)
-    assert task['status'] == 'succeeded'
+    assert task.status == 'succeeded'
     assert index.get_primary_key() == 'id'
 
 def test_add_documents_ndjson(empty_index, songs_ndjson):
@@ -183,5 +183,5 @@ def test_add_documents_ndjson(empty_index, songs_ndjson):
     assert isinstance(response, TaskInfo)
     assert response.task_uid != None
     task = index.wait_for_task(response.task_uid)
-    assert task['status'] == 'succeeded'
+    assert task.status == 'succeeded'
     assert index.get_primary_key() == 'id'
