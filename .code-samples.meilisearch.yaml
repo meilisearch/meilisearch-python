@@ -3,8 +3,6 @@
 # the documentation on build
 # You can read more on https://github.com/meilisearch/documentation/tree/master/.vuepress/code-samples
 ---
-getting_started_typo_tolerance: |-
-
 get_one_index_1: |-
   client.get_index('movies')
 list_all_indexes_1: |-
@@ -190,6 +188,12 @@ update_displayed_attributes_1: |-
   ])
 reset_displayed_attributes_1: |-
   client.index('movies').reset_displayed_attributes()
+getting_started_typo_tolerance: |-
+  client.index('movies').update_typo_tolerance({
+    'minWordSizeForTypos': {
+      'oneTypo': 4
+    }
+  })
 get_typo_tolerance_1:
   client.index('books').get_typo_tolerance()
 update_typo_tolerance_1: |-
