@@ -1,4 +1,4 @@
-from meilisearch.models import IndexStats
+from meilisearch.models.index import IndexStats
 
 def test_get_stats(empty_index):
     """Tests getting stats of an index."""

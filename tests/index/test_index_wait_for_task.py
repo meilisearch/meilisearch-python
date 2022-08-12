@@ -3,7 +3,7 @@
 from datetime import datetime
 import pytest
 from meilisearch.errors import MeiliSearchTimeoutError
-from meilisearch.models import Task
+from meilisearch.models.task import Task
 
 def test_wait_for_task_default(index_with_documents):
     """Tests waiting for an update with default parameters."""

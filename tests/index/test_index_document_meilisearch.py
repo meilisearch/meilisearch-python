@@ -2,7 +2,8 @@
 
 from math import ceil
 from meilisearch.client import Client
-from meilisearch.models import TaskInfo
+from meilisearch.models.document import Document
+from meilisearch.models.task import TaskInfo
 
 import pytest
 
@@ -47,17 +48,18 @@ def test_add_documents_in_batches(
 def test_get_document(index_with_documents):
     """Tests getting one document from a populated index."""
     response = index_with_documents().get_document('500682')
-    assert isinstance(response, dict)
-    assert 'title' in response
-    assert response['title'] == 'The Highwaymen'
+    assert isinstance(response, Document)
+    assert hasattr(response, 'title')
+    assert response.title == 'The Highwaymen'
 
 def test_get_document_with_fields(index_with_documents):
     """Tests getting one document from a populated index."""
     response = index_with_documents().get_document('500682', {'fields' : ['id', 'title']})
-    assert isinstance(response, dict)
-    assert 'title' in response
-    assert 'poster' not in response
-    assert response['title'] == 'The Highwaymen'
+    assert isinstance(response, Document)
+    assert hasattr(response, 'title')
+    assert not hasattr(response, 'poster')
+    # assert 'poster' not in response
+    assert response.title == 'The Highwaymen'
 
 def test_get_document_inexistent(empty_index):
     """Tests getting one inexistent document from a populated index."""
@@ -82,24 +84,24 @@ def test_get_documents_offset_optional_params(index_with_documents):
         'fields': 'title'
     })
     assert len(response_offset_limit.results) == 3
-    assert 'title' in response_offset_limit.results[0]
-    assert response_offset_limit.results[0]['title'] == response.results[1]['title']
+    assert hasattr(response_offset_limit.results[0], 'title')
+    assert response_offset_limit.results[0].title == response.results[1].title
 
 def test_update_documents(index_with_documents, small_movies):
     """Tests updating a single document and a set of documents."""
     index = index_with_documents()
     response = index.get_documents()
-    response.results[0]['title'] = 'Some title'
-    update = index.update_documents([response.results[0]])
+    response.results[0].title = 'Some title'
+    update = index.update_documents([dict(response.results[0])])
     assert isinstance(update, TaskInfo)
     assert update.task_uid != None
     index.wait_for_task(update.task_uid)
     response = index.get_documents()
-    assert response.results[0]['title'] == 'Some title'
+    assert response.results[0].title == 'Some title'
     update = index.update_documents(small_movies)
     index.wait_for_task(update.task_uid)
     response = index.get_documents()
-    assert response.results[0]['title'] != 'Some title'
+    assert response.results[0].title != 'Some title'
 
 @pytest.mark.parametrize('batch_size', [2, 3, 1000])
 @pytest.mark.parametrize(

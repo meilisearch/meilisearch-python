@@ -5,7 +5,10 @@ from typing import Any, Dict, Generator, List, Optional, Union
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
 from meilisearch.task import get_task, get_tasks, wait_for_task
-from meilisearch.models import DocumentsResults, Task, TaskInfo, TaskResults, IndexStats
+
+from meilisearch.models.index import IndexStats
+from meilisearch.models.document import Document, DocumentsResults
+from meilisearch.models.task import Task, TaskInfo, TaskResults
 
 # pylint: disable=too-many-public-methods
 class Index():
@@ -255,7 +258,7 @@ class Index():
             body=body
         )
 
-    def get_document(self, document_id: str, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def get_document(self, document_id: str, parameters: Optional[Dict[str, Any]] = None) -> Document:
         """Get one document with given document identifier.
 
         Parameters
@@ -279,9 +282,11 @@ class Index():
             parameters = {}
         elif 'fields' in parameters and isinstance(parameters['fields'], list):
             parameters['fields'] = ",".join(parameters['fields'])
-        return self.http.get(
+
+        document = self.http.get(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}/{document_id}?{parse.urlencode(parameters)}'
         )
+        return Document(document)
 
     def get_documents(self, parameters: Optional[Dict[str, Any]] = None) -> DocumentsResults:
         """Get a set of documents from the index.
@@ -309,7 +314,7 @@ class Index():
         response = self.http.get(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{parse.urlencode(parameters)}'
         )
-        return DocumentsResults(**response)
+        return DocumentsResults(response)
 
     def add_documents(
         self,
@@ -337,8 +342,8 @@ class Index():
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         url = self._build_url(primary_key)
-        response = self.http.post(url, documents)
-        return TaskInfo(**response)
+        add_document_task = self.http.post(url, documents)
+        return TaskInfo(**add_document_task)
 
     def add_documents_in_batches(
         self,

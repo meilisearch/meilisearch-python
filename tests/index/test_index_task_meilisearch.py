@@ -2,7 +2,7 @@
 
 import pytest
 from tests import common
-from meilisearch.models import Task, TaskResults
+from meilisearch.models.task import Task, TaskResults
 
 def test_get_tasks_default(index_with_documents):
     """Tests getting the tasks list of an empty index."""

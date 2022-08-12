@@ -1,12 +1,6 @@
 from typing import Any, List, Dict, Optional
 from camel_converter.pydantic_base import CamelBase
 
-class DocumentsResults(CamelBase):
-    results: List[Dict[str, Any]]
-    offset: int
-    limit: int
-    total: int
-
 class Task(CamelBase):
     uid: str
     index_uid: str
@@ -35,8 +29,3 @@ class TaskResults:
         self.limit: int = resp['limit']
         self.from_: int = resp['from']
         self.next_: int = resp['next']
-
-class IndexStats(CamelBase):
-    number_of_documents: int
-    is_indexing: bool
-    field_distribution: Dict[str, Any]
