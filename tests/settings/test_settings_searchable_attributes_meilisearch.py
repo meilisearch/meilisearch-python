@@ -9,7 +9,7 @@ def test_get_searchable_attributes(empty_index, small_movies):
     assert isinstance(response, list)
     assert response == ['*']
     response = index.add_documents(small_movies, primary_key='id')
-    index.wait_for_task(response['taskUid'])
+    index.wait_for_task(response.task_uid)
     get_attributes = index.get_searchable_attributes()
     assert get_attributes == ['*']
 

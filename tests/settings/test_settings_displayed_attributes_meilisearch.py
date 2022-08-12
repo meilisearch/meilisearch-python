@@ -10,7 +10,7 @@ def test_get_displayed_attributes(empty_index, small_movies):
     assert isinstance(response, list)
     assert response == ['*']
     response = index.add_documents(small_movies)
-    index.wait_for_task(response['taskUid'])
+    index.wait_for_task(response.task_uid)
     get_attributes = index.get_displayed_attributes()
     assert get_attributes == ['*']
 

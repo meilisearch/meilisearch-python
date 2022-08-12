@@ -1,30 +1,26 @@
-from dataclasses import dataclass
 from typing import Any, List, Dict, Optional
 from camel_converter.pydantic_base import CamelBase
 
-@dataclass
-class DocumentsResults:
+class DocumentsResults(CamelBase):
     results: List[Dict[str, Any]]
     offset: int
     limit: int
     total: int
 
 class Task(CamelBase):
-    uid: Optional[str]
+    uid: str
     index_uid: str
-    task_uid: Optional[str]
     status: str
     type: str
     details: Optional[Dict[str, Any]]
-    duration: Optional[str]
+    duration: str
     enqueued_at: str
-    started_at: Optional[str]
-    finished_at: Optional[str]
+    started_at: str
+    finished_at: str
 
 class TaskInfo(CamelBase):
-    uid: Optional[str]
-    index_uid: str
     task_uid: Optional[str]
+    index_uid: str
     status: str
     type: str
     details: Optional[Dict[str, Any]]
@@ -40,7 +36,7 @@ class TaskResults:
         self.from_: int = resp['from']
         self.next_: int = resp['next']
 
-class IndexStatsResults(CamelBase):
+class IndexStats(CamelBase):
     number_of_documents: int
     is_indexing: bool
     field_distribution: Dict[str, Any]

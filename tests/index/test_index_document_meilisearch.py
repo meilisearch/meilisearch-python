@@ -16,9 +16,9 @@ def test_add_documents(empty_index, small_movies):
     """Tests adding new documents to a clean index."""
     index = empty_index()
     response = index.add_documents(small_movies)
-    assert isinstance(response, dict)
-    assert 'taskUid' in response
-    update = index.wait_for_task(response['taskUid'])
+    assert isinstance(response, TaskInfo)
+    assert response.task_uid != None
+    update = index.wait_for_task(response.task_uid)
     assert index.get_primary_key() == 'id'
     assert update.status == 'succeeded'
 
@@ -38,8 +38,8 @@ def test_add_documents_in_batches(
     assert ceil(len(small_movies) / batch_size) == len(response)
 
     for r in response:
-        assert 'taskUid' in r
-        update = index.wait_for_task(r['taskUid'])
+        assert r.task_uid != None
+        update = index.wait_for_task(r.task_uid)
         assert update.status == 'succeeded'
 
     assert index.get_primary_key() == expected_primary_key
@@ -91,13 +91,13 @@ def test_update_documents(index_with_documents, small_movies):
     response = index.get_documents()
     response.results[0]['title'] = 'Some title'
     update = index.update_documents([response.results[0]])
-    assert isinstance(update, dict)
-    assert 'taskUid' in update
-    index.wait_for_task(update['taskUid'])
+    assert isinstance(update, TaskInfo)
+    assert update.task_uid != None
+    index.wait_for_task(update.task_uid)
     response = index.get_documents()
     assert response.results[0]['title'] == 'Some title'
     update = index.update_documents(small_movies)
-    index.wait_for_task(update['taskUid'])
+    index.wait_for_task(update.task_uid)
     response = index.get_documents()
     assert response.results[0]['title'] != 'Some title'
 
@@ -117,8 +117,8 @@ def test_update_documents_in_batches(
     assert ceil(len(small_movies) / batch_size) == len(response)
 
     for r in response:
-        assert 'taskUid' in r
-        update = index.wait_for_task(r['taskUid'])
+        assert r.task_uid != None
+        update = index.wait_for_task(r.task_uid)
         assert update.status == 'succeeded'
 
     assert index.get_primary_key() == expected_primary_key
@@ -127,9 +127,9 @@ def test_delete_document(index_with_documents):
     """Tests deleting a single document."""
     index = index_with_documents()
     response = index.delete_document('500682')
-    assert isinstance(response, dict)
-    assert 'taskUid' in response
-    index.wait_for_task(response['taskUid'])
+    assert isinstance(response, TaskInfo)
+    assert response.task_uid != None
+    index.wait_for_task(response.task_uid)
     with pytest.raises(Exception):
         index.get_document('500682')
 

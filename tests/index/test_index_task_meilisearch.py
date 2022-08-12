@@ -2,7 +2,7 @@
 
 import pytest
 from tests import common
-from meilisearch.models import TaskInfo, TaskResults
+from meilisearch.models import Task, TaskResults
 
 def test_get_tasks_default(index_with_documents):
     """Tests getting the tasks list of an empty index."""
@@ -17,8 +17,8 @@ def test_get_tasks(empty_index, small_movies):
     current_tasks = index.get_tasks()
     pre_count = len(current_tasks.results)
     response = index.add_documents(small_movies)
-    assert 'taskUid' in response
-    index.wait_for_task(response['taskUid'])
+    assert response.task_uid != None
+    index.wait_for_task(response.task_uid)
     tasks = index.get_tasks()
     assert len(tasks.results) == pre_count + 1
 
@@ -49,8 +49,9 @@ def test_get_task(client):
     client.wait_for_task(task['taskUid'])
     index = client.get_index(uid=common.INDEX_UID)
     task = index.get_task(task['taskUid'])
-    assert isinstance(task, TaskInfo)
+    assert isinstance(task, Task)
     assert task.uid != None
+    assert task.index_uid != None
     assert task.status != None
     assert task.type != None
     assert task.duration != None

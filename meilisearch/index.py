@@ -5,7 +5,7 @@ from typing import Any, Dict, Generator, List, Optional, Union
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
 from meilisearch.task import get_task, get_tasks, wait_for_task
-from meilisearch.models import DocumentsResults, TaskInfo, TaskResults, IndexStatsResults
+from meilisearch.models import DocumentsResults, Task, TaskInfo, TaskResults, IndexStats
 
 # pylint: disable=too-many-public-methods
 class Index():
@@ -152,7 +152,7 @@ class Index():
         tasks = get_tasks(self.config, parameters=parameters)
         return TaskResults(tasks)
 
-    def get_task(self, uid: int) -> TaskInfo:
+    def get_task(self, uid: int) -> Task:
         """Get one task through the route of a specific index.
 
         Parameters
@@ -171,13 +171,13 @@ class Index():
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         task = get_task(self.config, uid)
-        return TaskInfo(**task)
+        return Task(**task)
 
     def wait_for_task(
         self, uid: int,
         timeout_in_ms: int = 5000,
         interval_in_ms: int = 50,
-    ) -> TaskInfo:
+    ) -> Task:
         """Wait until Meilisearch processes a task until it fails or succeeds.
 
         Parameters
@@ -200,9 +200,9 @@ class Index():
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         task = wait_for_task(self.config, uid, timeout_in_ms, interval_in_ms)
-        return TaskInfo(**task)
+        return Task(**task)
 
-    def get_stats(self) -> IndexStatsResults:
+    def get_stats(self) -> IndexStats:
         """Get stats of the index.
 
         Get information about the number of documents, field frequencies, ...
@@ -221,7 +221,7 @@ class Index():
         stats = self.http.get(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.stat}'
         )
-        return IndexStatsResults(**stats)
+        return IndexStats(**stats)
 
     def search(self, query: str, opt_params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Search in the index.
@@ -315,7 +315,7 @@ class Index():
         self,
         documents: List[Dict[str, Any]],
         primary_key: Optional[str] = None,
-    ) -> Dict[str, Any]:
+    ) -> TaskInfo:
         """Add documents to the index.
 
         Parameters
@@ -337,14 +337,15 @@ class Index():
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         url = self._build_url(primary_key)
-        return self.http.post(url, documents)
+        response = self.http.post(url, documents)
+        return TaskInfo(**response)
 
     def add_documents_in_batches(
         self,
         documents: List[Dict[str, Any]],
         batch_size: int = 1000,
         primary_key: Optional[str] = None,
-    ) -> List[Dict[str, Any]]:
+    ) -> List[TaskInfo]:
         """Add documents to the index in batches.
 
         Parameters
@@ -369,13 +370,13 @@ class Index():
             Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
 
-        uids = []
+        tasks: List[TaskInfo] = []
 
         for document_batch in self._batch(documents, batch_size):
-            uid = self.add_documents(document_batch, primary_key)
-            uids.append(uid)
+            task = self.add_documents(document_batch, primary_key)
+            tasks.append(task)
 
-        return uids
+        return tasks
 
     def add_documents_json(
         self,
@@ -494,7 +495,7 @@ class Index():
         self,
         documents: List[Dict[str, Any]],
         primary_key: Optional[str] = None
-    ) -> Dict[str, Any]:
+    ) -> TaskInfo:
         """Update documents in the index.
 
         Parameters
@@ -516,14 +517,15 @@ class Index():
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         url = self._build_url(primary_key)
-        return self.http.put(url, documents)
+        response = self.http.put(url, documents)
+        return TaskInfo(**response)
 
     def update_documents_in_batches(
         self,
         documents: List[Dict[str, Any]],
         batch_size: int = 1000,
         primary_key: Optional[str] = None
-    ) -> List[Dict[str, Any]]:
+    ) -> List[TaskInfo]:
         """Update documents to the index in batches.
 
         Parameters
@@ -548,15 +550,15 @@ class Index():
             Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
 
-        uids = []
+        tasks = []
 
         for document_batch in self._batch(documents, batch_size):
-            uid = self.update_documents(document_batch, primary_key)
-            uids.append(uid)
+            update_task = self.update_documents(document_batch, primary_key)
+            tasks.append(update_task)
 
-        return uids
+        return tasks
 
-    def delete_document(self, document_id: str) -> Dict[str, Any]:
+    def delete_document(self, document_id: str) -> TaskInfo:
         """Delete one document from the index.
 
         Parameters
@@ -575,9 +577,10 @@ class Index():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.delete(
+        response = self.http.delete(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}/{document_id}'
         )
+        return TaskInfo(**response)
 
     def delete_documents(self, ids: List[str]) -> Dict[str, int]:
         """Delete multiple documents from the index.
