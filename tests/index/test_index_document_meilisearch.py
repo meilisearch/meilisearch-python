@@ -140,9 +140,9 @@ def test_delete_documents(index_with_documents):
     to_delete = ['522681', '450465', '329996']
     index = index_with_documents()
     response = index.delete_documents(to_delete)
-    assert isinstance(response, dict)
-    assert 'taskUid' in response
-    index.wait_for_task(response['taskUid'])
+    assert isinstance(response, TaskInfo)
+    assert response.task_uid != None
+    index.wait_for_task(response.task_uid)
     for document in to_delete:
         with pytest.raises(Exception):
             index.get_document(document)
@@ -151,9 +151,9 @@ def test_delete_all_documents(index_with_documents):
     """Tests deleting all the documents in the index."""
     index = index_with_documents()
     response = index.delete_all_documents()
-    assert isinstance(response, dict)
-    assert 'taskUid' in response
-    index.wait_for_task(response['taskUid'])
+    assert isinstance(response, TaskInfo)
+    assert response.task_uid != None
+    index.wait_for_task(response.task_uid)
     response = index.get_documents()
     assert isinstance(response.results, list)
     assert response.results == []

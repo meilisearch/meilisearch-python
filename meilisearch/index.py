@@ -593,7 +593,7 @@ class Index():
         )
         return TaskInfo(**response)
 
-    def delete_documents(self, ids: List[str]) -> Dict[str, int]:
+    def delete_documents(self, ids: List[str]) -> TaskInfo:
         """Delete multiple documents from the index.
 
         Parameters
@@ -603,8 +603,8 @@ class Index():
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        TaskInfo:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -612,18 +612,19 @@ class Index():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.post(
+        response = self.http.post(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}/delete-batch',
             ids
         )
+        return TaskInfo(**response)
 
-    def delete_all_documents(self) -> Dict[str, int]:
+    def delete_all_documents(self) -> TaskInfo:
         """Delete all documents from the index.
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        TaskInfo:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -631,9 +632,10 @@ class Index():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.delete(
+        response = self.http.delete(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}'
         )
+        return TaskInfo(**response)
 
     # GENERAL SETTINGS ROUTES
 
