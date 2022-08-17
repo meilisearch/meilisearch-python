@@ -139,8 +139,11 @@ class Index():
 
         Returns
         -------
-        task:
-            Dictionary with limit, from, next and results containing a list of all enqueued, processing, succeeded or failed tasks of the index.
+        TaskResults instance with attributes:
+            - from_
+            - next_
+            - limit
+            - results : list of Task instances containing all enqueued, processing, succeeded or failed tasks of the index
 
         Raises
         ------
@@ -165,8 +168,8 @@ class Index():
 
         Returns
         -------
-        task:
-            Dictionary containing information about the processed asynchronous task of an index.
+        Task:
+            Task instance containing information about the processed asynchronous task of an index.
 
         Raises
         ------
@@ -194,8 +197,8 @@ class Index():
 
         Returns
         -------
-        task:
-            Dictionary containing information about the processed asynchronous task.
+        Task:
+            Task instance containing information about the processed asynchronous task.
 
         Raises
         ------
@@ -213,8 +216,8 @@ class Index():
 
         Returns
         -------
-        stats:
-            Dictionary containing stats about the given index.
+        IndexStats:
+            IndexStats instance containing information about the given index.
 
         Raises
         ------
@@ -270,8 +273,8 @@ class Index():
 
         Returns
         -------
-        document:
-            Dictionary containing the documents information.
+        Document:
+            Document instance containing the documents information.
 
         Raises
         ------
@@ -298,8 +301,11 @@ class Index():
 
         Returns
         -------
-        document:
-            Dictionary with limit, offset, total and results a list of dictionaries containing the documents information.
+        DocumentsResults instance with attributes:
+            - total
+            - offset
+            - limit
+            - results : list of Document instances containing the documents information
 
         Raises
         ------
@@ -332,8 +338,8 @@ class Index():
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        TaskInfo:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -364,8 +370,8 @@ class Index():
 
         Returns
         -------
-        task:
-            List of dictionaries containing a task to track the informations about the progress of an asynchronous process.
+        TaskInfo (list):
+            List of TaskInfo instances containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -399,8 +405,8 @@ class Index():
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        TaskInfo:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -426,8 +432,8 @@ class Index():
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        TaskInfo:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -453,8 +459,8 @@ class Index():
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        TaskInfo:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -483,8 +489,8 @@ class Index():
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        TaskInfo:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -512,8 +518,8 @@ class Index():
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        TaskInfo:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -544,8 +550,8 @@ class Index():
 
         Returns
         -------
-        task:
-            List of dictionaries containing a task to track the informations about the progress of an asynchronous process.
+        TaskInfo (list):
+            List of TaskInfo instances containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -573,8 +579,8 @@ class Index():
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        TaskInfo:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
