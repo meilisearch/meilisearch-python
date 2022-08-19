@@ -227,7 +227,7 @@ class Index():
         stats = self.http.get(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.stat}'
         )
-        return IndexStats(**stats)
+        return IndexStats(stats)
 
     def search(self, query: str, opt_params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Search in the index.
