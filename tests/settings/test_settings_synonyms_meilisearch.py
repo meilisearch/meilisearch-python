@@ -16,7 +16,7 @@ def test_update_synonyms(empty_index):
     assert isinstance(response, dict)
     assert 'taskUid' in response
     update = index.wait_for_task(response['taskUid'])
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
     response = index.get_synonyms()
     assert isinstance(response, dict)
     for synonym in NEW_SYNONYMS:
@@ -28,7 +28,7 @@ def test_reset_synonyms(empty_index):
     # Update the settings first
     response = index.update_synonyms(NEW_SYNONYMS)
     update = index.wait_for_task(response['taskUid'])
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
     # Check the settings have been correctly updated
     response = index.get_synonyms()
     assert isinstance(response, dict)
@@ -39,6 +39,6 @@ def test_reset_synonyms(empty_index):
     assert isinstance(response, dict)
     assert 'taskUid' in response
     update = index.wait_for_task(response['taskUid'])
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
     response = index.get_synonyms()
     assert response == {}

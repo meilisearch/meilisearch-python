@@ -24,7 +24,7 @@ def test_update_filterable_attributes_to_none(empty_index):
     # Update the settings first
     response = index.update_filterable_attributes(FILTERABLE_ATTRIBUTES)
     update = index.wait_for_task(response['taskUid'])
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
     # Check the settings have been correctly updated
     get_attributes = index.get_filterable_attributes()
     for attribute in FILTERABLE_ATTRIBUTES:
@@ -41,7 +41,7 @@ def test_reset_filterable_attributes(empty_index):
     # Update the settings first
     response = index.update_filterable_attributes(FILTERABLE_ATTRIBUTES)
     update = index.wait_for_task(response['taskUid'])
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
     # Check the settings have been correctly updated
     get_attributes = index.get_filterable_attributes()
     assert len(get_attributes) == len(FILTERABLE_ATTRIBUTES)

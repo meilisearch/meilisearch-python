@@ -24,7 +24,7 @@ def test_update_sortable_attributes_to_none(empty_index):
     # Update the settings first
     response = index.update_sortable_attributes(SORTABLE_ATTRIBUTES)
     update = index.wait_for_task(response['taskUid'])
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
     # Check the settings have been correctly updated
     get_attributes = index.get_sortable_attributes()
     for attribute in SORTABLE_ATTRIBUTES:
@@ -41,7 +41,7 @@ def test_reset_sortable_attributes(empty_index):
     # Update the settings first
     response = index.update_sortable_attributes(SORTABLE_ATTRIBUTES)
     update = index.wait_for_task(response['taskUid'])
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
     # Check the settings have been correctly updated
     get_attributes = index.get_sortable_attributes()
     assert len(get_attributes) == len(SORTABLE_ATTRIBUTES)

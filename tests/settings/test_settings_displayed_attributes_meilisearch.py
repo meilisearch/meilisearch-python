@@ -10,7 +10,7 @@ def test_get_displayed_attributes(empty_index, small_movies):
     assert isinstance(response, list)
     assert response == ['*']
     response = index.add_documents(small_movies)
-    index.wait_for_task(response['taskUid'])
+    index.wait_for_task(response.task_uid)
     get_attributes = index.get_displayed_attributes()
     assert get_attributes == ['*']
 
@@ -30,7 +30,7 @@ def test_update_displayed_attributes_to_none(empty_index):
     # Update the settings first
     response = index.update_displayed_attributes(DISPLAYED_ATTRIBUTES)
     update = index.wait_for_task(response['taskUid'])
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
     # Check the settings have been correctly updated
     get_attributes = index.get_displayed_attributes()
     for attribute in DISPLAYED_ATTRIBUTES:
@@ -47,7 +47,7 @@ def test_reset_displayed_attributes(empty_index):
     # Update the settings first
     response = index.update_displayed_attributes(DISPLAYED_ATTRIBUTES)
     update = index.wait_for_task(response['taskUid'])
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
     # Check the settings have been correctly updated
     get_attributes_new = index.get_displayed_attributes()
     assert len(get_attributes_new) == len(DISPLAYED_ATTRIBUTES)

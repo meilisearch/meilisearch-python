@@ -34,7 +34,7 @@ def test_update_ranking_rules_none(empty_index):
     # Update the settings first
     response = index.update_ranking_rules(NEW_RANKING_RULES)
     update = index.wait_for_task(response['taskUid'])
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
     # Check the settings have been correctly updated
     response = index.get_ranking_rules()
     for rule in NEW_RANKING_RULES:
@@ -55,7 +55,7 @@ def test_reset_ranking_rules(empty_index):
     # Update the settings first
     response = index.update_ranking_rules(NEW_RANKING_RULES)
     update = index.wait_for_task(response['taskUid'])
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
     # Check the settings have been correctly updated
     response = index.get_ranking_rules()
     assert isinstance(response, list)
