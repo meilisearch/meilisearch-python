@@ -1,6 +1,7 @@
 # pylint: disable=invalid-name
 
 from math import ceil
+from time import sleep
 from meilisearch.client import Client
 from meilisearch.models.document import Document
 from meilisearch.models.task import TaskInfo
