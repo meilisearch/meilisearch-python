@@ -436,3 +436,29 @@ def test_search_on_nested_documents_with_sortable_attributes(index_with_document
     )
     assert isinstance(response, dict)
     assert response['hits'][0]['id'] == 6
+
+def test_custom_search_params_with_matching_strategy_all(index_with_documents):
+    """Tests search with matching strategy param set to all"""
+    response = index_with_documents().search(
+        'man loves',
+        {
+            'limit': 5,
+            'matchingStrategy': 'all',
+        }
+    )
+
+    assert isinstance(response, dict)
+    assert len(response['hits']) == 1
+
+def test_custom_search_params_with_matching_strategy_last(index_with_documents):
+    """Tests search with matching strategy param set to last"""
+    response = index_with_documents().search(
+        'man loves',
+        {
+            'limit': 5,
+            'matchingStrategy': 'last',
+        }
+    )
+
+    assert isinstance(response, dict)
+    assert len(response['hits']) > 1
