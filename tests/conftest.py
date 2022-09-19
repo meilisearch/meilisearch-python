@@ -89,7 +89,7 @@ def index_with_documents(empty_index, small_movies):
     def index_maker(index_uid=common.INDEX_UID, documents=small_movies):
         index = empty_index(index_uid)
         task = index.add_documents(documents)
-        index.wait_for_task(task['taskUid'])
+        index.wait_for_task(task.task_uid)
         return index
     return index_maker
 

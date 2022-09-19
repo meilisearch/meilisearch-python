@@ -24,7 +24,7 @@ def test_update_distinct_at_to_none(empty_index):
     # Update the settings first
     response = index.update_distinct_attribute(NEW_DISTINCT_ATTRIBUTE)
     update = index.wait_for_task(response['taskUid'])
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
     # Check the settings have been correctly updated
     response = index.get_distinct_attribute()
     assert response == NEW_DISTINCT_ATTRIBUTE
@@ -42,7 +42,7 @@ def test_reset_distinct_attribute(empty_index):
     # Update the settings first
     response = index.update_distinct_attribute(NEW_DISTINCT_ATTRIBUTE)
     update = index.wait_for_task(response['taskUid'])
-    assert update['status'] == 'succeeded'
+    assert update.status == 'succeeded'
     # Check the settings have been correctly updated
     response = index.get_distinct_attribute()
     assert isinstance(response, str)
