@@ -1,4 +1,3 @@
-
 NEW_SETTINGS = {
     'rankingRules': ['typo', 'words'],
     'searchableAttributes': ['title', 'overview']
