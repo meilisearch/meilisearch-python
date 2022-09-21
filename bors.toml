@@ -3,7 +3,7 @@ status = [
   'mypy',
   'integration-tests (3.7)',
   'integration-tests (3.8)',
-  'integration-tests (3.9)'
+  'integration-tests (3.9)',
   'integration-tests (3.10)'
 ]
 # 1 hour timeout
