@@ -1,6 +1,10 @@
+from __future__ import annotations
+
 import json
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any, Callable
+
 import requests
+
 from meilisearch.config import Config
 from meilisearch.errors import (
     MeiliSearchApiError,
@@ -8,6 +12,7 @@ from meilisearch.errors import (
     MeiliSearchTimeoutError,
 )
 from meilisearch.version import qualified_version
+
 
 class HttpRequests:
     def __init__(self, config: Config) -> None:
@@ -21,8 +26,8 @@ class HttpRequests:
         self,
         http_method: Callable,
         path: str,
-        body: Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str], str]] = None,
-        content_type: Optional[str] = None,
+        body: dict[str, Any] | list[dict[str, Any]] | list[str] | str | None = None,
+        content_type: str | None = None,
     ) -> Any:
         if content_type:
             self.headers['Content-Type'] = content_type
@@ -57,31 +62,31 @@ class HttpRequests:
     def post(
         self,
         path: str,
-        body: Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str], str]] = None,
-        content_type: Optional[str] = 'application/json',
+        body: dict[str, Any] | list[dict[str, Any]] | list[str] | str | None = None,
+        content_type: str | None = 'application/json',
     ) -> Any:
         return self.send_request(requests.post, path, body, content_type)
 
     def patch(
         self,
         path: str,
-        body: Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str], str]] = None,
-        content_type: Optional[str] = 'application/json',
+        body: dict[str, Any] | list[dict[str, Any]] | list[str] | str | None = None,
+        content_type: str | None = 'application/json',
     ) -> Any:
         return self.send_request(requests.patch, path, body, content_type)
 
     def put(
         self,
         path: str,
-        body: Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str]]] = None,
-        content_type: Optional[str] = 'application/json',
+        body: dict[str, Any] | list[dict[str, Any]] | list[str] | None = None,
+        content_type: str | None = 'application/json',
     ) -> Any:
         return self.send_request(requests.put, path, body, content_type)
 
     def delete(
         self,
         path: str,
-        body: Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str]]] = None,
+        body: dict[str, Any] | list[dict[str, Any]] | list[str] | None = None,
     ) -> Any:
         return self.send_request(requests.delete, path, body)
 

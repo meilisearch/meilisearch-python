@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import json
 
 from requests import Response
+
 
 class MeiliSearchError(Exception):
     """Generic class for Meilisearch error handling"""

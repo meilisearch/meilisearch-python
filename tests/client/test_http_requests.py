@@ -1,4 +1,3 @@
-
 import meilisearch
 from tests import BASE_URL, MASTER_KEY
 

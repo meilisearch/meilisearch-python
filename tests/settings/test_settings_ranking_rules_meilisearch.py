@@ -1,4 +1,3 @@
-
 NEW_RANKING_RULES = ['typo', 'exactness']
 DEFAULT_RANKING_RULES = [
     'words',
