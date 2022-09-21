@@ -7,7 +7,8 @@ with open("README.md", encoding="utf8") as fh:
 
 setup(
     install_requires=[
-        "requests"
+        "requests",
+        "camel_converter"
     ],
     name="meilisearch",
     version=__version__,
