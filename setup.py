@@ -1,7 +1,8 @@
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
+
 from meilisearch.version import __version__
 
-with open("README.md", "r", encoding="utf8") as fh:
+with open("README.md", encoding="utf8") as fh:
     long_description = fh.read()
 
 setup(
@@ -23,7 +24,6 @@ setup(
     platform="any",
     classifiers=[
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",

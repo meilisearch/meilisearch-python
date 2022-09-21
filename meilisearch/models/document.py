@@ -1,9 +1,12 @@
-from typing import Any, Iterator, List, Dict
+from __future__ import annotations
+
+from typing import Any, Iterator
+
 
 class Document:
     __doc: dict
 
-    def __init__(self, doc: Dict[str, Any]) -> None:
+    def __init__(self, doc: dict[str, Any]) -> None:
         self.__doc = doc
         for key in doc:
             setattr(self, key, doc[key])
@@ -17,8 +20,8 @@ class Document:
         return iter(self.__dict__.items())  # type: ignore
 
 class DocumentsResults:
-    def __init__(self, resp: Dict[str, Any]) -> None:
-        self.results: List[Document] = [Document(doc) for doc in resp['results']]
+    def __init__(self, resp: dict[str, Any]) -> None:
+        self.results: list[Document] = [Document(doc) for doc in resp['results']]
         self.offset: int = resp['offset']
         self.limit: int = resp['limit']
         self.total: int = resp['total']
