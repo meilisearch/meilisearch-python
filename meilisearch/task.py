@@ -1,13 +1,16 @@
-from urllib import parse
-from time import sleep
+from __future__ import annotations
+
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from time import sleep
+from typing import Any
+from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
 from meilisearch.errors import MeiliSearchTimeoutError
 
-def get_tasks(config: Config, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, List[Dict[str, Any]]]:
+
+def get_tasks(config: Config, parameters: dict[str, Any] | None = None) -> dict[str, list[dict[str, Any]]]:
     """Get all tasks.
 
     Parameters
@@ -38,7 +41,7 @@ def get_tasks(config: Config, parameters: Optional[Dict[str, Any]] = None) -> Di
         f"{config.paths.task}?{parse.urlencode(parameters)}"
     )
 
-def get_task(config: Config, uid: int) -> Dict[str, Any]:
+def get_task(config: Config, uid: int) -> dict[str, Any]:
     """Get one task.
 
     Parameters
@@ -71,7 +74,7 @@ def wait_for_task(
     uid: int,
     timeout_in_ms: int = 5000,
     interval_in_ms: int = 50,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Wait until the task fails or succeeds in Meilisearch.
 
     Parameters
