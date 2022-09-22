@@ -21,7 +21,7 @@ setup(
     project_urls={"Documentation": "https://docs.meilisearch.com/",},
     keywords="search python meilisearch",
     platform="any",
-classifiers=[
+    classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
