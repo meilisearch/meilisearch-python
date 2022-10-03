@@ -91,17 +91,23 @@ def test_update_documents(index_with_documents, small_movies):
     """Tests updating a single document and a set of documents."""
     index = index_with_documents()
     response = index.get_documents()
-    response.results[0].title = 'Some title'
-    update = index.update_documents([dict(response.results[0])])
+    doc = response.results[0]
+    doc.title = 'Some title'
+
+    update = index.update_documents([dict(doc)])
+
     assert isinstance(update, TaskInfo)
     assert update.task_uid != None
     index.wait_for_task(update.task_uid)
-    response = index.get_documents()
-    assert response.results[0].title == 'Some title'
+
+    response = index.get_document(doc.id)
+    assert response.title == 'Some title'
+
     update = index.update_documents(small_movies)
     index.wait_for_task(update.task_uid)
-    response = index.get_documents()
-    assert response.results[0].title != 'Some title'
+
+    response = index.get_document(doc.id)
+    assert response.title != 'Some title'
 
 @pytest.mark.parametrize('batch_size', [2, 3, 1000])
 @pytest.mark.parametrize(
