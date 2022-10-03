@@ -62,6 +62,13 @@ def test_create_keys_with_options(client, test_key_info):
     assert key['actions'] == test_key_info['actions']
     assert key['indexes'] == test_key_info['indexes']
 
+def test_create_keys_with_wildcarded_actions(client, test_key_info):
+    """Tests the creation of a key with an action which contains a wildcard."""
+    key = client.create_key(options={'description': test_key_info['description'], 'actions': ['documents.*'], 'indexes': test_key_info['indexes'], 'expiresAt': None })
+
+    assert isinstance(key, dict)
+    assert key['actions'] == ['documents.*']
+
 def test_create_keys_without_actions(client):
     """Tests the creation of a key with missing arguments."""
     with pytest.raises(MeiliSearchApiError):

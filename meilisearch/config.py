@@ -1,4 +1,4 @@
-from typing import Optional
+from __future__ import annotations
 
 
 class Config:
@@ -33,8 +33,8 @@ class Config:
     def __init__(
         self,
         url: str,
-        api_key: Optional[str] = None,
-        timeout: Optional[int] = None
+        api_key: str | None = None,
+        timeout: int | None = None
     ) -> None:
         """
         Parameters

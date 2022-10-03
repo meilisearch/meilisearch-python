@@ -1,4 +1,3 @@
-
 NEW_SYNONYMS = {
     'hp': ['harry potter']
 }
