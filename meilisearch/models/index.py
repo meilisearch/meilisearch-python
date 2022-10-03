@@ -1,10 +1,14 @@
-from typing import Any, Dict, Iterator
+from __future__ import annotations
+
+from typing import Any, Iterator
+
 from camel_converter import to_snake
+
 
 class IndexStats:
     __dict: dict
 
-    def __init__(self, doc: Dict[str, Any]) -> None:
+    def __init__(self, doc: dict[str, Any]) -> None:
         self.__dict = doc
         for key, val in doc.items():
             key = to_snake(key)

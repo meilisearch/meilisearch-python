@@ -1,4 +1,3 @@
-
 NEW_STOP_WORDS = ['of', 'the']
 
 def test_get_stop_words_default(empty_index):
