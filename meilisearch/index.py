@@ -143,8 +143,8 @@ class Index():
         -------
         tasks:
         TaskResults instance with attributes:
-            - from_
-            - next_
+            - from\_
+            - next\_
             - limit
             - results : list of Task instances containing all enqueued, processing, succeeded or failed tasks of the index
 

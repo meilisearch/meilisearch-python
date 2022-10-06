@@ -1,14 +1,37 @@
-name: Pages
+name: Documentation
 on:
   push:
     branches:
-    - doc-test
-    
+    - 462_pythod_hosted_documentation
+
 jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+        lfs: true
+    - name: Install Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'    
     - uses: ammaraskar/sphinx-action@master
       with:
+        pre-build-command: "pip install camel-converter[pydantic] && pip install sphinx_rtd_theme && sphinx-apidoc -f -o docs meilisearch/"
         docs-folder: "docs/"
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/462_pythod_hosted_documentation' }}
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: docs/_build/html
+        force_orphan: true    
+
+
+
+      
+
+
+
+
