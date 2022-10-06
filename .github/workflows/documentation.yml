@@ -2,7 +2,7 @@ name: Documentation
 on:
   push:
     branches:
-    - 462_pythod_hosted_documentation
+    - 462_python_hosted_documentation
 
 jobs:
   docs:
@@ -22,15 +22,15 @@ jobs:
         docs-folder: "docs/"
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
-      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/462_pythod_hosted_documentation' }}
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/462_python_hosted_documentation' }}
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs/_build/html
         force_orphan: true   
 
 
-        
-         
+
+
 
 
 
