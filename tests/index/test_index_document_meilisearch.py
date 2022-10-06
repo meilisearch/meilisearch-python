@@ -143,7 +143,7 @@ def test_delete_document(index_with_documents):
 
 def test_delete_documents(index_with_documents):
     """Tests deleting a set of documents."""
-    to_delete = ['522681', '450465', '329996']
+    to_delete = [522681, '450465', 329996]
     index = index_with_documents()
     response = index.delete_documents(to_delete)
     assert isinstance(response, TaskInfo)

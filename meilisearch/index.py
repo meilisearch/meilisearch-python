@@ -264,7 +264,7 @@ class Index():
             body=body
         )
 
-    def get_document(self, document_id: str, parameters: dict[str, Any] | None = None) -> Document:
+    def get_document(self, document_id: str | int, parameters: dict[str, Any] | None = None) -> Document:
         """Get one document with given document identifier.
 
         Parameters
@@ -573,7 +573,7 @@ class Index():
 
         return tasks
 
-    def delete_document(self, document_id: str) -> TaskInfo:
+    def delete_document(self, document_id: str | int) -> TaskInfo:
         """Delete one document from the index.
 
         Parameters
@@ -597,7 +597,7 @@ class Index():
         )
         return TaskInfo(**response)
 
-    def delete_documents(self, ids: list[str]) -> TaskInfo:
+    def delete_documents(self, ids: list[str | int]) -> TaskInfo:
         """Delete multiple documents from the index.
 
         Parameters
