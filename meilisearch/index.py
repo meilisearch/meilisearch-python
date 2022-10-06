@@ -618,7 +618,7 @@ class Index():
         """
         response = self.http.post(
             f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}/delete-batch',
-            ids
+            [str(i) for i in ids]
         )
         return TaskInfo(**response)
 
