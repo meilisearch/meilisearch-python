@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('..'))
 # -- Project information -----------------------------------------------------
 
 project = 'meilisearch-python'
-copyright = '2022, Charlotte Vermandel'
+copyright = '2019, Meili SAS'
 author = 'Charlotte Vermandel'
 
 
