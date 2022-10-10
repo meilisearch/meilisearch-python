@@ -18,7 +18,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/meilisearch/meilisearch-python",
     packages=find_packages(exclude=("tests*",)),
-    project_urls={"Documentation": "https://docs.meilisearch.com/",},
+    project_urls={"Meilisearch Documentation": "https://docs.meilisearch.com/", "Documentation": "https://meilisearch.github.io/meilisearch-python/",},
     keywords="search python meilisearch",
     platform="any",
     classifiers=[
