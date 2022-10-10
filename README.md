@@ -46,7 +46,7 @@ You’d like to contribute? Don’t hesitate to check out our [contributing guid
 
 ## 📖 Documentation
 
-See our [Documentation](https://docs.meilisearch.com/learn/tutorials/getting_started.html) or our [API References](https://docs.meilisearch.com/reference/api/).
+To learn more about Meilisearch Python, refer to the in-depth [Meilisearch Python documentation](https://meilisearch.github.io/meilisearch-python/). To learn more about Meilisearch in general, refer to our [documentation](https://docs.meilisearch.com/learn/getting_started/quick_start.html) or our [API reference](https://docs.meilisearch.com/reference/api/overview.html).
 
 ## 🔧 Installation
 
