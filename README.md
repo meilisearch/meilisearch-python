@@ -46,7 +46,6 @@ You’d like to contribute? Don’t hesitate to check out our [contributing guid
 
 ## 📖 Documentation
 
-https://meilisearch.github.io/meilisearch-python/
 See our [Documentation of this SDK](https://meilisearch.github.io/meilisearch-python/), our [Documentation](https://docs.meilisearch.com/learn/tutorials/getting_started.html) or our [API References](https://docs.meilisearch.com/reference/api/).
 
 ## 🔧 Installation
