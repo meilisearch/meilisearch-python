@@ -46,7 +46,7 @@ You’d like to contribute? Don’t hesitate to check out our [contributing guid
 
 ## 📖 Documentation
 
-This readme contains all the information on this SDK. To learn more about Meilisearch, refer to our [documentation](https://docs.meilisearch.com/learn/getting_started/quick_start.html) or our [API references](https://docs.meilisearch.com/reference/api/overview.html).
+To learn more about Meilisearch Python, refer to the in-depth [Meilisearch Python documentation](https://meilisearch.github.io/meilisearch-python/). To learn more about Meilisearch in general, refer to our [documentation](https://docs.meilisearch.com/learn/getting_started/quick_start.html) or our [API reference](https://docs.meilisearch.com/reference/api/overview.html).
 
 ## 🔧 Installation
 
