@@ -1,8 +1,7 @@
 name: Documentation
 on:
-  push:
-    tags:
-      - v*
+  pull_request:
+    types: [opened, reopened]
 
 jobs:
   docs:
@@ -19,8 +18,8 @@ jobs:
     - name: Install pipenv
       uses: dschep/install-pipenv-action@v1
     - name: Install dependencies
-      run: pipenv install --dev    
-    - name: Build docs      
+      run: pipenv install --dev
+    - name: Build docs
       uses: ammaraskar/sphinx-action@master
       with:
         pre-build-command: "pip install sphinx_rtd_theme && sphinx-apidoc -f -o docs meilisearch/"
@@ -30,7 +29,7 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: docs/_build/html
-        force_orphan: true   
+        force_orphan: true
 
 
 
@@ -38,7 +37,7 @@ jobs:
 
 
 
-      
+
 
 
 
