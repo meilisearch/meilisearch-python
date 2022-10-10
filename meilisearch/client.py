@@ -327,7 +327,6 @@ class Client():
         """Update an API key.
 
         Parameters
-
         ----------
         key:
             The key or the uid of the key for which to update the information.
