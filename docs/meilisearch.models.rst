@@ -4,6 +4,14 @@ meilisearch.models package
 Submodules
 ----------
 
+meilisearch.models.client module
+--------------------------------
+
+.. automodule:: meilisearch.models.client
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 meilisearch.models.document module
 ----------------------------------
 
@@ -16,6 +24,14 @@ meilisearch.models.index module
 -------------------------------
 
 .. automodule:: meilisearch.models.index
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+meilisearch.models.ressource module
+-----------------------------------
+
+.. automodule:: meilisearch.models.ressource
    :members:
    :undoc-members:
    :show-inheritance:
