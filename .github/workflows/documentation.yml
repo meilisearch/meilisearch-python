@@ -1,7 +1,8 @@
 name: Documentation
 on:
-  pull_request:
-    types: [opened, reopened]
+  push:
+    tags:
+      - v*
 
 jobs:
   docs:
