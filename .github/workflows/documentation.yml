@@ -19,12 +19,14 @@ jobs:
     - name: Install pipenv
       uses: dschep/install-pipenv-action@v1
     - name: Install dependencies
-      run: pipenv install --dev
+      run: |
+        pipenv install --dev
+        pipenv install sphinx
+        pipenv install sphinx_rtd_theme 
     - name: Build docs
-      uses: ammaraskar/sphinx-action@master
-      with:
-        pre-build-command: "pip install sphinx_rtd_theme && sphinx-apidoc -f -o docs meilisearch/"
-        docs-folder: "docs/"
+      run: |
+        pipenv run sphinx-apidoc -f -o docs meilisearch/
+        pipenv run sphinx-build docs ./docs/_build/html/
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
