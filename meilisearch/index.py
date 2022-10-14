@@ -534,6 +534,65 @@ class Index():
         url = self._build_url(primary_key)
         response = self.http.put(url, documents)
         return TaskInfo(**response)
+    
+    def update_documents_ndjson(
+        self,
+        str_documents: str,
+        primary_key: str | None = None,
+    ) -> TaskInfo:
+        """Update documents in the index.
+
+        Parameters
+        ----------
+        str_documents:
+            String of document from a NDJSON file.
+        primary_key (optional):
+            The primary-key used in index. Ignored if already set up
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.update_documents_raw(str_documents, primary_key, 'application/x-ndjson')
+
+    def update_documents_raw(
+        self,
+        str_documents: str,
+        primary_key: str | None = None,
+        content_type: str | None = None,
+    ) -> TaskInfo:
+        """Add string documents to the index.
+
+        Parameters
+        ----------
+        str_documents:
+            String of document.
+        primary_key (optional):
+            The primary-key used in index. Ignored if already set up.
+        type:
+            The type of document. Type available: 'csv', 'json', 'jsonl'
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        url = self._build_url(primary_key)
+        response = self.http.post(url, str_documents, content_type)
+        return TaskInfo(**response)
 
     def update_documents_in_batches(
         self,
