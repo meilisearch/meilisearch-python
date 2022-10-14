@@ -617,7 +617,7 @@ class Index():
         primary_key: str | None = None,
         content_type: str | None = None,
     ) -> TaskInfo:
-        """Update documents in the index.
+        """Update documents in the index with string.
 
         Parameters
         ----------
