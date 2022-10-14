@@ -447,7 +447,7 @@ class Index():
         """
         return self.add_documents_raw(str_documents, primary_key, 'text/csv')
 
-    def add_documents_in_batches(
+    def add_documents_csv_in_batches(
         self,
         documents: list[dict[str, Any]],
         batch_size: int = 1000,
