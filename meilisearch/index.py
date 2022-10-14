@@ -611,6 +611,38 @@ class Index():
 
         return tasks
 
+    def update_documents_raw(
+        self,
+        documents: list[dict[str, Any]],
+        primary_key: str | None = None,
+        content_type: str | None = None,
+    ) -> TaskInfo:
+        """Update documents in the index.
+
+        Parameters
+        ----------
+        documents:
+            List of documents. Each document should be a dictionary.
+        primary_key (optional):
+            The primary-key used in index. Ignored if already set up
+        type:
+            The type of document. Type available: 'csv', 'json', 'jsonl'
+        
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        url = self._build_url(primary_key)
+        response = self.http.put(url, documents, content_type)
+        return TaskInfo(**response)
+
     def delete_document(self, document_id: str | int) -> TaskInfo:
         """Delete one document from the index.
 
