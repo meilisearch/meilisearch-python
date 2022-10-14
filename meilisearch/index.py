@@ -534,7 +534,7 @@ class Index():
         url = self._build_url(primary_key)
         response = self.http.put(url, documents)
         return TaskInfo(**response)
-    
+
     def update_documents_ndjson(
         self,
         str_documents: str,
@@ -561,6 +561,33 @@ class Index():
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.update_documents_raw(str_documents, primary_key, 'application/x-ndjson')
+
+    def update_documents_json(
+        self,
+        str_documents: str,
+        primary_key: str | None = None,
+    ) -> TaskInfo:
+        """Update documents in the index.
+
+        Parameters
+        ----------
+        str_documents:
+            String of document from a JSON file.
+        primary_key (optional):
+            The primary-key used in index. Ignored if already set up
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.update_documents_raw(str_documents, primary_key, 'application/json')
 
     def update_documents_raw(
         self,
@@ -1196,7 +1223,6 @@ class Index():
             self.__settings_url_for(self.config.paths.filterable_attributes),
         )
 
-
     # SORTABLE ATTRIBUTES SUB-ROUTES
 
     def get_sortable_attributes(self) -> list[str]:
@@ -1359,7 +1385,6 @@ class Index():
             body=body
         )
 
-
     def reset_pagination_settings(self) -> dict[str, Any]:
         """Reset pagination settings of the index to default values.
 
@@ -1417,7 +1442,6 @@ class Index():
             body=body
         )
 
-
     def reset_faceting_settings(self) -> dict[str, Any]:
         """Reset faceting settings of the index to default values.
 
@@ -1434,14 +1458,13 @@ class Index():
         """
         return self.http.delete(self.__settings_url_for(self.config.paths.faceting))
 
-
     @staticmethod
     def _batch(
         documents: list[dict[str, Any]], batch_size: int
     ) -> Generator[list[dict[str, Any]], None, None]:
         total_len = len(documents)
         for i in range(0, total_len, batch_size):
-            yield documents[i : i + batch_size]
+            yield documents[i: i + batch_size]
 
     @staticmethod
     def _iso_to_date_time(iso_date: datetime | str | None) -> datetime | None:
@@ -1465,7 +1488,6 @@ class Index():
             reduce = len(split[1]) - 6
             reduced = f"{split[0]}.{split[1][:-reduce]}Z"
             return datetime.strptime(reduced, "%Y-%m-%dT%H:%M:%S.%fZ")
-
 
     def __settings_url_for(self, sub_route: str) -> str:
         return f'{self.config.paths.index}/{self.uid}/{self.config.paths.setting}/{sub_route}'
