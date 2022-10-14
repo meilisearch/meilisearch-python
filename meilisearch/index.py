@@ -643,6 +643,35 @@ class Index():
         response = self.http.put(url, documents, content_type)
         return TaskInfo(**response)
 
+    def update_documents_ndjson(
+        self,
+        str_documents: str,
+        primary_key: str | None = None,
+    ) -> TaskInfo:
+        """Update string documents from a NDJSON file to the index.
+
+        Parameters
+        ----------
+        documents:
+            List of documents. Each document should be a dictionary.
+        primary_key (optional):
+            The primary-key used in index. Ignored if already set up
+        type:
+            The type of document. Type available: 'csv', 'json', 'jsonl'
+        
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.update_documents_raw(primary_key, str_documents, 'application/x-ndjson')
+
     def delete_document(self, document_id: str | int) -> TaskInfo:
         """Delete one document from the index.
 
