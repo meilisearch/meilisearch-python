@@ -447,6 +447,44 @@ class Index():
         """
         return self.add_documents_raw(str_documents, primary_key, 'text/csv')
 
+    def add_documents_in_batches(
+        self,
+        documents: list[dict[str, Any]],
+        batch_size: int = 1000,
+        primary_key: str | None = None,
+    ) -> list[TaskInfo]:
+        """Add documents to the index in batches.
+
+        Parameters
+        ----------
+        documents:
+            List of documents. Each document should be a dictionary.
+        batch_size (optional):
+            The number of documents that should be included in each batch. Default = 1000
+        primary_key (optional):
+            The primary-key used in index. Ignored if already set up.
+
+        Returns
+        -------
+        tasks_info:
+            List of TaskInfo instances containing information about a task to track the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why Meilisearch can't process your request.
+            Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+
+        tasks: list[TaskInfo] = []
+
+        for document_batch in self._batch(documents, batch_size):
+            task = self.add_documents_csv(document_batch, primary_key)
+            tasks.append(task)
+
+        return tasks
+
     def add_documents_ndjson(
         self,
         str_documents: str,
