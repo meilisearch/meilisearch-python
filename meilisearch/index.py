@@ -617,12 +617,12 @@ class Index():
         primary_key: str | None = None,
         content_type: str | None = None,
     ) -> TaskInfo:
-        """Update documents in the index with string.
+        """Update string documents in the index.
 
         Parameters
         ----------
-        documents:
-            List of documents. Each document should be a dictionary.
+        str_documents:
+            String of document.
         primary_key (optional):
             The primary-key used in index. Ignored if already set up
         type:
