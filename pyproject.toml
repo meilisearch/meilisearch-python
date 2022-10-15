@@ -1,0 +1,46 @@
+[project]
+name = "meilisearch"
+description = "The python client for Meilisearch API."
+license = { text = "MIT" }
+requires-python = ">=3.7"
+authors = [
+  { name = "Charlotte Vermandel", email = "charlotte@meilisearch.com" },
+]
+keywords = [
+  "search",
+  "python",
+  "meilisearch",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "requests",
+    "camel-converter[pydantic]",
+]
+dynamic = ['version']
+
+[project.urls]
+Meilisearch_Documentation = "https://docs.meilisearch.com/"
+Documentation = "https://meilisearch.github.io/meilisearch-python/"
+Homepage = "https://github.com/meilisearch/meilisearch-python"
+
+[tool.black]
+line-length = 88
+target-version = ['py37', 'py38']
+include = '\.pyi?$'
+
+# Uncomment to exclude
+extend-exclude = '''
+/(
+    # Exclude these folder / files from black when running 
+    | MyFileToExclude
+    | MyFolderToExclude
+)/
+'''
