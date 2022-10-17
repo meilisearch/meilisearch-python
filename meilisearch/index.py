@@ -534,7 +534,7 @@ class Index():
         url = self._build_url(primary_key)
         response = self.http.put(url, documents)
         return TaskInfo(**response)
-    
+
     def update_documents_ndjson(
         self,
         str_documents: str,
@@ -568,7 +568,7 @@ class Index():
         primary_key: str | None = None,
         content_type: str | None = None,
     ) -> TaskInfo:
-        """Add string documents to the index.
+        """Update string to documents in the index.
 
         Parameters
         ----------
@@ -591,7 +591,7 @@ class Index():
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         url = self._build_url(primary_key)
-        response = self.http.post(url, str_documents, content_type)
+        response = self.http.put(url, str_documents, content_type)
         return TaskInfo(**response)
 
     def update_documents_in_batches(
