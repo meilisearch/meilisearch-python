@@ -23,6 +23,8 @@ classifiers = [
 dependencies = [
     "requests",
     "camel-converter[pydantic]",
+    "black",
+    "isort",
 ]
 dynamic = ['version']
 
@@ -32,15 +34,28 @@ Documentation = "https://meilisearch.github.io/meilisearch-python/"
 Homepage = "https://github.com/meilisearch/meilisearch-python"
 
 [tool.black]
-line-length = 88
+line-length = 100
 target-version = ['py37', 'py38']
 include = '\.pyi?$'
-
-# Uncomment to exclude
 extend-exclude = '''
 /(
-    # Exclude these folder / files from black when running 
-    | MyFileToExclude
-    | MyFolderToExclude
+    \.egg
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.nox
+  | \.tox
+  | \.venv
+  | \venv
+  | _build
+  | buck-out
+  | build
+  | dist
+  | setup.py
 )/
 '''
+
+[tool.isort]
+profile = "black"
+line_length = 100
+src_paths = ["meilisearch", "tests", "setup.py"]
