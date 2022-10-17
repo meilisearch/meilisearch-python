@@ -57,6 +57,7 @@ pipenv install --dev
 ### Tests and Linter <!-- omit in toc -->
 
 Each PR should pass the tests, mypy type checking, and the linter to be accepted.
+Your PR also needs to be formatted using black and isort.
 
 ```bash
 # Tests
@@ -67,6 +68,10 @@ pipenv run pytest tests
 pipenv run mypy meilisearch
 # Linter
 pipenv run pylint meilisearch
+# Black
+pipenv run black meilisearch
+# Isort
+pipenv run isort meilisearch
 ```
 
 Optionally tox can be used to run test on all supported version of Python, mypy, and linting.
