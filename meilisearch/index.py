@@ -540,7 +540,7 @@ class Index():
         str_documents: str,
         primary_key: str | None = None,
     ) -> TaskInfo:
-        """Update documents in the index.
+        """Update documents as a ndjson string in the index.
 
         Parameters
         ----------
