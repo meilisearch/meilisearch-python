@@ -1,9 +1,8 @@
 import meilisearch
-from tests import BASE_URL, MASTER_KEY
-
-from meilisearch.config import Config
 from meilisearch._httprequests import HttpRequests
+from meilisearch.config import Config
 from meilisearch.version import qualified_version
+from tests import BASE_URL, MASTER_KEY
 
 
 def test_get_headers_from_http_requests_instance():

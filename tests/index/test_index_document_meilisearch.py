@@ -1,11 +1,12 @@
 # pylint: disable=invalid-name
 
 from math import ceil
+
+import pytest
+
 from meilisearch.client import Client
 from meilisearch.models.document import Document
 from meilisearch.models.task import TaskInfo
-
-import pytest
 
 
 def test_get_documents_default(empty_index):

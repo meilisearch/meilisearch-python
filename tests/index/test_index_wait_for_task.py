@@ -1,7 +1,9 @@
 # pylint: disable=invalid-name
 
 from datetime import datetime
+
 import pytest
+
 from meilisearch.errors import MeiliSearchTimeoutError
 from meilisearch.models.task import Task
 

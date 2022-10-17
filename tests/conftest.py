@@ -1,11 +1,12 @@
 # pylint: disable=redefined-outer-name
 import json
+from typing import Optional
+
 from pytest import fixture
 
-from tests import common
 import meilisearch
 from meilisearch.errors import MeiliSearchApiError
-from typing import Optional
+from tests import common
 
 
 @fixture(scope="session")

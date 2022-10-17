@@ -1,6 +1,7 @@
 # pylint: disable=invalid-name
 
 import pytest
+
 from tests import common
 
 

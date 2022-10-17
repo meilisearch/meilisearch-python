@@ -1,11 +1,13 @@
 # pylint: disable=invalid-name
 
-from re import search
-import pytest
-import meilisearch
-from tests import BASE_URL, MASTER_KEY
-from meilisearch.errors import MeiliSearchApiError
 import datetime
+from re import search
+
+import pytest
+
+import meilisearch
+from meilisearch.errors import MeiliSearchApiError
+from tests import BASE_URL, MASTER_KEY
 
 
 def test_generate_tenant_token_with_search_rules(get_private_key, index_with_documents):

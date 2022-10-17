@@ -1,7 +1,9 @@
-import pytest
-from tests import common
 from datetime import datetime
+
+import pytest
+
 from meilisearch.errors import MeiliSearchApiError
+from tests import common
 
 
 def test_get_keys_default(client):

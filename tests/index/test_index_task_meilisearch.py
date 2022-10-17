@@ -1,8 +1,9 @@
 # pylint: disable=invalid-name
 
 import pytest
-from tests import common
+
 from meilisearch.models.task import Task, TaskResults
+from tests import common
 
 
 def test_get_tasks_default(index_with_documents):
