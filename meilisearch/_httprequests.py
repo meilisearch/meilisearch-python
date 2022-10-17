@@ -76,7 +76,7 @@ class HttpRequests:
     def put(
         self,
         path: str,
-        body: dict[str, Any] | list[dict[str, Any]] | list[str] | None = None,
+        body: dict[str, Any] | list[dict[str, Any]] | list[str] | str | None = None,
         content_type: str | None = "application/json",
     ) -> Any:
         return self.send_request(requests.put, path, body, content_type)
