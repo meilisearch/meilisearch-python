@@ -203,6 +203,16 @@ def test_add_documents_json(empty_index, small_movies_json_file):
     assert index.get_primary_key() == "id"
 
 
+def test_update_documents_json(index_with_documents, small_movies_json_file):
+    """Tests updating a single document with json string."""
+    index = index_with_documents()
+    response = index.update_documents_json(small_movies_json_file)
+    assert isinstance(response, TaskInfo)
+    assert response.task_uid != None
+    task = index.wait_for_task(response.task_uid)
+    assert task.status == 'succeeded'
+    assert index.get_primary_key() == 'id'
+
 def test_add_documents_ndjson(empty_index, songs_ndjson):
     """Tests adding new documents to a clean index."""
     index = empty_index()
