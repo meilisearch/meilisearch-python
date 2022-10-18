@@ -18,3 +18,5 @@ types-requests = "*"
 [packages]
 requests = "*"
 camel-converter = {extras = ["pydantic"], version = "*"}
+isort = "*"
+black = "*"
