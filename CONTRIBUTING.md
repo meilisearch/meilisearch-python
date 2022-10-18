@@ -71,7 +71,7 @@ pipenv run pylint meilisearch
 # Black
 pipenv run black meilisearch tests
 # Isort
-pipenv run isort meilisearch
+pipenv run isort meilisearch tests
 ```
 
 Optionally tox can be used to run test on all supported version of Python, mypy, and linting.
