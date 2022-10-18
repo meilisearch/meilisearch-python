@@ -4,8 +4,6 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-black = "*"
-isort = "*"
 mypy = "*"
 pylint = "*"
 pytest = "*"
@@ -14,9 +12,9 @@ pytest-ordering = "*"
 tox = "*"
 tox-pipenv = "*"
 types-requests = "*"
+black = "*"
+isort = "*"
 
 [packages]
 requests = "*"
 camel-converter = {extras = ["pydantic"], version = "*"}
-isort = "*"
-black = "*"
