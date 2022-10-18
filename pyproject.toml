@@ -26,8 +26,6 @@ classifiers = [
 dependencies = [
     "requests",
     "camel-converter[pydantic]",
-    "black",
-    "isort",
 ]
 dynamic = ['version']
 
