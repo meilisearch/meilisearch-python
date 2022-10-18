@@ -1223,6 +1223,7 @@ class Index():
             self.__settings_url_for(self.config.paths.filterable_attributes),
         )
 
+
     # SORTABLE ATTRIBUTES SUB-ROUTES
 
     def get_sortable_attributes(self) -> list[str]:
@@ -1385,6 +1386,7 @@ class Index():
             body=body
         )
 
+
     def reset_pagination_settings(self) -> dict[str, Any]:
         """Reset pagination settings of the index to default values.
 
@@ -1442,6 +1444,7 @@ class Index():
             body=body
         )
 
+
     def reset_faceting_settings(self) -> dict[str, Any]:
         """Reset faceting settings of the index to default values.
 
@@ -1458,13 +1461,14 @@ class Index():
         """
         return self.http.delete(self.__settings_url_for(self.config.paths.faceting))
 
+
     @staticmethod
     def _batch(
         documents: list[dict[str, Any]], batch_size: int
     ) -> Generator[list[dict[str, Any]], None, None]:
         total_len = len(documents)
         for i in range(0, total_len, batch_size):
-            yield documents[i: i + batch_size]
+            yield documents[i : i + batch_size]
 
     @staticmethod
     def _iso_to_date_time(iso_date: datetime | str | None) -> datetime | None:
@@ -1489,6 +1493,7 @@ class Index():
             reduced = f"{split[0]}.{split[1][:-reduce]}Z"
             return datetime.strptime(reduced, "%Y-%m-%dT%H:%M:%S.%fZ")
 
+
     def __settings_url_for(self, sub_route: str) -> str:
         return f'{self.config.paths.index}/{self.uid}/{self.config.paths.setting}/{sub_route}'
 
@@ -1500,3 +1505,4 @@ class Index():
             return f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}'
         primary_key = parse.urlencode({'primaryKey': primary_key})
         return f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{primary_key}'
+    
