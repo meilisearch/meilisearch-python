@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf8") as fh:
     long_description = fh.read()
 
 setup(
-    install_requires=["requests", "camel-converter[pydantic]", "black", "isort"],
+    install_requires=["requests", "camel-converter[pydantic]"],
     name="meilisearch",
     version=__version__,
     author="Charlotte Vermandel",
