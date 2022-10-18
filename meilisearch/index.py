@@ -562,6 +562,33 @@ class Index():
         """
         return self.update_documents_raw(str_documents, primary_key, 'application/x-ndjson')
 
+    def update_documents_json(
+        self,
+        str_documents: str,
+        primary_key: str | None = None,
+    ) -> TaskInfo:
+        """Update documents as a json string in the index.
+
+        Parameters
+        ----------
+        str_documents:
+            String of document from a JSON file.
+        primary_key (optional):
+            The primary-key used in index. Ignored if already set up
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.update_documents_raw(str_documents, primary_key, 'application/json')
+
     def update_documents_raw(
         self,
         str_documents: str,
@@ -1478,3 +1505,4 @@ class Index():
             return f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}'
         primary_key = parse.urlencode({'primaryKey': primary_key})
         return f'{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{primary_key}'
+    
