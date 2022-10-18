@@ -69,7 +69,7 @@ pipenv run mypy meilisearch
 # Linter
 pipenv run pylint meilisearch
 # Black
-pipenv run black meilisearch
+pipenv run black meilisearch tests
 # Isort
 pipenv run isort meilisearch
 ```
