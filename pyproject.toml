@@ -29,6 +29,9 @@ dependencies = [
 ]
 dynamic = ['version']
 
+[tool.setuptools.dynamic]
+version = {attr = "meilisearch.version.__version__"}
+
 [project.urls]
 Meilisearch_Documentation = "https://docs.meilisearch.com/"
 Documentation = "https://meilisearch.github.io/meilisearch-python/"
