@@ -18,8 +18,8 @@ class HttpRequests:
     def __init__(self, config: Config) -> None:
         self.config = config
         self.headers = {
-            'Authorization': f'Bearer {self.config.api_key}',
-            'User-Agent': qualified_version(),
+            "Authorization": f"Bearer {self.config.api_key}",
+            "User-Agent": qualified_version(),
         }
 
     def send_request(
@@ -30,22 +30,22 @@ class HttpRequests:
         content_type: str | None = None,
     ) -> Any:
         if content_type:
-            self.headers['Content-Type'] = content_type
+            self.headers["Content-Type"] = content_type
         try:
-            request_path = self.config.url + '/' + path
+            request_path = self.config.url + "/" + path
             if isinstance(body, bytes):
                 request = http_method(
                     request_path,
                     timeout=self.config.timeout,
                     headers=self.headers,
-                    data=body
+                    data=body,
                 )
             else:
                 request = http_method(
                     request_path,
                     timeout=self.config.timeout,
                     headers=self.headers,
-                    data=json.dumps(body) if body else "null"
+                    data=json.dumps(body) if body else "null",
                 )
             return self.__validate(request)
 
@@ -54,16 +54,14 @@ class HttpRequests:
         except requests.exceptions.ConnectionError as err:
             raise MeiliSearchCommunicationError(str(err)) from err
 
-    def get(
-        self, path: str
-    ) -> Any:
+    def get(self, path: str) -> Any:
         return self.send_request(requests.get, path)
 
     def post(
         self,
         path: str,
         body: dict[str, Any] | list[dict[str, Any]] | list[str] | str | None = None,
-        content_type: str | None = 'application/json',
+        content_type: str | None = "application/json",
     ) -> Any:
         return self.send_request(requests.post, path, body, content_type)
 
@@ -71,7 +69,7 @@ class HttpRequests:
         self,
         path: str,
         body: dict[str, Any] | list[dict[str, Any]] | list[str] | str | None = None,
-        content_type: str | None = 'application/json',
+        content_type: str | None = "application/json",
     ) -> Any:
         return self.send_request(requests.patch, path, body, content_type)
 
@@ -79,7 +77,7 @@ class HttpRequests:
         self,
         path: str,
         body: dict[str, Any] | list[dict[str, Any]] | list[str] | str | None = None,
-        content_type: str | None = 'application/json',
+        content_type: str | None = "application/json",
     ) -> Any:
         return self.send_request(requests.put, path, body, content_type)
 
@@ -91,17 +89,13 @@ class HttpRequests:
         return self.send_request(requests.delete, path, body)
 
     @staticmethod
-    def __to_json(
-        request: requests.Response
-    ) -> Any:
-        if request.content == b'':
+    def __to_json(request: requests.Response) -> Any:
+        if request.content == b"":
             return request
         return request.json()
 
     @staticmethod
-    def __validate(
-        request: requests.Response
-    ) -> Any:
+    def __validate(request: requests.Response) -> Any:
         try:
             request.raise_for_status()
             return HttpRequests.__to_json(request)

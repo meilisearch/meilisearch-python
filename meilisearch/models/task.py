@@ -16,6 +16,7 @@ class Task(CamelBase):
     started_at: str
     finished_at: str
 
+
 class TaskInfo(CamelBase):
     task_uid: Optional[str]
     index_uid: str
@@ -27,9 +28,10 @@ class TaskInfo(CamelBase):
     started_at: Optional[str]
     finished_at: Optional[str]
 
+
 class TaskResults:
     def __init__(self, resp: Dict[str, Any]) -> None:
-        self.results: list[Task] = [Task(**task) for task in resp['results']]
-        self.limit: int = resp['limit']
-        self.from_: int = resp['from']
-        self.next_: int = resp['next']
+        self.results: list[Task] = [Task(**task) for task in resp["results"]]
+        self.limit: int = resp["limit"]
+        self.from_: int = resp["from"]
+        self.next_: int = resp["next"]

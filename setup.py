@@ -5,10 +5,7 @@ with open("README.md", "r", encoding="utf8") as fh:
     long_description = fh.read()
 
 setup(
-    install_requires=[
-        "requests",
-        "camel-converter[pydantic]"
-    ],
+    install_requires=["requests", "camel-converter[pydantic]"],
     name="meilisearch",
     version=__version__,
     author="Charlotte Vermandel",
@@ -18,7 +15,10 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/meilisearch/meilisearch-python",
     packages=find_packages(exclude=("tests*",)),
-    project_urls={"Meilisearch Documentation": "https://docs.meilisearch.com/", "Documentation": "https://meilisearch.github.io/meilisearch-python/",},
+    project_urls={
+        "Meilisearch Documentation": "https://docs.meilisearch.com/",
+        "Documentation": "https://meilisearch.github.io/meilisearch-python/",
+    },
     keywords="search python meilisearch",
     platform="any",
     classifiers=[
@@ -30,7 +30,7 @@ setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    package_data = {
+    package_data={
         "meilisearch": ["py.typed"],
     },
     include_package_data=True,
