@@ -71,12 +71,20 @@ disallow_untyped_defs = true
 module = ["tests.*"]
 disallow_untyped_defs = false
 
-[tool.pylint.basic]
+[tool.pylint]
+[tool.pylint.MASTER]
+load-plugins = [
+    'pylint.extensions.bad_builtin',
+]
+
+[tool.pylint.'DEPRECATED_BUILTINS']
 bad-functions=[
   "map",
   "filter",
   "input"
 ]
+
+[tool.pylint.'BASIC']
 fconst-rgx = "(([A-Z_][A-Z0-9_]*)|(__.*__))$"
 const-name-hint = "(([A-Z_][A-Z0-9_]*)|(__.*__))$"
 attr-rgx = "[a-z_][a-z0-9_]{2,}$"
@@ -86,23 +94,22 @@ module-name-hint = "(([a-z_][a-z0-9_]*)|([A-Z][a-zA-Z0-9]+))$"
 method-rgx = "[a-z_][a-z0-9_]{2,}$"
 method-name-hint = "[a-z_][a-z0-9_]{2,}$"
 
-[tool.pylint.design]
+[tool.pylint.'DESIGN']
 max-args = 10
 max-public-methods = 25
 
-[tool.pylint.format]
+[tool.pylint.'FORMAT']
 max-module-lines=2000
 no-space-check=[
   "trailing-comma",
   "dict-separator"
 ]
 
-[tool.pylint.messages_control]
+[tool.pylint.'MESSAGES CONTROL']
 enable=[
   "use-symbolic-message-instead",
-  "useless-supression",
   "fixme",
 ]
 
-[tool.pylint.report]
-files-output = "no"
+[tool.pylint.'REPORTS']
+reports=false
