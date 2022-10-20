@@ -16,7 +16,7 @@ from meilisearch.index import Index
 from meilisearch.task import get_task, get_tasks, wait_for_task
 
 
-class Client():
+class Client:
     """
     A client for the Meilisearch API
 
@@ -39,7 +39,9 @@ class Client():
 
         self.http = HttpRequests(self.config)
 
-    def create_index(self, uid: str, options: dict[str, Any] | None = None) -> dict[str, Any]:
+    def create_index(
+        self, uid: str, options: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
         """Create an index.
 
         Parameters
@@ -82,9 +84,11 @@ class Client():
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
 
-        return self.http.delete(f'{self.config.paths.index}/{uid}')
+        return self.http.delete(f"{self.config.paths.index}/{uid}")
 
-    def get_indexes(self, parameters: dict[str, Any] | None = None) -> dict[str, list[Index]]:
+    def get_indexes(
+        self, parameters: dict[str, Any] | None = None
+    ) -> dict[str, list[Index]]:
         """Get all indexes.
 
         Parameters
@@ -105,21 +109,23 @@ class Client():
         if parameters is None:
             parameters = {}
         response = self.http.get(
-            f'{self.config.paths.index}?{parse.urlencode(parameters)}'
+            f"{self.config.paths.index}?{parse.urlencode(parameters)}"
         )
-        response['results'] = [
-                Index(
-                    self.config,
-                    index["uid"],
-                    index["primaryKey"],
-                    index["createdAt"],
-                    index["updatedAt"],
-                )
-                for index in response['results']
-            ]
+        response["results"] = [
+            Index(
+                self.config,
+                index["uid"],
+                index["primaryKey"],
+                index["createdAt"],
+                index["updatedAt"],
+            )
+            for index in response["results"]
+        ]
         return response
 
-    def get_raw_indexes(self, parameters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+    def get_raw_indexes(
+        self, parameters: dict[str, Any] | None = None
+    ) -> list[dict[str, Any]]:
         """Get all indexes in dictionary format.
 
         Parameters
@@ -139,9 +145,7 @@ class Client():
         """
         if parameters is None:
             parameters = {}
-        return self.http.get(
-            f'{self.config.paths.index}?{parse.urlencode(parameters)}'
-        )
+        return self.http.get(f"{self.config.paths.index}?{parse.urlencode(parameters)}")
 
     def get_index(self, uid: str) -> Index:
         """Get the index.
@@ -183,7 +187,7 @@ class Client():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.get(f'{self.config.paths.index}/{uid}')
+        return self.http.get(f"{self.config.paths.index}/{uid}")
 
     def index(self, uid: str) -> Index:
         """Create a local reference to an index identified by UID, without doing an HTTP call.
@@ -201,7 +205,7 @@ class Client():
         """
         if uid is not None:
             return Index(self.config, uid=uid)
-        raise Exception('The index UID should not be None')
+        raise Exception("The index UID should not be None")
 
     def get_all_stats(self) -> dict[str, Any]:
         """Get all stats of Meilisearch
@@ -237,8 +241,7 @@ class Client():
         return self.http.get(self.config.paths.health)
 
     def is_healthy(self) -> bool:
-        """Get health of the Meilisearch server.
-        """
+        """Get health of the Meilisearch server."""
         try:
             self.health()
         except MeiliSearchError:
@@ -264,7 +267,7 @@ class Client():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.get(f'{self.config.paths.keys}/{key_or_uid}')
+        return self.http.get(f"{self.config.paths.keys}/{key_or_uid}")
 
     def get_keys(self, parameters: dict[str, Any] | None = None) -> dict[str, Any]:
         """Gets the Meilisearch API keys.
@@ -287,14 +290,9 @@ class Client():
         """
         if parameters is None:
             parameters = {}
-        return self.http.get(
-            f'{self.config.paths.keys}?{parse.urlencode(parameters)}'
-        )
+        return self.http.get(f"{self.config.paths.keys}?{parse.urlencode(parameters)}")
 
-    def create_key(
-        self,
-        options: dict[str, Any]
-    ) -> dict[str, Any]:
+    def create_key(self, options: dict[str, Any]) -> dict[str, Any]:
         """Creates a new API key.
 
         Parameters
@@ -317,13 +315,9 @@ class Client():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.post(f'{self.config.paths.keys}', options)
+        return self.http.post(f"{self.config.paths.keys}", options)
 
-    def update_key(
-        self,
-        key_or_uid: str,
-        options: dict[str, Any]
-    ) -> dict[str, Any]:
+    def update_key(self, key_or_uid: str, options: dict[str, Any]) -> dict[str, Any]:
         """Update an API key.
 
         Parameters
@@ -345,7 +339,7 @@ class Client():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        url = f'{self.config.paths.keys}/{key_or_uid}'
+        url = f"{self.config.paths.keys}/{key_or_uid}"
         return self.http.patch(url, options)
 
     def delete_key(self, key_or_uid: str) -> dict[str, int]:
@@ -367,7 +361,7 @@ class Client():
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.delete(f'{self.config.paths.keys}/{key_or_uid}')
+        return self.http.delete(f"{self.config.paths.keys}/{key_or_uid}")
 
     def get_version(self) -> dict[str, str]:
         """Get version Meilisearch
@@ -415,7 +409,9 @@ class Client():
         """
         return self.http.post(self.config.paths.dumps)
 
-    def get_tasks(self, parameters: dict[str, Any] | None = None) -> dict[str, list[dict[str, Any]]]:
+    def get_tasks(
+        self, parameters: dict[str, Any] | None = None
+    ) -> dict[str, list[dict[str, Any]]]:
         """Get all tasks.
 
         Parameters
@@ -457,7 +453,8 @@ class Client():
         return get_task(self.config, uid)
 
     def wait_for_task(
-        self, uid: int,
+        self,
+        uid: int,
         timeout_in_ms: int = 5000,
         interval_in_ms: int = 50,
     ) -> dict[str, Any]:
@@ -490,7 +487,7 @@ class Client():
         search_rules: dict[str, Any] | list[str],
         *,
         expires_at: datetime.datetime | None = None,
-        api_key: str | None = None
+        api_key: str | None = None,
     ) -> str:
         """Generate a JWT token for the use of multitenancy.
 
@@ -515,33 +512,40 @@ class Client():
            `exp` must be a `datetime` in the future. It's not possible to create a token from the master key.
         """
         # Validate all fields
-        if api_key == '' or api_key is None and self.config.api_key is None:
-            raise Exception('An api key is required in the client or should be passed as an argument.')
-        if api_key_uid == '' or api_key_uid is None or self._valid_uuid(api_key_uid) is False:
-            raise Exception('An uid is required and must comply to the uuid4 format.')
-        if not search_rules or search_rules == ['']:
-            raise Exception('The search_rules field is mandatory and should be defined.')
+        if api_key == "" or api_key is None and self.config.api_key is None:
+            raise Exception(
+                "An api key is required in the client or should be passed as an argument."
+            )
+        if (
+            api_key_uid == ""
+            or api_key_uid is None
+            or self._valid_uuid(api_key_uid) is False
+        ):
+            raise Exception("An uid is required and must comply to the uuid4 format.")
+        if not search_rules or search_rules == [""]:
+            raise Exception(
+                "The search_rules field is mandatory and should be defined."
+            )
         if expires_at and expires_at < datetime.datetime.utcnow():
-            raise Exception('The date expires_at should be in the future.')
+            raise Exception("The date expires_at should be in the future.")
 
         # Standard JWT header for encryption with SHA256/HS256 algorithm
-        header = {
-            "typ": "JWT",
-            "alg": "HS256"
-        }
+        header = {"typ": "JWT", "alg": "HS256"}
 
         api_key = str(self.config.api_key) if api_key is None else api_key
 
         # Add the required fields to the payload
         payload = {
-            'apiKeyUid': api_key_uid,
-            'searchRules': search_rules,
-            'exp': int(datetime.datetime.timestamp(expires_at)) if expires_at is not None else None
+            "apiKeyUid": api_key_uid,
+            "searchRules": search_rules,
+            "exp": int(datetime.datetime.timestamp(expires_at))
+            if expires_at is not None
+            else None,
         }
 
         # Serialize the header and the payload
-        json_header = json.dumps(header, separators=(",",":")).encode()
-        json_payload = json.dumps(payload, separators=(",",":")).encode()
+        json_header = json.dumps(header, separators=(",", ":")).encode()
+        json_payload = json.dumps(payload, separators=(",", ":")).encode()
 
         # Encode the header and the payload to Base64Url String
         header_encode = self._base64url_encode(json_header)
@@ -549,22 +553,31 @@ class Client():
 
         secret_encoded = api_key.encode()
         # Create Signature Hash
-        signature = hmac.new(secret_encoded, (header_encode + "." + payload_encode).encode(), hashlib.sha256).digest()
+        signature = hmac.new(
+            secret_encoded,
+            (header_encode + "." + payload_encode).encode(),
+            hashlib.sha256,
+        ).digest()
         # Create JWT
-        jwt_token = header_encode + '.' + payload_encode + '.' + self._base64url_encode(signature)
+        jwt_token = (
+            header_encode
+            + "."
+            + payload_encode
+            + "."
+            + self._base64url_encode(signature)
+        )
 
         return jwt_token
 
     @staticmethod
-    def _base64url_encode(
-        data: bytes
-    ) -> str:
-        return base64.urlsafe_b64encode(data).decode('utf-8').replace('=','')
+    def _base64url_encode(data: bytes) -> str:
+        return base64.urlsafe_b64encode(data).decode("utf-8").replace("=", "")
 
     @staticmethod
-    def _valid_uuid(
-        uuid: str
-    ) -> bool:
-        uuid4hex = re.compile(r'^[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}', re.I)
+    def _valid_uuid(uuid: str) -> bool:
+        uuid4hex = re.compile(
+            r"^[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}",
+            re.I,
+        )
         match = uuid4hex.match(uuid)
         return bool(match)

@@ -20,7 +20,9 @@ class IndexStats:
     def __getattr__(self, attr: str) -> Any:
         if attr in self.__dict.keys():
             return attr
-        raise AttributeError(f"{self.__class__.__name__} object has no attribute {attr}")
+        raise AttributeError(
+            f"{self.__class__.__name__} object has no attribute {attr}"
+        )
 
     def __iter__(self) -> Iterator:
         return iter(self.__dict__.items())  # type: ignore
