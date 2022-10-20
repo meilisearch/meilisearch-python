@@ -48,7 +48,16 @@
       "reviewNb": 1000
     }
   },
-  { "id": 7,
+  {
+    "id": 7,
     "title": "The Hitchhiker's Guide to the Galaxy"
-  }
+   }
+  },
+  {
+    "id": 8,
+    "title": "A Fault in our Stars",
+    "info": {
+      "comment": "The funny, thrilling, and tragic business of being alive and in love.",
+      "reviewNb": 800
+    }
 ]
