@@ -20,7 +20,7 @@ def test_get_tasks(empty_index, small_movies):
     current_tasks = index.get_tasks()
     pre_count = len(current_tasks.results)
     response = index.add_documents(small_movies)
-    assert response.task_uid != None
+    assert response.task_uid is not None
     index.wait_for_task(response.task_uid)
     tasks = index.get_tasks()
     assert len(tasks.results) == pre_count + 1
@@ -57,15 +57,15 @@ def test_get_task(client):
     index = client.get_index(uid=common.INDEX_UID)
     task = index.get_task(task["taskUid"])
     assert isinstance(task, Task)
-    assert task.uid != None
-    assert task.index_uid != None
-    assert task.status != None
-    assert task.type != None
-    assert task.duration != None
-    assert task.enqueued_at != None
-    assert task.finished_at != None
-    assert task.details != None
-    assert task.started_at != None
+    assert task.uid is not None
+    assert task.index_uid is not None
+    assert task.status is not None
+    assert task.type is not None
+    assert task.duration is not None
+    assert task.enqueued_at is not None
+    assert task.finished_at is not None
+    assert task.details is not None
+    assert task.started_at is not None
 
 
 def test_get_task_inexistent(empty_index):

@@ -30,9 +30,7 @@ class Config:
         pagination = "pagination"
         faceting = "faceting"
 
-    def __init__(
-        self, url: str, api_key: str | None = None, timeout: int | None = None
-    ) -> None:
+    def __init__(self, url: str, api_key: str | None = None, timeout: int | None = None) -> None:
         """
         Parameters
         ----------

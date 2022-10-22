@@ -33,9 +33,7 @@ def test_basic_search_with_no_query(index_with_documents):
 
 def test_custom_search(index_with_documents):
     """Tests search with a simple query and a custom parameter (attributesToHighlight)."""
-    response = index_with_documents().search(
-        "Dragon", {"attributesToHighlight": ["title"]}
-    )
+    response = index_with_documents().search("Dragon", {"attributesToHighlight": ["title"]})
     assert isinstance(response, dict)
     assert response["hits"][0]["id"] == "166428"
     assert "_formatted" in response["hits"][0]
@@ -227,9 +225,7 @@ def test_custom_search_params_with_multiple_filter_string_with_space(
     index = index_with_documents()
     update = index.update_filterable_attributes(["genre", "release_date"])
     index.wait_for_task(update["taskUid"])
-    response = index.search(
-        "galaxy", {"filter": "genre = 'sci fi' AND release_date < 1550000000"}
-    )
+    response = index.search("galaxy", {"filter": "genre = 'sci fi' AND release_date < 1550000000"})
     assert isinstance(response, dict)
     assert len(response["hits"]) == 1
     assert "facetDistribution" not in response
@@ -239,9 +235,7 @@ def test_custom_search_params_with_array_filter_with_space(index_with_documents)
     index = index_with_documents()
     update = index.update_filterable_attributes(["genre", "release_date"])
     index.wait_for_task(update["taskUid"])
-    response = index.search(
-        "galaxy", {"filter": ["genre = 'sci fi'", "release_date < 1550000000"]}
-    )
+    response = index.search("galaxy", {"filter": ["genre = 'sci fi'", "release_date < 1550000000"]})
     assert isinstance(response, dict)
     assert len(response["hits"]) == 1
     assert "facetDistribution" not in response
@@ -251,9 +245,7 @@ def test_custom_search_params_with_mutilple_filter_string(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(["genre", "release_date"])
     index.wait_for_task(update["taskUid"])
-    response = index.search(
-        "world", {"filter": "genre = action AND release_date < 1550000000"}
-    )
+    response = index.search("world", {"filter": "genre = action AND release_date < 1550000000"})
     assert isinstance(response, dict)
     assert len(response["hits"]) == 2
     assert "facetDistribution" not in response
@@ -363,22 +355,16 @@ def test_phrase_search(index_with_documents):
 
 def test_basic_search_on_nested_documents(index_with_documents, nested_movies):
     """Tests search with an simple query on nested fields."""
-    response = index_with_documents("nested_fields_index", nested_movies).search(
-        "An awesome"
-    )
+    response = index_with_documents("nested_fields_index", nested_movies).search("An awesome")
     assert isinstance(response, dict)
     assert response["hits"][0]["id"] == 5
     assert len(response["hits"]) == 1
 
 
-def test_search_on_nested_documents_with_searchable_attributes(
-    index_with_documents, nested_movies
-):
+def test_search_on_nested_documents_with_searchable_attributes(index_with_documents, nested_movies):
     """Tests search on nested fields with searchable attribute."""
     index = index_with_documents("nested_fields_index", nested_movies)
-    response_searchable_attributes = index.update_searchable_attributes(
-        ["title", "info.comment"]
-    )
+    response_searchable_attributes = index.update_searchable_attributes(["title", "info.comment"])
     index.wait_for_task(response_searchable_attributes["taskUid"])
     response = index.search("An awesome")
     assert isinstance(response, dict)
@@ -386,9 +372,7 @@ def test_search_on_nested_documents_with_searchable_attributes(
     assert len(response["hits"]) == 1
 
 
-def test_search_on_nested_documents_with_sortable_attributes(
-    index_with_documents, nested_movies
-):
+def test_search_on_nested_documents_with_sortable_attributes(index_with_documents, nested_movies):
     """Tests search on nested fields with searchable attribute and sortable attributes."""
     index = index_with_documents("nested_fields_index", nested_movies)
     response_settings = index.update_settings(

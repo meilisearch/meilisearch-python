@@ -49,7 +49,7 @@ jobs:
       - name: Install dependencies
         run: pipenv install --dev
       - name: Linter with pylint
-        run: pipenv run pylint meilisearch
+        run: pipenv run pylint meilisearch tests
 
   mypy:
     name: mypy

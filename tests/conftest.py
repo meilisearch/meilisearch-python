@@ -145,6 +145,8 @@ def test_key_info(client):
         client.delete_key(key["key"])
     except MeiliSearchApiError:
         pass
+    except StopIteration:
+        pass
 
 
 @fixture(scope="function")
