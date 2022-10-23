@@ -226,5 +226,13 @@
     "overview": "Don't Panic! The story of Arthur Dent, an average Englishman who life was spared by his friend, who turned out to be an alien, while the planet Earth is destroyed. His friend tells him about the Hitchhiker's Guide to the Galaxy, a guide with anything you ever needed, and wanted to know. They travel across the galaxy, meeting friendly, and not so friendly characters in order to find the great question (the answer being 42).",
     "release_date": 1114669984,
     "genre": "Sci Fi"
-  }
+  },
+ {
+    "id": "123470",
+    "title": "Black Adam",
+    "poster": "https://www.themoviedb.org/t/p/original/6dK9T9qx1lp64sKoOkncDyy4Uhg.jpg",
+    "overview": "Nearly 5,000 years after he was bestowed with the almighty powers of the Egyptian gods-and imprisoned just as quickly-Black Adam is freed from his earthly tomb, ready to unleash his unique form of justice on the modern world.",
+    "release_date": 2111012022,
+    "genre": "Sci Fi"
+  } 
 ]
