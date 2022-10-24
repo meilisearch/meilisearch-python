@@ -1,4 +1,3 @@
-import meilisearch
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
 from meilisearch.version import qualified_version

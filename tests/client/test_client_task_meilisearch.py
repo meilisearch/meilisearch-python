@@ -22,7 +22,7 @@ def test_get_tasks(client, empty_index):
     assert tasks["from"] == pre_count + 1
 
 
-def test_get_tasks_empty_parameters(client, empty_index):
+def test_get_tasks_empty_parameters(client):
     """Tests getting the global tasks list after populating an index."""
     tasks = client.get_tasks({})
     assert isinstance(tasks, dict)

@@ -38,7 +38,7 @@ def test_update_typo_tolerance(empty_index):
     assert "taskUid" in response_update
     assert update.status == "succeeded"
     assert isinstance(response_get, dict)
-    for typo_tolerance in NEW_TYPO_TOLERANCE:
+    for typo_tolerance in NEW_TYPO_TOLERANCE:  # pylint: disable=consider-using-dict-items
         assert typo_tolerance in response_get
         assert NEW_TYPO_TOLERANCE[typo_tolerance] == response_get[typo_tolerance]
 
@@ -60,7 +60,7 @@ def test_reset_typo_tolerance(empty_index):
 
     assert update1.status == "succeeded"
     assert isinstance(response_get, dict)
-    for typo_tolerance in NEW_TYPO_TOLERANCE:
+    for typo_tolerance in NEW_TYPO_TOLERANCE:  # pylint: disable=consider-using-dict-items
         assert typo_tolerance in response_get
         assert NEW_TYPO_TOLERANCE[typo_tolerance] == response_get[typo_tolerance]
     assert isinstance(response_reset, dict)
