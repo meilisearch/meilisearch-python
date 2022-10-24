@@ -22,7 +22,7 @@ def test_get_settings_default(empty_index):
     assert isinstance(response, dict)
     for rule in DEFAULT_RANKING_RULES:
         assert rule in response["rankingRules"]
-    for typo in DEFAULT_TYPO_TOLERANCE:
+    for typo in DEFAULT_TYPO_TOLERANCE:  # pylint: disable=consider-using-dict-items
         assert typo in response["typoTolerance"]
         assert DEFAULT_TYPO_TOLERANCE[typo] == response["typoTolerance"][typo]
     assert response["distinctAttribute"] is None
@@ -77,7 +77,7 @@ def test_reset_settings(empty_index):
     response = index.get_settings()
     for rule in DEFAULT_RANKING_RULES:
         assert rule in response["rankingRules"]
-    for typo in DEFAULT_TYPO_TOLERANCE:
+    for typo in DEFAULT_TYPO_TOLERANCE:  # pylint: disable=consider-using-dict-items
         assert typo in response["typoTolerance"]
         assert DEFAULT_TYPO_TOLERANCE[typo] == response["typoTolerance"][typo]
     assert response["distinctAttribute"] is None

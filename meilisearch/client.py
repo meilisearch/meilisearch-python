@@ -24,9 +24,7 @@ class Client:
     Meilisearch and its permissions.
     """
 
-    def __init__(
-        self, url: str, api_key: str | None = None, timeout: int | None = None
-    ) -> None:
+    def __init__(self, url: str, api_key: str | None = None, timeout: int | None = None) -> None:
         """
         Parameters
         ----------
@@ -39,9 +37,7 @@ class Client:
 
         self.http = HttpRequests(self.config)
 
-    def create_index(
-        self, uid: str, options: dict[str, Any] | None = None
-    ) -> dict[str, Any]:
+    def create_index(self, uid: str, options: dict[str, Any] | None = None) -> dict[str, Any]:
         """Create an index.
 
         Parameters
@@ -86,9 +82,7 @@ class Client:
 
         return self.http.delete(f"{self.config.paths.index}/{uid}")
 
-    def get_indexes(
-        self, parameters: dict[str, Any] | None = None
-    ) -> dict[str, list[Index]]:
+    def get_indexes(self, parameters: dict[str, Any] | None = None) -> dict[str, list[Index]]:
         """Get all indexes.
 
         Parameters
@@ -108,9 +102,7 @@ class Client:
         """
         if parameters is None:
             parameters = {}
-        response = self.http.get(
-            f"{self.config.paths.index}?{parse.urlencode(parameters)}"
-        )
+        response = self.http.get(f"{self.config.paths.index}?{parse.urlencode(parameters)}")
         response["results"] = [
             Index(
                 self.config,
@@ -123,9 +115,7 @@ class Client:
         ]
         return response
 
-    def get_raw_indexes(
-        self, parameters: dict[str, Any] | None = None
-    ) -> list[dict[str, Any]]:
+    def get_raw_indexes(self, parameters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
         """Get all indexes in dictionary format.
 
         Parameters
@@ -516,16 +506,10 @@ class Client:
             raise Exception(
                 "An api key is required in the client or should be passed as an argument."
             )
-        if (
-            api_key_uid == ""
-            or api_key_uid is None
-            or self._valid_uuid(api_key_uid) is False
-        ):
+        if api_key_uid == "" or api_key_uid is None or self._valid_uuid(api_key_uid) is False:
             raise Exception("An uid is required and must comply to the uuid4 format.")
         if not search_rules or search_rules == [""]:
-            raise Exception(
-                "The search_rules field is mandatory and should be defined."
-            )
+            raise Exception("The search_rules field is mandatory and should be defined.")
         if expires_at and expires_at < datetime.datetime.utcnow():
             raise Exception("The date expires_at should be in the future.")
 
@@ -538,9 +522,7 @@ class Client:
         payload = {
             "apiKeyUid": api_key_uid,
             "searchRules": search_rules,
-            "exp": int(datetime.datetime.timestamp(expires_at))
-            if expires_at is not None
-            else None,
+            "exp": int(datetime.datetime.timestamp(expires_at)) if expires_at is not None else None,
         }
 
         # Serialize the header and the payload
@@ -559,13 +541,7 @@ class Client:
             hashlib.sha256,
         ).digest()
         # Create JWT
-        jwt_token = (
-            header_encode
-            + "."
-            + payload_encode
-            + "."
-            + self._base64url_encode(signature)
-        )
+        jwt_token = header_encode + "." + payload_encode + "." + self._base64url_encode(signature)
 
         return jwt_token
 

@@ -10,7 +10,7 @@ from meilisearch.index import Index
 from tests import BASE_URL, MASTER_KEY, common
 
 
-def test_create_index(client, empty_index):
+def test_create_index(empty_index):
     """Tests creating an index."""
     index = empty_index()
     assert isinstance(index, Index)
@@ -21,9 +21,7 @@ def test_create_index(client, empty_index):
 
 def test_create_index_with_primary_key(client):
     """Tests creating an index with a primary key."""
-    response = client.create_index(
-        uid=common.INDEX_UID2, options={"primaryKey": "book_id"}
-    )
+    response = client.create_index(uid=common.INDEX_UID2, options={"primaryKey": "book_id"})
     client.wait_for_task(response["taskUid"])
     index = client.get_index(uid=common.INDEX_UID2)
     assert isinstance(index, Index)
