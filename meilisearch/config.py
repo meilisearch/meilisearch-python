@@ -6,36 +6,31 @@ class Config:
     Client's credentials and configuration parameters
     """
 
-    class Paths():
+    class Paths:
         health = "health"
-        keys = 'keys'
-        version = 'version'
-        index = 'indexes'
-        task = 'tasks'
-        stat = 'stats'
-        search = 'search'
-        document = 'documents'
-        setting = 'settings'
-        ranking_rules = 'ranking-rules'
-        distinct_attribute = 'distinct-attribute'
-        searchable_attributes = 'searchable-attributes'
-        displayed_attributes = 'displayed-attributes'
-        stop_words = 'stop-words'
-        synonyms = 'synonyms'
-        accept_new_fields = 'accept-new-fields'
-        filterable_attributes = 'filterable-attributes'
-        sortable_attributes = 'sortable-attributes'
-        typo_tolerance = 'typo-tolerance'
-        dumps = 'dumps'
-        pagination = 'pagination'
-        faceting = 'faceting'
+        keys = "keys"
+        version = "version"
+        index = "indexes"
+        task = "tasks"
+        stat = "stats"
+        search = "search"
+        document = "documents"
+        setting = "settings"
+        ranking_rules = "ranking-rules"
+        distinct_attribute = "distinct-attribute"
+        searchable_attributes = "searchable-attributes"
+        displayed_attributes = "displayed-attributes"
+        stop_words = "stop-words"
+        synonyms = "synonyms"
+        accept_new_fields = "accept-new-fields"
+        filterable_attributes = "filterable-attributes"
+        sortable_attributes = "sortable-attributes"
+        typo_tolerance = "typo-tolerance"
+        dumps = "dumps"
+        pagination = "pagination"
+        faceting = "faceting"
 
-    def __init__(
-        self,
-        url: str,
-        api_key: str | None = None,
-        timeout: int | None = None
-    ) -> None:
+    def __init__(self, url: str, api_key: str | None = None, timeout: int | None = None) -> None:
         """
         Parameters
         ----------

@@ -1,6 +1,8 @@
 from unittest.mock import patch
+
 import pytest
 import requests
+
 import meilisearch
 from meilisearch.errors import MeiliSearchTimeoutError
 from tests import BASE_URL, MASTER_KEY

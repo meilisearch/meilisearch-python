@@ -12,6 +12,8 @@ pytest-ordering = "*"
 tox = "*"
 tox-pipenv = "*"
 types-requests = "*"
+black = "*"
+isort = "*"
 
 [packages]
 requests = "*"

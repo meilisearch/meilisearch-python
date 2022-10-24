@@ -1,8 +1,10 @@
 # pylint: disable=invalid-name
 
 from unittest.mock import patch
+
 import pytest
 import requests
+
 import meilisearch
 from meilisearch.errors import MeiliSearchCommunicationError
 from tests import MASTER_KEY

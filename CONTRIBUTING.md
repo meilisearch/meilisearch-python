@@ -45,7 +45,7 @@ You can set up your local environment natively or using `docker`, check out the 
 
 Example of running all the checks with docker:
 ```bash
-docker-compose run --rm package bash -c "pipenv install --dev && pipenv run mypy meilisearch && pipenv run pylint meilisearch && pipenv run pytest tests"
+docker-compose run --rm package bash -c "pipenv install --dev && pipenv run mypy meilisearch && pipenv run pylint meilisearch tests && pipenv run pytest tests"
 ```
 
 To install dependencies:
@@ -57,6 +57,7 @@ pipenv install --dev
 ### Tests and Linter <!-- omit in toc -->
 
 Each PR should pass the tests, mypy type checking, and the linter to be accepted.
+Your PR also needs to be formatted using black and isort.
 
 ```bash
 # Tests
@@ -66,7 +67,11 @@ pipenv run pytest tests
 # MyPy
 pipenv run mypy meilisearch
 # Linter
-pipenv run pylint meilisearch
+pipenv run pylint meilisearch tests
+# Black
+pipenv run black meilisearch tests
+# Isort
+pipenv run isort meilisearch tests
 ```
 
 Optionally tox can be used to run test on all supported version of Python, mypy, and linting.
@@ -118,7 +123,7 @@ Some notes on GitHub PRs:
 - All PRs must be reviewed and approved by at least one maintainer.
 - The PR title should be accurate and descriptive of the changes. The title of the PR will be indeed automatically added to the next [release changelogs](https://github.com/meilisearch/meilisearch-python/releases/).
 
-## Release Process (for internal team only)
+## Release Process (for the internal team only)
 
 Meilisearch tools follow the [Semantic Versioning Convention](https://semver.org/).
 
@@ -142,10 +147,10 @@ Make a PR modifying the file [`meilisearch/version.py`](/meilisearch/version.py)
 __version__ = "X.X.X"
 ```
 
-Once the changes are merged on `main`, you can publish the current draft release via the [GitHub interface](https://github.com/meilisearch/meilisearch-python/releases): on this page, click on `Edit` (related to the draft release) > update the description (be sure you apply [these recommandations](https://github.com/meilisearch/integration-guides/blob/main/resources/integration-release.md#writting-the-release-description)) > when you are ready, click on `Publish release`.
+Once the changes are merged on `main`, you can publish the current draft release via the [GitHub interface](https://github.com/meilisearch/meilisearch-python/releases): on this page, click on `Edit` (related to the draft release) > update the description (be sure you apply [these recommendations](https://github.com/meilisearch/integration-guides/blob/main/resources/integration-release.md#writting-the-release-description)) > when you are ready, click on `Publish release`.
 
 GitHub Actions will be triggered and push the package to [PyPI](https://pypi.org/project/meilisearch).
 
 <hr>
 
-Thank you again for reading this through, we can not wait to begin to work with you if you made your way through this contributing guide ❤️
+Thank you again for reading this through. We can not wait to begin to work with you if you make your way through this contributing guide ❤️
