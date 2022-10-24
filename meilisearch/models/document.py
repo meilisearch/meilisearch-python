@@ -19,9 +19,10 @@ class Document:
     def __iter__(self) -> Iterator:
         return iter(self.__dict__.items())  # type: ignore
 
+
 class DocumentsResults:
     def __init__(self, resp: dict[str, Any]) -> None:
-        self.results: list[Document] = [Document(doc) for doc in resp['results']]
-        self.offset: int = resp['offset']
-        self.limit: int = resp['limit']
-        self.total: int = resp['total']
+        self.results: list[Document] = [Document(doc) for doc in resp["results"]]
+        self.offset: int = resp["offset"]
+        self.limit: int = resp["limit"]
+        self.total: int = resp["total"]
