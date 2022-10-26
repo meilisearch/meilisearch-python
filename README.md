@@ -60,9 +60,9 @@ pip3 install meilisearch
 
 ### Run Meilisearch <!-- omit in toc -->
 
-There are many easy ways to [download and run a Meilisearch instance](https://docs.meilisearch.com/reference/features/installation.html#download-and-launch).
+There are many easy ways to [download and run a Meilisearch instance](https://docs.meilisearch.com/reference/features/installation.html#setup-and-installation).
 
-For example, using the `curl` command in [your Terminal](https://itconnect.uw.edu/learn/workshops/online-tutorials/web-publishing/what-is-a-terminal/):
+For example, using the `curl` command in [your Terminal](https://itconnect.uw.edu/learn/workshops/online-tutorials/what-is-a-terminal/):
 
 ```bash
 # Install Meilisearch
@@ -99,7 +99,7 @@ documents = [
 index.add_documents(documents) # => { "uid": 0 }
 ```
 
-With the task `uid`, you can check the status (`enqueued`, `processing`, `succeeded` or `failed`) of your documents addition using the [task](https://docs.meilisearch.com/reference/api/tasks.html#get-task).
+With the task `uid`, you can check the status (`enqueued`, `processing`, `succeeded` or `failed`) of your documents addition using the [task](https://docs.meilisearch.com/reference/api/tasks.html#get-tasks).
 
 #### Basic Search <!-- omit in toc -->
 
@@ -174,7 +174,7 @@ index.update_filterable_attributes([
 
 You only need to perform this operation once.
 
-Note that Meilisearch will rebuild your index whenever you update `filterableAttributes`. Depending on the size of your dataset, this might take time. You can track the process using the [task](https://docs.meilisearch.com/reference/api/tasks.html#get-task).
+Note that Meilisearch will rebuild your index whenever you update `filterableAttributes`. Depending on the size of your dataset, this might take time. You can track the process using the [task](https://docs.meilisearch.com/reference/api/tasks.html#get-tasks).
 
 Then, you can perform the search:
 
