@@ -279,11 +279,11 @@ search_parameter_guide_crop_marker_1: |-
     'cropMarker': '[…]'
   })
 search_parameter_guide_matching_strategy_1: |-
-  client.index('movies').search('big fat liar', { 
-    matchingStrategy: 'last'
+  client.index('movies').search('big fat liar', {
+    'matchingStrategy': 'last'
   })
 search_parameter_guide_matching_strategy_2: |-
-  client.index('movies').search('big fat liar', { 
+  client.index('movies').search('big fat liar', {
     'matchingStrategy': 'all'
   })
 search_parameter_guide_highlight_1: |-
