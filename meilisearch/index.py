@@ -10,6 +10,7 @@ from meilisearch.models.document import Document, DocumentsResults
 from meilisearch.models.index import IndexStats
 from meilisearch.models.task import Task, TaskInfo, TaskResults
 from meilisearch.task import get_task, get_tasks, wait_for_task
+from meilisearch.errors import MeiliSearchError
 
 
 # pylint: disable=too-many-public-methods
@@ -350,6 +351,8 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         url = self._build_url(primary_key)
+        if not documents:
+            raise MeiliSearchError("An empty document list was provided. No request will be sent to the Meilisearch API")
         add_document_task = self.http.post(url, documents)
         return TaskInfo(**add_document_task)
 
