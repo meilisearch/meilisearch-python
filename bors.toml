@@ -4,7 +4,7 @@ status = [
   'integration-tests (3.7)',
   'integration-tests (3.8)',
   'integration-tests (3.9)',
-  'integration-tests (3.10)'
+  'integration-tests (3.10)',
   'integration-tests (3.11)',
 ]
 # 1 hour timeout
