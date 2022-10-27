@@ -30,7 +30,6 @@ def test_add_documents_empty(empty_index):
     index = empty_index()
     with pytest.raises(Exception) as e_info:
         response = index.add_documents('')
-    assert e_info.value.message == "A json payload is missing."
     assert e_info.value.code == "missing_payload"
     assert e_info.value.type == "invalid_request"
     assert e_info.value.link == "https://docs.meilisearch.com/errors#missing_payload"
