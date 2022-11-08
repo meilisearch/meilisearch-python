@@ -30,7 +30,7 @@ def test_add_documents_empty(empty_index):
     """Tests adding empty string as documents to a clean index."""
     index = empty_index()
     with pytest.raises(Exception) as e_info:
-        index.add_documents('')
+        index.add_documents("")
     assert e_info.value.code == "missing_payload"
     assert e_info.value.type == "invalid_request"
     assert e_info.value.link == "https://docs.meilisearch.com/errors#missing_payload"
