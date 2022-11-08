@@ -45,7 +45,7 @@ class HttpRequests:
                     request_path,
                     timeout=self.config.timeout,
                     headers=self.headers,
-                    data=json.dumps(body) if body != None else "null",
+                    data=json.dumps(body) if body else "" if body == "" else "null",
                 )
             return self.__validate(request)
 
