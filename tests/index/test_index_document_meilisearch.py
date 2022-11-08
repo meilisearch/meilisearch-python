@@ -25,6 +25,7 @@ def test_add_documents(empty_index, small_movies):
     assert index.get_primary_key() == "id"
     assert update.status == "succeeded"
 
+
 def test_add_documents_empty(empty_index):
     """Tests adding empty string as documents to a clean index."""
     index = empty_index()
