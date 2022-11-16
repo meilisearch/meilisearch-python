@@ -29,17 +29,42 @@ def test_get_tasks_empty_parameters(client):
     assert isinstance(tasks["results"], list)
 
 
-def test_get_tasks_with_parameters(client):
+def test_get_tasks_with_parameters(client, empty_index):
     """Tests getting the global tasks list after populating an index."""
-    tasks = client.get_tasks({"limit": 1, "from": 1})
+    empty_index()
+    tasks = client.get_tasks({"limit": 1})
     assert isinstance(tasks, dict)
     assert len(tasks["results"]) == 1
-    assert tasks["results"][0]["uid"] == 1
 
 
-def test_get_tasks_with_index_uid(client):
+def test_get_tasks_with_all_plural_parameters(client, empty_index):
     """Tests getting the global tasks list after populating an index."""
-    tasks = client.get_tasks({"limit": 1, "indexUid": [common.INDEX_UID]})
+    empty_index()
+    tasks = client.get_tasks(
+        {"indexUids": [common.INDEX_UID], "statuses": ["succeeded"], "types": ["indexCreation"]}
+    )
+    assert isinstance(tasks, dict)
+    assert len(tasks["results"]) > 1
+
+
+def test_get_tasks_with_date_parameters(client, empty_index):
+    """Tests getting the global tasks list after populating an index."""
+    empty_index()
+    tasks = client.get_tasks(
+        {
+            "beforeEnqueuedAt": "2042-04-02T00:42:42Z",
+            "beforeStartedAt": "2042-04-02T00:42:42Z",
+            "beforeFinishedAt": "2042-04-02T00:42:42Z",
+        }
+    )
+    assert isinstance(tasks, dict)
+    assert len(tasks["results"]) > 1
+
+
+def test_get_tasks_with_index_uid(client, empty_index):
+    """Tests getting the global tasks list after populating an index."""
+    empty_index()
+    tasks = client.get_tasks({"limit": 1, "indexUids": [common.INDEX_UID]})
     assert isinstance(tasks, dict)
     assert len(tasks["results"]) == 1
 
@@ -50,7 +75,7 @@ def test_get_task(client):
     client.wait_for_task(response["taskUid"])
     task = client.get_task(response["taskUid"])
     assert isinstance(task, dict)
-    assert len(task) == 9
+    assert len(task) == 11
     assert "uid" in task
     assert "indexUid" in task
     assert "status" in task

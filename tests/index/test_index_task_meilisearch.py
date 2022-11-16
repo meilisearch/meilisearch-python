@@ -37,7 +37,7 @@ def test_get_tasks_with_parameters(empty_index):
 def test_get_tasks_with_index_uid(empty_index):
     """Tests getting the tasks list of a populated index."""
     index = empty_index()
-    tasks = index.get_tasks({"limit": 1, "indexUid": [common.INDEX_UID]})
+    tasks = index.get_tasks({"limit": 1, "indexUids": [common.INDEX_UID]})
     assert isinstance(tasks, TaskResults)
     assert len(tasks.results) == 1
 
