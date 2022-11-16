@@ -131,3 +131,33 @@ def test_cancel_every_task(client):
     assert task.index_uid is None
     assert task.type == "taskCancelation"
     assert "statuses=enqueued%2Cprocessing" in tasks["results"][0]["details"]["originalFilter"]
+
+
+def test_delete_tasks_by_uid(client, empty_index, small_movies):
+    """Tests getting a task of an inexistent operation."""
+    index = empty_index()
+    task = index.add_documents(small_movies)
+    task_deleted = client.delete_tasks({"uids": task.task_uid})
+    client.wait_for_task(task_deleted.task_uid)
+    with pytest.raises(Exception):
+        client.get_task(task.task_uid)
+
+    assert isinstance(task_deleted, TaskInfo)
+    assert task_deleted.task_uid is not None
+    assert task_deleted.index_uid is None
+    assert task_deleted.status == "enqueued" or "processing" or "succeeded"
+    assert task_deleted.type == "taskDeletion"
+
+
+def test_delete_all_tasks(client):
+    tasks_before = client.get_tasks()
+    task = client.delete_tasks({"statuses": ["succeeded", "failed", "canceled"]})
+    tasks_after = client.get_tasks()
+
+    assert isinstance(task, TaskInfo)
+    assert task.task_uid is not None
+    assert task.index_uid is None
+    assert task.status == "enqueued" or "processing" or "succeeded"
+    assert task.type == "taskDeletion"
+    assert len(tasks_after["results"]) == 1
+    assert len(tasks_before["results"]) == len(tasks_after["results"])
