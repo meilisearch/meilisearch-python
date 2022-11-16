@@ -407,8 +407,7 @@ class Client:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the get tasks route: https://docs.meilisearch.com/reference/api/tasks.html#get-all-tasks.
-            `indexUid` should be set as a List.
+            parameters accepted by the get tasks route: https://docs.meilisearch.com/reference/api/tasks.html#get-tasks.
 
         Returns
         -------
