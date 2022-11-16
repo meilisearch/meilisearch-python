@@ -22,11 +22,7 @@ class TaskInfo(CamelBase):
     index_uid: str
     status: str
     type: str
-    details: Optional[Dict[str, Any]]
-    duration: Optional[str]
     enqueued_at: str
-    started_at: Optional[str]
-    finished_at: Optional[str]
 
 
 class TaskResults:
