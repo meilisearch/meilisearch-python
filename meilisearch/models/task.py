@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, Union
 
 from camel_converter.pydantic_base import CamelBase
 
@@ -11,7 +11,8 @@ class Task(CamelBase):
     status: str
     type: str
     details: Dict[str, Any]
-    error: Optional[Dict[str, Any]]
+    error: Dict[str, Any]
+    canceled_by: Union[int, None]
     duration: str
     enqueued_at: str
     started_at: str

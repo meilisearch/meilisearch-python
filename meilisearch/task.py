@@ -8,6 +8,7 @@ from urllib import parse
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
 from meilisearch.errors import MeiliSearchTimeoutError
+from meilisearch.models.task import TaskInfo
 
 
 def get_tasks(
@@ -65,6 +66,37 @@ def get_task(config: Config, uid: int) -> dict[str, Any]:
     """
     http = HttpRequests(config)
     return http.get(f"{config.paths.task}/{uid}")
+
+
+def cancel_tasks(config: Config, parameters: dict[str, Any] | None = None) -> TaskInfo:
+    """Cancel a list of enqueued or processing tasks.
+
+    Parameters
+    ----------
+    config:
+        Config object containing permission and location of Meilisearch.
+    parameters (optional):
+        parameters accepted by the cancel tasks route:https://docs.meilisearch.com/reference/api/tasks.html#cancel-task.
+
+    Returns
+    -------
+    task_info:
+        TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+        https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+
+    Raises
+    ------
+    MeiliSearchApiError
+        An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+    """
+    http = HttpRequests(config)
+    if parameters is None:
+        parameters = {}
+    for param in parameters:
+        if isinstance(parameters[param], list):
+            parameters[param] = ",".join(parameters[param])
+    response = http.post(f"{config.paths.task}/cancel?{parse.urlencode(parameters)}")
+    return TaskInfo(**response)
 
 
 def wait_for_task(
