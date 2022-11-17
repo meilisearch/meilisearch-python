@@ -11,7 +11,7 @@ class Task(CamelBase):
     status: str
     type: str
     details: Dict[str, Any]
-    error: Optional[str]
+    error: Optional[Dict[str, Any]]
     duration: str
     enqueued_at: str
     started_at: str
