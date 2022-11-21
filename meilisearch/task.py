@@ -68,7 +68,7 @@ def get_task(config: Config, uid: int) -> dict[str, Any]:
     return http.get(f"{config.paths.task}/{uid}")
 
 
-def cancel_tasks(config: Config, parameters: dict[str, Any] | None = None) -> TaskInfo:
+def cancel_tasks(config: Config, parameters: dict[str, Any]) -> TaskInfo:
     """Cancel a list of enqueued or processing tasks.
 
     Parameters
