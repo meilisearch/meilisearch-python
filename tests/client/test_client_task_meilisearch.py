@@ -118,6 +118,7 @@ def test_cancel_tasks(client):
     assert "uids=1%2C2" in tasks["results"][0]["details"]["originalFilter"]
 
 
+@pytest.mark.usefixtures("create_tasks")
 def test_cancel_every_task(client):
     """Tests cancel every task."""
     task = client.cancel_tasks({"statuses": ["enqueued", "processing"]})
