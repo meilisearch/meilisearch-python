@@ -9,7 +9,9 @@ from meilisearch.config import Config
 from meilisearch.models.document import Document, DocumentsResults
 from meilisearch.models.index import IndexStats
 from meilisearch.models.task import Task, TaskInfo, TaskResults
-from meilisearch.task import get_task, get_tasks, wait_for_task
+from meilisearch.task import get_task as get_task_func
+from meilisearch.task import get_tasks as get_tasks_func
+from meilisearch.task import wait_for_task as wait_for_task_func
 
 
 # pylint: disable=too-many-public-methods
@@ -163,7 +165,7 @@ class Index:
         else:
             parameters = {"indexUids": [self.uid]}
 
-        tasks = get_tasks(self.config, parameters=parameters)
+        tasks = get_tasks_func(self.config, parameters=parameters)
         return TaskResults(tasks)
 
     def get_task(self, uid: int) -> Task:
@@ -184,7 +186,7 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        task = get_task(self.config, uid)
+        task = get_task_func(self.config, uid)
         return Task(**task)
 
     def wait_for_task(
@@ -214,7 +216,7 @@ class Index:
         MeiliSearchTimeoutError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        task = wait_for_task(self.config, uid, timeout_in_ms, interval_in_ms)
+        task = wait_for_task_func(self.config, uid, timeout_in_ms, interval_in_ms)
         return Task(**task)
 
     def get_stats(self) -> IndexStats:

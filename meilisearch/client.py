@@ -14,7 +14,10 @@ from meilisearch.config import Config
 from meilisearch.errors import MeiliSearchError
 from meilisearch.index import Index
 from meilisearch.models.task import TaskInfo
-from meilisearch.task import cancel_tasks, get_task, get_tasks, wait_for_task
+from meilisearch.task import cancel_tasks as cancel_tasks_func
+from meilisearch.task import get_task as get_task_func
+from meilisearch.task import get_tasks as get_tasks_func
+from meilisearch.task import wait_for_task as wait_for_task_func
 
 
 class Client:
@@ -420,7 +423,7 @@ class Client:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return get_tasks(self.config, parameters=parameters)
+        return get_tasks_func(self.config, parameters=parameters)
 
     def get_task(self, uid: int) -> dict[str, Any]:
         """Get one task.
@@ -440,7 +443,7 @@ class Client:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return get_task(self.config, uid)
+        return get_task_func(self.config, uid)
 
     def cancel_tasks(self, parameters: dict[str, Any]) -> TaskInfo:
         """Cancel a list of enqueued or processing tasks.
@@ -461,7 +464,7 @@ class Client:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return cancel_tasks(self.config, parameters=parameters)
+        return cancel_tasks_func(self.config, parameters=parameters)
 
     def wait_for_task(
         self,
@@ -490,7 +493,7 @@ class Client:
         MeiliSearchTimeoutError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return wait_for_task(self.config, uid, timeout_in_ms, interval_in_ms)
+        return wait_for_task_func(self.config, uid, timeout_in_ms, interval_in_ms)
 
     def generate_tenant_token(
         self,
