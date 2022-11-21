@@ -103,6 +103,7 @@ def create_tasks(empty_index, small_movies):
     index.add_documents(small_movies)
     index.add_documents(small_movies)
 
+
 @pytest.mark.usefixtures("create_tasks")
 def test_cancel_tasks(client):
     """Tests cancel a task with uid 1."""
