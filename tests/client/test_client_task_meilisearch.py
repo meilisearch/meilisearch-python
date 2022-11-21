@@ -94,6 +94,16 @@ def test_get_task_inexistent(client):
         client.get_task("abc")
 
 
+@pytest.fixture
+def create_tasks(empty_index, small_movies):
+    """Ensures there are some tasks present for testing."""
+    index = empty_index()
+    index.update_ranking_rules(["type", "exactness"])
+    index.reset_ranking_rules()
+    index.add_documents(small_movies)
+    index.add_documents(small_movies)
+
+@pytest.mark.usefixtures("create_tasks")
 def test_cancel_tasks(client):
     """Tests cancel a task with uid 1."""
     task = client.cancel_tasks({"uids": ["1", "2"]})
