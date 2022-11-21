@@ -97,12 +97,12 @@ def test_get_task_inexistent(client):
 def test_cancel_tasks(client):
     """Tests cancel a task with uid 1."""
     task = client.cancel_tasks({"uids": ["1", "2"]})
+    client.wait_for_task(task.task_uid)
     tasks = client.get_tasks({"types": "taskCancelation"})
 
     assert isinstance(task, TaskInfo)
     assert task.task_uid is not None
     assert task.index_uid is None
-    assert task.status in {"enqueued", "processing", "succeeded"}
     assert task.type == "taskCancelation"
     assert "uids" in tasks["results"][0]["details"]["originalFilter"]
     assert "uids=1%2C2" in tasks["results"][0]["details"]["originalFilter"]
@@ -111,11 +111,11 @@ def test_cancel_tasks(client):
 def test_cancel_every_task(client):
     """Tests cancel every task."""
     task = client.cancel_tasks({"statuses": ["enqueued", "processing"]})
+    client.wait_for_task(task.task_uid)
     tasks = client.get_tasks({"types": "taskCancelation"})
 
     assert isinstance(task, TaskInfo)
     assert task.task_uid is not None
     assert task.index_uid is None
-    assert task.status in {"enqueued", "processing", "succeeded"}
     assert task.type == "taskCancelation"
     assert "statuses=enqueued%2Cprocessing" in tasks["results"][0]["details"]["originalFilter"]
