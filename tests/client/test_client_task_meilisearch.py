@@ -45,7 +45,7 @@ def test_get_tasks_with_all_plural_parameters(client, empty_index):
         {"indexUids": [common.INDEX_UID], "statuses": ["succeeded"], "types": ["indexCreation"]}
     )
     assert isinstance(tasks, dict)
-    assert len(tasks["results"]) > 1
+    assert len(tasks["results"]) >= 1
 
 
 def test_get_tasks_with_date_parameters(client, empty_index):
@@ -136,28 +136,34 @@ def test_cancel_every_task(client):
 def test_delete_tasks_by_uid(client, empty_index, small_movies):
     """Tests getting a task of an inexistent operation."""
     index = empty_index()
-    task = index.add_documents(small_movies)
-    task_deleted = client.delete_tasks({"uids": task.task_uid})
+    task_addition = index.add_documents(small_movies)
+    task_deleted = client.delete_tasks({"uids": task_addition.task_uid})
     client.wait_for_task(task_deleted.task_uid)
     with pytest.raises(Exception):
-        client.get_task(task.task_uid)
+        client.get_task(task_addition.task_uid)
+    task = client.get_task(task_deleted.task_uid)
 
     assert isinstance(task_deleted, TaskInfo)
     assert task_deleted.task_uid is not None
     assert task_deleted.index_uid is None
-    assert task_deleted.status == "enqueued" or "processing" or "succeeded"
     assert task_deleted.type == "taskDeletion"
+    assert "uids" in task["details"]["originalFilter"]
+    assert f"uids={task_addition.task_uid}" in task["details"]["originalFilter"]
 
 
 def test_delete_all_tasks(client):
     tasks_before = client.get_tasks()
     task = client.delete_tasks({"statuses": ["succeeded", "failed", "canceled"]})
+    client.wait_for_task(task.task_uid)
     tasks_after = client.get_tasks()
 
     assert isinstance(task, TaskInfo)
     assert task.task_uid is not None
     assert task.index_uid is None
-    assert task.status == "enqueued" or "processing" or "succeeded"
     assert task.type == "taskDeletion"
     assert len(tasks_after["results"]) == 1
     assert len(tasks_before["results"]) == len(tasks_after["results"])
+    assert (
+        "statuses=succeeded%2Cfailed%2Ccanceled"
+        in tasks_after["results"][0]["details"]["originalFilter"]
+    )
