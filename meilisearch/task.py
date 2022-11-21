@@ -76,7 +76,7 @@ def cancel_tasks(config: Config, parameters: dict[str, Any]) -> TaskInfo:
     config:
         Config object containing permission and location of Meilisearch.
     parameters (optional):
-        parameters accepted by the cancel tasks route:https://docs.meilisearch.com/reference/api/tasks.html#cancel-task.
+        parameters accepted by the cancel tasks https://docs.meilisearch.com/reference/api/tasks.html#cancel-task.
 
     Returns
     -------
