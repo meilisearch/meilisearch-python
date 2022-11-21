@@ -442,7 +442,7 @@ class Client:
         """
         return get_task(self.config, uid)
 
-    def cancel_tasks(self, parameters: dict[str, Any] | None = None) -> TaskInfo:
+    def cancel_tasks(self, parameters: dict[str, Any]) -> TaskInfo:
         """Cancel a list of enqueued or processing tasks.
 
         Parameters
