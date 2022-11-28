@@ -307,9 +307,9 @@ search_parameter_guide_show_matches_position_1: |-
     'showMatchesPosition': True
   })
 search_parameter_guide_hitsperpage_1: |-
-  client.index('movies').search("", {"hitsPerPage": 15})
+  client.index('movies').search('', {'hitsPerPage': 15})
 search_parameter_guide_page_1: |-
-  client.index('movies').search("", {"page": 2})
+  client.index('movies').search('', {'page': 2})
 settings_guide_synonyms_1: |-
   client.index('tops').update_settings({
     'synonyms': {
