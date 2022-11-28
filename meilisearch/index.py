@@ -49,6 +49,12 @@ class Index:
     def delete(self) -> dict[str, Any]:
         """Delete the index.
 
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+
         Raises
         ------
         MeiliSearchApiError
@@ -67,8 +73,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -116,8 +122,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -136,8 +142,7 @@ class Index:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the get tasks route: https://docs.meilisearch.com/reference/api/tasks.html#get-all-tasks.
-            `indexUid` should be set as a List.
+            parameters accepted by the get tasks route: https://docs.meilisearch.com/reference/api/tasks.html#get-tasks.
 
         Returns
         -------
@@ -154,9 +159,9 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         if parameters is not None:
-            parameters.setdefault("indexUid", []).append(self.uid)
+            parameters.setdefault("indexUids", []).append(self.uid)
         else:
-            parameters = {"indexUid": [self.uid]}
+            parameters = {"indexUids": [self.uid]}
 
         tasks = get_tasks(self.config, parameters=parameters)
         return TaskResults(tasks)
@@ -756,8 +761,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -776,8 +781,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -814,8 +819,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -830,8 +835,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -870,8 +875,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -886,8 +891,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -926,8 +931,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -942,8 +947,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -982,8 +987,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -998,8 +1003,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -1038,8 +1043,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -1054,8 +1059,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -1094,8 +1099,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -1110,8 +1115,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -1150,8 +1155,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -1166,8 +1171,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -1206,8 +1211,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -1222,8 +1227,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -1262,8 +1267,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -1278,8 +1283,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -1317,8 +1322,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -1335,8 +1340,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -1373,8 +1378,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -1389,8 +1394,8 @@ class Index:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
