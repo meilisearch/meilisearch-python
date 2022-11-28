@@ -623,8 +623,8 @@ get_all_tasks_filtering_1: |-
   client.get_tasks({'indexUid': ['movies']})
 get_all_tasks_filtering_2: |-
   client.get_tasks({
-    'status': ['succeeded', 'failed'],
-    'type': ['documentAdditionOrUpdate']
+    'statuses': ['succeeded', 'failed'],
+    'types': ['documentAdditionOrUpdate']
   })
 get_all_tasks_paginating_1: |-
   client.get_tasks({
