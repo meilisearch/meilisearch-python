@@ -29,6 +29,7 @@ class Config:
         dumps = "dumps"
         pagination = "pagination"
         faceting = "faceting"
+        swap = "swap-indexes"
 
     def __init__(self, url: str, api_key: str | None = None, timeout: int | None = None) -> None:
         """
