@@ -3,42 +3,6 @@
 # the documentation on build
 # You can read more on https://github.com/meilisearch/documentation/tree/master/.vuepress/code-samples
 ---
-async_guide_filter_by_date_1: |-
-  with filter: { afterEnqueuedAt=2020-10-11T11:49:53.000Z }
-
-async_guide_multiple_filters_1: |-
-  with filter: { indexUids: movies, types: ["documentAdditionOrUpdate","documentDeletion"], statuses: ["processing"] }
-
-async_guide_filter_by_ids_1: |-
-  with filter: { uids: [5, 10, 13] }
-
-async_guide_filter_by_statuses_1: |-
-  with filter: { statuses: ["failed", "canceled"] }
-
-async_guide_filter_by_types_1: |-
-  with filter: { types: ["dumpCreation", "indexSwap"] }
-
-async_guide_filter_by_index_uids_1: |-
-  with filter: { indexUids: ["movies"] }
-
-delete_tasks_1: |-
-  with filter: { uids: [1, 2] }
-
-cancel_tasks_1: |-
-  with filter: { uids: [1,2] }
-
-async_guide_canceled_by: |-
-  with filter: { canceledBy: [9] }
-
-swap_indexes_1: |-
-  with data: { indexes: [ "indexA", "indexB"], indexes: [ "indexX", "indexY" ] }
-
-search_parameter_guide_hitsperpage_1: |-
-  with queryparams: { "q": "", "hitsPerPage": 15 }
-
-search_parameter_guide_page_1: |-
-  with queryparams: { "q": "", "page": 2 }
-
 get_one_index_1: |-
   client.get_index('movies')
 list_all_indexes_1: |-
@@ -51,6 +15,8 @@ delete_an_index_1: |-
   client.delete_index('movies')
   // OR
   client.index('movies').delete()
+swap_indexes_1: |-
+  client.swap_indexes([{'indexes': ['indexA', 'indexB']}, {'indexes': ['indexX', 'indexY']}])
 get_one_document_1: |-
   client.index('movies').get_document(25684, {
     'fields': ['id', 'title', 'poster', 'release_date']
@@ -83,6 +49,10 @@ get_all_tasks_1: |-
   client.get_tasks()
 get_task_1: |-
   client.get_task(1)
+delete_tasks_1: |-
+  client.delete_tasks({'uids': [1, 2]})
+cancel_tasks_1: |-
+  client.cancel_tasks({'uids': [1, 2]})
 get_one_key_1: |-
   client.get_key('6062abda-a5aa-4414-ac91-ecd7944c0f8d')
 get_all_keys_1: |-
@@ -336,6 +306,10 @@ search_parameter_guide_show_matches_position_1: |-
   client.index('movies').search('winter feast', {
     'showMatchesPosition': True
   })
+search_parameter_guide_hitsperpage_1: |-
+  client.index('movies').search("", {"hitsPerPage": 15})
+search_parameter_guide_page_1: |-
+  client.index('movies').search("", {"page": 2})
 settings_guide_synonyms_1: |-
   client.index('tops').update_settings({
     'synonyms': {
@@ -653,15 +627,6 @@ tenant_token_guide_generate_sdk_1: |-
 tenant_token_guide_search_sdk_1: |-
   front_end_client = Client('http://localhost:7700', token)
   front_end_client.index('patient_medical_records').search('blood test')
->>>>>>>>>>> REMOVE_ME get_all_tasks_filtering_1: |-
-  client.index.('movies').get_tasks()
-  // OR
-  client.get_tasks({'indexUid': ['movies']})
->>>>>>>>>>> REMOVE_ME get_all_tasks_filtering_2: |-
-  client.get_tasks({
-    'status': ['succeeded', 'failed'],
-    'type': ['documentAdditionOrUpdate']
-  })
 get_all_tasks_paginating_1: |-
   client.get_tasks({
     'limit': 2,
@@ -700,3 +665,23 @@ settings_guide_pagination_1: |-
       'maxTotalHits': 50
     }
   })
+async_guide_filter_by_date_1: |-
+  client.get_tasks({'afterEnqueuedAt': '2020-10-11T11:49:53.000Z'})
+async_guide_multiple_filters_1: |-
+  client.get_tasks(
+    {
+        'indexUids': 'movies',
+        'types': ['documentAdditionOrUpdate', 'documentDeletion'],
+        'statuses': ['processing'],
+    }
+  )
+async_guide_filter_by_ids_1: |-
+  client.get_tasks({'uids': ['5', '10', '13']})
+async_guide_filter_by_statuses_1: |-
+  client.get_tasks({'statuses': ['failed', 'canceled']})
+async_guide_filter_by_types_1: |-
+  client.get_tasks({'types': ['dumpCreation', 'indexSwap']})
+async_guide_filter_by_index_uids_1: |-
+  client.get_tasks({'indexUids': 'movies'})
+async_guide_canceled_by: |-
+  client.get_tasks({'canceledBy': [9]})
