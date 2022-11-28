@@ -29,6 +29,15 @@ def clear_indexes(client):
         client.wait_for_task(task["taskUid"])
 
 
+@fixture(autouse=True)
+def clear_all_tasks(client):
+    """
+    Auto-clears the tasks after each test function run.
+    Makes all the test functions independent.
+    """
+    client.delete_tasks({"statuses": ["succeeded", "failed", "canceled"]})
+
+
 @fixture(scope="function")
 def indexes_sample(client):
     indexes = []
