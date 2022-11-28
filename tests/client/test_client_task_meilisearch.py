@@ -161,7 +161,7 @@ def test_delete_all_tasks(client):
     assert task.task_uid is not None
     assert task.index_uid is None
     assert task.type == "taskDeletion"
-    assert len(tasks_after["results"]) == 1
+    assert len(tasks_after["results"]) >= 1
     assert len(tasks_before["results"]) == len(tasks_after["results"])
     assert (
         "statuses=succeeded%2Cfailed%2Ccanceled"
