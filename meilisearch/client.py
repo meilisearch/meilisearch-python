@@ -13,7 +13,8 @@ from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
 from meilisearch.errors import MeiliSearchError
 from meilisearch.index import Index
-from meilisearch.task import get_task, get_tasks, wait_for_task
+from meilisearch.models.task import TaskInfo
+from meilisearch.task import cancel_tasks, delete_tasks, get_task, get_tasks, wait_for_task
 
 
 class Client:
@@ -399,6 +400,27 @@ class Client:
         """
         return self.http.post(self.config.paths.dumps)
 
+    def swap_indexes(self, parameters: list[dict[str, list[str]]]) -> TaskInfo:
+        """Swap two indexes.
+
+        Parameters
+        ----------
+        indexes:
+            List of indexes to swap (ex: [{"indexes": ["indexA", "indexB"]}).
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return TaskInfo(**self.http.post(self.config.paths.swap, parameters))
+
     def get_tasks(
         self, parameters: dict[str, Any] | None = None
     ) -> dict[str, list[dict[str, Any]]]:
@@ -407,8 +429,7 @@ class Client:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the get tasks route: https://docs.meilisearch.com/reference/api/tasks.html#get-all-tasks.
-            `indexUid` should be set as a List.
+            parameters accepted by the get tasks route: https://docs.meilisearch.com/reference/api/tasks.html#get-tasks.
 
         Returns
         -------
@@ -441,6 +462,46 @@ class Client:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return get_task(self.config, uid)
+
+    def cancel_tasks(self, parameters: dict[str, Any]) -> TaskInfo:
+        """Cancel a list of enqueued or processing tasks.
+
+        Parameters
+        ----------
+        parameters (optional):
+            parameters accepted by the cancel tasks route:https://docs.meilisearch.com/reference/api/tasks.html#cancel-tasks.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return cancel_tasks(self.config, parameters=parameters)
+
+    def delete_tasks(self, parameters: dict[str, Any]) -> TaskInfo:
+        """Delete a list of finished tasks.
+
+        Parameters
+        ----------
+        parameters (optional):
+            parameters accepted by the delete tasks route:https://docs.meilisearch.com/reference/api/tasks.html#delete-task.
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+        Raises
+        ------
+        MeiliSearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return delete_tasks(self.config, parameters=parameters)
 
     def wait_for_task(
         self,

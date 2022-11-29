@@ -6,6 +6,8 @@ def test_basic_search(index_with_documents):
     response = index_with_documents().search("How to Train Your Dragon")
     assert isinstance(response, dict)
     assert response["hits"][0]["id"] == "166428"
+    assert response["estimatedTotalHits"] is not None
+    assert "hitsPerPage" is not response
 
 
 def test_basic_search_with_empty_params(index_with_documents):
@@ -413,3 +415,29 @@ def test_custom_search_params_with_matching_strategy_last(index_with_documents):
 
     assert isinstance(response, dict)
     assert len(response["hits"]) > 1
+
+
+def test_custom_search_params_with_pagination_parameters(index_with_documents):
+    """Tests search with matching strategy param set to last"""
+    response = index_with_documents().search("", {"hitsPerPage": 1, "page": 1})
+
+    assert isinstance(response, dict)
+    assert len(response["hits"]) == 1
+    assert response["hitsPerPage"] == 1
+    assert response["page"] == 1
+    assert response["totalPages"] is not None
+    assert response["totalHits"] is not None
+    assert "estimatedTotalHits" is not response
+
+
+def test_custom_search_params_with_pagination_parameters_at_zero(index_with_documents):
+    """Tests search with matching strategy param set to last"""
+    response = index_with_documents().search("", {"hitsPerPage": 0, "page": 0})
+
+    assert isinstance(response, dict)
+    assert len(response["hits"]) == 0
+    assert response["hitsPerPage"] == 0
+    assert response["page"] == 0
+    assert response["totalPages"] is not None
+    assert response["totalHits"] is not None
+    assert "estimatedTotalHits" is not response
