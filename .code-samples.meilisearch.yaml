@@ -683,5 +683,5 @@ async_guide_filter_by_types_1: |-
   client.get_tasks({'types': ['dumpCreation', 'indexSwap']})
 async_guide_filter_by_index_uids_1: |-
   client.get_tasks({'indexUids': 'movies'})
-async_guide_canceled_by: |-
-  client.get_tasks({'canceledBy': [9]})
+async_guide_canceled_by_1: |-
+  client.get_tasks({'canceledBy': [9, 15]})
