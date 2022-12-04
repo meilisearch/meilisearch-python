@@ -25,7 +25,7 @@ jobs:
       - name: Install pipenv
         uses: dschep/install-pipenv-action@v1
       - name: Install dependencies
-        run: pipenv install --dev
+        run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: Get the latest Meilisearch RC
         run: echo "MEILISEARCH_VERSION=$(curl https://raw.githubusercontent.com/meilisearch/integration-guides/main/scripts/get-latest-meilisearch-rc.sh | bash)" >> $GITHUB_ENV
       - name: Meilisearch (${{ env.MEILISEARCH_VERSION }}) setup with Docker
