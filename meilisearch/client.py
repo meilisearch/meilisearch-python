@@ -6,7 +6,7 @@ import hashlib
 import hmac
 import json
 import re
-from typing import Any
+from typing import Any, Dict, List, Optional, Union
 from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
@@ -25,7 +25,9 @@ class Client:
     Meilisearch and its permissions.
     """
 
-    def __init__(self, url: str, api_key: str | None = None, timeout: int | None = None) -> None:
+    def __init__(
+        self, url: str, api_key: Optional[str] = None, timeout: Optional[int] = None
+    ) -> None:
         """
         Parameters
         ----------
@@ -38,7 +40,7 @@ class Client:
 
         self.http = HttpRequests(self.config)
 
-    def create_index(self, uid: str, options: dict[str, Any] | None = None) -> dict[str, Any]:
+    def create_index(self, uid: str, options: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Create an index.
 
         Parameters
@@ -61,7 +63,7 @@ class Client:
         """
         return Index.create(self.config, uid, options)
 
-    def delete_index(self, uid: str) -> dict[str, Any]:
+    def delete_index(self, uid: str) -> Dict[str, Any]:
         """Deletes an index
 
         Parameters
@@ -83,7 +85,7 @@ class Client:
 
         return self.http.delete(f"{self.config.paths.index}/{uid}")
 
-    def get_indexes(self, parameters: dict[str, Any] | None = None) -> dict[str, list[Index]]:
+    def get_indexes(self, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, List[Index]]:
         """Get all indexes.
 
         Parameters
@@ -116,7 +118,7 @@ class Client:
         ]
         return response
 
-    def get_raw_indexes(self, parameters: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+    def get_raw_indexes(self, parameters: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
         """Get all indexes in dictionary format.
 
         Parameters
@@ -159,7 +161,7 @@ class Client:
         """
         return Index(self.config, uid).fetch_info()
 
-    def get_raw_index(self, uid: str) -> dict[str, Any]:
+    def get_raw_index(self, uid: str) -> Dict[str, Any]:
         """Get the index as a dictionary.
         This index should already exist.
 
@@ -198,7 +200,7 @@ class Client:
             return Index(self.config, uid=uid)
         raise Exception("The index UID should not be None")
 
-    def get_all_stats(self) -> dict[str, Any]:
+    def get_all_stats(self) -> Dict[str, Any]:
         """Get all stats of Meilisearch
 
         Get information about database size and all indexes
@@ -216,7 +218,7 @@ class Client:
         """
         return self.http.get(self.config.paths.stat)
 
-    def health(self) -> dict[str, str]:
+    def health(self) -> Dict[str, str]:
         """Get health of the Meilisearch server.
 
         Returns
@@ -239,7 +241,7 @@ class Client:
             return False
         return True
 
-    def get_key(self, key_or_uid: str) -> dict[str, Any]:
+    def get_key(self, key_or_uid: str) -> Dict[str, Any]:
         """Gets information about a specific API key.
 
         Parameters
@@ -260,7 +262,7 @@ class Client:
         """
         return self.http.get(f"{self.config.paths.keys}/{key_or_uid}")
 
-    def get_keys(self, parameters: dict[str, Any] | None = None) -> dict[str, Any]:
+    def get_keys(self, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Gets the Meilisearch API keys.
 
         Parameters
@@ -283,7 +285,7 @@ class Client:
             parameters = {}
         return self.http.get(f"{self.config.paths.keys}?{parse.urlencode(parameters)}")
 
-    def create_key(self, options: dict[str, Any]) -> dict[str, Any]:
+    def create_key(self, options: Dict[str, Any]) -> Dict[str, Any]:
         """Creates a new API key.
 
         Parameters
@@ -308,7 +310,7 @@ class Client:
         """
         return self.http.post(f"{self.config.paths.keys}", options)
 
-    def update_key(self, key_or_uid: str, options: dict[str, Any]) -> dict[str, Any]:
+    def update_key(self, key_or_uid: str, options: Dict[str, Any]) -> Dict[str, Any]:
         """Update an API key.
 
         Parameters
@@ -333,7 +335,7 @@ class Client:
         url = f"{self.config.paths.keys}/{key_or_uid}"
         return self.http.patch(url, options)
 
-    def delete_key(self, key_or_uid: str) -> dict[str, int]:
+    def delete_key(self, key_or_uid: str) -> Dict[str, int]:
         """Deletes an API key.
 
         Parameters
@@ -354,7 +356,7 @@ class Client:
         """
         return self.http.delete(f"{self.config.paths.keys}/{key_or_uid}")
 
-    def get_version(self) -> dict[str, str]:
+    def get_version(self) -> Dict[str, str]:
         """Get version Meilisearch
 
         Returns
@@ -369,7 +371,7 @@ class Client:
         """
         return self.http.get(self.config.paths.version)
 
-    def version(self) -> dict[str, str]:
+    def version(self) -> Dict[str, str]:
         """Alias for get_version
 
         Returns
@@ -384,7 +386,7 @@ class Client:
         """
         return self.get_version()
 
-    def create_dump(self) -> dict[str, str]:
+    def create_dump(self) -> Dict[str, str]:
         """Trigger the creation of a Meilisearch dump.
 
         Returns
@@ -400,7 +402,7 @@ class Client:
         """
         return self.http.post(self.config.paths.dumps)
 
-    def swap_indexes(self, parameters: list[dict[str, list[str]]]) -> TaskInfo:
+    def swap_indexes(self, parameters: List[Dict[str, List[str]]]) -> TaskInfo:
         """Swap two indexes.
 
         Parameters
@@ -422,8 +424,8 @@ class Client:
         return TaskInfo(**self.http.post(self.config.paths.swap, parameters))
 
     def get_tasks(
-        self, parameters: dict[str, Any] | None = None
-    ) -> dict[str, list[dict[str, Any]]]:
+        self, parameters: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, List[Dict[str, Any]]]:
         """Get all tasks.
 
         Parameters
@@ -443,7 +445,7 @@ class Client:
         """
         return get_tasks(self.config, parameters=parameters)
 
-    def get_task(self, uid: int) -> dict[str, Any]:
+    def get_task(self, uid: int) -> Dict[str, Any]:
         """Get one task.
 
         Parameters
@@ -463,7 +465,7 @@ class Client:
         """
         return get_task(self.config, uid)
 
-    def cancel_tasks(self, parameters: dict[str, Any]) -> TaskInfo:
+    def cancel_tasks(self, parameters: Dict[str, Any]) -> TaskInfo:
         """Cancel a list of enqueued or processing tasks.
 
         Parameters
@@ -484,7 +486,7 @@ class Client:
         """
         return cancel_tasks(self.config, parameters=parameters)
 
-    def delete_tasks(self, parameters: dict[str, Any]) -> TaskInfo:
+    def delete_tasks(self, parameters: Dict[str, Any]) -> TaskInfo:
         """Delete a list of finished tasks.
 
         Parameters
@@ -508,7 +510,7 @@ class Client:
         uid: int,
         timeout_in_ms: int = 5000,
         interval_in_ms: int = 50,
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """Wait until Meilisearch processes a task until it fails or succeeds.
 
         Parameters
@@ -535,10 +537,10 @@ class Client:
     def generate_tenant_token(
         self,
         api_key_uid: str,
-        search_rules: dict[str, Any] | list[str],
+        search_rules: Union[Dict[str, Any], List[str]],
         *,
-        expires_at: datetime.datetime | None = None,
-        api_key: str | None = None,
+        expires_at: Optional[datetime.datetime] = None,
+        api_key: Optional[str] = None,
     ) -> str:
         """Generate a JWT token for the use of multitenancy.
 

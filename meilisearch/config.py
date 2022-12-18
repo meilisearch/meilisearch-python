@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Optional
+
 
 class Config:
     """
@@ -31,7 +33,9 @@ class Config:
         faceting = "faceting"
         swap = "swap-indexes"
 
-    def __init__(self, url: str, api_key: str | None = None, timeout: int | None = None) -> None:
+    def __init__(
+        self, url: str, api_key: Optional[str] = None, timeout: Optional[int] = None
+    ) -> None:
         """
         Parameters
         ----------
