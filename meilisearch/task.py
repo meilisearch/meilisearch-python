@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from time import sleep
-from typing import Any
+from typing import Any, Dict, List, Optional
 from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
@@ -12,8 +12,8 @@ from meilisearch.models.task import TaskInfo
 
 
 def get_tasks(
-    config: Config, parameters: dict[str, Any] | None = None
-) -> dict[str, list[dict[str, Any]]]:
+    config: Config, parameters: Optional[Dict[str, Any]] = None
+) -> Dict[str, List[Dict[str, Any]]]:
     """Get all tasks.
 
     Parameters
@@ -42,7 +42,7 @@ def get_tasks(
     return http.get(f"{config.paths.task}?{parse.urlencode(parameters)}")
 
 
-def get_task(config: Config, uid: int) -> dict[str, Any]:
+def get_task(config: Config, uid: int) -> Dict[str, Any]:
     """Get one task.
 
     Parameters
@@ -68,7 +68,7 @@ def get_task(config: Config, uid: int) -> dict[str, Any]:
     return http.get(f"{config.paths.task}/{uid}")
 
 
-def cancel_tasks(config: Config, parameters: dict[str, Any]) -> TaskInfo:
+def cancel_tasks(config: Config, parameters: Dict[str, Any]) -> TaskInfo:
     """Cancel a list of enqueued or processing tasks.
 
     Parameters
@@ -99,7 +99,7 @@ def cancel_tasks(config: Config, parameters: dict[str, Any]) -> TaskInfo:
     return TaskInfo(**response)
 
 
-def delete_tasks(config: Config, parameters: dict[str, Any] | None = None) -> TaskInfo:
+def delete_tasks(config: Config, parameters: Optional[Dict[str, Any]] = None) -> TaskInfo:
     """Delete a list of enqueued or processing tasks.
     Parameters
     ----------
@@ -132,7 +132,7 @@ def wait_for_task(
     uid: int,
     timeout_in_ms: int = 5000,
     interval_in_ms: int = 50,
-) -> dict[str, Any]:
+) -> Dict[str, Any]:
     """Wait until the task fails or succeeds in Meilisearch.
 
     Parameters
