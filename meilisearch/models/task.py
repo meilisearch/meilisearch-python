@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Union
+from typing import Any, Dict, List, Union
 
 from camel_converter.pydantic_base import CamelBase
 
@@ -29,7 +29,7 @@ class TaskInfo(CamelBase):
 
 class TaskResults:
     def __init__(self, resp: Dict[str, Any]) -> None:
-        self.results: list[Task] = [Task(**task) for task in resp["results"]]
+        self.results: List[Task] = [Task(**task) for task in resp["results"]]
         self.limit: int = resp["limit"]
         self.from_: int = resp["from"]
         self.next_: int = resp["next"]
