@@ -511,11 +511,7 @@ class Index:
         response = self.http.post(url, str_documents, content_type)
         return TaskInfo(**response)
 
-    def 
-    
-    
-    
-    e_documents(
+    def update_documents(
         self, documents: List[Dict[str, Any]], primary_key: Optional[str] = None
     ) -> TaskInfo:
         """Update documents in the index.
