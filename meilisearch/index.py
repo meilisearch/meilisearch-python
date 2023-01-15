@@ -617,7 +617,7 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.update_documents_raw(str_documents, primary_key, "application/csv")
+        return self.update_documents_raw(str_documents, primary_key, "text/csv")
 
     def update_documents_raw(
         self,
