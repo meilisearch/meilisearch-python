@@ -197,10 +197,10 @@ def test_add_documents_csv(empty_index, songs_csv):
     assert index.get_primary_key() == "id"
 
 
-def test_update_documents_csv(index_with_documents, small_movies_json_file):
+def test_update_documents_csv(index_with_documents, songs_csv):
     """Tests updating a single document with csv string."""
     index = index_with_documents()
-    response = index.update_documents_csv(small_movies_json_file)
+    response = index.update_documents_csv(songs_csv)
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     task = index.wait_for_task(response.task_uid)
