@@ -14,10 +14,10 @@ class Task(CamelBase):
     details: Dict[str, Any]
     error: Union[Dict[str, Any], None]
     canceled_by: Union[int, None]
-    duration: Union[datetime, str]
-    enqueued_at: Union[datetime, str]
-    started_at: Union[datetime, str]
-    finished_at: Union[datetime, str]
+    duration: Optional[str]
+    enqueued_at: datetime
+    started_at: Optional[datetime]
+    finished_at: Optional[datetime]
 
 
 class TaskInfo(CamelBase):
