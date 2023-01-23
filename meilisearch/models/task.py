@@ -25,7 +25,7 @@ class TaskInfo(CamelBase):
     index_uid: Union[str, None]
     status: str
     type: str
-    enqueued_at: Union[datetime, str]
+    enqueued_at: datetime
 
 
 class TaskResults:
