@@ -14,7 +14,7 @@ from meilisearch.config import Config
 from meilisearch.errors import MeiliSearchError
 from meilisearch.index import Index
 from meilisearch.models.task import TaskInfo
-from meilisearch.task import cancel_tasks, delete_tasks, get_task, get_tasks, wait_for_task
+from meilisearch.task import TaskHandler
 
 
 class Client:
@@ -39,6 +39,8 @@ class Client:
         self.config = Config(url, api_key, timeout=timeout)
 
         self.http = HttpRequests(self.config)
+
+        self.task_handler = TaskHandler(self.config)
 
     def create_index(self, uid: str, options: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Create an index.
@@ -443,7 +445,7 @@ class Client:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return get_tasks(self.config, parameters=parameters)
+        return self.task_handler.get_tasks(parameters=parameters)
 
     def get_task(self, uid: int) -> Dict[str, Any]:
         """Get one task.
@@ -463,7 +465,7 @@ class Client:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return get_task(self.config, uid)
+        return self.task_handler.get_task(uid)
 
     def cancel_tasks(self, parameters: Dict[str, Any]) -> TaskInfo:
         """Cancel a list of enqueued or processing tasks.
@@ -484,7 +486,7 @@ class Client:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return cancel_tasks(self.config, parameters=parameters)
+        return self.task_handler.cancel_tasks(parameters=parameters)
 
     def delete_tasks(self, parameters: Dict[str, Any]) -> TaskInfo:
         """Delete a list of finished tasks.
@@ -503,7 +505,7 @@ class Client:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return delete_tasks(self.config, parameters=parameters)
+        return self.task_handler.delete_tasks(parameters=parameters)
 
     def wait_for_task(
         self,
@@ -532,7 +534,7 @@ class Client:
         MeiliSearchTimeoutError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return wait_for_task(self.config, uid, timeout_in_ms, interval_in_ms)
+        return self.task_handler.wait_for_task(uid, timeout_in_ms, interval_in_ms)
 
     def generate_tenant_token(
         self,
