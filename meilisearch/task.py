@@ -16,7 +16,9 @@ class TaskHandler:
         self.config = config
         self.http = HttpRequests(config)
 
-    def get_tasks(self, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, List[Dict[str, Any]]]:
+    def get_tasks(
+        self, parameters: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, List[Dict[str, Any]]]:
         """Get all tasks.
 
         Parameters
@@ -88,7 +90,6 @@ class TaskHandler:
         response = self.http.post(f"{self.config.paths.task}/cancel?{parse.urlencode(parameters)}")
         return TaskInfo(**response)
 
-
     def delete_tasks(self, parameters: Optional[Dict[str, Any]] = None) -> TaskInfo:
         """Delete a list of enqueued or processing tasks.
         Parameters
@@ -114,7 +115,6 @@ class TaskHandler:
                 parameters[param] = ",".join(parameters[param])
         response = self.http.delete(f"{self.config.paths.task}?{parse.urlencode(parameters)}")
         return TaskInfo(**response)
-
 
     def wait_for_task(
         self,
