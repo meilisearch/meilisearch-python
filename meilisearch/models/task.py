@@ -10,7 +10,7 @@ class Task(CamelBase):
     index_uid: Union[str, None]
     status: str
     type: str
-    details: Dict[str, Any]
+    details: Union[Dict[str, Any], None]
     error: Union[Dict[str, Any], None]
     canceled_by: Union[int, None]
     duration: str
