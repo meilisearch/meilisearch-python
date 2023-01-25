@@ -12,6 +12,20 @@ from meilisearch.models.task import TaskInfo
 
 
 class TaskHandler:
+    """
+    This class handles all tasks related operations for Meilisearch.
+
+
+    Parameters
+    ----------
+        config: Config object containing permission and location of Meilisearch.
+
+    Attributes
+    ----------
+        config (Config): Config object containing permission and location of Meilisearch.
+        http (HttpRequests): HttpRequests object to handle communication with the Meilisearch API.
+    """
+
     def __init__(self, config: Config):
         self.config = config
         self.http = HttpRequests(config)
