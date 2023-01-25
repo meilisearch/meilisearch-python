@@ -77,7 +77,7 @@ class TaskHandler:
         """
         return self.http.get(f"{self.config.paths.task}/{uid}")
 
-    def cancel_tasks(self, parameters: Dict[str, Any]) -> TaskInfo:
+    def cancel_tasks(self, parameters: Optional[Dict[str, Any]] = None) -> TaskInfo:
         """Cancel a list of enqueued or processing tasks.
 
         Parameters
