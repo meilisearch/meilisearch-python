@@ -3,35 +3,6 @@
 # the documentation on build
 # You can read more on https://github.com/meilisearch/documentation/tree/master/.vuepress/code-samples
 ---
-getting_started_faceting: |-
-  client.index("movies").updateFaceting({ maxValuesPerFacet: 2 })
-getting_started_pagination: |-
-  client.index("movies").updatePagination({ maxTotalHits: 500 })
-synonyms_guide_1: |-
-  client.index('movies').updateSynonyms({
-    "great": ["fantastic"],
-    "fantastic": ["great"]
-  })
-date_guide_index_1: |-
-  const games = require('./games.json')
-  client.index('games').addDocuments(games).then((res) => console.log(res))
-date_guide_filterable_attributes_1: |-
-  client.index('games').updateFilterableAttributes({
-    filterableAttributes: ['release_timestamp'] 
-  })
-date_guide_filter_1: |-
-  client.index('games').search('', {
-    filter: 'release_timestamp >= 1514761200 AND release_timestamp < 1672527600'
-  })
-date_guide_sortable_attributes_1: |-
-  client.index('games').updateSortableAttributes({
-    sortableAttributes: ['release_timestamp'] 
-  })
-date_guide_sort_1: |-
-  client.index('games').search('', {
-    sort: ['release_timestamp:desc'],
-  })
-
 get_one_index_1: |-
   client.get_index('movies')
 list_all_indexes_1: |-
@@ -535,6 +506,10 @@ getting_started_configure_settings: |-
 getting_started_communicating_with_a_protected_instance: |-
   client = Client('http://localhost:7700', 'apiKey')
   client.index('movies').search()
+getting_started_faceting: |-
+  client.index('movies').update_faceting_settings({'maxValuesPerFacet': 2})
+getting_started_pagination: |-
+  client.index('movies').update_pagination_settings({'maxTotalHits': 500})
 faceted_search_update_settings_1: |-
   client.index('movies').update_filterable_attributes([
       'director',
@@ -694,6 +669,11 @@ settings_guide_pagination_1: |-
       'maxTotalHits': 50
     }
   })
+synonyms_guide_1: |-
+  client.index('movies').update_synonyms({
+    'great': ['fantastic'],
+    'fantastic': ['great']
+  })
 async_guide_filter_by_date_1: |-
   client.get_tasks({'afterEnqueuedAt': '2020-10-11T11:49:53.000Z'})
 async_guide_multiple_filters_1: |-
@@ -714,3 +694,21 @@ async_guide_filter_by_index_uids_1: |-
   client.get_tasks({'indexUids': ['movies']})
 async_guide_canceled_by_1: |-
   client.get_tasks({'canceledBy': ['9', '15']})
+date_guide_index_1: |-
+  import json
+
+  json_file = open('./games.json')
+  games = json.load(json_file)
+  client.index('games').add_documents(games)
+date_guide_filterable_attributes_1: |-
+  client.index('games').update_filterable_attributes(['release_timestamp'])
+date_guide_filter_1: |-
+  client.index('games').search('', {
+    'filter': 'release_timestamp >= 1514761200 AND release_timestamp < 1672527600'
+  })
+date_guide_sortable_attributes_1: |-
+  client.index('games').update_sortable_attributes(['release_timestamp'])
+date_guide_sort_1: |-
+  client.index('games').search('', {
+    'sort': ['release_timestamp:desc']
+  })
