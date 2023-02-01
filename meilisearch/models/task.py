@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Any, Dict, List, Union
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Union
 
 from camel_converter.pydantic_base import CamelBase
 
@@ -10,13 +11,13 @@ class Task(CamelBase):
     index_uid: Union[str, None]
     status: str
     type: str
-    details: Dict[str, Any]
+    details: Union[Dict[str, Any], None]
     error: Union[Dict[str, Any], None]
     canceled_by: Union[int, None]
-    duration: str
-    enqueued_at: str
-    started_at: str
-    finished_at: str
+    duration: Optional[str]
+    enqueued_at: datetime
+    started_at: Optional[datetime]
+    finished_at: Optional[datetime]
 
 
 class TaskInfo(CamelBase):
@@ -24,7 +25,7 @@ class TaskInfo(CamelBase):
     index_uid: Union[str, None]
     status: str
     type: str
-    enqueued_at: str
+    enqueued_at: datetime
 
 
 class TaskResults:
