@@ -17,19 +17,13 @@ class TaskHandler:
     
     The task class gives access to all task routes and gives information about the progress of asynchronous operations.
     https://docs.meilisearch.com/reference/api/tasks.html
-
-
-    Parameters
-    ----------
-        config: Config object containing permission and location of Meilisearch.
-
-    Attributes
-    ----------
-        config (Config): Config object containing permission and location of Meilisearch.
-        http (HttpRequests): HttpRequests object to handle communication with the Meilisearch API.
     """
 
     def __init__(self, config: Config):
+        """Parameters
+        ----------
+            config: Config object containing permission and location of Meilisearch.
+        """
         self.config = config
         self.http = HttpRequests(config)
 
