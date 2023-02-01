@@ -14,7 +14,7 @@ from meilisearch.models.task import TaskInfo
 class TaskHandler:
     """
     A class covering the Meilisearch Task API
-    
+
     The task class gives access to all task routes and gives information about the progress of asynchronous operations.
     https://docs.meilisearch.com/reference/api/tasks.html
     """
