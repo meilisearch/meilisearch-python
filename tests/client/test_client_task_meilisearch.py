@@ -151,7 +151,7 @@ def test_delete_tasks_by_uid(client, empty_index, small_movies):
     assert f"uids={task_addition.task_uid}" in task["details"]["originalFilter"]
 
 
-def test_delete_all_tasks(client):
+def test_delete_tasks_by_filter(client):
     tasks_before = client.get_tasks()
     task = client.delete_tasks({"statuses": ["succeeded", "failed", "canceled"]})
     client.wait_for_task(task.task_uid)
@@ -167,3 +167,5 @@ def test_delete_all_tasks(client):
         "statuses=succeeded%2Cfailed%2Ccanceled"
         in tasks_after["results"][0]["details"]["originalFilter"]
     )
+    assert len(tasks_after["results"]) >= 1
+    assert len(tasks_before["results"]) == len(tasks_after["results"])
