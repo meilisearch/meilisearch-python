@@ -315,7 +315,7 @@ class Client:
 
         Parameters
         ----------
-        key:
+        key_or_uid:
             The key or the uid of the key for which to update the information.
         options:
             The information to use in creating the key (ex: { 'description': 'Search Key', 'expiresAt': '22-01-01' }). Note that if an
