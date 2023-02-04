@@ -198,7 +198,7 @@ class Client:
         """
         if uid is not None:
             return Index(self.config, uid=uid)
-        raise Exception("The index UID should not be None")
+        raise ValueError("The index UID should not be None")
 
     def get_all_stats(self) -> Dict[str, Any]:
         """Get all stats of Meilisearch
@@ -566,15 +566,15 @@ class Client:
         """
         # Validate all fields
         if api_key == "" or api_key is None and self.config.api_key is None:
-            raise Exception(
+            raise ValueError(
                 "An api key is required in the client or should be passed as an argument."
             )
         if api_key_uid == "" or api_key_uid is None or self._valid_uuid(api_key_uid) is False:
-            raise Exception("An uid is required and must comply to the uuid4 format.")
+            raise ValueError("An uid is required and must comply to the uuid4 format.")
         if not search_rules or search_rules == [""]:
-            raise Exception("The search_rules field is mandatory and should be defined.")
+            raise ValueError("The search_rules field is mandatory and should be defined.")
         if expires_at and expires_at < datetime.datetime.utcnow():
-            raise Exception("The date expires_at should be in the future.")
+            raise ValueError("The date expires_at should be in the future.")
 
         # Standard JWT header for encryption with SHA256/HS256 algorithm
         header = {"typ": "JWT", "alg": "HS256"}
