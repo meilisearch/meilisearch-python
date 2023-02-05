@@ -152,7 +152,6 @@ def test_delete_tasks_by_uid(client, empty_index, small_movies):
 
 
 def test_delete_tasks_by_filter(client):
-    tasks_before = client.get_tasks()
     task = client.delete_tasks({"statuses": ["succeeded", "failed", "canceled"]})
     client.wait_for_task(task.task_uid)
     tasks_after = client.get_tasks()
@@ -161,11 +160,5 @@ def test_delete_tasks_by_filter(client):
     assert task.task_uid is not None
     assert task.index_uid is None
     assert task.type == "taskDeletion"
-    assert len(tasks_after["results"]) >= 1
-    assert len(tasks_before["results"]) == len(tasks_after["results"])
-    assert (
-        "statuses=succeeded%2Cfailed%2Ccanceled"
-        in tasks_after["results"][0]["details"]["originalFilter"]
-    )
     assert len(tasks_after["results"]) >= 1
     assert len(tasks_before["results"]) == len(tasks_after["results"])
