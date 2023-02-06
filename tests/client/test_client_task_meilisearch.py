@@ -98,7 +98,7 @@ def test_get_task_inexistent(client):
 def create_tasks(empty_index, small_movies):
     """Ensures there are some tasks present for testing."""
     index = empty_index()
-    index.update_ranking_rules(["type", "exactness"])
+    index.update_ranking_rules(["typo", "exactness"])
     index.reset_ranking_rules()
     index.add_documents(small_movies)
     index.add_documents(small_movies)
