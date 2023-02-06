@@ -161,4 +161,7 @@ def test_delete_tasks_by_filter(client):
     assert task.index_uid is None
     assert task.type == "taskDeletion"
     assert len(tasks_after["results"]) >= 1
-    assert len(tasks_before["results"]) == len(tasks_after["results"])
+    assert (
+        "statuses=succeeded%2Cfailed%2Ccanceled"
+        in tasks_after["results"][0]["details"]["originalFilter"]
+    )
