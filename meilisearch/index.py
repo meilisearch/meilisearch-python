@@ -1316,6 +1316,7 @@ class Index:
 
         Returns
         -------
+        settings:
             The typo tolerance settings of the index.
 
         Raises
@@ -1376,7 +1377,7 @@ class Index:
         Returns
         -------
         settings:
-             The pagination settings of the index.
+            The pagination settings of the index.
 
         Raises
         ------
@@ -1436,8 +1437,8 @@ class Index:
 
         Returns
         -------
-        settings: dict
-            Dictionary containing the faceting settings of the index.
+        settings:
+            The faceting settings of the index.
 
         Raises
         ------

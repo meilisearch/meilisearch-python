@@ -13,7 +13,7 @@ from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
 from meilisearch.errors import MeiliSearchError
 from meilisearch.index import Index
-from meilisearch.models.client import Key, KeySearch, KeyUpdate
+from meilisearch.models.key import Key, KeysResults, KeyUpdate
 from meilisearch.models.task import TaskInfo
 from meilisearch.task import cancel_tasks, delete_tasks, get_task, get_tasks, wait_for_task
 
@@ -267,7 +267,7 @@ class Client:
 
         return Key(**key)
 
-    def get_keys(self, parameters: Optional[Dict[str, Any]] = None) -> KeySearch:
+    def get_keys(self, parameters: Optional[Dict[str, Any]] = None) -> KeysResults:
         """Gets the Meilisearch API keys.
 
         Parameters
@@ -290,7 +290,7 @@ class Client:
             parameters = {}
         keys = self.http.get(f"{self.config.paths.keys}?{parse.urlencode(parameters)}")
 
-        return KeySearch(**keys)
+        return KeysResults(**keys)
 
     def create_key(self, options: Dict[str, Any]) -> Key:
         """Creates a new API key.
