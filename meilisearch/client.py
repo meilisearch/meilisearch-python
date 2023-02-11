@@ -13,7 +13,7 @@ from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
 from meilisearch.errors import MeiliSearchError
 from meilisearch.index import Index
-from meilisearch.models.key import Key, KeysResults, KeyUpdate
+from meilisearch.models.key import Key, KeysResults
 from meilisearch.models.task import TaskInfo
 from meilisearch.task import cancel_tasks, delete_tasks, get_task, get_tasks, wait_for_task
 
@@ -319,7 +319,7 @@ class Client:
 
         return Key(**task)
 
-    def update_key(self, key_or_uid: str, options: Dict[str, Any]) -> KeyUpdate:
+    def update_key(self, key_or_uid: str, options: Dict[str, Any]) -> Key:
         """Update an API key.
 
         Parameters
@@ -344,7 +344,7 @@ class Client:
         url = f"{self.config.paths.keys}/{key_or_uid}"
         key = self.http.patch(url, options)
 
-        return KeyUpdate(**key)
+        return Key(**key)
 
     def delete_key(self, key_or_uid: str) -> int:
         """Deletes an API key.
