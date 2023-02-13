@@ -23,24 +23,22 @@ def test_get_typo_tolerance_default(empty_index):
     """Tests getting default typo_tolerance."""
     response = empty_index().get_typo_tolerance()
 
-    assert isinstance(response, dict)
-    assert response == DEFAULT_TYPO_TOLERANCE
+    assert response.dict(by_alias=True) == DEFAULT_TYPO_TOLERANCE
 
 
 def test_update_typo_tolerance(empty_index):
     """Tests updating typo_tolerance."""
     index = empty_index()
     response_update = index.update_typo_tolerance(NEW_TYPO_TOLERANCE)
-    update = index.wait_for_task(response_update["taskUid"])
+    update = index.wait_for_task(response_update.task_uid)
     response_get = index.get_typo_tolerance()
 
-    assert isinstance(response_update, dict)
-    assert "taskUid" in response_update
     assert update.status == "succeeded"
-    assert isinstance(response_get, dict)
     for typo_tolerance in NEW_TYPO_TOLERANCE:  # pylint: disable=consider-using-dict-items
-        assert typo_tolerance in response_get
-        assert NEW_TYPO_TOLERANCE[typo_tolerance] == response_get[typo_tolerance]
+        assert typo_tolerance in response_get.dict(by_alias=True)
+        assert (
+            NEW_TYPO_TOLERANCE[typo_tolerance] == response_get.dict(by_alias=True)[typo_tolerance]
+        )
 
 
 def test_reset_typo_tolerance(empty_index):
@@ -49,21 +47,19 @@ def test_reset_typo_tolerance(empty_index):
 
     # Update the settings
     response_update = index.update_typo_tolerance(NEW_TYPO_TOLERANCE)
-    update1 = index.wait_for_task(response_update["taskUid"])
+    update1 = index.wait_for_task(response_update.task_uid)
     # Get the setting after update
     response_get = index.get_typo_tolerance()
     # Reset the setting
     response_reset = index.reset_typo_tolerance()
-    update2 = index.wait_for_task(response_reset["taskUid"])
+    update2 = index.wait_for_task(response_reset.task_uid)
     # Get the setting after reset
     response_last = index.get_typo_tolerance()
 
     assert update1.status == "succeeded"
-    assert isinstance(response_get, dict)
     for typo_tolerance in NEW_TYPO_TOLERANCE:  # pylint: disable=consider-using-dict-items
-        assert typo_tolerance in response_get
-        assert NEW_TYPO_TOLERANCE[typo_tolerance] == response_get[typo_tolerance]
-    assert isinstance(response_reset, dict)
-    assert "taskUid" in response_reset
+        assert (
+            NEW_TYPO_TOLERANCE[typo_tolerance] == response_get.dict(by_alias=True)[typo_tolerance]
+        )
     assert update2.status == "succeeded"
-    assert response_last == DEFAULT_TYPO_TOLERANCE
+    assert response_last.dict(by_alias=True) == DEFAULT_TYPO_TOLERANCE

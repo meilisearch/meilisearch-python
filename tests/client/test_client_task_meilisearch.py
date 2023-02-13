@@ -73,8 +73,8 @@ def test_get_tasks_with_index_uid(client, empty_index):
 def test_get_task(client):
     """Tests getting the tasks list of an empty index."""
     response = client.create_index(uid=common.INDEX_UID)
-    client.wait_for_task(response["taskUid"])
-    task = client.get_task(response["taskUid"])
+    client.wait_for_task(response.task_uid)
+    task = client.get_task(response.task_uid)
     assert isinstance(task, dict)
     assert len(task) == 11
     assert "uid" in task

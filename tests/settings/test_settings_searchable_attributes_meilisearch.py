@@ -7,7 +7,6 @@ def test_get_searchable_attributes(empty_index, small_movies):
     """Tests getting the searchable attributes on an empty and populated index."""
     index = empty_index()
     response = index.get_searchable_attributes()
-    assert isinstance(response, list)
     assert response == ["*"]
     response = index.add_documents(small_movies, primary_key="id")
     index.wait_for_task(response.task_uid)
@@ -19,9 +18,7 @@ def test_update_searchable_attributes(empty_index):
     """Tests updating the searchable attributes."""
     index = empty_index()
     response = index.update_searchable_attributes(NEW_SEARCHABLE_ATTRIBUTES)
-    assert isinstance(response, dict)
-    assert "taskUid" in response
-    index.wait_for_task(response["taskUid"])
+    index.wait_for_task(response.task_uid)
     response = index.get_searchable_attributes()
     assert len(response) == len(NEW_SEARCHABLE_ATTRIBUTES)
     for attribute in NEW_SEARCHABLE_ATTRIBUTES:
@@ -33,7 +30,7 @@ def test_update_searchable_attributes_to_none(empty_index):
     index = empty_index()
     # Update the settings first
     response = index.update_searchable_attributes(NEW_SEARCHABLE_ATTRIBUTES)
-    update = index.wait_for_task(response["taskUid"])
+    update = index.wait_for_task(response.task_uid)
     assert update.status == "succeeded"
     # Check the settings have been correctly updated
     response = index.get_searchable_attributes()
@@ -41,9 +38,7 @@ def test_update_searchable_attributes_to_none(empty_index):
         assert attribute in response
     # Launch test to update at null the setting
     response = index.update_searchable_attributes(None)
-    assert isinstance(response, dict)
-    assert "taskUid" in response
-    index.wait_for_task(response["taskUid"])
+    index.wait_for_task(response.task_uid)
     response = index.get_searchable_attributes()
     assert response == ["*"]
 
@@ -53,7 +48,7 @@ def test_reset_searchable_attributes(empty_index):
     index = empty_index()
     # Update the settings first
     response = index.update_searchable_attributes(NEW_SEARCHABLE_ATTRIBUTES)
-    update = index.wait_for_task(response["taskUid"])
+    update = index.wait_for_task(response.task_uid)
     assert update.status == "succeeded"
     # Check the settings have been correctly updated
     response = index.get_searchable_attributes()
@@ -62,8 +57,6 @@ def test_reset_searchable_attributes(empty_index):
         assert attribute in response
     # Check the reset of the settings
     response = index.reset_searchable_attributes()
-    assert isinstance(response, dict)
-    assert "taskUid" in response
-    index.wait_for_task(response["taskUid"])
+    index.wait_for_task(response.task_uid)
     response = index.get_searchable_attributes()
     assert response == ["*"]

@@ -5,27 +5,23 @@ NEW_MAX_VALUE_PER_FACET = {"maxValuesPerFacet": 200}
 def test_get_faceting_settings(empty_index):
     response = empty_index().get_faceting_settings()
 
-    assert isinstance(response, dict)
-    assert {"maxValuesPerFacet": DEFAULT_MAX_VALUE_PER_FACET} == response
+    assert DEFAULT_MAX_VALUE_PER_FACET == response.max_values_per_facet
 
 
 def test_update_faceting_settings(empty_index):
     index = empty_index()
     response = index.update_faceting_settings(NEW_MAX_VALUE_PER_FACET)
-    assert isinstance(response, dict)
-    assert "taskUid" in response
-
-    index.wait_for_task(response["taskUid"])
+    index.wait_for_task(response.task_uid)
     response = index.get_faceting_settings()
-    assert isinstance(response, dict)
-    assert NEW_MAX_VALUE_PER_FACET == response
+    assert NEW_MAX_VALUE_PER_FACET["maxValuesPerFacet"] == response.max_values_per_facet
 
 
 def test_delete_faceting_settings(empty_index):
     index = empty_index()
-    response = index.reset_faceting_settings()
+    response = index.update_faceting_settings(NEW_MAX_VALUE_PER_FACET)
+    index.wait_for_task(response.task_uid)
 
-    index.wait_for_task(response["taskUid"])
+    response = index.reset_faceting_settings()
+    index.wait_for_task(response.task_uid)
     response = index.get_faceting_settings()
-    assert isinstance(response, dict)
-    assert {"maxValuesPerFacet": DEFAULT_MAX_VALUE_PER_FACET} == response
+    assert DEFAULT_MAX_VALUE_PER_FACET == response.max_values_per_facet

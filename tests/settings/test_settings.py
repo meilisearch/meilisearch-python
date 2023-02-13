@@ -19,7 +19,6 @@ DEFAULT_TYPO_TOLERANCE = {
 def test_get_settings_default(empty_index):
     """Tests getting all settings by default."""
     response = empty_index().get_settings()
-    assert isinstance(response, dict)
     for rule in DEFAULT_RANKING_RULES:
         assert rule in response["rankingRules"]
     for typo in DEFAULT_TYPO_TOLERANCE:  # pylint: disable=consider-using-dict-items
@@ -36,9 +35,7 @@ def test_update_settings(empty_index):
     """Tests updating some settings."""
     index = empty_index()
     response = index.update_settings(NEW_SETTINGS)
-    assert isinstance(response, dict)
-    assert "taskUid" in response
-    update = index.wait_for_task(response["taskUid"])
+    update = index.wait_for_task(response.task_uid)
     assert update.status == "succeeded"
     response = index.get_settings()
     for rule in NEW_SETTINGS["rankingRules"]:
@@ -56,7 +53,7 @@ def test_reset_settings(empty_index):
     index = empty_index()
     # Update settings first
     response = index.update_settings(NEW_SETTINGS)
-    update = index.wait_for_task(response["taskUid"])
+    update = index.wait_for_task(response.task_uid)
     assert update.status == "succeeded"
     # Check the settings have been correctly updated
     response = index.get_settings()
@@ -70,9 +67,7 @@ def test_reset_settings(empty_index):
     assert response["synonyms"] == {}
     # Check the reset of the settings
     response = index.reset_settings()
-    assert isinstance(response, dict)
-    assert "taskUid" in response
-    update = index.wait_for_task(response["taskUid"])
+    update = index.wait_for_task(response.task_uid)
     assert update.status == "succeeded"
     response = index.get_settings()
     for rule in DEFAULT_RANKING_RULES:
