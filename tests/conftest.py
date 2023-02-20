@@ -26,7 +26,7 @@ def clear_indexes(client):
     indexes = client.get_indexes()
     for index in indexes["results"]:
         task = client.index(index.uid).delete()
-        client.wait_for_task(task["taskUid"])
+        client.wait_for_task(task.task_uid)
 
 
 @fixture(autouse=True)
@@ -43,7 +43,7 @@ def indexes_sample(client):
     indexes = []
     for index_args in common.INDEX_FIXTURE:
         task = client.create_index(**index_args)
-        client.wait_for_task(task["taskUid"])
+        client.wait_for_task(task.task_uid)
         indexes.append(client.get_index(index_args["uid"]))
     # Yields the indexes to the test to make them accessible.
     yield indexes
@@ -100,7 +100,7 @@ def empty_index(client, index_uid: Optional[str] = None):
 
     def index_maker(index_uid=index_uid):
         task = client.create_index(uid=index_uid)
-        client.wait_for_task(task["taskUid"])
+        client.wait_for_task(task.task_uid)
         return client.get_index(uid=index_uid)
 
     return index_maker
@@ -131,7 +131,7 @@ def test_key(client):
     yield key
 
     try:
-        client.delete_key(key["key"])
+        client.delete_key(key.key)
     except MeiliSearchApiError:
         pass
 
@@ -149,9 +149,9 @@ def test_key_info(client):
     yield key_info
 
     try:
-        keys = client.get_keys()["results"]
-        key = next(x for x in keys if x["description"] == key_info["description"])
-        client.delete_key(key["key"])
+        keys = client.get_keys().results
+        key = next(x for x in keys if x.description == key_info["description"])
+        client.delete_key(key.key)
     except MeiliSearchApiError:
         pass
     except StopIteration:
@@ -160,6 +160,6 @@ def test_key_info(client):
 
 @fixture(scope="function")
 def get_private_key(client):
-    keys = client.get_keys()["results"]
-    key = next(x for x in keys if "Default Search API" in x["name"])
+    keys = client.get_keys().results
+    key = next(x for x in keys if "Default Search API" in x.name)
     return key

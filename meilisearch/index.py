@@ -7,7 +7,7 @@ from urllib import parse
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
 from meilisearch.models.document import Document, DocumentsResults
-from meilisearch.models.index import IndexStats
+from meilisearch.models.index import Faceting, IndexStats, Pagination, TypoTolerance
 from meilisearch.models.task import Task, TaskInfo, TaskResults
 from meilisearch.task import TaskHandler
 
@@ -47,7 +47,7 @@ class Index:
         self.created_at = self._iso_to_date_time(created_at)
         self.updated_at = self._iso_to_date_time(updated_at)
 
-    def delete(self) -> Dict[str, Any]:
+    def delete(self) -> TaskInfo:
         """Delete the index.
 
         Returns
@@ -62,9 +62,11 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
 
-        return self.http.delete(f"{self.config.paths.index}/{self.uid}")
+        task = self.http.delete(f"{self.config.paths.index}/{self.uid}")
 
-    def update(self, primary_key: str) -> Dict[str, Any]:
+        return TaskInfo(**task)
+
+    def update(self, primary_key: str) -> TaskInfo:
         """Update the index primary-key.
 
         Parameters
@@ -84,7 +86,9 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         payload = {"primaryKey": primary_key}
-        return self.http.patch(f"{self.config.paths.index}/{self.uid}", payload)
+        task = self.http.patch(f"{self.config.paths.index}/{self.uid}", payload)
+
+        return TaskInfo(**task)
 
     def fetch_info(self) -> Index:
         """Fetch the info of the index.
@@ -111,9 +115,7 @@ class Index:
         return self.fetch_info().primary_key
 
     @staticmethod
-    def create(
-        config: Config, uid: str, options: Optional[Dict[str, Any]] = None
-    ) -> Dict[str, Any]:
+    def create(config: Config, uid: str, options: Optional[Dict[str, Any]] = None) -> TaskInfo:
         """Create the index.
 
         Parameters
@@ -137,7 +139,9 @@ class Index:
         if options is None:
             options = {}
         payload = {**options, "uid": uid}
-        return HttpRequests(config).post(config.paths.index, payload)
+        task = HttpRequests(config).post(config.paths.index, payload)
+
+        return TaskInfo(**task)
 
     def get_tasks(self, parameters: Optional[Dict[str, Any]] = None) -> TaskResults:
         """Get all tasks of a specific index from the last one.
@@ -777,7 +781,7 @@ class Index:
         """
         return self.http.get(f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}")
 
-    def update_settings(self, body: Dict[str, Any]) -> Dict[str, Any]:
+    def update_settings(self, body: Dict[str, Any]) -> TaskInfo:
         """Update settings of the index.
 
         https://docs.meilisearch.com/reference/api/settings.html#update-settings
@@ -800,11 +804,13 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.patch(
+        task = self.http.patch(
             f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}", body
         )
 
-    def reset_settings(self) -> Dict[str, Any]:
+        return TaskInfo(**task)
+
+    def reset_settings(self) -> TaskInfo:
         """Reset settings of the index to default values.
 
         https://docs.meilisearch.com/reference/api/settings.html#reset-settings
@@ -820,7 +826,9 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.delete(f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}")
+        task = self.http.delete(f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}")
+
+        return TaskInfo(**task)
 
     # RANKING RULES SUB-ROUTES
 
@@ -839,7 +847,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.ranking_rules))
 
-    def update_ranking_rules(self, body: List[str]) -> Dict[str, Any]:
+    def update_ranking_rules(self, body: List[str]) -> TaskInfo:
         """Update ranking rules of the index.
 
         Parameters
@@ -858,9 +866,11 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.put(self.__settings_url_for(self.config.paths.ranking_rules), body)
+        task = self.http.put(self.__settings_url_for(self.config.paths.ranking_rules), body)
 
-    def reset_ranking_rules(self) -> Dict[str, Any]:
+        return TaskInfo(**task)
+
+    def reset_ranking_rules(self) -> TaskInfo:
         """Reset ranking rules of the index to default values.
 
         Returns
@@ -874,9 +884,11 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.delete(
+        task = self.http.delete(
             self.__settings_url_for(self.config.paths.ranking_rules),
         )
+
+        return TaskInfo(**task)
 
     # DISTINCT ATTRIBUTE SUB-ROUTES
 
@@ -895,7 +907,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.distinct_attribute))
 
-    def update_distinct_attribute(self, body: Dict[str, Any]) -> Dict[str, Any]:
+    def update_distinct_attribute(self, body: Dict[str, Any]) -> TaskInfo:
         """Update distinct attribute of the index.
 
         Parameters
@@ -914,9 +926,11 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.put(self.__settings_url_for(self.config.paths.distinct_attribute), body)
+        task = self.http.put(self.__settings_url_for(self.config.paths.distinct_attribute), body)
 
-    def reset_distinct_attribute(self) -> Dict[str, Any]:
+        return TaskInfo(**task)
+
+    def reset_distinct_attribute(self) -> TaskInfo:
         """Reset distinct attribute of the index to default values.
 
         Returns
@@ -930,9 +944,11 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.delete(
+        task = self.http.delete(
             self.__settings_url_for(self.config.paths.distinct_attribute),
         )
+
+        return TaskInfo(**task)
 
     # SEARCHABLE ATTRIBUTES SUB-ROUTES
 
@@ -951,7 +967,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.searchable_attributes))
 
-    def update_searchable_attributes(self, body: List[str]) -> Dict[str, Any]:
+    def update_searchable_attributes(self, body: List[str]) -> TaskInfo:
         """Update searchable attributes of the index.
 
         Parameters
@@ -970,9 +986,11 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.put(self.__settings_url_for(self.config.paths.searchable_attributes), body)
+        task = self.http.put(self.__settings_url_for(self.config.paths.searchable_attributes), body)
 
-    def reset_searchable_attributes(self) -> Dict[str, Any]:
+        return TaskInfo(**task)
+
+    def reset_searchable_attributes(self) -> TaskInfo:
         """Reset searchable attributes of the index to default values.
 
         Returns
@@ -986,9 +1004,11 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.delete(
+        task = self.http.delete(
             self.__settings_url_for(self.config.paths.searchable_attributes),
         )
+
+        return TaskInfo(**task)
 
     # DISPLAYED ATTRIBUTES SUB-ROUTES
 
@@ -1007,7 +1027,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.displayed_attributes))
 
-    def update_displayed_attributes(self, body: List[str]) -> Dict[str, Any]:
+    def update_displayed_attributes(self, body: List[str]) -> TaskInfo:
         """Update displayed attributes of the index.
 
         Parameters
@@ -1026,9 +1046,11 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.put(self.__settings_url_for(self.config.paths.displayed_attributes), body)
+        task = self.http.put(self.__settings_url_for(self.config.paths.displayed_attributes), body)
 
-    def reset_displayed_attributes(self) -> Dict[str, Any]:
+        return TaskInfo(**task)
+
+    def reset_displayed_attributes(self) -> TaskInfo:
         """Reset displayed attributes of the index to default values.
 
         Returns
@@ -1042,9 +1064,11 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.delete(
+        task = self.http.delete(
             self.__settings_url_for(self.config.paths.displayed_attributes),
         )
+
+        return TaskInfo(**task)
 
     # STOP WORDS SUB-ROUTES
 
@@ -1063,7 +1087,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.stop_words))
 
-    def update_stop_words(self, body: List[str]) -> Dict[str, Any]:
+    def update_stop_words(self, body: List[str]) -> TaskInfo:
         """Update stop words of the index.
 
         Parameters
@@ -1082,9 +1106,11 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.put(self.__settings_url_for(self.config.paths.stop_words), body)
+        task = self.http.put(self.__settings_url_for(self.config.paths.stop_words), body)
 
-    def reset_stop_words(self) -> Dict[str, Any]:
+        return TaskInfo(**task)
+
+    def reset_stop_words(self) -> TaskInfo:
         """Reset stop words of the index to default values.
 
         Returns
@@ -1098,9 +1124,11 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.delete(
+        task = self.http.delete(
             self.__settings_url_for(self.config.paths.stop_words),
         )
+
+        return TaskInfo(**task)
 
     # SYNONYMS SUB-ROUTES
 
@@ -1119,7 +1147,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.synonyms))
 
-    def update_synonyms(self, body: Dict[str, List[str]]) -> Dict[str, Any]:
+    def update_synonyms(self, body: Dict[str, List[str]]) -> TaskInfo:
         """Update synonyms of the index.
 
         Parameters
@@ -1138,9 +1166,11 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.put(self.__settings_url_for(self.config.paths.synonyms), body)
+        task = self.http.put(self.__settings_url_for(self.config.paths.synonyms), body)
 
-    def reset_synonyms(self) -> Dict[str, Any]:
+        return TaskInfo(**task)
+
+    def reset_synonyms(self) -> TaskInfo:
         """Reset synonyms of the index to default values.
 
         Returns
@@ -1154,9 +1184,11 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.delete(
+        task = self.http.delete(
             self.__settings_url_for(self.config.paths.synonyms),
         )
+
+        return TaskInfo(**task)
 
     # FILTERABLE ATTRIBUTES SUB-ROUTES
 
@@ -1175,7 +1207,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.filterable_attributes))
 
-    def update_filterable_attributes(self, body: List[str]) -> Dict[str, Any]:
+    def update_filterable_attributes(self, body: List[str]) -> TaskInfo:
         """Update filterable attributes of the index.
 
         Parameters
@@ -1194,9 +1226,11 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.put(self.__settings_url_for(self.config.paths.filterable_attributes), body)
+        task = self.http.put(self.__settings_url_for(self.config.paths.filterable_attributes), body)
 
-    def reset_filterable_attributes(self) -> Dict[str, Any]:
+        return TaskInfo(**task)
+
+    def reset_filterable_attributes(self) -> TaskInfo:
         """Reset filterable attributes of the index to default values.
 
         Returns
@@ -1210,9 +1244,11 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.delete(
+        task = self.http.delete(
             self.__settings_url_for(self.config.paths.filterable_attributes),
         )
+
+        return TaskInfo(**task)
 
     # SORTABLE ATTRIBUTES SUB-ROUTES
 
@@ -1231,7 +1267,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.sortable_attributes))
 
-    def update_sortable_attributes(self, body: List[str]) -> Dict[str, Any]:
+    def update_sortable_attributes(self, body: List[str]) -> TaskInfo:
         """Update sortable attributes of the index.
 
         Parameters
@@ -1250,9 +1286,11 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.put(self.__settings_url_for(self.config.paths.sortable_attributes), body)
+        task = self.http.put(self.__settings_url_for(self.config.paths.sortable_attributes), body)
 
-    def reset_sortable_attributes(self) -> Dict[str, Any]:
+        return TaskInfo(**task)
+
+    def reset_sortable_attributes(self) -> TaskInfo:
         """Reset sortable attributes of the index to default values.
 
         Returns
@@ -1266,28 +1304,32 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.delete(
+        task = self.http.delete(
             self.__settings_url_for(self.config.paths.sortable_attributes),
         )
 
+        return TaskInfo(**task)
+
     # TYPO TOLERANCE SUB-ROUTES
 
-    def get_typo_tolerance(self) -> Dict[str, Any]:
+    def get_typo_tolerance(self) -> TypoTolerance:
         """Get typo tolerance of the index.
 
         Returns
         -------
-        settings: dict
-            Dictionary containing the typo tolerance of the index.
+        settings:
+            The typo tolerance settings of the index.
 
         Raises
         ------
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.get(self.__settings_url_for(self.config.paths.typo_tolerance))
+        typo_tolerance = self.http.get(self.__settings_url_for(self.config.paths.typo_tolerance))
 
-    def update_typo_tolerance(self, body: Dict[str, Any]) -> Dict[str, Any]:
+        return TypoTolerance(**typo_tolerance)
+
+    def update_typo_tolerance(self, body: Dict[str, Any]) -> TaskInfo:
         """Update typo tolerance of the index.
 
         Parameters
@@ -1306,9 +1348,11 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.patch(self.__settings_url_for(self.config.paths.typo_tolerance), body)
+        task = self.http.patch(self.__settings_url_for(self.config.paths.typo_tolerance), body)
 
-    def reset_typo_tolerance(self) -> Dict[str, Any]:
+        return TaskInfo(**task)
+
+    def reset_typo_tolerance(self) -> TaskInfo:
         """Reset typo tolerance of the index to default values.
 
         Returns
@@ -1322,26 +1366,30 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.delete(
+        task = self.http.delete(
             self.__settings_url_for(self.config.paths.typo_tolerance),
         )
 
-    def get_pagination_settings(self) -> Dict[str, Any]:
+        return TaskInfo(**task)
+
+    def get_pagination_settings(self) -> Pagination:
         """Get pagination settngs of the index.
 
         Returns
         -------
-        settings: dict
-            Dictionary containing the pagination settings of the index.
+        settings:
+            The pagination settings of the index.
 
         Raises
         ------
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.get(self.__settings_url_for(self.config.paths.pagination))
+        pagination = self.http.get(self.__settings_url_for(self.config.paths.pagination))
 
-    def update_pagination_settings(self, body: Dict[str, Any]) -> Dict[str, Any]:
+        return Pagination(**pagination)
+
+    def update_pagination_settings(self, body: Dict[str, Any]) -> TaskInfo:
         """Update the pagination settings of the index.
 
         Parameters
@@ -1361,11 +1409,13 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.patch(
+        task = self.http.patch(
             path=self.__settings_url_for(self.config.paths.pagination), body=body
         )
 
-    def reset_pagination_settings(self) -> Dict[str, Any]:
+        return TaskInfo(**task)
+
+    def reset_pagination_settings(self) -> TaskInfo:
         """Reset pagination settings of the index to default values.
 
         Returns
@@ -1379,15 +1429,17 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.delete(self.__settings_url_for(self.config.paths.pagination))
+        task = self.http.delete(self.__settings_url_for(self.config.paths.pagination))
 
-    def get_faceting_settings(self) -> Dict[str, Any]:
+        return TaskInfo(**task)
+
+    def get_faceting_settings(self) -> Faceting:
         """Get the faceting settings of an index.
 
         Returns
         -------
-        settings: dict
-            Dictionary containing the faceting settings of the index.
+        settings:
+            The faceting settings of the index.
 
         Raises
         ------
@@ -1395,9 +1447,11 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
 
-        return self.http.get(self.__settings_url_for(self.config.paths.faceting))
+        faceting = self.http.get(self.__settings_url_for(self.config.paths.faceting))
 
-    def update_faceting_settings(self, body: Dict[str, Any]) -> Dict[str, Any]:
+        return Faceting(**faceting)
+
+    def update_faceting_settings(self, body: Dict[str, Any]) -> TaskInfo:
         """Update the faceting settings of the index.
 
         Parameters
@@ -1417,9 +1471,11 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.patch(path=self.__settings_url_for(self.config.paths.faceting), body=body)
+        task = self.http.patch(path=self.__settings_url_for(self.config.paths.faceting), body=body)
 
-    def reset_faceting_settings(self) -> Dict[str, Any]:
+        return TaskInfo(**task)
+
+    def reset_faceting_settings(self) -> TaskInfo:
         """Reset faceting settings of the index to default values.
 
         Returns
@@ -1433,7 +1489,9 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.delete(self.__settings_url_for(self.config.paths.faceting))
+        task = self.http.delete(self.__settings_url_for(self.config.paths.faceting))
+
+        return TaskInfo(**task)
 
     @staticmethod
     def _batch(

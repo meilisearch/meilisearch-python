@@ -6,7 +6,6 @@ FILTERABLE_ATTRIBUTES = ["title", "release_date"]
 def test_get_filterable_attributes(empty_index):
     """Tests getting the filterable attributes."""
     response = empty_index().get_filterable_attributes()
-    assert isinstance(response, list)
     assert response == []
 
 
@@ -14,7 +13,7 @@ def test_update_filterable_attributes(empty_index):
     """Tests updating the filterable attributes."""
     index = empty_index()
     response = index.update_filterable_attributes(FILTERABLE_ATTRIBUTES)
-    index.wait_for_task(response["taskUid"])
+    index.wait_for_task(response.task_uid)
     get_attributes = index.get_filterable_attributes()
     assert len(get_attributes) == len(FILTERABLE_ATTRIBUTES)
     for attribute in FILTERABLE_ATTRIBUTES:
@@ -26,7 +25,7 @@ def test_update_filterable_attributes_to_none(empty_index):
     index = empty_index()
     # Update the settings first
     response = index.update_filterable_attributes(FILTERABLE_ATTRIBUTES)
-    update = index.wait_for_task(response["taskUid"])
+    update = index.wait_for_task(response.task_uid)
     assert update.status == "succeeded"
     # Check the settings have been correctly updated
     get_attributes = index.get_filterable_attributes()
@@ -34,7 +33,7 @@ def test_update_filterable_attributes_to_none(empty_index):
         assert attribute in get_attributes
     # Launch test to update at null the setting
     response = index.update_filterable_attributes(None)
-    index.wait_for_task(response["taskUid"])
+    index.wait_for_task(response.task_uid)
     response = index.get_filterable_attributes()
     assert response == []
 
@@ -44,7 +43,7 @@ def test_reset_filterable_attributes(empty_index):
     index = empty_index()
     # Update the settings first
     response = index.update_filterable_attributes(FILTERABLE_ATTRIBUTES)
-    update = index.wait_for_task(response["taskUid"])
+    update = index.wait_for_task(response.task_uid)
     assert update.status == "succeeded"
     # Check the settings have been correctly updated
     get_attributes = index.get_filterable_attributes()
@@ -53,9 +52,6 @@ def test_reset_filterable_attributes(empty_index):
         assert attribute in get_attributes
     # Check the reset of the settings
     response = index.reset_filterable_attributes()
-    assert isinstance(response, dict)
-    assert "taskUid" in response
-    index.wait_for_task(response["taskUid"])
+    index.wait_for_task(response.task_uid)
     response = index.get_filterable_attributes()
-    assert isinstance(response, list)
     assert response == []

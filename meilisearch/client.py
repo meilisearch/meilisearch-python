@@ -13,6 +13,7 @@ from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
 from meilisearch.errors import MeiliSearchError
 from meilisearch.index import Index
+from meilisearch.models.key import Key, KeysResults
 from meilisearch.models.task import TaskInfo
 from meilisearch.task import TaskHandler
 
@@ -42,7 +43,7 @@ class Client:
 
         self.task_handler = TaskHandler(self.config)
 
-    def create_index(self, uid: str, options: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def create_index(self, uid: str, options: Optional[Dict[str, Any]] = None) -> TaskInfo:
         """Create an index.
 
         Parameters
@@ -54,8 +55,8 @@ class Client:
 
         Returns
         -------
-        task:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
         Raises
@@ -65,7 +66,7 @@ class Client:
         """
         return Index.create(self.config, uid, options)
 
-    def delete_index(self, uid: str) -> Dict[str, Any]:
+    def delete_index(self, uid: str) -> TaskInfo:
         """Deletes an index
 
         Parameters
@@ -75,7 +76,7 @@ class Client:
 
         Returns
         -------
-        task:
+        task_info:
             Dictionary containing a task to track the informations about the progress of an asynchronous process.
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
 
@@ -85,7 +86,9 @@ class Client:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
 
-        return self.http.delete(f"{self.config.paths.index}/{uid}")
+        task = self.http.delete(f"{self.config.paths.index}/{uid}")
+
+        return TaskInfo(**task)
 
     def get_indexes(self, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, List[Index]]:
         """Get all indexes.
@@ -200,7 +203,7 @@ class Client:
         """
         if uid is not None:
             return Index(self.config, uid=uid)
-        raise Exception("The index UID should not be None")
+        raise ValueError("The index UID should not be None")
 
     def get_all_stats(self) -> Dict[str, Any]:
         """Get all stats of Meilisearch
@@ -243,7 +246,7 @@ class Client:
             return False
         return True
 
-    def get_key(self, key_or_uid: str) -> Dict[str, Any]:
+    def get_key(self, key_or_uid: str) -> Key:
         """Gets information about a specific API key.
 
         Parameters
@@ -262,9 +265,11 @@ class Client:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.get(f"{self.config.paths.keys}/{key_or_uid}")
+        key = self.http.get(f"{self.config.paths.keys}/{key_or_uid}")
 
-    def get_keys(self, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        return Key(**key)
+
+    def get_keys(self, parameters: Optional[Dict[str, Any]] = None) -> KeysResults:
         """Gets the Meilisearch API keys.
 
         Parameters
@@ -275,7 +280,7 @@ class Client:
         Returns
         -------
         keys:
-            Dictionary with limit, offset, total and results a list of dictionaries containing the key information.
+            API keys.
             https://docs.meilisearch.com/reference/api/keys.html#get-keys
 
         Raises
@@ -285,9 +290,11 @@ class Client:
         """
         if parameters is None:
             parameters = {}
-        return self.http.get(f"{self.config.paths.keys}?{parse.urlencode(parameters)}")
+        keys = self.http.get(f"{self.config.paths.keys}?{parse.urlencode(parameters)}")
 
-    def create_key(self, options: Dict[str, Any]) -> Dict[str, Any]:
+        return KeysResults(**keys)
+
+    def create_key(self, options: Dict[str, Any]) -> Key:
         """Creates a new API key.
 
         Parameters
@@ -301,7 +308,7 @@ class Client:
 
         Returns
         -------
-        keys:
+        key:
             The new API key.
             https://docs.meilisearch.com/reference/api/keys.html#get-keys
 
@@ -310,14 +317,16 @@ class Client:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.post(f"{self.config.paths.keys}", options)
+        task = self.http.post(f"{self.config.paths.keys}", options)
 
-    def update_key(self, key_or_uid: str, options: Dict[str, Any]) -> Dict[str, Any]:
+        return Key(**task)
+
+    def update_key(self, key_or_uid: str, options: Dict[str, Any]) -> Key:
         """Update an API key.
 
         Parameters
         ----------
-        key:
+        key_or_uid:
             The key or the uid of the key for which to update the information.
         options:
             The information to use in creating the key (ex: { 'description': 'Search Key', 'expiresAt': '22-01-01' }). Note that if an
@@ -335,9 +344,11 @@ class Client:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         url = f"{self.config.paths.keys}/{key_or_uid}"
-        return self.http.patch(url, options)
+        key = self.http.patch(url, options)
 
-    def delete_key(self, key_or_uid: str) -> Dict[str, int]:
+        return Key(**key)
+
+    def delete_key(self, key_or_uid: str) -> int:
         """Deletes an API key.
 
         Parameters
@@ -356,7 +367,9 @@ class Client:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.delete(f"{self.config.paths.keys}/{key_or_uid}")
+        response = self.http.delete(f"{self.config.paths.keys}/{key_or_uid}")
+
+        return response.status_code
 
     def get_version(self) -> Dict[str, str]:
         """Get version Meilisearch
@@ -388,7 +401,7 @@ class Client:
         """
         return self.get_version()
 
-    def create_dump(self) -> Dict[str, str]:
+    def create_dump(self) -> TaskInfo:
         """Trigger the creation of a Meilisearch dump.
 
         Returns
@@ -402,7 +415,9 @@ class Client:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.post(self.config.paths.dumps)
+        task = self.http.post(self.config.paths.dumps)
+
+        return TaskInfo(**task)
 
     def swap_indexes(self, parameters: List[Dict[str, List[str]]]) -> TaskInfo:
         """Swap two indexes.
@@ -568,15 +583,15 @@ class Client:
         """
         # Validate all fields
         if api_key == "" or api_key is None and self.config.api_key is None:
-            raise Exception(
+            raise ValueError(
                 "An api key is required in the client or should be passed as an argument."
             )
         if api_key_uid == "" or api_key_uid is None or self._valid_uuid(api_key_uid) is False:
-            raise Exception("An uid is required and must comply to the uuid4 format.")
+            raise ValueError("An uid is required and must comply to the uuid4 format.")
         if not search_rules or search_rules == [""]:
-            raise Exception("The search_rules field is mandatory and should be defined.")
+            raise ValueError("The search_rules field is mandatory and should be defined.")
         if expires_at and expires_at < datetime.datetime.utcnow():
-            raise Exception("The date expires_at should be in the future.")
+            raise ValueError("The date expires_at should be in the future.")
 
         # Standard JWT header for encryption with SHA256/HS256 algorithm
         header = {"typ": "JWT", "alg": "HS256"}

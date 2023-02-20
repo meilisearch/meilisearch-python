@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Iterator
+from typing import Any, Dict, Iterator, List, Optional
 
 from camel_converter import to_snake
+from camel_converter.pydantic_base import CamelBase
 
 
 class IndexStats:
@@ -24,3 +25,23 @@ class IndexStats:
 
     def __iter__(self) -> Iterator:
         return iter(self.__dict__.items())  # type: ignore
+
+
+class Faceting(CamelBase):
+    max_values_per_facet: int
+
+
+class Pagination(CamelBase):
+    max_total_hits: int
+
+
+class MinWordSizeForTypos(CamelBase):
+    one_typo: Optional[int] = None
+    two_typos: Optional[int] = None
+
+
+class TypoTolerance(CamelBase):
+    enabled: bool = True
+    disable_on_attributes: Optional[List[str]] = None
+    disable_on_words: Optional[List[str]] = None
+    min_word_size_for_typos: Optional[MinWordSizeForTypos] = None
