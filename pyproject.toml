@@ -1,5 +1,6 @@
 [build-system]
 requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "meilisearch"
@@ -32,6 +33,12 @@ dynamic = ['version']
 
 [tool.setuptools.dynamic]
 version = {attr = "meilisearch.version.__version__"}
+
+[tool.setuptools]
+packages=["meilisearch"]
+
+[tool.setuptools.package-data]
+meilisearch = ["py.typed"]
 
 [project.urls]
 Meilisearch_Documentation = "https://docs.meilisearch.com/"
