@@ -34,8 +34,9 @@ dynamic = ['version']
 [tool.setuptools.dynamic]
 version = {attr = "meilisearch.version.__version__"}
 
-[tool.setuptools]
-packages=["meilisearch"]
+[tool.setuptools.packages.find]
+include = ["meilisearch*"]
+exclude = ["docs*", "tests*"]
 
 [tool.setuptools.package-data]
 meilisearch = ["py.typed"]
