@@ -70,7 +70,7 @@ extend-exclude = '''
 [tool.isort]
 profile = "black"
 line_length = 100
-src_paths = ["meilisearch", "tests", "setup.py"]
+src_paths = ["meilisearch", "tests"]
 
 [tool.mypy]
 disallow_untyped_defs = true
