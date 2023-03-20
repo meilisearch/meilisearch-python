@@ -2,6 +2,7 @@ import pytest
 
 from meilisearch.errors import MeiliSearchApiError
 
+
 def test_basic_multi_search(client, empty_index):
     """Tests multi-search on two indexes."""
     empty_index("indexA")
