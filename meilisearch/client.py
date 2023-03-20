@@ -213,7 +213,7 @@ class Client:
         Parameters
         ----------
         queries:
-            Dictionary containing the query searched word(s) and the query parameters
+            List of dictionaries containing the query searched word(s) and the query parameters
             https://docs.meilisearch.com/reference/api/search.html#search-in-an-index
 
         Returns
