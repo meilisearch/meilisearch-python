@@ -207,7 +207,7 @@ class Client:
             return Index(self.config, uid=uid)
         raise ValueError("The index UID should not be None")
 
-    def multi_search(self, queries: Dict[str, Any]) -> Dict[str, Any]:
+    def multi_search(self, queries: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]:
         """Multi Search in the index.
 
         Parameters
