@@ -197,6 +197,16 @@ def test_add_documents_csv(empty_index, songs_csv):
     assert index.get_primary_key() == "id"
 
 
+def test_add_documents_csv_with_delimiter(empty_index, songs_csv_delimiter):
+    """Tests adding new documents to a clean index."""
+    index = empty_index("csv-delimiter")
+    response = index.add_documents_csv(songs_csv_delimiter, csv_delimiter=";")
+    assert isinstance(response, TaskInfo)
+    assert response.task_uid is not None
+    task = index.wait_for_task(response.task_uid)
+    assert task.status == "succeeded"
+
+
 def test_update_documents_csv(index_with_documents, songs_csv):
     """Tests updating a single document with csv string."""
     index = index_with_documents()
@@ -206,6 +216,16 @@ def test_update_documents_csv(index_with_documents, songs_csv):
     task = index.wait_for_task(response.task_uid)
     assert task.status == "succeeded"
     assert index.get_primary_key() == "id"
+
+
+def test_update_documents_csv_with_delimiter(index_with_documents, songs_csv_delimiter):
+    """Tests adding new documents to a clean index."""
+    index = index_with_documents("csv-delimiter")
+    response = index.update_documents_csv(songs_csv_delimiter, csv_delimiter=";")
+    assert isinstance(response, TaskInfo)
+    assert response.task_uid is not None
+    task = index.wait_for_task(response.task_uid)
+    assert task.status == "succeeded"
 
 
 def test_add_documents_json(empty_index, small_movies_json_file):

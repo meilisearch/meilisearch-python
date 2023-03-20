@@ -2,7 +2,7 @@
 
 
 def test_basic_search(index_with_documents):
-    """Tests search with an simple query."""
+    """Tests search with a simple query."""
     response = index_with_documents().search("How to Train Your Dragon")
     assert isinstance(response, dict)
     assert response["hits"][0]["id"] == "166428"
@@ -356,7 +356,7 @@ def test_phrase_search(index_with_documents):
 
 
 def test_basic_search_on_nested_documents(index_with_documents, nested_movies):
-    """Tests search with an simple query on nested fields."""
+    """Tests search with a simple query on nested fields."""
     response = index_with_documents("nested_fields_index", nested_movies).search("An awesome")
     assert isinstance(response, dict)
     assert response["hits"][0]["id"] == 5
