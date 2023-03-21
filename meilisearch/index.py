@@ -506,6 +506,7 @@ class Index:
             The type of document. Type available: 'csv', 'json', 'jsonl'.
         csv_delimiter:
             One ASCII character used to customize the delimiter for CSV.
+            Note: The csv delimiter can only be used with the Content-Type text/csv.
 
         Returns
         -------
@@ -518,7 +519,6 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-
         url = self._build_url(primary_key=primary_key, csv_delimiter=csv_delimiter)
         response = self.http.post(url, str_documents, content_type)
         return TaskInfo(**response)
@@ -653,6 +653,7 @@ class Index:
             The type of document. Type available: 'csv', 'json', 'jsonl'
         csv_delimiter:
             One ASCII character used to customize the delimiter for CSV.
+            Note: The csv delimiter can only be used with the Content-Type text/csv.
 
         Returns
         -------
