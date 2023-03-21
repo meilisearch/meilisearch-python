@@ -77,11 +77,11 @@ def songs_csv():
 
 
 @fixture(scope="session")
-def songs_csv_delimiter():
+def songs_csv_custom_separator():
     """
-    Runs once per session. Provides the content of songs_delimiter.csv from read..
+    Runs once per session. Provides the content of songs_custom_delimiter.csv from read..
     """
-    with open("./datasets/songs_delimiter.csv", encoding="utf-8") as song_csv_file:
+    with open("./datasets/songs_custom_delimiter.csv", encoding="utf-8") as song_csv_file:
         return song_csv_file.read().encode("utf-8")
 
 
