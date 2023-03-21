@@ -518,14 +518,8 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        parameters = {}
-        if primary_key:
-            parameters["primaryKey"] = primary_key
-        if csv_delimiter:
-            parameters["csvDelimiter"] = csv_delimiter
-        url = self._build_url()
-        if primary_key or csv_delimiter:
-            url = url + f"?{parse.urlencode(parameters)}"
+
+        url = self._build_url(primary_key=primary_key, csv_delimiter=csv_delimiter)
         response = self.http.post(url, str_documents, content_type)
         return TaskInfo(**response)
 
@@ -671,14 +665,7 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        parameters = {}
-        if primary_key:
-            parameters["primaryKey"] = primary_key
-        if csv_delimiter:
-            parameters["csvDelimiter"] = csv_delimiter
-        url = self._build_url()
-        if primary_key or csv_delimiter:
-            url = url + f"?{parse.urlencode(parameters)}"
+        url = self._build_url(primary_key=primary_key, csv_delimiter=csv_delimiter)
         response = self.http.put(url, str_documents, content_type)
         return TaskInfo(**response)
 
@@ -1556,8 +1543,13 @@ class Index:
     def _build_url(
         self,
         primary_key: Optional[str] = None,
+        csv_delimiter: Optional[str] = None,
     ) -> str:
-        if primary_key is None:
+        parameters = {}
+        if primary_key:
+            parameters["primaryKey"] = primary_key
+        if csv_delimiter:
+            parameters["csvDelimiter"] = csv_delimiter
+        if primary_key is None and csv_delimiter is None:
             return f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}"
-        primary_key = parse.urlencode({"primaryKey": primary_key})
-        return f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{primary_key}"
+        return f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{parse.urlencode(parameters)}"
