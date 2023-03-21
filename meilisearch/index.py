@@ -445,7 +445,7 @@ class Index:
         primary_key (optional):
             The primary-key used in index. Ignored if already set up.
         csv_delimiter:
-            One ASCII character used to customize the delimiter for CSV.
+            One ASCII character used to customize the delimiter for CSV. Comma used by default.
 
         Returns
         -------
