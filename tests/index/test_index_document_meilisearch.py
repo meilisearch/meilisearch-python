@@ -205,7 +205,7 @@ def test_add_documents_csv_with_delimiter(empty_index, songs_csv_custom_separato
     assert response.task_uid is not None
     task = index.wait_for_task(response.task_uid)
     assert task.status == "succeeded"
-    assert task.details["receivedDocuments"] == 53
+    assert task.details["receivedDocuments"] == 20
     documents = index.get_documents().results
     assert documents[1].country == "Europe"
     assert documents[4].artist == "Elton John"
@@ -230,7 +230,7 @@ def test_update_documents_csv_with_delimiter(index_with_documents, songs_csv_cus
     assert response.task_uid is not None
     task = index.wait_for_task(response.task_uid)
     assert task.status == "succeeded"
-    assert task.details["receivedDocuments"] == 53
+    assert task.details["receivedDocuments"] == 20
     document = index.get_document("813645611")
     assert document.country == "Europe"
     assert document.artist == "Elton John"

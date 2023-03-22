@@ -70,7 +70,7 @@ def small_movies_json_file():
 @fixture(scope="session")
 def songs_csv():
     """
-    Runs once per session. Provides the content of songs.csv from read..
+    Runs once per session. Provides the content of songs.csv from read.
     """
     with open("./datasets/songs.csv", encoding="utf-8") as song_csv_file:
         return song_csv_file.read().encode("utf-8")
@@ -79,7 +79,7 @@ def songs_csv():
 @fixture(scope="session")
 def songs_csv_custom_separator():
     """
-    Runs once per session. Provides the content of songs_custom_delimiter.csv from read..
+    Runs once per session. Provides the content of songs_custom_delimiter.csv from read.
     """
     with open("./datasets/songs_custom_delimiter.csv", encoding="utf-8") as song_csv_file:
         return song_csv_file.read().encode("utf-8")
@@ -88,7 +88,7 @@ def songs_csv_custom_separator():
 @fixture(scope="session")
 def songs_ndjson():
     """
-    Runs once per session. Provides the content of songs.ndjson from read..
+    Runs once per session. Provides the content of songs.ndjson from read.
     """
     with open("./datasets/songs.ndjson", encoding="utf-8") as song_ndjson_file:
         return song_ndjson_file.read().encode("utf-8")
