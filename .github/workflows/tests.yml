@@ -81,7 +81,7 @@ jobs:
       - name: Install dependencies
         run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: black
-        run: pipenv run black meilisearch tests setup.py --check
+        run: pipenv run black meilisearch tests --check
 
   isort:
     name: isort
@@ -97,4 +97,4 @@ jobs:
       - name: Install dependencies
         run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: isort
-        run: pipenv run isort meilisearch tests setup.py --check-only
+        run: pipenv run isort meilisearch tests --check-only
