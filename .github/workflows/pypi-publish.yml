@@ -21,11 +21,11 @@ jobs:
     - name: Install dependencies
       run: |
         pipenv install
-        pipenv run pip3 install setuptools wheel twine
+        pipenv run pip3 install build setuptools wheel twine
     - name: Build and publish
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: |
-        pipenv run python3 setup.py sdist bdist_wheel
+        pipenv run python3 -m build
         pipenv run twine upload dist/*
