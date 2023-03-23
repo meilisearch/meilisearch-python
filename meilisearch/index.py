@@ -434,6 +434,7 @@ class Index:
         self,
         str_documents: str,
         primary_key: Optional[str] = None,
+        csv_delimiter: Optional[str] = None,
     ) -> TaskInfo:
         """Add string documents from a CSV file to the index.
 
@@ -443,6 +444,8 @@ class Index:
             String of document from a CSV file.
         primary_key (optional):
             The primary-key used in index. Ignored if already set up.
+        csv_delimiter:
+            One ASCII character used to customize the delimiter for CSV. Comma used by default.
 
         Returns
         -------
@@ -455,7 +458,7 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.add_documents_raw(str_documents, primary_key, "text/csv")
+        return self.add_documents_raw(str_documents, primary_key, "text/csv", csv_delimiter)
 
     def add_documents_ndjson(
         self,
@@ -489,6 +492,7 @@ class Index:
         str_documents: str,
         primary_key: Optional[str] = None,
         content_type: Optional[str] = None,
+        csv_delimiter: Optional[str] = None,
     ) -> TaskInfo:
         """Add string documents to the index.
 
@@ -499,7 +503,10 @@ class Index:
         primary_key (optional):
             The primary-key used in index. Ignored if already set up.
         type:
-            The type of document. Type available: 'csv', 'json', 'jsonl'
+            The type of document. Type available: 'csv', 'json', 'jsonl'.
+        csv_delimiter:
+            One ASCII character used to customize the delimiter for CSV.
+            Note: The csv delimiter can only be used with the Content-Type text/csv.
 
         Returns
         -------
@@ -512,7 +519,7 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        url = self._build_url(primary_key)
+        url = self._build_url(primary_key=primary_key, csv_delimiter=csv_delimiter)
         response = self.http.post(url, str_documents, content_type)
         return TaskInfo(**response)
 
@@ -601,6 +608,7 @@ class Index:
         self,
         str_documents: str,
         primary_key: Optional[str] = None,
+        csv_delimiter: Optional[str] = None,
     ) -> TaskInfo:
         """Update documents as a csv string in the index.
 
@@ -609,7 +617,9 @@ class Index:
         str_documents:
             String of document from a CSV file.
         primary_key (optional):
-            The primary-key used in index. Ignored if already set up
+            The primary-key used in index. Ignored if already set up.
+        csv_delimiter:
+            One ASCII character used to customize the delimiter for CSV. Comma used by default.
 
         Returns
         -------
@@ -622,13 +632,14 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.update_documents_raw(str_documents, primary_key, "text/csv")
+        return self.update_documents_raw(str_documents, primary_key, "text/csv", csv_delimiter)
 
     def update_documents_raw(
         self,
         str_documents: str,
         primary_key: Optional[str] = None,
         content_type: Optional[str] = None,
+        csv_delimiter: Optional[str] = None,
     ) -> TaskInfo:
         """Update documents as a string in the index.
 
@@ -640,6 +651,9 @@ class Index:
             The primary-key used in index. Ignored if already set up.
         type:
             The type of document. Type available: 'csv', 'json', 'jsonl'
+        csv_delimiter:
+            One ASCII character used to customize the delimiter for CSV.
+            Note: The csv delimiter can only be used with the Content-Type text/csv.
 
         Returns
         -------
@@ -652,7 +666,7 @@ class Index:
         MeiliSearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        url = self._build_url(primary_key)
+        url = self._build_url(primary_key=primary_key, csv_delimiter=csv_delimiter)
         response = self.http.put(url, str_documents, content_type)
         return TaskInfo(**response)
 
@@ -1530,8 +1544,13 @@ class Index:
     def _build_url(
         self,
         primary_key: Optional[str] = None,
+        csv_delimiter: Optional[str] = None,
     ) -> str:
-        if primary_key is None:
+        parameters = {}
+        if primary_key:
+            parameters["primaryKey"] = primary_key
+        if csv_delimiter:
+            parameters["csvDelimiter"] = csv_delimiter
+        if primary_key is None and csv_delimiter is None:
             return f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}"
-        primary_key = parse.urlencode({"primaryKey": primary_key})
-        return f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{primary_key}"
+        return f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{parse.urlencode(parameters)}"
