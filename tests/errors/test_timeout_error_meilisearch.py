@@ -4,7 +4,7 @@ import pytest
 import requests
 
 import meilisearch
-from meilisearch.errors import MeiliSearchTimeoutError
+from meilisearch.errors import MeilisearchTimeoutError
 from tests import BASE_URL, MASTER_KEY
 
 
@@ -13,7 +13,7 @@ def test_client_timeout_error(mock_get):
     mock_get.side_effect = requests.exceptions.Timeout()
     client = meilisearch.Client(BASE_URL, MASTER_KEY, timeout=1)
 
-    with pytest.raises(MeiliSearchTimeoutError):
+    with pytest.raises(MeilisearchTimeoutError):
         client.version()
 
 

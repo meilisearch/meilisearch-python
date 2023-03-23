@@ -7,9 +7,9 @@ import requests
 
 from meilisearch.config import Config
 from meilisearch.errors import (
-    MeiliSearchApiError,
-    MeiliSearchCommunicationError,
-    MeiliSearchTimeoutError,
+    MeilisearchApiError,
+    MeilisearchCommunicationError,
+    MeilisearchTimeoutError,
 )
 from meilisearch.version import qualified_version
 
@@ -50,9 +50,9 @@ class HttpRequests:
             return self.__validate(request)
 
         except requests.exceptions.Timeout as err:
-            raise MeiliSearchTimeoutError(str(err)) from err
+            raise MeilisearchTimeoutError(str(err)) from err
         except requests.exceptions.ConnectionError as err:
-            raise MeiliSearchCommunicationError(str(err)) from err
+            raise MeilisearchCommunicationError(str(err)) from err
 
     def get(self, path: str) -> Any:
         return self.send_request(requests.get, path)
@@ -100,4 +100,4 @@ class HttpRequests:
             request.raise_for_status()
             return HttpRequests.__to_json(request)
         except requests.exceptions.HTTPError as err:
-            raise MeiliSearchApiError(str(err), request) from err
+            raise MeilisearchApiError(str(err), request) from err

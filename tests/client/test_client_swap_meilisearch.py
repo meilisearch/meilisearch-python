@@ -2,7 +2,7 @@
 
 import pytest
 
-from meilisearch.errors import MeiliSearchApiError
+from meilisearch.errors import MeilisearchApiError
 
 
 def test_swap_indexes(client, empty_index):
@@ -49,7 +49,7 @@ def test_swap_indexes_with_one_that_does_not_exist(client, empty_index):
 def test_swap_indexes_with_itself(client, empty_index):
     """Tests swap indexes with itself."""
     index = empty_index()
-    with pytest.raises(MeiliSearchApiError):
+    with pytest.raises(MeilisearchApiError):
         client.swap_indexes(
             [
                 {

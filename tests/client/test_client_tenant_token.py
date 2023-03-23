@@ -5,7 +5,7 @@ import datetime
 import pytest
 
 import meilisearch
-from meilisearch.errors import MeiliSearchApiError
+from meilisearch.errors import MeilisearchApiError
 from tests import BASE_URL
 
 
@@ -35,7 +35,7 @@ def test_generate_tenant_token_with_search_rules_on_one_index(get_private_key, e
     response = token_client.index("indexUID").search("")
     assert isinstance(response, dict)
     assert response["query"] == ""
-    with pytest.raises(MeiliSearchApiError):
+    with pytest.raises(MeilisearchApiError):
         response = token_client.index("tenant_token").search("")
 
 

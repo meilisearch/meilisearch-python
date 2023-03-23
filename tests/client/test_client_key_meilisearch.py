@@ -2,7 +2,7 @@ from datetime import datetime
 
 import pytest
 
-from meilisearch.errors import MeiliSearchApiError
+from meilisearch.errors import MeilisearchApiError
 from tests import common
 
 
@@ -83,7 +83,7 @@ def test_create_keys_with_wildcarded_actions(client, test_key_info):
 
 def test_create_keys_without_actions(client):
     """Tests the creation of a key with missing arguments."""
-    with pytest.raises(MeiliSearchApiError):
+    with pytest.raises(MeilisearchApiError):
         client.create_key(options={"indexes": [common.INDEX_UID]})
 
 
@@ -101,11 +101,11 @@ def test_delete_key(client, test_key):
     """Tests deleting a key."""
     resp = client.delete_key(test_key.key)
     assert resp == 204
-    with pytest.raises(MeiliSearchApiError):
+    with pytest.raises(MeilisearchApiError):
         client.get_key(test_key.key)
 
 
 def test_delete_key_inexisting(client):
     """Tests deleting a key that does not exists."""
-    with pytest.raises(MeiliSearchApiError):
+    with pytest.raises(MeilisearchApiError):
         client.delete_key("No existing key")
