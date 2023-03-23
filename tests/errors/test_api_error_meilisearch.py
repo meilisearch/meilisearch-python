@@ -6,19 +6,19 @@ import pytest
 import requests
 
 import meilisearch
-from meilisearch.errors import MeiliSearchApiError
+from meilisearch.errors import MeilisearchApiError
 from tests import BASE_URL, MASTER_KEY
 
 
 def test_meilisearch_api_error_no_master_key():
     client = meilisearch.Client(BASE_URL)
-    with pytest.raises(MeiliSearchApiError):
+    with pytest.raises(MeilisearchApiError):
         client.create_index("some_index")
 
 
 def test_meilisearch_api_error_wrong_master_key():
     client = meilisearch.Client(BASE_URL, MASTER_KEY + "123")
-    with pytest.raises(MeiliSearchApiError):
+    with pytest.raises(MeilisearchApiError):
         client.create_index("some_index")
 
 
@@ -30,6 +30,6 @@ def test_meilisearch_api_error_no_code(mock_post):
     mock_response.status_code = 408
     mock_post.return_value = mock_response
 
-    with pytest.raises(MeiliSearchApiError):
+    with pytest.raises(MeilisearchApiError):
         client = meilisearch.Client(BASE_URL, MASTER_KEY + "123")
         client.create_index("some_index")

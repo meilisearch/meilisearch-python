@@ -11,7 +11,7 @@ from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
-from meilisearch.errors import MeiliSearchError
+from meilisearch.errors import MeilisearchError
 from meilisearch.index import Index
 from meilisearch.models.key import Key, KeysResults
 from meilisearch.models.task import TaskInfo
@@ -61,7 +61,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return Index.create(self.config, uid, options)
@@ -82,7 +82,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
 
@@ -105,7 +105,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         if parameters is None:
@@ -138,7 +138,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         if parameters is None:
@@ -161,7 +161,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return Index(self.config, uid).fetch_info()
@@ -182,7 +182,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(f"{self.config.paths.index}/{uid}")
@@ -218,7 +218,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(self.config.paths.stat)
@@ -233,7 +233,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(self.config.paths.health)
@@ -242,7 +242,7 @@ class Client:
         """Get health of the Meilisearch server."""
         try:
             self.health()
-        except MeiliSearchError:
+        except MeilisearchError:
             return False
         return True
 
@@ -262,7 +262,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         key = self.http.get(f"{self.config.paths.keys}/{key_or_uid}")
@@ -285,7 +285,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         if parameters is None:
@@ -314,7 +314,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         task = self.http.post(f"{self.config.paths.keys}", options)
@@ -340,7 +340,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         url = f"{self.config.paths.keys}/{key_or_uid}"
@@ -364,7 +364,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         response = self.http.delete(f"{self.config.paths.keys}/{key_or_uid}")
@@ -381,7 +381,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(self.config.paths.version)
@@ -396,7 +396,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.get_version()
@@ -412,7 +412,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         task = self.http.post(self.config.paths.dumps)
@@ -435,7 +435,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return TaskInfo(**self.http.post(self.config.paths.swap, parameters))
@@ -457,7 +457,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.task_handler.get_tasks(parameters=parameters)
@@ -477,7 +477,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.task_handler.get_task(uid)
@@ -498,7 +498,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.task_handler.cancel_tasks(parameters=parameters)
@@ -517,7 +517,7 @@ class Client:
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.task_handler.delete_tasks(parameters=parameters)
@@ -535,7 +535,7 @@ class Client:
         uid:
             Identifier of the task to wait for being processed.
         timeout_in_ms (optional):
-            Time the method should wait before raising a MeiliSearchTimeoutError
+            Time the method should wait before raising a MeilisearchTimeoutError
         interval_in_ms (optional):
             Time interval the method should wait (sleep) between requests
 
@@ -546,7 +546,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchTimeoutError
+        MeilisearchTimeoutError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.task_handler.wait_for_task(uid, timeout_in_ms, interval_in_ms)

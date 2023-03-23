@@ -5,7 +5,7 @@ from datetime import datetime
 import pytest
 
 from meilisearch.client import Client
-from meilisearch.errors import MeiliSearchApiError
+from meilisearch.errors import MeilisearchApiError
 from meilisearch.index import Index
 from tests import BASE_URL, MASTER_KEY, common
 
@@ -208,7 +208,7 @@ def test_delete(client):
     assert client.get_index(uid=common.INDEX_UID)
     deleted = Client(BASE_URL, MASTER_KEY).index(common.INDEX_UID).delete()
     client.wait_for_task(deleted.task_uid)
-    with pytest.raises(MeiliSearchApiError):
+    with pytest.raises(MeilisearchApiError):
         client.get_index(uid=common.INDEX_UID)
 
 
@@ -217,5 +217,5 @@ def test_delete_index(client):
     assert client.get_index(uid=common.INDEX_UID)
     deleted = Client(BASE_URL, MASTER_KEY).delete_index(uid=common.INDEX_UID)
     client.wait_for_task(deleted.task_uid)
-    with pytest.raises(MeiliSearchApiError):
+    with pytest.raises(MeilisearchApiError):
         client.get_index(uid=common.INDEX_UID)
