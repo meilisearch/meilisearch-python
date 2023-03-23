@@ -213,13 +213,13 @@ class Client:
         Parameters
         ----------
         queries:
-            List of dictionaries containing the query searched word(s) and the query parameters
+            List of dictionaries containing the specified indexes and their search queries
             https://docs.meilisearch.com/reference/api/search.html#search-in-an-index
 
         Returns
         -------
         results:
-            Dictionary of results for each index with hits, offset, limit, processingTime and initial query
+            Dictionary of results for each index
 
         Raises
         ------
