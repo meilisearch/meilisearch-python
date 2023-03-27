@@ -223,7 +223,7 @@ class Client:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.post(

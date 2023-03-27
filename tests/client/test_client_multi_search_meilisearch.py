@@ -1,6 +1,6 @@
 import pytest
 
-from meilisearch.errors import MeiliSearchApiError
+from meilisearch.errors import MeilisearchApiError
 
 
 def test_basic_multi_search(client, empty_index):
@@ -30,5 +30,5 @@ def test_multi_search_one_index(client, empty_index):
 
 def test_multi_search_on_no_index(client):
     """Tests multi-search on a non existing index."""
-    with pytest.raises(MeiliSearchApiError):
+    with pytest.raises(MeilisearchApiError):
         client.multi_search([{"indexUid": "indexDoesNotExist", "q": ""}])
