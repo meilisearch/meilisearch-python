@@ -5,7 +5,7 @@ from typing import Optional
 from pytest import fixture
 
 import meilisearch
-from meilisearch.errors import MeiliSearchApiError
+from meilisearch.errors import MeilisearchApiError
 from tests import common
 
 
@@ -141,7 +141,7 @@ def test_key(client):
 
     try:
         client.delete_key(key.key)
-    except MeiliSearchApiError:
+    except MeilisearchApiError:
         pass
 
 
@@ -161,7 +161,7 @@ def test_key_info(client):
         keys = client.get_keys().results
         key = next(x for x in keys if x.description == key_info["description"])
         client.delete_key(key.key)
-    except MeiliSearchApiError:
+    except MeilisearchApiError:
         pass
     except StopIteration:
         pass

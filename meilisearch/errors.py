@@ -5,7 +5,7 @@ import json
 from requests import Response
 
 
-class MeiliSearchError(Exception):
+class MeilisearchError(Exception):
     """Generic class for Meilisearch error handling"""
 
     def __init__(self, message: str) -> None:
@@ -13,10 +13,10 @@ class MeiliSearchError(Exception):
         super().__init__(self.message)
 
     def __str__(self) -> str:
-        return f"MeiliSearchError. Error message: {self.message}"
+        return f"MeilisearchError. Error message: {self.message}"
 
 
-class MeiliSearchApiError(MeiliSearchError):
+class MeilisearchApiError(MeilisearchError):
     """Error sent by Meilisearch API"""
 
     def __init__(self, error: str, request: Response) -> None:
@@ -37,20 +37,20 @@ class MeiliSearchApiError(MeiliSearchError):
 
     def __str__(self) -> str:
         if self.code and self.link:
-            return f"MeiliSearchApiError. Error code: {self.code}. Error message: {self.message} Error documentation: {self.link} Error type: {self.type}"
+            return f"MeilisearchApiError. Error code: {self.code}. Error message: {self.message} Error documentation: {self.link} Error type: {self.type}"
 
-        return f"MeiliSearchApiError. {self.message}"
+        return f"MeilisearchApiError. {self.message}"
 
 
-class MeiliSearchCommunicationError(MeiliSearchError):
+class MeilisearchCommunicationError(MeilisearchError):
     """Error when connecting to Meilisearch"""
 
     def __str__(self) -> str:
-        return f"MeiliSearchCommunicationError, {self.message}"
+        return f"MeilisearchCommunicationError, {self.message}"
 
 
-class MeiliSearchTimeoutError(MeiliSearchError):
+class MeilisearchTimeoutError(MeilisearchError):
     """Error when Meilisearch operation takes longer than expected"""
 
     def __str__(self) -> str:
-        return f"MeiliSearchTimeoutError, {self.message}"
+        return f"MeilisearchTimeoutError, {self.message}"

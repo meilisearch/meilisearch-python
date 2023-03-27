@@ -4,7 +4,7 @@ from datetime import datetime
 
 import pytest
 
-from meilisearch.errors import MeiliSearchTimeoutError
+from meilisearch.errors import MeilisearchTimeoutError
 from meilisearch.models.task import Task
 
 
@@ -21,7 +21,7 @@ def test_wait_for_task_default(index_with_documents):
 
 def test_wait_for_task_timeout(index_with_documents):
     """Tests timeout risen by waiting for an update."""
-    with pytest.raises(MeiliSearchTimeoutError):
+    with pytest.raises(MeilisearchTimeoutError):
         index_with_documents().wait_for_task(2, timeout_in_ms=0)
 
 
