@@ -3,68 +3,6 @@
 # the documentation on build
 # You can read more on https://github.com/meilisearch/documentation/tree/master/.vuepress/code-samples
 ---
-multi_search_1: |-
-  see cURL: https://github.com/meilisearch/documentation/blob/5ec3df3844f603f0958d91a0c5cfc38bc57656af/.code-samples.meilisearch.yaml#L996-L1017
-  multi-search with data: { "queries": [
-      {
-        "indexUid": "movies",
-        "q": "pooh",
-        "limit": 5
-      },
-      {
-        "indexUid": "movies",
-        "q": "nemo",
-        "limit": 5
-      },
-      {
-        "indexUid": "movie_ratings",
-        "q": "us"
-      }
-    ]
-  }
-faceted_search_update_settings_1: |-
-  See cURL: https://github.com/meilisearch/documentation/blob/5ec3df3844f603f0958d91a0c5cfc38bc57656af/.code-samples.meilisearch.yaml#L1018-L1024
-  on the books index: Add "genres", "rating", "language" as filterable attributes
-faceted_search_1: |-
-  See cURL: https://github.com/meilisearch/documentation/blob/5ec3df3844f603f0958d91a0c5cfc38bc57656af/.code-samples.meilisearch.yaml#L1025-L1034
-  Search books index with data: {
-      "q": "classic",
-        "facets": [
-        "genres", "rating", "language"
-      ]
-    }
-search_parameter_guide_facet_stats_1: |-
-  See cURL: https://github.com/meilisearch/documentation/blob/5ec3df3844f603f0958d91a0c5cfc38bc57656af/.code-samples.meilisearch.yaml#L1035-L1042
-  search movie_ratings index with data: '{
-      "q": "Batman",
-      "facets": ["genres", "rating"]
-    }
-faceted_search_2: |-
-  see cURL: https://github.com/meilisearch/documentation/blob/5ec3df3844f603f0958d91a0c5cfc38bc57656af/.code-samples.meilisearch.yaml#L1043-L1065
-  multi-search with data: {
-      "queries": [
-        {
-          "indexUid": "books",
-          "facets": ["language", "genres", "author", "format"],
-          "filter": [["language = English", "language = French"], ["genres = Fiction"]]
-        },
-        {
-          "indexUid": "books",
-          "facets": ["language"],
-          "filter": [["genres = Fiction"]]
-        },
-        {
-          "indexUid": "books",
-          "facets": ["genres"],
-          "filter": [["language = English", "language = French"]]
-        }
-      ]
-    }
-geosearch_guide_filter_usage_3: |-
-  see cURL: https://github.com/meilisearch/documentation/blob/c8ab47d004753ce2241a756eff14ade448d70a93/.code-samples.meilisearch.yaml#L696-L700
-  Search on `restaurants` with data:
-    '{ "filter": "_geoBoundingBox([45.494181, 9.179175], [45.449484, 9.214024])" }'          
-
 get_one_index_1: |-
   client.get_index('movies')
 list_all_indexes_1: |-
@@ -107,6 +45,14 @@ delete_documents_1: |-
   client.index('movies').delete_documents([23488, 153738, 437035, 363869])
 search_post_1: |-
   client.index('movies').search('American ninja')
+multi_search_1: |-
+  client.multi_search(
+    [
+      {'indexUid': 'movies', 'q': 'pooh', 'limit': 5},
+      {'indexUid': 'movies', 'q': 'nemo', 'limit': 5},
+      {'indexUid': 'movie_ratings', 'q': 'us'}
+    ]
+  )
 get_all_tasks_1: |-
   client.get_tasks()
 get_task_1: |-
@@ -372,6 +318,14 @@ search_parameter_guide_hitsperpage_1: |-
   client.index('movies').search('', {'hitsPerPage': 15})
 search_parameter_guide_page_1: |-
   client.index('movies').search('', {'page': 2})
+search_parameter_guide_sort_1: |-
+  client.index('books').search('science fiction', {
+    'sort': ['price:asc']
+  })
+search_parameter_guide_facet_stats_1: |-
+  client.index('movie_ratings').search('Batman', {
+    'facets': ['genres', 'rating']
+  })
 settings_guide_synonyms_1: |-
   client.index('tops').update_settings({
     'synonyms': {
@@ -589,6 +543,36 @@ faceted_search_walkthrough_filter_1: |-
   client.index('movies').search('thriller', {
     'filter': [['genres = Horror', 'genres = Mystery'], 'director = "Jordan Peele"']
   })
+faceted_search_update_settings_1: |-
+  client.index('books').update_filterable_attributes([
+    'genres',
+    'director',
+    'language'
+  ])
+faceted_search_1: |-
+  client.index('books').search('classic', {
+    'facets': ['genres', 'rating', 'language']
+  })
+faceted_search_2: |-
+  client.multi_search(
+    [
+      {
+        'indexUid': 'books',
+        'facets': ['language', 'genres', 'author', 'format'],
+        'filter': [['language = English', 'language = French'], ['genres = Fiction']]
+      },
+      {
+        'indexUid': 'books',
+        'facets': ['language'],
+        'filter': [['genres = Fiction']]
+      },
+      {
+        'indexUid': 'books',
+        'facets': ['genres'],
+        'filter': [['language = English', 'language = French']]
+      },
+    ]
+  )
 post_dump_1: |-
   client.create_dump()
 phrase_search_1: |-
@@ -615,10 +599,6 @@ sorting_guide_sort_parameter_2: |-
   client.index('books').search('butler', {
     'sort': ['author:desc']
   })
-search_parameter_guide_sort_1: |-
-  client.index('books').search('science fiction', {
-    'sort': ['price:asc']
-  })
 geosearch_guide_filter_settings_1: |-
   client.index('restaurants').update_filterable_attributes([
     '_geo'
@@ -642,6 +622,10 @@ geosearch_guide_sort_usage_1: |-
 geosearch_guide_sort_usage_2: |-
   client.index('restaurants').search('', {
     'sort': ['_geoPoint(48.8561446,2.2978204):asc', 'rating:desc']
+  })
+geosearch_guide_filter_usage_3: |-
+  client.index('restaurants').search('Batman', {
+    'filter': '_geoBoundingBox([45.494181, 9.179175], [45.449484, 9.214024])'
   })
 primary_field_guide_update_document_primary_key: |-
   client.index('books').update(primary_key='title')
