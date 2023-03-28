@@ -7,7 +7,7 @@ from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
-from meilisearch.errors import MeiliSearchTimeoutError
+from meilisearch.errors import MeilisearchTimeoutError
 from meilisearch.models.task import TaskInfo
 
 
@@ -44,7 +44,7 @@ class TaskHandler:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         if parameters is None:
@@ -69,7 +69,7 @@ class TaskHandler:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         return self.http.get(f"{self.config.paths.task}/{uid}")
@@ -90,7 +90,7 @@ class TaskHandler:
 
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         if parameters is None:
@@ -116,7 +116,7 @@ class TaskHandler:
             https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
         Raises
         ------
-        MeiliSearchApiError
+        MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         if parameters is None:
@@ -140,7 +140,7 @@ class TaskHandler:
         uid:
             Identifier of the task to wait for being processed.
         timeout_in_ms (optional):
-            Time the method should wait before raising a MeiliSearchTimeoutError.
+            Time the method should wait before raising a MeilisearchTimeoutError.
         interval_in_ms (optional):
             Time interval the method should wait (sleep) between requests.
 
@@ -151,7 +151,7 @@ class TaskHandler:
 
         Raises
         ------
-        MeiliSearchTimeoutError
+        MeilisearchTimeoutError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
         start_time = datetime.now()
@@ -163,6 +163,6 @@ class TaskHandler:
             sleep(interval_in_ms / 1000)
             time_delta = datetime.now() - start_time
             elapsed_time = time_delta.seconds * 1000 + time_delta.microseconds / 1000
-        raise MeiliSearchTimeoutError(
+        raise MeilisearchTimeoutError(
             f"timeout of ${timeout_in_ms}ms has exceeded on process ${uid} when waiting for task to be resolve."
         )
