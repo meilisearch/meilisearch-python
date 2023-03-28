@@ -543,11 +543,11 @@
         },
         "pylint": {
             "hashes": [
-                "sha256:13b2c805a404a9bf57d002cd5f054ca4d40b0b87542bdaba5e05321ae8262c84",
-                "sha256:ff22dde9c2128cd257c145cfd51adeff0be7df4d80d669055f24a962b351bbe4"
+                "sha256:8660a54e3f696243d644fca98f79013a959c03f979992c1ab59c24d3f4ec2700",
+                "sha256:d4d009b0116e16845533bc2163493d6681846ac725eab8ca8014afb520178ddd"
             ],
             "index": "pypi",
-            "version": "==2.16.2"
+            "version": "==2.17.1"
         },
         "pyproject-api": {
             "hashes": [
@@ -616,11 +616,11 @@
         },
         "types-requests": {
             "hashes": [
-                "sha256:232792870b60adb07d23175451ab4e6190021b0c584edf052d92d9b993118f06",
-                "sha256:f84613b0d4c5d0eeb7879dfa05e14a3702b9c1f7a4ee81dfe9b4321b13fe93a1"
+                "sha256:9d4002056df7ebc4ec1f28fd701fba82c5c22549c4477116cb2656aa30ace6db",
+                "sha256:a86921028335fdcc3aaf676c9d3463f867db6af2303fc65aa309b13ae1e6dd53"
             ],
             "index": "pypi",
-            "version": "==2.28.11.14"
+            "version": "==2.28.11.16"
         },
         "types-urllib3": {
             "hashes": [
