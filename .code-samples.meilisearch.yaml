@@ -3,12 +3,6 @@
 # the documentation on build
 # You can read more on https://github.com/meilisearch/documentation/tree/master/.vuepress/code-samples
 ---
-filtering_guide_nested_1: |-
-  with data: { "index": "movies", "q": "thriller", "filter": "rating.users >= 90" }
-
-sorting_guide_sort_nested_1: |-
-  with data: { "index": "books", "q": "science fiction", "sort": ["rating.users:asc"] }
-
 get_one_index_1: |-
   client.get_index('movies')
 list_all_indexes_1: |-
@@ -237,23 +231,21 @@ get_health_1: |-
   client.health()
 get_version_1: |-
   client.get_version()
->>>>>>>>>>>>>>>> UPDATE_ME distinct_attribute_guide_1 (use distinct attribute route): |-
-  client.index('jackets').update_settings({'distinctAttribute': 'product_id'})
->>>>>>>>>>>>>>>> UPDATE_ME field_properties_guide_searchable_1 (use searchable attribute route): |-
-  client.index('movies').update_settings({
-    'searchableAttributes': [
-        'title',
-        'overview',
-        'genres'
-  ]})
->>>>>>>>>>>>>>>> UPDATE_ME field_properties_guide_displayed_1 (use displayed attribute route): |-
-  client.index('movies').update_settings({
-    'displayedAttributes': [
-        'title',
-        'overview',
-        'genres',
-        'release_date'
-  ]})
+distinct_attribute_guide_1: |-
+  client.index('jackets').update_distinct_attribute('product_id')
+field_properties_guide_searchable_1: |-
+  client.index('movies').update_searchable_attributes([
+      'title',
+      'overview',
+      'genres'
+  ])
+field_properties_guide_displayed_1: |-
+  client.index('movies').update_displayed_attributes([
+      'title',
+      'overview',
+      'genres',
+      'release_date'
+  ])
 filtering_guide_1: |-
   client.index('movies').search('Avengers', {
     'filter': 'release_date > 795484800'
@@ -265,6 +257,10 @@ filtering_guide_2: |-
 filtering_guide_3: |-
   client.index('movies').search('Planet of the Apes', {
     'filter': 'rating >= 3 AND (NOT director = "Tim Burton")'
+  })
+filtering_guide_nested_1: |-
+  client.index('movie_ratings').search('thriller', {
+    'filter': 'rating.users >= 90")'
   })
 search_parameter_guide_query_1: |-
   client.index('movies').search('shifu')
@@ -316,71 +312,6 @@ search_parameter_guide_hitsperpage_1: |-
   client.index('movies').search('', {'hitsPerPage': 15})
 search_parameter_guide_page_1: |-
   client.index('movies').search('', {'page': 2})
->>>>>>>>>>> REMOVE_ME settings_guide_synonyms_1: |-
-  client.index('tops').update_settings({
-    'synonyms': {
-      sweater: ['jumper'],
-      jumper: ['sweater']
-    },
-  })
->>>>>>>>>>> REMOVE_ME settings_guide_stop_words_1: |-
-  client.index('movies').update_settings({
-    'stopWords': [
-        'the',
-        'a',
-        'an'
-    ],
-  })
->>>>>>>>>>> REMOVE_ME settings_guide_ranking_rules_1: |-
-  client.index('movies').update_settings({
-    'rankingRules': [
-        'words',
-        'typo',
-        'proximity',
-        'attribute',
-        'sort',
-        'exactness',
-        'release_date:asc',
-        'rank:desc'
-    ]
-  })
->>>>>>>>>>> REMOVE_ME settings_guide_distinct_1: |-
-  client.index('jackets').update_settings({
-    'distinctAttribute': 'product_id'
-  })
->>>>>>>>>>> REMOVE_ME settings_guide_searchable_1: |-
-  client.index('movies').update_settings({
-    'searchableAttributes': [
-      'title',
-      'overview',
-      'genres'
-    ]
-  })
->>>>>>>>>>> REMOVE_ME settings_guide_displayed_1: |-
-  client.index('movies').update_settings({
-    'displayedAttributes': [
-      'title',
-      'overview',
-      'genres',
-      'release_date'
-    ]
-  })
->>>>>>>>>>> REMOVE_ME settings_guide_sortable_1: |-
-  client.index('books').update_settings({
-    'sortableAttributes': [
-      'price',
-      'author'
-    ]
-  })
->>>>>>>>>>> REMOVE_ME settings_guide_typo_tolerance_1: |-
-  client.index('movies').update_typo_tolerance({
-    'minWordSizeForTypos': {
-      'twoTypos': 12
-    },
-    'disableOnAttributes': [
-      'title'
-    ]
-  })
 typo_tolerance_guide_1: |-
   client.index('movies').update_typo_tolerance({
     'enabled': False
@@ -559,6 +490,10 @@ sorting_guide_sort_parameter_2: |-
   client.index('books').search('butler', {
     'sort': ['author:desc']
   })
+sorting_guide_sort_nested_1: |-
+  client.index('books').search('science fiction', {
+    'sort': ['rating.users:asc']
+  })
 search_parameter_guide_sort_1: |-
   client.index('books').search('science fiction', {
     'sort': ['price:asc']
@@ -663,18 +598,6 @@ update_faceting_settings_1: |-
     }
   })
 reset_faceting_settings_1: |-
->>>>>>>>>>> REMOVE_ME settings_guide_faceting_1: |-
-  client.index('movies').update_settings({
-    'faceting': {
-      'maxValuesPerFacet': 5
-    }
-  })
->>>>>>>>>>> REMOVE_ME settings_guide_pagination_1: |-
-  client.index('movies').update_settings({
-    'pagination': {
-      'maxTotalHits': 50
-    }
-  })
 synonyms_guide_1: |-
   client.index('movies').update_synonyms({
     'great': ['fantastic'],
