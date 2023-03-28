@@ -260,7 +260,7 @@ filtering_guide_3: |-
   })
 filtering_guide_nested_1: |-
   client.index('movie_ratings').search('thriller', {
-    'filter': 'rating.users >= 90")'
+    'filter': 'rating.users >= 90'
   })
 search_parameter_guide_query_1: |-
   client.index('movies').search('shifu')
