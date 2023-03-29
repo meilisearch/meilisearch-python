@@ -45,6 +45,14 @@ delete_documents_1: |-
   client.index('movies').delete_documents([23488, 153738, 437035, 363869])
 search_post_1: |-
   client.index('movies').search('American ninja')
+multi_search_1: |-
+  client.multi_search(
+    [
+      {'indexUid': 'movies', 'q': 'pooh', 'limit': 5},
+      {'indexUid': 'movies', 'q': 'nemo', 'limit': 5},
+      {'indexUid': 'movie_ratings', 'q': 'us'}
+    ]
+  )
 get_all_tasks_1: |-
   client.get_tasks()
 get_task_1: |-
@@ -312,6 +320,14 @@ search_parameter_guide_hitsperpage_1: |-
   client.index('movies').search('', {'hitsPerPage': 15})
 search_parameter_guide_page_1: |-
   client.index('movies').search('', {'page': 2})
+search_parameter_guide_sort_1: |-
+  client.index('books').search('science fiction', {
+    'sort': ['price:asc']
+  })
+search_parameter_guide_facet_stats_1: |-
+  client.index('movie_ratings').search('Batman', {
+    'facets': ['genres', 'rating']
+  })
 typo_tolerance_guide_1: |-
   client.index('movies').update_typo_tolerance({
     'enabled': False
@@ -447,7 +463,7 @@ getting_started_faceting: |-
   client.index('movies').update_faceting_settings({'maxValuesPerFacet': 2})
 getting_started_pagination: |-
   client.index('movies').update_pagination_settings({'maxTotalHits': 500})
-faceted_search_update_settings_1: |-
+filtering_update_settings_1: |-
   client.index('movies').update_filterable_attributes([
       'director',
       'genres',
@@ -464,6 +480,36 @@ faceted_search_walkthrough_filter_1: |-
   client.index('movies').search('thriller', {
     'filter': [['genres = Horror', 'genres = Mystery'], 'director = "Jordan Peele"']
   })
+faceted_search_update_settings_1: |-
+  client.index('books').update_filterable_attributes([
+    'genres',
+    'director',
+    'language'
+  ])
+faceted_search_1: |-
+  client.index('books').search('classic', {
+    'facets': ['genres', 'rating', 'language']
+  })
+faceted_search_2: |-
+  client.multi_search(
+    [
+      {
+        'indexUid': 'books',
+        'facets': ['language', 'genres', 'author', 'format'],
+        'filter': [['language = English', 'language = French'], ['genres = Fiction']]
+      },
+      {
+        'indexUid': 'books',
+        'facets': ['language'],
+        'filter': [['genres = Fiction']]
+      },
+      {
+        'indexUid': 'books',
+        'facets': ['genres'],
+        'filter': [['language = English', 'language = French']]
+      },
+    ]
+  )
 post_dump_1: |-
   client.create_dump()
 phrase_search_1: |-
@@ -521,6 +567,10 @@ geosearch_guide_sort_usage_1: |-
 geosearch_guide_sort_usage_2: |-
   client.index('restaurants').search('', {
     'sort': ['_geoPoint(48.8561446,2.2978204):asc', 'rating:desc']
+  })
+geosearch_guide_filter_usage_3: |-
+  client.index('restaurants').search('Batman', {
+    'filter': '_geoBoundingBox([45.494181, 9.179175], [45.449484, 9.214024])'
   })
 primary_field_guide_update_document_primary_key: |-
   client.index('books').update(primary_key='title')
