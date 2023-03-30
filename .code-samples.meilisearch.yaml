@@ -540,10 +540,6 @@ sorting_guide_sort_nested_1: |-
   client.index('books').search('science fiction', {
     'sort': ['rating.users:asc']
   })
-search_parameter_guide_sort_1: |-
-  client.index('books').search('science fiction', {
-    'sort': ['price:asc']
-  })
 geosearch_guide_filter_settings_1: |-
   client.index('restaurants').update_filterable_attributes([
     '_geo'
