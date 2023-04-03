@@ -16,6 +16,7 @@ class Config:
         task = "tasks"
         stat = "stats"
         search = "search"
+        multi_search = "multi-search"
         document = "documents"
         setting = "settings"
         ranking_rules = "ranking-rules"

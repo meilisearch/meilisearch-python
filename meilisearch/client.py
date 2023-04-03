@@ -1,3 +1,5 @@
+# pylint: disable=too-many-public-methods
+
 from __future__ import annotations
 
 import base64
@@ -204,6 +206,30 @@ class Client:
         if uid is not None:
             return Index(self.config, uid=uid)
         raise ValueError("The index UID should not be None")
+
+    def multi_search(self, queries: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
+        """Multi-index search.
+
+        Parameters
+        ----------
+        queries:
+            List of dictionaries containing the specified indexes and their search queries
+            https://docs.meilisearch.com/reference/api/search.html#search-in-an-index
+
+        Returns
+        -------
+        results:
+            Dictionary of results for each search query
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        return self.http.post(
+            f"{self.config.paths.multi_search}",
+            body={"queries": queries},
+        )
 
     def get_all_stats(self) -> Dict[str, Any]:
         """Get all stats of Meilisearch
