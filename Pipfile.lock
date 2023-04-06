@@ -191,11 +191,11 @@
     "develop": {
         "astroid": {
             "hashes": [
-                "sha256:89860bda98fe2bbd1f5d262229be7629d778ce280de68d95d4a73d1f592ad268",
-                "sha256:af4e0aff46e2868218502789898269ed95b663fba49e65d91c1e09c966266c34"
+                "sha256:6e61b85c891ec53b07471aec5878f4ac6446a41e590ede0f2ce095f39f7d49dd",
+                "sha256:dea89d9f99f491c66ac9c04ebddf91e4acf8bd711722175fe6245c0725cc19bb"
             ],
             "markers": "python_full_version >= '3.7.2'",
-            "version": "==2.15.1"
+            "version": "==2.15.2"
         },
         "attrs": {
             "hashes": [
@@ -600,11 +600,11 @@
         },
         "tox": {
             "hashes": [
-                "sha256:12fe562b8992ea63b1e92556b7e28600cd1b70c9e01ce08984f60ce2d32c243c",
-                "sha256:524640254de8b0f03facbdc6b7c18a35700592e3ada0ede42f509b3504b745ff"
+                "sha256:6fa4dbd933d0e335b5392c81e9cd467630119b3669705dbad47814a93b6c9586",
+                "sha256:cd88e41aef9c71f0ba02b6d7939f102760b192b63458fbe04dbbaed82f7bf5f5"
             ],
             "index": "pypi",
-            "version": "==4.4.8"
+            "version": "==4.4.11"
         },
         "tox-pipenv": {
             "hashes": [
