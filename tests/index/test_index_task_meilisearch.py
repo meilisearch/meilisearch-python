@@ -53,9 +53,9 @@ def test_get_tasks_empty_parameters(empty_index):
 def test_get_task(client):
     """Tests getting a task of a operation."""
     task = client.create_index(uid=common.INDEX_UID)
-    client.wait_for_task(task["taskUid"])
+    client.wait_for_task(task.task_uid)
     index = client.get_index(uid=common.INDEX_UID)
-    task = index.get_task(task["taskUid"])
+    task = index.get_task(task.task_uid)
     assert isinstance(task, Task)
     assert task.uid is not None
     assert task.index_uid is not None

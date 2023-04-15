@@ -5,7 +5,7 @@ from typing import Optional
 from pytest import fixture
 
 import meilisearch
-from meilisearch.errors import MeiliSearchApiError
+from meilisearch.errors import MeilisearchApiError
 from tests import common
 
 
@@ -26,7 +26,7 @@ def clear_indexes(client):
     indexes = client.get_indexes()
     for index in indexes["results"]:
         task = client.index(index.uid).delete()
-        client.wait_for_task(task["taskUid"])
+        client.wait_for_task(task.task_uid)
 
 
 @fixture(autouse=True)
@@ -43,7 +43,7 @@ def indexes_sample(client):
     indexes = []
     for index_args in common.INDEX_FIXTURE:
         task = client.create_index(**index_args)
-        client.wait_for_task(task["taskUid"])
+        client.wait_for_task(task.task_uid)
         indexes.append(client.get_index(index_args["uid"]))
     # Yields the indexes to the test to make them accessible.
     yield indexes
@@ -70,16 +70,25 @@ def small_movies_json_file():
 @fixture(scope="session")
 def songs_csv():
     """
-    Runs once per session. Provides the content of songs.csv from read..
+    Runs once per session. Provides the content of songs.csv from read.
     """
     with open("./datasets/songs.csv", encoding="utf-8") as song_csv_file:
         return song_csv_file.read().encode("utf-8")
 
 
 @fixture(scope="session")
+def songs_csv_custom_separator():
+    """
+    Runs once per session. Provides the content of songs_custom_delimiter.csv from read.
+    """
+    with open("./datasets/songs_custom_delimiter.csv", encoding="utf-8") as song_csv_file:
+        return song_csv_file.read().encode("utf-8")
+
+
+@fixture(scope="session")
 def songs_ndjson():
     """
-    Runs once per session. Provides the content of songs.ndjson from read..
+    Runs once per session. Provides the content of songs.ndjson from read.
     """
     with open("./datasets/songs.ndjson", encoding="utf-8") as song_ndjson_file:
         return song_ndjson_file.read().encode("utf-8")
@@ -100,7 +109,7 @@ def empty_index(client, index_uid: Optional[str] = None):
 
     def index_maker(index_uid=index_uid):
         task = client.create_index(uid=index_uid)
-        client.wait_for_task(task["taskUid"])
+        client.wait_for_task(task.task_uid)
         return client.get_index(uid=index_uid)
 
     return index_maker
@@ -131,8 +140,8 @@ def test_key(client):
     yield key
 
     try:
-        client.delete_key(key["key"])
-    except MeiliSearchApiError:
+        client.delete_key(key.key)
+    except MeilisearchApiError:
         pass
 
 
@@ -149,10 +158,10 @@ def test_key_info(client):
     yield key_info
 
     try:
-        keys = client.get_keys()["results"]
-        key = next(x for x in keys if x["description"] == key_info["description"])
-        client.delete_key(key["key"])
-    except MeiliSearchApiError:
+        keys = client.get_keys().results
+        key = next(x for x in keys if x.description == key_info["description"])
+        client.delete_key(key.key)
+    except MeilisearchApiError:
         pass
     except StopIteration:
         pass
@@ -160,6 +169,6 @@ def test_key_info(client):
 
 @fixture(scope="function")
 def get_private_key(client):
-    keys = client.get_keys()["results"]
-    key = next(x for x in keys if "Default Search API" in x["name"])
+    keys = client.get_keys().results
+    key = next(x for x in keys if "Default Search API" in x.name)
     return key

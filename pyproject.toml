@@ -1,5 +1,6 @@
 [build-system]
 requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "meilisearch"
@@ -24,7 +25,6 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
-include = ["meilisearch/py.typed"]
 dependencies = [
     "requests",
     "camel-converter[pydantic]",
@@ -33,6 +33,13 @@ dynamic = ['version']
 
 [tool.setuptools.dynamic]
 version = {attr = "meilisearch.version.__version__"}
+
+[tool.setuptools.packages.find]
+include = ["meilisearch*"]
+exclude = ["docs*", "tests*"]
+
+[tool.setuptools.package-data]
+meilisearch = ["py.typed"]
 
 [project.urls]
 Meilisearch_Documentation = "https://docs.meilisearch.com/"
@@ -64,7 +71,7 @@ extend-exclude = '''
 [tool.isort]
 profile = "black"
 line_length = 100
-src_paths = ["meilisearch", "tests", "setup.py"]
+src_paths = ["meilisearch", "tests"]
 
 [tool.mypy]
 disallow_untyped_defs = true

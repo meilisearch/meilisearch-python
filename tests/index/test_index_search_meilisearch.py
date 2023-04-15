@@ -2,7 +2,7 @@
 
 
 def test_basic_search(index_with_documents):
-    """Tests search with an simple query."""
+    """Tests search with a simple query."""
     response = index_with_documents().search("How to Train Your Dragon")
     assert isinstance(response, dict)
     assert response["hits"][0]["id"] == "166428"
@@ -190,7 +190,7 @@ def test_custom_search_params_with_customized_highlight_tag(index_with_documents
 def test_custom_search_params_with_facets_distribution(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(["genre"])
-    index.wait_for_task(update["taskUid"])
+    index.wait_for_task(update.task_uid)
     response = index.search("world", {"facets": ["genre"]})
     assert isinstance(response, dict)
     assert len(response["hits"]) == 12
@@ -204,7 +204,7 @@ def test_custom_search_params_with_facets_distribution(index_with_documents):
 def test_custom_search_params_with_filter_string(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(["genre"])
-    index.wait_for_task(update["taskUid"])
+    index.wait_for_task(update.task_uid)
     response = index.search("world", {"filter": "genre = action"})
     assert isinstance(response, dict)
     assert len(response["hits"]) == 3
@@ -214,7 +214,7 @@ def test_custom_search_params_with_filter_string(index_with_documents):
 def test_custom_search_params_with_filter_string_with_space(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(["genre"])
-    index.wait_for_task(update["taskUid"])
+    index.wait_for_task(update.task_uid)
     response = index.search("galaxy", {"filter": "genre = 'sci fi'"})
     assert isinstance(response, dict)
     assert len(response["hits"]) == 1
@@ -226,7 +226,7 @@ def test_custom_search_params_with_multiple_filter_string_with_space(
 ):
     index = index_with_documents()
     update = index.update_filterable_attributes(["genre", "release_date"])
-    index.wait_for_task(update["taskUid"])
+    index.wait_for_task(update.task_uid)
     response = index.search("galaxy", {"filter": "genre = 'sci fi' AND release_date < 1550000000"})
     assert isinstance(response, dict)
     assert len(response["hits"]) == 1
@@ -236,7 +236,7 @@ def test_custom_search_params_with_multiple_filter_string_with_space(
 def test_custom_search_params_with_array_filter_with_space(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(["genre", "release_date"])
-    index.wait_for_task(update["taskUid"])
+    index.wait_for_task(update.task_uid)
     response = index.search("galaxy", {"filter": ["genre = 'sci fi'", "release_date < 1550000000"]})
     assert isinstance(response, dict)
     assert len(response["hits"]) == 1
@@ -246,7 +246,7 @@ def test_custom_search_params_with_array_filter_with_space(index_with_documents)
 def test_custom_search_params_with_mutilple_filter_string(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(["genre", "release_date"])
-    index.wait_for_task(update["taskUid"])
+    index.wait_for_task(update.task_uid)
     response = index.search("world", {"filter": "genre = action AND release_date < 1550000000"})
     assert isinstance(response, dict)
     assert len(response["hits"]) == 2
@@ -257,7 +257,7 @@ def test_custom_search_params_with_mutilple_filter_string(index_with_documents):
 def test_custom_search_params_with_filter(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(["genre"])
-    index.wait_for_task(update["taskUid"])
+    index.wait_for_task(update.task_uid)
     response = index.search("world", {"filter": [["genre = action"]]})
     assert isinstance(response, dict)
     assert len(response["hits"]) == 3
@@ -267,7 +267,7 @@ def test_custom_search_params_with_filter(index_with_documents):
 def test_custom_search_params_with_multiple_filter(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(["genre"])
-    index.wait_for_task(update["taskUid"])
+    index.wait_for_task(update.task_uid)
     response = index.search(
         "world", {"filter": ["genre = action", ["genre = action", "genre = action"]]}
     )
@@ -279,7 +279,7 @@ def test_custom_search_params_with_multiple_filter(index_with_documents):
 def test_custom_search_params_with_many_params(index_with_documents):
     index = index_with_documents()
     update = index.update_filterable_attributes(["genre"])
-    index.wait_for_task(update["taskUid"])
+    index.wait_for_task(update.task_uid)
     response = index.search(
         "world",
         {"filter": [["genre = action"]], "attributesToRetrieve": ["title", "poster"]},
@@ -299,9 +299,9 @@ def test_custom_search_params_with_sort_string(index_with_documents):
     response = index.update_ranking_rules(
         ["words", "typo", "sort", "proximity", "attribute", "exactness"]
     )
-    index.wait_for_task(response["taskUid"])
+    index.wait_for_task(response.task_uid)
     update = index.update_sortable_attributes(["title"])
-    index.wait_for_task(update["taskUid"])
+    index.wait_for_task(update.task_uid)
     response = index.search("world", {"sort": ["title:asc"]})
     assert isinstance(response, dict)
     assert len(response["hits"]) == 12
@@ -315,9 +315,9 @@ def test_custom_search_params_with_sort_int(index_with_documents):
     response = index.update_ranking_rules(
         ["words", "typo", "sort", "proximity", "attribute", "exactness"]
     )
-    index.wait_for_task(response["taskUid"])
+    index.wait_for_task(response.task_uid)
     update = index.update_sortable_attributes(["release_date"])
-    index.wait_for_task(update["taskUid"])
+    index.wait_for_task(update.task_uid)
     response = index.search("world", {"sort": ["release_date:asc"]})
     assert isinstance(response, dict)
     assert len(response["hits"]) == 12
@@ -331,9 +331,9 @@ def test_custom_search_params_with_multiple_sort(index_with_documents):
     response = index.update_ranking_rules(
         ["words", "typo", "sort", "proximity", "attribute", "exactness"]
     )
-    index.wait_for_task(response["taskUid"])
+    index.wait_for_task(response.task_uid)
     update = index.update_sortable_attributes(["title", "release_date"])
-    index.wait_for_task(update["taskUid"])
+    index.wait_for_task(update.task_uid)
     response = index.search("world", {"sort": ["title:asc", "release_date:asc"]})
     assert isinstance(response, dict)
     assert len(response["hits"]) == 12
@@ -356,7 +356,7 @@ def test_phrase_search(index_with_documents):
 
 
 def test_basic_search_on_nested_documents(index_with_documents, nested_movies):
-    """Tests search with an simple query on nested fields."""
+    """Tests search with a simple query on nested fields."""
     response = index_with_documents("nested_fields_index", nested_movies).search("An awesome")
     assert isinstance(response, dict)
     assert response["hits"][0]["id"] == 5
@@ -367,7 +367,7 @@ def test_search_on_nested_documents_with_searchable_attributes(index_with_docume
     """Tests search on nested fields with searchable attribute."""
     index = index_with_documents("nested_fields_index", nested_movies)
     response_searchable_attributes = index.update_searchable_attributes(["title", "info.comment"])
-    index.wait_for_task(response_searchable_attributes["taskUid"])
+    index.wait_for_task(response_searchable_attributes.task_uid)
     response = index.search("An awesome")
     assert isinstance(response, dict)
     assert response["hits"][0]["id"] == 5
@@ -383,7 +383,7 @@ def test_search_on_nested_documents_with_sortable_attributes(index_with_document
             "sortableAttributes": ["info.reviewNb"],
         }
     )
-    index.wait_for_task(response_settings["taskUid"])
+    index.wait_for_task(response_settings.task_uid)
     response = index.search("", {"sort": ["info.reviewNb:desc"]})
     assert isinstance(response, dict)
     assert response["hits"][0]["id"] == 6

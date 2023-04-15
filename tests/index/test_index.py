@@ -5,7 +5,7 @@ from datetime import datetime
 import pytest
 
 from meilisearch.client import Client
-from meilisearch.errors import MeiliSearchApiError
+from meilisearch.errors import MeilisearchApiError
 from meilisearch.index import Index
 from tests import BASE_URL, MASTER_KEY, common
 
@@ -22,7 +22,7 @@ def test_create_index(empty_index):
 def test_create_index_with_primary_key(client):
     """Tests creating an index with a primary key."""
     response = client.create_index(uid=common.INDEX_UID2, options={"primaryKey": "book_id"})
-    client.wait_for_task(response["taskUid"])
+    client.wait_for_task(response.task_uid)
     index = client.get_index(uid=common.INDEX_UID2)
     assert isinstance(index, Index)
     assert index.uid == common.INDEX_UID2
@@ -35,7 +35,7 @@ def test_create_index_with_uid_in_options(client):
     response = client.create_index(
         uid=common.INDEX_UID3, options={"uid": "wrong", "primaryKey": "book_id"}
     )
-    client.wait_for_task(response["taskUid"])
+    client.wait_for_task(response.task_uid)
     index = client.get_index(uid=common.INDEX_UID3)
     assert isinstance(index, Index)
     assert index.uid == common.INDEX_UID3
@@ -174,7 +174,7 @@ def test_update_index(empty_index):
     """Tests updating an index."""
     index = empty_index()
     response = index.update(primary_key="objectID")
-    index.wait_for_task(response["taskUid"])
+    index.wait_for_task(response.task_uid)
     response = index.fetch_info()
     assert isinstance(response, Index)
     assert index.get_primary_key() == "objectID"
@@ -186,18 +186,18 @@ def test_update_index(empty_index):
 def test_delete_index_by_client(client):
     """Tests deleting an index."""
     response = client.index(uid=common.INDEX_UID).delete()
-    assert response["status"] == "enqueued"
-    client.wait_for_task(response["taskUid"])
+    assert response.status == "enqueued"
+    client.wait_for_task(response.task_uid)
     with pytest.raises(Exception):
         client.get_index(uid=common.INDEX_UID)
     response = client.index(uid=common.INDEX_UID2).delete()
-    assert response["status"] == "enqueued"
-    client.wait_for_task(response["taskUid"])
+    assert response.status == "enqueued"
+    client.wait_for_task(response.task_uid)
     with pytest.raises(Exception):
         client.get_index(uid=common.INDEX_UID2)
     response = client.index(uid=common.INDEX_UID3).delete()
-    assert response["status"] == "enqueued"
-    client.wait_for_task(response["taskUid"])
+    assert response.status == "enqueued"
+    client.wait_for_task(response.task_uid)
     with pytest.raises(Exception):
         client.get_index(uid=common.INDEX_UID3)
     assert len(client.get_indexes()["results"]) == 0
@@ -207,8 +207,8 @@ def test_delete_index_by_client(client):
 def test_delete(client):
     assert client.get_index(uid=common.INDEX_UID)
     deleted = Client(BASE_URL, MASTER_KEY).index(common.INDEX_UID).delete()
-    client.wait_for_task(deleted["taskUid"])
-    with pytest.raises(MeiliSearchApiError):
+    client.wait_for_task(deleted.task_uid)
+    with pytest.raises(MeilisearchApiError):
         client.get_index(uid=common.INDEX_UID)
 
 
@@ -216,6 +216,6 @@ def test_delete(client):
 def test_delete_index(client):
     assert client.get_index(uid=common.INDEX_UID)
     deleted = Client(BASE_URL, MASTER_KEY).delete_index(uid=common.INDEX_UID)
-    client.wait_for_task(deleted["taskUid"])
-    with pytest.raises(MeiliSearchApiError):
+    client.wait_for_task(deleted.task_uid)
+    with pytest.raises(MeilisearchApiError):
         client.get_index(uid=common.INDEX_UID)
