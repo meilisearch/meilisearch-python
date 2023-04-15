@@ -397,7 +397,7 @@ typo_tolerance_guide_4: |-
 add_movies_json_1: |-
   import json
 
-  json_file = open('movies.json')
+  json_file = open('movies.json', encoding='utf-8')
   movies = json.load(json_file)
   client.index('movies').add_documents(movies)
 landing_getting_started_1: |-
@@ -429,7 +429,7 @@ getting_started_add_documents_md: |-
 
   client = meilisearch.Client('http://localhost:7700')
 
-  json_file = open('movies.json')
+  json_file = open('movies.json', encoding='utf-8')
   movies = json.load(json_file)
   client.index('movies').add_documents(movies)
   ```
