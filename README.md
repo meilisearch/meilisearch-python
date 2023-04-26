@@ -6,11 +6,11 @@
 
 <h4 align="center">
   <a href="https://github.com/meilisearch/meilisearch">Meilisearch</a> |
-  <a href="https://docs.meilisearch.com">Documentation</a> |
+  <a href="https://www.meilisearch.com/docs">Documentation</a> |
   <a href="https://discord.meilisearch.com">Discord</a> |
   <a href="https://roadmap.meilisearch.com/tabs/1-under-consideration">Roadmap</a> |
   <a href="https://www.meilisearch.com">Website</a> |
-  <a href="https://docs.meilisearch.com/faq">FAQ</a>
+  <a href="https://www.meilisearch.com/docs/faq">FAQ</a>
 </h4>
 
 <p align="center">
@@ -37,7 +37,7 @@
 
 ## 📖 Documentation
 
-To learn more about Meilisearch Python, refer to the in-depth [Meilisearch Python documentation](https://meilisearch.github.io/meilisearch-python/). To learn more about Meilisearch in general, refer to our [documentation](https://docs.meilisearch.com/learn/getting_started/quick_start.html) or our [API reference](https://docs.meilisearch.com/reference/api/overview.html).
+To learn more about Meilisearch Python, refer to the in-depth [Meilisearch Python documentation](https://meilisearch.github.io/meilisearch-python/). To learn more about Meilisearch in general, refer to our [documentation](https://www.meilisearch.com/docs/learn/getting_started/quick_start) or our [API reference](https://www.meilisearch.com/docs/reference/api/overview).
 
 ## 🔧 Installation
 
@@ -51,7 +51,7 @@ pip3 install meilisearch
 
 ### Run Meilisearch <!-- omit in toc -->
 
-There are many easy ways to [download and run a Meilisearch instance](https://docs.meilisearch.com/reference/features/installation.html#setup-and-installation).
+There are many easy ways to [download and run a Meilisearch instance](https://www.meilisearch.com/docs/learn/getting_started/installation).
 
 For example, using the `curl` command in [your Terminal](https://itconnect.uw.edu/learn/workshops/online-tutorials/what-is-a-terminal/):
 
@@ -90,7 +90,7 @@ documents = [
 index.add_documents(documents) # => { "uid": 0 }
 ```
 
-With the task `uid`, you can check the status (`enqueued`, `processing`, `succeeded` or `failed`) of your documents addition using the [task](https://docs.meilisearch.com/reference/api/tasks.html#get-tasks).
+With the task `uid`, you can check the status (`enqueued`, `processing`, `succeeded` or `failed`) of your documents addition using the [task](https://www.meilisearch.com/docs/reference/api/tasks#get-tasks).
 
 #### Basic Search <!-- omit in toc -->
 
@@ -119,7 +119,7 @@ Output:
 
 #### Custom Search <!-- omit in toc -->
 
-All the supported options are described in the [search parameters](https://docs.meilisearch.com/reference/features/search_parameters.html) section of the documentation.
+All the supported options are described in the [search parameters](https://www.meilisearch.com/docs/reference/api/search#search-parameters)
 
 ```python
 index.search(
@@ -165,7 +165,7 @@ index.update_filterable_attributes([
 
 You only need to perform this operation once.
 
-Note that Meilisearch will rebuild your index whenever you update `filterableAttributes`. Depending on the size of your dataset, this might take time. You can track the process using the [task](https://docs.meilisearch.com/reference/api/tasks.html#get-tasks).
+Note that Meilisearch will rebuild your index whenever you update `filterableAttributes`. Depending on the size of your dataset, this might take time. You can track the process using the [task](https://www.meilisearch.com/docs/reference/api/tasks#get-tasks).
 
 Then, you can perform the search:
 
@@ -203,10 +203,10 @@ This package guarantees compatibility with [version v1.x of Meilisearch](https:/
 
 The following sections in our main documentation website may interest you:
 
-- **Manipulate documents**: see the [API references](https://docs.meilisearch.com/reference/api/documents.html) or read more about [documents](https://docs.meilisearch.com/learn/core_concepts/documents.html).
-- **Search**: see the [API references](https://docs.meilisearch.com/reference/api/search.html) or follow our guide on [search parameters](https://docs.meilisearch.com/reference/features/search_parameters.html).
-- **Manage the indexes**: see the [API references](https://docs.meilisearch.com/reference/api/indexes.html) or read more about [indexes](https://docs.meilisearch.com/learn/core_concepts/indexes.html).
-- **Configure the index settings**: see the [API references](https://docs.meilisearch.com/reference/api/settings.html) or follow our guide on [settings parameters](https://docs.meilisearch.com/reference/features/settings.html).
+- **Manipulate documents**: see the [API references](https://www.meilisearch.com/docs/reference/api/documents) or read more about [documents](https://www.meilisearch.com/docs/learn/core_concepts/documents).
+- **Search**: see the [API references](https://www.meilisearch.com/docs/reference/api/search).
+- **Manage the indexes**: see the [API references](https://www.meilisearch.com/docs/reference/api/indexes) or read more about [indexes](https://www.meilisearch.com/docs/learn/core_concepts/indexes).
+- **Configure the index settings**: see the [API references](https://www.meilisearch.com/docs/reference/api/settings).
 
 ## ⚙️ Contributing
 
