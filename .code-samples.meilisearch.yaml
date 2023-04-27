@@ -350,7 +350,7 @@ typo_tolerance_guide_4: |-
 add_movies_json_1: |-
   import json
 
-  json_file = open('movies.json')
+  json_file = open('movies.json', encoding='utf-8')
   movies = json.load(json_file)
   client.index('movies').add_documents(movies)
 landing_getting_started_1: |-
@@ -382,7 +382,7 @@ getting_started_add_documents_md: |-
 
   client = meilisearch.Client('http://localhost:7700')
 
-  json_file = open('movies.json')
+  json_file = open('movies.json', encoding='utf-8')
   movies = json.load(json_file)
   client.index('movies').add_documents(movies)
   ```
@@ -397,7 +397,7 @@ getting_started_search_md: |-
 getting_started_add_meteorites: |-
   import json
 
-  json_file = open('meteorites.json')
+  json_file = open('meteorites.json', encoding='utf-8')
   meteorites = json.load(json_file)
   client.index('meteorites').add_documents(meteorites)
 getting_started_update_ranking_rules: |-
@@ -672,7 +672,7 @@ async_guide_canceled_by_1: |-
 date_guide_index_1: |-
   import json
 
-  json_file = open('./games.json')
+  json_file = open('./games.json', encoding='utf-8')
   games = json.load(json_file)
   client.index('games').add_documents(games)
 date_guide_filterable_attributes_1: |-
