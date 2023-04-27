@@ -397,7 +397,7 @@ getting_started_search_md: |-
 getting_started_add_meteorites: |-
   import json
 
-  json_file = open('meteorites.json')
+  json_file = open('meteorites.json', encoding='utf-8')
   meteorites = json.load(json_file)
   client.index('meteorites').add_documents(meteorites)
 getting_started_update_ranking_rules: |-
@@ -672,7 +672,7 @@ async_guide_canceled_by_1: |-
 date_guide_index_1: |-
   import json
 
-  json_file = open('./games.json')
+  json_file = open('./games.json', encoding='utf-8')
   games = json.load(json_file)
   client.index('games').add_documents(games)
 date_guide_filterable_attributes_1: |-
