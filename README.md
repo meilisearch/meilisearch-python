@@ -206,7 +206,7 @@ The following sections in our main documentation website may interest you:
 - **Manipulate documents**: see the [API references](https://www.meilisearch.com/docs/reference/api/documents) or read more about [documents](https://www.meilisearch.com/docs/learn/core_concepts/documents).
 - **Search**: see the [API references](https://www.meilisearch.com/docs/reference/api/search).
 - **Manage the indexes**: see the [API references](https://www.meilisearch.com/docs/reference/api/indexes) or read more about [indexes](https://www.meilisearch.com/docs/learn/core_concepts/indexes).
-- **Configure the index settings**: see the [API references](https://www.meilisearch.com/docs/reference/api/settings).
+- **Configure the index settings**: see the [API references](https://www.meilisearch.com/docs/reference/api/settings) or follow our guide on [settings parameters](https://www.meilisearch.com/docs/learn/configuration/settings).
 
 ## ⚙️ Contributing
 
