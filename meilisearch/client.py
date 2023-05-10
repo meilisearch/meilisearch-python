@@ -477,7 +477,8 @@ class Client:
         Returns
         -------
         task:
-            Limit, from, next and results containing a list of all enqueued, processing, succeeded or failed tasks.
+            TaskResult instance containing limit, from, next and results containing a list of all
+            enqueued, processing, succeeded or failed tasks.
 
         Raises
         ------
@@ -497,7 +498,7 @@ class Client:
         Returns
         -------
         task:
-            Information about the processed asynchronous task.
+            Task instance containing information about the processed asynchronous task.
 
         Raises
         ------
@@ -566,7 +567,7 @@ class Client:
         Returns
         -------
         task:
-            Dictionary containing information about the processed asynchronous task.
+            Task instance containing information about the processed asynchronous task.
 
         Raises
         ------

@@ -38,7 +38,8 @@ class TaskHandler:
         Returns
         -------
         task:
-            Limit, from, next and results containing a list of all enqueued, processing, succeeded or failed tasks.
+            TaskResults instance contining limit, from, next and results containing a list of all
+            enqueued, processing, succeeded or failed tasks.
 
         Raises
         ------
@@ -64,7 +65,7 @@ class TaskHandler:
         Returns
         -------
         task:
-            Dictionary containing information about the status of the asynchronous task.
+            Task instance containing information about the processed asynchronous task.
 
         Raises
         ------
@@ -147,7 +148,7 @@ class TaskHandler:
         Returns
         -------
         task:
-            Information about the processed asynchronous task.
+            Task instance containing information about the processed asynchronous task.
 
         Raises
         ------
