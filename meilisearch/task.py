@@ -2,13 +2,13 @@ from __future__ import annotations
 
 from datetime import datetime
 from time import sleep
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
 from meilisearch.errors import MeilisearchTimeoutError
-from meilisearch.models.task import TaskInfo
+from meilisearch.models.task import Task, TaskInfo, TaskResults
 
 
 class TaskHandler:
@@ -27,9 +27,7 @@ class TaskHandler:
         self.config = config
         self.http = HttpRequests(config)
 
-    def get_tasks(
-        self, parameters: Optional[Dict[str, Any]] = None
-    ) -> Dict[str, List[Dict[str, Any]]]:
+    def get_tasks(self, parameters: Optional[Dict[str, Any]] = None) -> TaskResults:
         """Get all tasks.
 
         Parameters
@@ -40,7 +38,8 @@ class TaskHandler:
         Returns
         -------
         task:
-            Dictionary with limit, from, next and results containing a list of all enqueued, processing, succeeded or failed tasks.
+            TaskResults instance contining limit, from, next and results containing a list of all
+            enqueued, processing, succeeded or failed tasks.
 
         Raises
         ------
@@ -52,9 +51,10 @@ class TaskHandler:
         for param in parameters:
             if isinstance(parameters[param], list):
                 parameters[param] = ",".join(parameters[param])
-        return self.http.get(f"{self.config.paths.task}?{parse.urlencode(parameters)}")
+        tasks = self.http.get(f"{self.config.paths.task}?{parse.urlencode(parameters)}")
+        return TaskResults(tasks)
 
-    def get_task(self, uid: int) -> Dict[str, Any]:
+    def get_task(self, uid: int) -> Task:
         """Get one task.
 
         Parameters
@@ -65,14 +65,15 @@ class TaskHandler:
         Returns
         -------
         task:
-            Dictionary containing information about the status of the asynchronous task.
+            Task instance containing information about the processed asynchronous task.
 
         Raises
         ------
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        return self.http.get(f"{self.config.paths.task}/{uid}")
+        task = self.http.get(f"{self.config.paths.task}/{uid}")
+        return Task(**task)
 
     def cancel_tasks(self, parameters: Optional[Dict[str, Any]] = None) -> TaskInfo:
         """Cancel a list of enqueued or processing tasks.
@@ -132,7 +133,7 @@ class TaskHandler:
         uid: int,
         timeout_in_ms: int = 5000,
         interval_in_ms: int = 50,
-    ) -> Dict[str, Any]:
+    ) -> Task:
         """Wait until the task fails or succeeds in Meilisearch.
 
         Parameters
@@ -147,7 +148,7 @@ class TaskHandler:
         Returns
         -------
         task:
-            Dictionary containing information about the processed asynchronous task.
+            Task instance containing information about the processed asynchronous task.
 
         Raises
         ------
@@ -158,7 +159,7 @@ class TaskHandler:
         elapsed_time = 0.0
         while elapsed_time < timeout_in_ms:
             task = self.get_task(uid)
-            if task["status"] not in ("enqueued", "processing"):
+            if task.status not in ("enqueued", "processing"):
                 return task
             sleep(interval_in_ms / 1000)
             time_delta = datetime.now() - start_time

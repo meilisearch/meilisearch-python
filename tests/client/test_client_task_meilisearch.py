@@ -9,33 +9,29 @@ from tests import common
 def test_get_tasks_default(client):
     """Tests getting the global tasks list."""
     tasks = client.get_tasks()
-    assert isinstance(tasks, dict)
-    assert "results" in tasks
+    assert len(tasks.results) >= 1
 
 
 def test_get_tasks(client, empty_index):
     """Tests getting the global tasks list after populating an index."""
     current_tasks = client.get_tasks()
-    pre_count = current_tasks["from"]
+    pre_count = current_tasks.from_
     empty_index()
     tasks = client.get_tasks()
-    assert isinstance(tasks, dict)
-    assert tasks["from"] == pre_count + 1
+    assert tasks.from_ == pre_count + 1
 
 
 def test_get_tasks_empty_parameters(client):
     """Tests getting the global tasks list after populating an index."""
     tasks = client.get_tasks({})
-    assert isinstance(tasks, dict)
-    assert isinstance(tasks["results"], list)
+    assert isinstance(tasks.results, list)
 
 
 def test_get_tasks_with_parameters(client, empty_index):
     """Tests getting the global tasks list after populating an index."""
     empty_index()
     tasks = client.get_tasks({"limit": 1})
-    assert isinstance(tasks, dict)
-    assert len(tasks["results"]) == 1
+    assert len(tasks.results) == 1
 
 
 def test_get_tasks_with_all_plural_parameters(client, empty_index):
@@ -44,8 +40,7 @@ def test_get_tasks_with_all_plural_parameters(client, empty_index):
     tasks = client.get_tasks(
         {"indexUids": [common.INDEX_UID], "statuses": ["succeeded"], "types": ["indexCreation"]}
     )
-    assert isinstance(tasks, dict)
-    assert len(tasks["results"]) >= 1
+    assert len(tasks.results) >= 1
 
 
 def test_get_tasks_with_date_parameters(client, empty_index):
@@ -58,16 +53,14 @@ def test_get_tasks_with_date_parameters(client, empty_index):
             "beforeFinishedAt": "2042-04-02T00:42:42Z",
         }
     )
-    assert isinstance(tasks, dict)
-    assert len(tasks["results"]) > 1
+    assert len(tasks.results) > 1
 
 
 def test_get_tasks_with_index_uid(client, empty_index):
     """Tests getting the global tasks list after populating an index."""
     empty_index()
     tasks = client.get_tasks({"limit": 1, "indexUids": [common.INDEX_UID]})
-    assert isinstance(tasks, dict)
-    assert len(tasks["results"]) == 1
+    assert len(tasks.results) == 1
 
 
 def test_get_task(client):
@@ -75,17 +68,16 @@ def test_get_task(client):
     response = client.create_index(uid=common.INDEX_UID)
     client.wait_for_task(response.task_uid)
     task = client.get_task(response.task_uid)
-    assert isinstance(task, dict)
-    assert len(task) == 11
-    assert "uid" in task
-    assert "indexUid" in task
-    assert "status" in task
-    assert "type" in task
-    assert "duration" in task
-    assert "enqueuedAt" in task
-    assert "finishedAt" in task
-    assert "details" in task
-    assert "startedAt" in task
+    task_dict = task.__dict__
+    assert "uid" in task_dict
+    assert "index_uid" in task_dict
+    assert "status" in task_dict
+    assert "type" in task_dict
+    assert "duration" in task_dict
+    assert "enqueued_at" in task_dict
+    assert "finished_at" in task_dict
+    assert "details" in task_dict
+    assert "started_at" in task_dict
 
 
 def test_get_task_inexistent(client):
@@ -115,8 +107,8 @@ def test_cancel_tasks(client):
     assert task.task_uid is not None
     assert task.index_uid is None
     assert task.type == "taskCancelation"
-    assert "uids" in tasks["results"][0]["details"]["originalFilter"]
-    assert "uids=1%2C2" in tasks["results"][0]["details"]["originalFilter"]
+    assert "uids" in tasks.results[0].details["originalFilter"]
+    assert "uids=1%2C2" in tasks.results[0].details["originalFilter"]
 
 
 @pytest.mark.usefixtures("create_tasks")
@@ -130,7 +122,7 @@ def test_cancel_every_task(client):
     assert task.task_uid is not None
     assert task.index_uid is None
     assert task.type == "taskCancelation"
-    assert "statuses=enqueued%2Cprocessing" in tasks["results"][0]["details"]["originalFilter"]
+    assert "statuses=enqueued%2Cprocessing" in tasks.results[0].details["originalFilter"]
 
 
 def test_delete_tasks_by_uid(client, empty_index, small_movies):
@@ -147,8 +139,8 @@ def test_delete_tasks_by_uid(client, empty_index, small_movies):
     assert task_deleted.task_uid is not None
     assert task_deleted.index_uid is None
     assert task_deleted.type == "taskDeletion"
-    assert "uids" in task["details"]["originalFilter"]
-    assert f"uids={task_addition.task_uid}" in task["details"]["originalFilter"]
+    assert "uids" in task.details["originalFilter"]
+    assert f"uids={task_addition.task_uid}" in task.details["originalFilter"]
 
 
 def test_delete_tasks_by_filter(client):
@@ -160,8 +152,7 @@ def test_delete_tasks_by_filter(client):
     assert task.task_uid is not None
     assert task.index_uid is None
     assert task.type == "taskDeletion"
-    assert len(tasks_after["results"]) >= 1
+    assert len(tasks_after.results) >= 1
     assert (
-        "statuses=succeeded%2Cfailed%2Ccanceled"
-        in tasks_after["results"][0]["details"]["originalFilter"]
+        "statuses=succeeded%2Cfailed%2Ccanceled" in tasks_after.results[0].details["originalFilter"]
     )
