@@ -7,5 +7,5 @@ def test_dump_creation(client, index_with_documents):
     dump = client.create_dump()
     client.wait_for_task(dump.task_uid)
     dump_status = client.get_task(dump.task_uid)
-    assert dump_status["status"] == "succeeded"
-    assert dump_status["type"] == "dumpCreation"
+    assert dump_status.status == "succeeded"
+    assert dump_status.type == "dumpCreation"

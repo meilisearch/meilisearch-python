@@ -170,8 +170,7 @@ class Index:
         else:
             parameters = {"indexUids": [self.uid]}
 
-        tasks = self.task_handler.get_tasks(parameters=parameters)
-        return TaskResults(tasks)
+        return self.task_handler.get_tasks(parameters=parameters)
 
     def get_task(self, uid: int) -> Task:
         """Get one task through the route of a specific index.
@@ -191,8 +190,7 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        task = self.task_handler.get_task(uid)
-        return Task(**task)
+        return self.task_handler.get_task(uid)
 
     def wait_for_task(
         self,
@@ -221,8 +219,7 @@ class Index:
         MeilisearchTimeoutError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        task = self.task_handler.wait_for_task(uid, timeout_in_ms, interval_in_ms)
-        return Task(**task)
+        return self.task_handler.wait_for_task(uid, timeout_in_ms, interval_in_ms)
 
     def get_stats(self) -> IndexStats:
         """Get stats of the index.

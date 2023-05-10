@@ -26,8 +26,8 @@ def test_swap_indexes(client, empty_index):
 
     assert docA.title == indexB.uid
     assert docB.title == indexA.uid
-    assert task["type"] == "indexSwap"
-    assert "swaps" in task["details"]
+    assert task.type == "indexSwap"
+    assert "swaps" in task.details
 
 
 def test_swap_indexes_with_one_that_does_not_exist(client, empty_index):
@@ -43,7 +43,7 @@ def test_swap_indexes_with_one_that_does_not_exist(client, empty_index):
     task = client.wait_for_task(swapTask.task_uid)
 
     assert swapTask.type == "indexSwap"
-    assert task["error"]["code"] == "index_not_found"
+    assert task.error["code"] == "index_not_found"
 
 
 def test_swap_indexes_with_itself(client, empty_index):

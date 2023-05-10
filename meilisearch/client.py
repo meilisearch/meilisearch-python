@@ -16,7 +16,7 @@ from meilisearch.config import Config
 from meilisearch.errors import MeilisearchError
 from meilisearch.index import Index
 from meilisearch.models.key import Key, KeysResults
-from meilisearch.models.task import TaskInfo
+from meilisearch.models.task import Task, TaskInfo, TaskResults
 from meilisearch.task import TaskHandler
 
 
@@ -466,9 +466,7 @@ class Client:
         """
         return TaskInfo(**self.http.post(self.config.paths.swap, parameters))
 
-    def get_tasks(
-        self, parameters: Optional[Dict[str, Any]] = None
-    ) -> Dict[str, List[Dict[str, Any]]]:
+    def get_tasks(self, parameters: Optional[Dict[str, Any]] = None) -> TaskResults:
         """Get all tasks.
 
         Parameters
@@ -479,7 +477,7 @@ class Client:
         Returns
         -------
         task:
-            Dictionary with limit, from, next and results containing a list of all enqueued, processing, succeeded or failed tasks.
+            Limit, from, next and results containing a list of all enqueued, processing, succeeded or failed tasks.
 
         Raises
         ------
@@ -488,7 +486,7 @@ class Client:
         """
         return self.task_handler.get_tasks(parameters=parameters)
 
-    def get_task(self, uid: int) -> Dict[str, Any]:
+    def get_task(self, uid: int) -> Task:
         """Get one task.
 
         Parameters
@@ -499,7 +497,7 @@ class Client:
         Returns
         -------
         task:
-            Dictionary containing information about the processed asynchronous task.
+            Information about the processed asynchronous task.
 
         Raises
         ------
@@ -553,7 +551,7 @@ class Client:
         uid: int,
         timeout_in_ms: int = 5000,
         interval_in_ms: int = 50,
-    ) -> Dict[str, Any]:
+    ) -> Task:
         """Wait until Meilisearch processes a task until it fails or succeeds.
 
         Parameters
