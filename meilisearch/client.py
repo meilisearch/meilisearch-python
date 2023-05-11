@@ -615,7 +615,7 @@ class Client:
             raise ValueError("An uid is required and must comply to the uuid4 format.")
         if not search_rules or search_rules == [""]:
             raise ValueError("The search_rules field is mandatory and should be defined.")
-        if expires_at and expires_at < datetime.datetime.utcnow():
+        if expires_at and expires_at < datetime.datetime.now(tz=datetime.timezone.utc):
             raise ValueError("The date expires_at should be in the future.")
 
         # Standard JWT header for encryption with SHA256/HS256 algorithm
