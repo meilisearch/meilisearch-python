@@ -58,7 +58,7 @@ def test_generate_tenant_token_with_expires_at(client, get_private_key, empty_in
     """Tests create a tenant token with search rules and expiration date."""
     empty_index()
     client = meilisearch.Client(BASE_URL, get_private_key.key)
-    tomorrow = datetime.datetime.utcnow() + datetime.timedelta(days=1)
+    tomorrow = datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(days=1)
 
     token = client.generate_tenant_token(
         api_key_uid=get_private_key.uid, search_rules=["*"], expires_at=tomorrow
@@ -106,7 +106,7 @@ def test_generate_tenant_token_with_bad_expires_at(client, get_private_key):
     """Tests create a tenant token with a bad expires at."""
     client = meilisearch.Client(BASE_URL, get_private_key.key)
 
-    yesterday = datetime.datetime.utcnow() + datetime.timedelta(days=-1)
+    yesterday = datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(days=-1)
 
     with pytest.raises(Exception):
         client.generate_tenant_token(
