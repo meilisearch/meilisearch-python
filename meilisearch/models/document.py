@@ -1,6 +1,4 @@
-from typing import Any, Dict, Iterator, List, Union
-
-from camel_converter.pydantic_base import CamelBase
+from typing import Any, Dict, Iterator
 
 
 class Document:
