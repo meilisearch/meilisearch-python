@@ -301,10 +301,7 @@ class Index:
         )
         return Document(document)
 
-    def get_documents(
-        self,
-        parameters: Optional[Dict[str, Any]] = None,
-    ) -> DocumentsResults:
+    def get_documents(self, parameters: Optional[Dict[str, Any]] = None) -> DocumentsResults:
         """Get a set of documents from the index.
 
         Parameters

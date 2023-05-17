@@ -108,7 +108,7 @@ def test_get_documents_filter(index_with_documents):
     response = index.update_filterable_attributes(["genre"])
     index.wait_for_task(response.task_uid)
     response = index.get_documents({"filter": "genre=action"})
-    genres = set([x.genre for x in response.results])
+    genres = {x.genre for x in response.results}
     assert len(genres) == 1
     assert next(iter(genres)) == "action"
 
@@ -118,7 +118,7 @@ def test_get_documents_filter_with_fields(index_with_documents):
     response = index.update_filterable_attributes(["genre"])
     index.wait_for_task(response.task_uid)
     response = index.get_documents({"fields": ["genre"], "filter": "genre=action"})
-    genres = set([x.genre for x in response.results])
+    genres = {x.genre for x in response.results}
     assert len(genres) == 1
     assert next(iter(genres)) == "action"
 
