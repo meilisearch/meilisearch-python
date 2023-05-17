@@ -6,6 +6,7 @@ from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
+from meilisearch.errors import version_error_hint_message
 from meilisearch.models.document import Document, DocumentsResults
 from meilisearch.models.index import Faceting, IndexStats, Pagination, TypoTolerance
 from meilisearch.models.task import Task, TaskInfo, TaskResults
@@ -729,12 +730,15 @@ class Index:
         )
         return TaskInfo(**response)
 
-    def delete_documents(self, ids: List[Union[str, int]]) -> TaskInfo:
+    def delete_documents(
+        self,
+        ids: List[Union[str, int]],
+    ) -> TaskInfo:
         """Delete multiple documents from the index.
 
         Parameters
         ----------
-        list:
+        ids:
             List of unique identifiers of documents.
 
         Returns
@@ -754,6 +758,7 @@ class Index:
         )
         return TaskInfo(**response)
 
+    @version_error_hint_message
     def delete_documents_by_filter(
         self, filter: Union[str, List[Union[str, List[str]]]]  # pylint: disable=redefined-builtin
     ) -> TaskInfo:

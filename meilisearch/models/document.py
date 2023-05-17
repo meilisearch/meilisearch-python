@@ -1,6 +1,6 @@
-from __future__ import annotations
+from typing import Any, Dict, Iterator, List, Union
 
-from typing import Any, Dict, Iterator
+from camel_converter.pydantic_base import CamelBase
 
 
 class Document:
