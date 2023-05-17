@@ -755,7 +755,7 @@ class Index:
         return TaskInfo(**response)
 
     def delete_documents_by_filter(
-        self, filter: Union[str, List[Union[str, List[str]]]]
+        self, filter: Union[str, List[Union[str, List[str]]]]  # pylint: disable=redefined-builtin
     ) -> TaskInfo:
         """Delete documents from the index by filter.
 
