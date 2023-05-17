@@ -754,6 +754,33 @@ class Index:
         )
         return TaskInfo(**response)
 
+    def delete_documents_by_filter(
+        self, filter: Union[str, List[Union[str, List[str]]]]
+    ) -> TaskInfo:
+        """Delete documents from the index by filter.
+
+        Parameters
+        ----------
+        filter:
+            The filter value information.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+        """
+        response = self.http.post(
+            f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}/delete",
+            body={"filter": filter},
+        )
+        return TaskInfo(**response)
+
     def delete_all_documents(self) -> TaskInfo:
         """Delete all documents from the index.
 

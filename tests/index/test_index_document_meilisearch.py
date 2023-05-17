@@ -174,6 +174,20 @@ def test_delete_documents(index_with_documents):
             index.get_document(document)
 
 
+def test_delete_documents_by_filter(index_with_documents):
+    index = index_with_documents()
+    response = index.update_filterable_attributes(["genre"])
+    index.wait_for_task(response.task_uid)
+    response = index.get_documents()
+    assert "action" in ([x.__dict__.get("genre") for x in response.results])
+    response = index.delete_documents_by_filter("genre=action")
+    index.wait_for_task(response.task_uid)
+    response = index.get_documents()
+    genres = [x.__dict__.get("genre") for x in response.results]
+    assert "action" not in genres
+    assert "cartoon" in genres
+
+
 def test_delete_all_documents(index_with_documents):
     """Tests deleting all the documents in the index."""
     index = index_with_documents()
