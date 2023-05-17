@@ -68,8 +68,8 @@ def version_error_hint_message(func: Callable) -> Any:
     def wrapper(*args: Any, **kwargs: Any) -> Any:
         try:
             return func(*args, **kwargs)
-        except MeilisearchApiError as e:
-            e.message = f"{e.message}. Hint: It might not be working because you're not up to date with the Meilisearch version that {func.__name__} call requires."
-            raise e
+        except MeilisearchApiError as exc:
+            exc.message = f"{exc.message}. Hint: It might not be working because you're not up to date with the Meilisearch version that {func.__name__} call requires."
+            raise exc
 
     return wrapper
