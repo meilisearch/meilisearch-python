@@ -32,7 +32,7 @@ def test_update_sortable_attributes_to_none(empty_index):
     for attribute in SORTABLE_ATTRIBUTES:
         assert attribute in get_attributes
     # Launch test to update at null the setting
-    response = index.update_sortable_attributes(None)
+    response = index.reset_sortable_attributes()
     index.wait_for_task(response.task_uid)
     response = index.get_sortable_attributes()
     assert response == []

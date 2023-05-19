@@ -32,7 +32,7 @@ def test_update_filterable_attributes_to_none(empty_index):
     for attribute in FILTERABLE_ATTRIBUTES:
         assert attribute in get_attributes
     # Launch test to update at null the setting
-    response = index.update_filterable_attributes(None)
+    response = index.reset_filterable_attributes()
     index.wait_for_task(response.task_uid)
     response = index.get_filterable_attributes()
     assert response == []

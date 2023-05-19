@@ -37,7 +37,7 @@ def test_update_searchable_attributes_to_none(empty_index):
     for attribute in NEW_SEARCHABLE_ATTRIBUTES:
         assert attribute in response
     # Launch test to update at null the setting
-    response = index.update_searchable_attributes(None)
+    response = index.reset_searchable_attributes()
     index.wait_for_task(response.task_uid)
     response = index.get_searchable_attributes()
     assert response == ["*"]

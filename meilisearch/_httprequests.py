@@ -33,7 +33,13 @@ class HttpRequests:
             self.headers["Content-Type"] = content_type
         try:
             request_path = self.config.url + "/" + path
-            if isinstance(body, bytes):
+            if body is None or body == "":
+                request = http_method(
+                    request_path,
+                    timeout=self.config.timeout,
+                    headers=self.headers,
+                )
+            elif isinstance(body, bytes):
                 request = http_method(
                     request_path,
                     timeout=self.config.timeout,
@@ -45,7 +51,7 @@ class HttpRequests:
                     request_path,
                     timeout=self.config.timeout,
                     headers=self.headers,
-                    data=json.dumps(body) if body else "" if body == "" else "null",
+                    data=json.dumps(body),
                 )
             return self.__validate(request)
 
