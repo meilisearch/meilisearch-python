@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any, Dict, Generator, List, Optional, Union
 from urllib import parse
+from warnings import warn
 
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
@@ -732,14 +733,21 @@ class Index:
 
     def delete_documents(
         self,
-        ids: List[Union[str, int]],
+        ids: Optional[List[Union[str, int]]] = None,
+        *,
+        filter: Optional[  # pylint: disable=redefined-builtin
+            Union[str, List[Union[str, List[str]]]]
+        ] = None,
     ) -> TaskInfo:
-        """Delete multiple documents from the index.
+        """Delete multiple documents from the index by id or filter.
 
         Parameters
         ----------
         ids:
-            List of unique identifiers of documents.
+            List of unique identifiers of documents. Note: using ids is depreciated and will be
+            removed in a future version.
+        filter:
+            The filter value information.
 
         Returns
         -------
@@ -752,10 +760,20 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        response = self.http.post(
-            f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}/delete-batch",
-            [str(i) for i in ids],
-        )
+        if ids:
+            warn(
+                "The use of ids is depreciated and will be removed in the future",
+                DeprecationWarning,
+            )
+            response = self.http.post(
+                f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}/delete-batch",
+                [str(i) for i in ids],
+            )
+        else:
+            response = self.http.post(
+                f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}/delete",
+                body={"filter": filter},
+            )
         return TaskInfo(**response)
 
     @version_error_hint_message
