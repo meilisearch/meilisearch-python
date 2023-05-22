@@ -17,7 +17,9 @@ jobs:
     - name: Check release validity
       run: sh .github/scripts/check-release.sh
     - name: Install pipenv
-      uses: dschep/install-pipenv-action@v1
+      run: |
+        pip install pipx
+        pipx install pipenv
     - name: Install dependencies
       run: |
         pipenv install

@@ -27,7 +27,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install pipenv
-        uses: dschep/install-pipenv-action@v1
+        run: |
+          pip install pipx
+          pipx install pipenv
       - name: Install dependencies
         run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: Meilisearch (latest version) setup with Docker
@@ -45,7 +47,9 @@ jobs:
         with:
           python-version: 3.7
       - name: Install pipenv
-        uses: dschep/install-pipenv-action@v1
+        run: |
+          pip install pipx
+          pipx install pipenv
       - name: Install dependencies
         run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: Linter with pylint
@@ -61,7 +65,9 @@ jobs:
         with:
           python-version: 3.9
       - name: Install pipenv
-        uses: dschep/install-pipenv-action@v1
+        run: |
+          pip install pipx
+          pipx install pipenv
       - name: Install dependencies
         run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: mypy type check
@@ -77,7 +83,9 @@ jobs:
         with:
           python-version: 3.9
       - name: Install pipenv
-        uses: dschep/install-pipenv-action@v1
+        run: |
+          pip install pipx
+          pipx install pipenv
       - name: Install dependencies
         run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: black
@@ -93,7 +101,9 @@ jobs:
         with:
           python-version: 3.9
       - name: Install pipenv
-        uses: dschep/install-pipenv-action@v1
+        run: |
+          pip install pipx
+          pipx install pipenv
       - name: Install dependencies
         run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: isort
