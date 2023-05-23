@@ -36,7 +36,8 @@ def test_update_displayed_attributes_to_none(empty_index):
     get_attributes = index.get_displayed_attributes()
     for attribute in DISPLAYED_ATTRIBUTES:
         assert attribute in get_attributes
-    response = index.reset_displayed_attributes()
+    # Launch test to update at null the setting
+    response = index.update_displayed_attributes(None)
     index.wait_for_task(response.task_uid)
     response = index.get_displayed_attributes()
     assert response == ["*"]

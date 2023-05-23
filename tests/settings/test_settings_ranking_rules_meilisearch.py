@@ -31,7 +31,7 @@ def test_update_ranking_rules_none(empty_index):
     for rule in NEW_RANKING_RULES:
         assert rule in response
     # Launch test to update at null the setting
-    response = index.reset_ranking_rules()
+    response = index.update_ranking_rules(None)
     index.wait_for_task(response.task_uid)
     response = index.get_ranking_rules()
     for rule in DEFAULT_RANKING_RULES:

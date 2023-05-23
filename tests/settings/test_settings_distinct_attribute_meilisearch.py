@@ -28,7 +28,7 @@ def test_update_distinct_at_to_none(empty_index):
     response = index.get_distinct_attribute()
     assert response == NEW_DISTINCT_ATTRIBUTE
     # Launch test to update at null the setting
-    response = index.reset_distinct_attribute()
+    response = index.update_distinct_attribute(None)
     index.wait_for_task(response.task_uid)
     response = index.get_distinct_attribute()
     assert response == DEFAULT_DISTINCT_ATTRIBUTE
