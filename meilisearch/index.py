@@ -310,6 +310,7 @@ class Index:
         ----------
         parameters (optional):
             parameters accepted by the get documents route: https://docs.meilisearch.com/reference/api/documents.html#get-documents
+            Note: The filter parameter is only available in Meilisearch >= 1.2.0.
 
         Returns
         -------
@@ -325,13 +326,20 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        if parameters is None:
-            parameters = {}
-        elif "fields" in parameters and isinstance(parameters["fields"], list):
-            parameters["fields"] = ",".join(parameters["fields"])
+        if parameters is None or parameters.get("filter") is None:
+            if parameters is None:
+                parameters = {}
+            elif "fields" in parameters and isinstance(parameters["fields"], list):
+                parameters["fields"] = ",".join(parameters["fields"])
 
-        response = self.http.get(
-            f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{parse.urlencode(parameters)}"
+            response = self.http.get(
+                f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{parse.urlencode(parameters)}"
+            )
+            return DocumentsResults(response)
+
+        response = self.http.post(
+            f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}/fetch",
+            body=parameters,
         )
         return DocumentsResults(response)
 
