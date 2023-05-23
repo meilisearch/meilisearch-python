@@ -23,7 +23,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install pipenv
-        uses: dschep/install-pipenv-action@v1
+        run: |
+          pip install pipx
+          pipx install pipenv
       - name: Install dependencies
         run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: Get the latest Meilisearch RC
