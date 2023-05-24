@@ -512,7 +512,7 @@ class Client:
 
         Parameters
         ----------
-        parameters (optional):
+        parameters:
             parameters accepted by the cancel tasks route:https://docs.meilisearch.com/reference/api/tasks.html#cancel-tasks.
 
         Returns
