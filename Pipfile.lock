@@ -592,11 +592,11 @@
         },
         "tox": {
             "hashes": [
-                "sha256:12fe562b8992ea63b1e92556b7e28600cd1b70c9e01ce08984f60ce2d32c243c",
-                "sha256:524640254de8b0f03facbdc6b7c18a35700592e3ada0ede42f509b3504b745ff"
+                "sha256:5a2eac5fb816779dfdf5cb00fecbc27eb0524e4626626bb1de84747b24cacc56",
+                "sha256:d25a2e6cb261adc489604fafd76cd689efeadfa79709965e965668d6d3f63046"
             ],
             "index": "pypi",
-            "version": "==4.4.8"
+            "version": "==4.5.1"
         },
         "tox-pipenv": {
             "hashes": [
