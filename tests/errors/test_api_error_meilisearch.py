@@ -25,7 +25,7 @@ def test_meilisearch_api_error_wrong_master_key():
 @patch("requests.post")
 def test_meilisearch_api_error_no_code(mock_post):
     """Here to test for regressions related to https://github.com/meilisearch/meilisearch-python/issues/305."""
-
+    mock_post.configure_mock(__name__="post")
     mock_response = requests.models.Response()
     mock_response.status_code = 408
     mock_post.return_value = mock_response

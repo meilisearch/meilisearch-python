@@ -889,7 +889,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.ranking_rules))
 
-    def update_ranking_rules(self, body: List[str]) -> TaskInfo:
+    def update_ranking_rules(self, body: Union[List[str], None]) -> TaskInfo:
         """Update ranking rules of the index.
 
         Parameters
@@ -949,7 +949,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.distinct_attribute))
 
-    def update_distinct_attribute(self, body: Dict[str, Any]) -> TaskInfo:
+    def update_distinct_attribute(self, body: Union[Dict[str, Any], None]) -> TaskInfo:
         """Update distinct attribute of the index.
 
         Parameters
@@ -1009,7 +1009,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.searchable_attributes))
 
-    def update_searchable_attributes(self, body: List[str]) -> TaskInfo:
+    def update_searchable_attributes(self, body: Union[List[str], None]) -> TaskInfo:
         """Update searchable attributes of the index.
 
         Parameters
@@ -1069,7 +1069,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.displayed_attributes))
 
-    def update_displayed_attributes(self, body: List[str]) -> TaskInfo:
+    def update_displayed_attributes(self, body: Union[List[str], None]) -> TaskInfo:
         """Update displayed attributes of the index.
 
         Parameters
@@ -1129,7 +1129,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.stop_words))
 
-    def update_stop_words(self, body: List[str]) -> TaskInfo:
+    def update_stop_words(self, body: Union[List[str], None]) -> TaskInfo:
         """Update stop words of the index.
 
         Parameters
@@ -1189,7 +1189,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.synonyms))
 
-    def update_synonyms(self, body: Dict[str, List[str]]) -> TaskInfo:
+    def update_synonyms(self, body: Union[Dict[str, List[str]], None]) -> TaskInfo:
         """Update synonyms of the index.
 
         Parameters
@@ -1249,7 +1249,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.filterable_attributes))
 
-    def update_filterable_attributes(self, body: List[str]) -> TaskInfo:
+    def update_filterable_attributes(self, body: Union[List[str], None]) -> TaskInfo:
         """Update filterable attributes of the index.
 
         Parameters
@@ -1309,7 +1309,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.sortable_attributes))
 
-    def update_sortable_attributes(self, body: List[str]) -> TaskInfo:
+    def update_sortable_attributes(self, body: Union[List[str], None]) -> TaskInfo:
         """Update sortable attributes of the index.
 
         Parameters
@@ -1371,7 +1371,7 @@ class Index:
 
         return TypoTolerance(**typo_tolerance)
 
-    def update_typo_tolerance(self, body: Dict[str, Any]) -> TaskInfo:
+    def update_typo_tolerance(self, body: Union[Dict[str, Any], None]) -> TaskInfo:
         """Update typo tolerance of the index.
 
         Parameters
@@ -1431,7 +1431,7 @@ class Index:
 
         return Pagination(**pagination)
 
-    def update_pagination_settings(self, body: Dict[str, Any]) -> TaskInfo:
+    def update_pagination_settings(self, body: Union[Dict[str, Any], None]) -> TaskInfo:
         """Update the pagination settings of the index.
 
         Parameters
@@ -1493,7 +1493,7 @@ class Index:
 
         return Faceting(**faceting)
 
-    def update_faceting_settings(self, body: Dict[str, Any]) -> TaskInfo:
+    def update_faceting_settings(self, body: Union[Dict[str, Any], None]) -> TaskInfo:
         """Update the faceting settings of the index.
 
         Parameters

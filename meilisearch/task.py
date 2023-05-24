@@ -75,12 +75,12 @@ class TaskHandler:
         task = self.http.get(f"{self.config.paths.task}/{uid}")
         return Task(**task)
 
-    def cancel_tasks(self, parameters: Optional[Dict[str, Any]] = None) -> TaskInfo:
+    def cancel_tasks(self, parameters: Dict[str, Any]) -> TaskInfo:
         """Cancel a list of enqueued or processing tasks.
 
         Parameters
         ----------
-        parameters (optional):
+        parameters:
             parameters accepted by the cancel tasks https://docs.meilisearch.com/reference/api/tasks.html#cancel-task.
 
         Returns
@@ -94,8 +94,6 @@ class TaskHandler:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
         """
-        if parameters is None:
-            parameters = {}
         for param in parameters:
             if isinstance(parameters[param], list):
                 parameters[param] = ",".join(parameters[param])
