@@ -33,7 +33,13 @@ class HttpRequests:
             self.headers["Content-Type"] = content_type
         try:
             request_path = self.config.url + "/" + path
-            if isinstance(body, bytes):
+            if http_method.__name__ == "get":
+                request = http_method(
+                    request_path,
+                    timeout=self.config.timeout,
+                    headers=self.headers,
+                )
+            elif isinstance(body, bytes):
                 request = http_method(
                     request_path,
                     timeout=self.config.timeout,
