@@ -303,6 +303,7 @@ class Index:
         )
         return Document(document)
 
+    @version_error_hint_message
     def get_documents(self, parameters: Optional[Dict[str, Any]] = None) -> DocumentsResults:
         """Get a set of documents from the index.
 
