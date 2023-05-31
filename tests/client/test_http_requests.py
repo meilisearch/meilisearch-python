@@ -19,7 +19,7 @@ def test_get_headers_with_multiple_user_agent():
         BASE_URL,
         MASTER_KEY,
         timeout=None,
-        client_agents=["Meilisearch Package1 (v1.1.1)", "Meilisearch Package2 (v2.2.2)"],
+        client_agents=("Meilisearch Package1 (v1.1.1)", "Meilisearch Package2 (v2.2.2)"),
     )
     http = HttpRequests(config=config)
 
