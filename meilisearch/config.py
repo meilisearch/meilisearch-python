@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Optional
+from typing import List, Optional
 
 
 class Config:
@@ -35,7 +35,11 @@ class Config:
         swap = "swap-indexes"
 
     def __init__(
-        self, url: str, api_key: Optional[str] = None, timeout: Optional[int] = None
+        self,
+        url: str,
+        api_key: Optional[str] = None,
+        timeout: Optional[int] = None,
+        client_agents: Optional[List[str]] = None,
     ) -> None:
         """
         Parameters
@@ -49,4 +53,5 @@ class Config:
         self.url = url
         self.api_key = api_key
         self.timeout = timeout
+        self.client_agents = client_agents
         self.paths = self.Paths()
