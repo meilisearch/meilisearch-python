@@ -20,7 +20,7 @@ class HttpRequests:
         self.config = config
         self.headers = {
             "Authorization": f"Bearer {self.config.api_key}",
-            "User-Agent": self._build_user_agent(config.client_agents),
+            "User-Agent": _build_user_agent(config.client_agents),
         }
 
     def send_request(
@@ -95,14 +95,6 @@ class HttpRequests:
     ) -> Any:
         return self.send_request(requests.delete, path, body)
 
-    @lru_cache(maxsize=1)
-    def _build_user_agent(self, client_agents: Optional[Tuple[str]] = None) -> str:
-        user_agent = qualified_version()
-        if not client_agents:
-            return user_agent
-
-        return f"{user_agent};{';'.join(client_agents)}"
-
     @staticmethod
     def __to_json(request: requests.Response) -> Any:
         if request.content == b"":
@@ -116,3 +108,12 @@ class HttpRequests:
             return HttpRequests.__to_json(request)
         except requests.exceptions.HTTPError as err:
             raise MeilisearchApiError(str(err), request) from err
+
+
+@lru_cache(maxsize=1)
+def _build_user_agent(client_agents: Optional[Tuple[str]] = None) -> str:
+    user_agent = qualified_version()
+    if not client_agents:
+        return user_agent
+
+    return f"{user_agent};{';'.join(client_agents)}"
