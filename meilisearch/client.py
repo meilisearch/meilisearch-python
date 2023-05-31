@@ -8,7 +8,7 @@ import hashlib
 import hmac
 import json
 import re
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 from urllib import parse
 
 from meilisearch._httprequests import HttpRequests

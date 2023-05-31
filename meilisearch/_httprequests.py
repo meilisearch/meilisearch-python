@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import json
-from typing import Any, Callable, Dict, List, Optional, Union
+from functools import lru_cache
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 import requests
 
@@ -19,7 +20,7 @@ class HttpRequests:
         self.config = config
         self.headers = {
             "Authorization": f"Bearer {self.config.api_key}",
-            "User-Agent": _build_user_agent(config.client_agents),
+            "User-Agent": self._build_user_agent(config.client_agents),
         }
 
     def send_request(
@@ -93,6 +94,14 @@ class HttpRequests:
         body: Optional[Union[Dict[str, Any], List[Dict[str, Any]], List[str]]] = None,
     ) -> Any:
         return self.send_request(requests.delete, path, body)
+
+    @lru_cache(maxsize=1)
+    def _build_user_agent(self, client_agents: Optional[Tuple[str]] = None) -> str:
+        user_agent = qualified_version()
+        if not client_agents:
+            return user_agent
+
+        return f"{user_agent};{';'.join(client_agents)}"
 
     @staticmethod
     def __to_json(request: requests.Response) -> Any:
