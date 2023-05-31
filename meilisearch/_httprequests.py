@@ -19,8 +19,7 @@ class HttpRequests:
         self.config = config
         self.headers = {
             "Authorization": f"Bearer {self.config.api_key}",
-            "User-Agent": qualified_version()
-            + (";" + ";".join(config.client_agents) if config.client_agents else ""),
+            "User-Agent": _build_user_agent(config.client_agents),
         }
 
     def send_request(
