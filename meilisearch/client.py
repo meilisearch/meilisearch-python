@@ -8,7 +8,7 @@ import hashlib
 import hmac
 import json
 import re
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
@@ -29,7 +29,11 @@ class Client:
     """
 
     def __init__(
-        self, url: str, api_key: Optional[str] = None, timeout: Optional[int] = None
+        self,
+        url: str,
+        api_key: Optional[str] = None,
+        timeout: Optional[int] = None,
+        client_agents: Optional[Tuple[str]] = None,
     ) -> None:
         """
         Parameters
@@ -39,7 +43,7 @@ class Client:
         api_key:
             The optional API key for Meilisearch
         """
-        self.config = Config(url, api_key, timeout=timeout)
+        self.config = Config(url, api_key, timeout=timeout, client_agents=client_agents)
 
         self.http = HttpRequests(self.config)
 
