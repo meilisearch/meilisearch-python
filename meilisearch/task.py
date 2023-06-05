@@ -16,7 +16,7 @@ class TaskHandler:
     A class covering the Meilisearch Task API
 
     The task class gives access to all task routes and gives information about the progress of asynchronous operations.
-    https://docs.meilisearch.com/reference/api/tasks.html
+    https://www.meilisearch.com/docs/reference/api/tasks
     """
 
     def __init__(self, config: Config):
@@ -33,7 +33,7 @@ class TaskHandler:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the get tasks route: https://docs.meilisearch.com/reference/api/tasks.html#get-tasks.
+            parameters accepted by the get tasks route: https://www.meilisearch.com/docs/reference/api/tasks#get-tasks.
 
         Returns
         -------
@@ -44,7 +44,7 @@ class TaskHandler:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         if parameters is None:
             parameters = {}
@@ -70,7 +70,7 @@ class TaskHandler:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.get(f"{self.config.paths.task}/{uid}")
         return Task(**task)
@@ -81,18 +81,18 @@ class TaskHandler:
         Parameters
         ----------
         parameters:
-            parameters accepted by the cancel tasks https://docs.meilisearch.com/reference/api/tasks.html#cancel-task.
+            parameters accepted by the cancel tasks https://www.meilisearch.com/docs/reference/api/tasks#cancel-task.
 
         Returns
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         for param in parameters:
             if isinstance(parameters[param], list):
@@ -107,16 +107,16 @@ class TaskHandler:
         config:
             Config object containing permission and location of Meilisearch.
         parameters (optional):
-            parameters accepted by the delete tasks route:https://docs.meilisearch.com/reference/api/tasks.html#delete-task.
+            parameters accepted by the delete tasks route:https://www.meilisearch.com/docs/reference/api/tasks#delete-task.
         Returns
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         if parameters is None:
             parameters = {}
@@ -151,7 +151,7 @@ class TaskHandler:
         Raises
         ------
         MeilisearchTimeoutError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         start_time = datetime.now()
         elapsed_time = 0.0

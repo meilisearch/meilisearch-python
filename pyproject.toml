@@ -42,7 +42,7 @@ exclude = ["docs*", "tests*"]
 meilisearch = ["py.typed"]
 
 [project.urls]
-Meilisearch_Documentation = "https://docs.meilisearch.com/"
+Meilisearch_Documentation = "https://www.meilisearch.com/docs"
 Documentation = "https://meilisearch.github.io/meilisearch-python/"
 Homepage = "https://github.com/meilisearch/meilisearch-python"
 

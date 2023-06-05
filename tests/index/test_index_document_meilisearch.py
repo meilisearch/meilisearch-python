@@ -34,7 +34,6 @@ def test_add_documents_empty(empty_index):
         index.add_documents("")
     assert e_info.value.code == "missing_payload"
     assert e_info.value.type == "invalid_request"
-    assert e_info.value.link == "https://docs.meilisearch.com/errors#missing_payload"
 
 
 @pytest.mark.parametrize("batch_size", [2, 3, 1000])

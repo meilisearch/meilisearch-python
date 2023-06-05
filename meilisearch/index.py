@@ -20,7 +20,7 @@ class Index:
     Indexes routes wrapper.
 
     Index class gives access to all indexes routes and child routes (inherited).
-    https://docs.meilisearch.com/reference/api/indexes.html
+    https://www.meilisearch.com/docs/reference/api/indexes
     """
 
     def __init__(
@@ -56,12 +56,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
 
         task = self.http.delete(f"{self.config.paths.index}/{self.uid}")
@@ -80,12 +80,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         payload = {"primaryKey": primary_key}
         task = self.http.patch(f"{self.config.paths.index}/{self.uid}", payload)
@@ -98,7 +98,7 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         index_dict = self.http.get(f"{self.config.paths.index}/{self.uid}")
         self.primary_key = index_dict["primaryKey"]
@@ -112,7 +112,7 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.fetch_info().primary_key
 
@@ -131,12 +131,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         if options is None:
             options = {}
@@ -151,7 +151,7 @@ class Index:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the get tasks route: https://docs.meilisearch.com/reference/api/tasks.html#get-tasks.
+            parameters accepted by the get tasks route: https://www.meilisearch.com/docs/reference/api/tasks#get-tasks.
 
         Returns
         -------
@@ -165,7 +165,7 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         if parameters is not None:
             parameters.setdefault("indexUids", []).append(self.uid)
@@ -190,7 +190,7 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.task_handler.get_task(uid)
 
@@ -219,7 +219,7 @@ class Index:
         Raises
         ------
         MeilisearchTimeoutError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.task_handler.wait_for_task(uid, timeout_in_ms, interval_in_ms)
 
@@ -227,7 +227,7 @@ class Index:
         """Get stats of the index.
 
         Get information about the number of documents, field frequencies, ...
-        https://docs.meilisearch.com/reference/api/stats.html
+        https://www.meilisearch.com/docs/reference/api/stats
 
         Returns
         -------
@@ -237,7 +237,7 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         stats = self.http.get(f"{self.config.paths.index}/{self.uid}/{self.config.paths.stat}")
         return IndexStats(stats)
@@ -251,7 +251,7 @@ class Index:
             String containing the searched word(s)
         opt_params (optional):
             Dictionary containing optional query parameters
-            https://docs.meilisearch.com/reference/api/search.html#search-in-an-index
+            https://www.meilisearch.com/docs/reference/api/search#search-in-an-index
 
         Returns
         -------
@@ -261,7 +261,7 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         if opt_params is None:
             opt_params = {}
@@ -281,7 +281,7 @@ class Index:
         document_id:
             Unique identifier of the document.
         parameters (optional):
-            parameters accepted by the get document route: https://docs.meilisearch.com/reference/api/documents.html#get-one-document
+            parameters accepted by the get document route: hhttps://www.meilisearch.com/docs/reference/api/documents#get-one-document
 
         Returns
         -------
@@ -291,7 +291,7 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         if parameters is None:
             parameters = {}
@@ -325,7 +325,7 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         if parameters is None or parameters.get("filter") is None:
             if parameters is None:
@@ -362,12 +362,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         url = self._build_url(primary_key)
         add_document_task = self.http.post(url, documents)
@@ -394,13 +394,13 @@ class Index:
         -------
         tasks_info:
             List of TaskInfo instances containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request.
-            Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
 
         tasks: List[TaskInfo] = []
@@ -429,12 +429,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.add_documents_raw(str_documents, primary_key, "application/json")
 
@@ -459,12 +459,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.add_documents_raw(str_documents, primary_key, "text/csv", csv_delimiter)
 
@@ -486,12 +486,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.add_documents_raw(str_documents, primary_key, "application/x-ndjson")
 
@@ -520,12 +520,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         url = self._build_url(primary_key=primary_key, csv_delimiter=csv_delimiter)
         response = self.http.post(url, str_documents, content_type)
@@ -547,12 +547,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         url = self._build_url(primary_key)
         response = self.http.put(url, documents)
@@ -576,12 +576,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.update_documents_raw(str_documents, primary_key, "application/x-ndjson")
 
@@ -603,12 +603,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.update_documents_raw(str_documents, primary_key, "application/json")
 
@@ -633,12 +633,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.update_documents_raw(str_documents, primary_key, "text/csv", csv_delimiter)
 
@@ -667,12 +667,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         url = self._build_url(primary_key=primary_key, csv_delimiter=csv_delimiter)
         response = self.http.put(url, str_documents, content_type)
@@ -699,13 +699,13 @@ class Index:
         -------
         tasks_info:
             List of TaskInfo instances containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request.
-            Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
 
         tasks = []
@@ -728,12 +728,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         response = self.http.delete(
             f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}/{document_id}"
@@ -763,12 +763,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         if ids:
             warn(
@@ -793,12 +793,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         response = self.http.delete(
             f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}"
@@ -810,7 +810,7 @@ class Index:
     def get_settings(self) -> Dict[str, Any]:
         """Get settings of the index.
 
-        https://docs.meilisearch.com/reference/api/settings.html
+        https://www.meilisearch.com/docs/reference/api/settings
 
         Returns
         -------
@@ -820,32 +820,32 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.http.get(f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}")
 
     def update_settings(self, body: Dict[str, Any]) -> TaskInfo:
         """Update settings of the index.
 
-        https://docs.meilisearch.com/reference/api/settings.html#update-settings
+        https://www.meilisearch.com/docs/reference/api/settings#update-settings
 
         Parameters
         ----------
         body:
             Dictionary containing the settings of the index.
             More information:
-            https://docs.meilisearch.com/reference/api/settings.html#update-settings
+            https://www.meilisearch.com/docs/reference/api/settings#update-settings
 
         Returns
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.patch(
             f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}", body
@@ -856,18 +856,18 @@ class Index:
     def reset_settings(self) -> TaskInfo:
         """Reset settings of the index to default values.
 
-        https://docs.meilisearch.com/reference/api/settings.html#reset-settings
+        https://www.meilisearch.com/docs/reference/api/settings#reset-settings
 
         Returns
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.delete(f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}")
 
@@ -886,7 +886,7 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.http.get(self.__settings_url_for(self.config.paths.ranking_rules))
 
@@ -902,12 +902,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.put(self.__settings_url_for(self.config.paths.ranking_rules), body)
 
@@ -920,12 +920,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.delete(
             self.__settings_url_for(self.config.paths.ranking_rules),
@@ -946,7 +946,7 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.http.get(self.__settings_url_for(self.config.paths.distinct_attribute))
 
@@ -962,12 +962,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.put(self.__settings_url_for(self.config.paths.distinct_attribute), body)
 
@@ -980,12 +980,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.delete(
             self.__settings_url_for(self.config.paths.distinct_attribute),
@@ -1006,7 +1006,7 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.http.get(self.__settings_url_for(self.config.paths.searchable_attributes))
 
@@ -1022,12 +1022,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.put(self.__settings_url_for(self.config.paths.searchable_attributes), body)
 
@@ -1040,12 +1040,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.delete(
             self.__settings_url_for(self.config.paths.searchable_attributes),
@@ -1066,7 +1066,7 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.http.get(self.__settings_url_for(self.config.paths.displayed_attributes))
 
@@ -1082,12 +1082,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.put(self.__settings_url_for(self.config.paths.displayed_attributes), body)
 
@@ -1100,12 +1100,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.delete(
             self.__settings_url_for(self.config.paths.displayed_attributes),
@@ -1126,7 +1126,7 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.http.get(self.__settings_url_for(self.config.paths.stop_words))
 
@@ -1142,12 +1142,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.put(self.__settings_url_for(self.config.paths.stop_words), body)
 
@@ -1160,12 +1160,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.delete(
             self.__settings_url_for(self.config.paths.stop_words),
@@ -1186,7 +1186,7 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.http.get(self.__settings_url_for(self.config.paths.synonyms))
 
@@ -1202,12 +1202,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.put(self.__settings_url_for(self.config.paths.synonyms), body)
 
@@ -1220,12 +1220,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.delete(
             self.__settings_url_for(self.config.paths.synonyms),
@@ -1246,7 +1246,7 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.http.get(self.__settings_url_for(self.config.paths.filterable_attributes))
 
@@ -1262,12 +1262,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.put(self.__settings_url_for(self.config.paths.filterable_attributes), body)
 
@@ -1280,12 +1280,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.delete(
             self.__settings_url_for(self.config.paths.filterable_attributes),
@@ -1306,7 +1306,7 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.http.get(self.__settings_url_for(self.config.paths.sortable_attributes))
 
@@ -1322,12 +1322,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.put(self.__settings_url_for(self.config.paths.sortable_attributes), body)
 
@@ -1340,12 +1340,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.delete(
             self.__settings_url_for(self.config.paths.sortable_attributes),
@@ -1366,7 +1366,7 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         typo_tolerance = self.http.get(self.__settings_url_for(self.config.paths.typo_tolerance))
 
@@ -1384,12 +1384,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.patch(self.__settings_url_for(self.config.paths.typo_tolerance), body)
 
@@ -1402,12 +1402,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.delete(
             self.__settings_url_for(self.config.paths.typo_tolerance),
@@ -1426,7 +1426,7 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         pagination = self.http.get(self.__settings_url_for(self.config.paths.pagination))
 
@@ -1439,18 +1439,18 @@ class Index:
         ----------
         body: dict
             Dictionary containing the pagination settings.
-            https://docs.meilisearch.com/reference/api/pagination.html#update-pagination-settings
+            https://www.meilisearch.com/docs/reference/api/settings#update-pagination-settings
 
         Returns
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.patch(
             path=self.__settings_url_for(self.config.paths.pagination), body=body
@@ -1465,12 +1465,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.delete(self.__settings_url_for(self.config.paths.pagination))
 
@@ -1487,7 +1487,7 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
 
         faceting = self.http.get(self.__settings_url_for(self.config.paths.faceting))
@@ -1501,18 +1501,18 @@ class Index:
         ----------
         body: dict
             Dictionary containing the faceting settings.
-            https://docs.meilisearch.com/reference/api/faceting.html#update-faceting-settings
+            https://www.meilisearch.com/docs/reference/api/settings#update-pagination-settings
 
         Returns
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.patch(path=self.__settings_url_for(self.config.paths.faceting), body=body)
 
@@ -1525,12 +1525,12 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.delete(self.__settings_url_for(self.config.paths.faceting))
 

@@ -63,12 +63,12 @@ class Client:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return Index.create(self.config, uid, options)
 
@@ -84,12 +84,12 @@ class Client:
         -------
         task_info:
             Dictionary containing a task to track the informations about the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
 
         task = self.http.delete(f"{self.config.paths.index}/{uid}")
@@ -102,7 +102,7 @@ class Client:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the get indexes route: https://docs.meilisearch.com/reference/api/indexes.html#list-all-indexes
+            parameters accepted by the get indexes route: https://www.meilisearch.com/docs/reference/api/indexes#list-all-indexes
 
         Returns
         -------
@@ -112,7 +112,7 @@ class Client:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         if parameters is None:
             parameters = {}
@@ -135,7 +135,7 @@ class Client:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the get indexes route: https://docs.meilisearch.com/reference/api/indexes.html#list-all-indexes
+            parameters accepted by the get indexes route: https://www.meilisearch.com/docs/reference/api/indexes#list-all-indexes
 
         Returns
         -------
@@ -145,7 +145,7 @@ class Client:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         if parameters is None:
             parameters = {}
@@ -168,7 +168,7 @@ class Client:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return Index(self.config, uid).fetch_info()
 
@@ -189,7 +189,7 @@ class Client:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.http.get(f"{self.config.paths.index}/{uid}")
 
@@ -218,7 +218,7 @@ class Client:
         ----------
         queries:
             List of dictionaries containing the specified indexes and their search queries
-            https://docs.meilisearch.com/reference/api/search.html#search-in-an-index
+            https://www.meilisearch.com/docs/reference/api/search#search-in-an-index
 
         Returns
         -------
@@ -228,7 +228,7 @@ class Client:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.http.post(
             f"{self.config.paths.multi_search}",
@@ -239,7 +239,7 @@ class Client:
         """Get all stats of Meilisearch
 
         Get information about database size and all indexes
-        https://docs.meilisearch.com/reference/api/stats.html
+        https://www.meilisearch.com/docs/reference/api/stats
 
         Returns
         -------
@@ -249,7 +249,7 @@ class Client:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.http.get(self.config.paths.stat)
 
@@ -264,7 +264,7 @@ class Client:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.http.get(self.config.paths.health)
 
@@ -288,12 +288,12 @@ class Client:
         -------
         key:
             The API key.
-            https://docs.meilisearch.com/reference/api/keys.html#get-key
+            https://www.meilisearch.com/docs/reference/api/keys#get-key
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         key = self.http.get(f"{self.config.paths.keys}/{key_or_uid}")
 
@@ -305,18 +305,18 @@ class Client:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the get keys route: https://docs.meilisearch.com/reference/api/keys.html#get-all-keys
+            parameters accepted by the get keys route: https://www.meilisearch.com/docs/reference/api/keys#get-all-keys
 
         Returns
         -------
         keys:
             API keys.
-            https://docs.meilisearch.com/reference/api/keys.html#get-keys
+            https://www.meilisearch.com/docs/reference/api/keys#get-keys
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         if parameters is None:
             parameters = {}
@@ -340,12 +340,12 @@ class Client:
         -------
         key:
             The new API key.
-            https://docs.meilisearch.com/reference/api/keys.html#get-keys
+            https://www.meilisearch.com/docs/reference/api/keys#get-keys
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.post(f"{self.config.paths.keys}", options)
 
@@ -366,12 +366,12 @@ class Client:
         -------
         key:
             The updated API key.
-            https://docs.meilisearch.com/reference/api/keys.html#get-keys
+            https://www.meilisearch.com/docs/reference/api/keys#get-keys
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         url = f"{self.config.paths.keys}/{key_or_uid}"
         key = self.http.patch(url, options)
@@ -390,12 +390,12 @@ class Client:
         -------
         keys:
             The Response status code. 204 signifies a successful delete.
-            https://docs.meilisearch.com/reference/api/keys.html#get-keys
+            https://www.meilisearch.com/docs/reference/api/keys#get-keys
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         response = self.http.delete(f"{self.config.paths.keys}/{key_or_uid}")
 
@@ -412,7 +412,7 @@ class Client:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.http.get(self.config.paths.version)
 
@@ -427,7 +427,7 @@ class Client:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.get_version()
 
@@ -438,12 +438,12 @@ class Client:
         -------
         Dump:
             Information about the dump.
-            https://docs.meilisearch.com/reference/api/dump.html#create-a-dump
+            https://www.meilisearch.com/docs/reference/api/dump#create-a-dump
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.post(self.config.paths.dumps)
 
@@ -461,12 +461,12 @@ class Client:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return TaskInfo(**self.http.post(self.config.paths.swap, parameters))
 
@@ -476,7 +476,7 @@ class Client:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the get tasks route: https://docs.meilisearch.com/reference/api/tasks.html#get-tasks.
+            parameters accepted by the get tasks route: https://www.meilisearch.com/docs/reference/api/tasks#get-tasks.
 
         Returns
         -------
@@ -487,7 +487,7 @@ class Client:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.task_handler.get_tasks(parameters=parameters)
 
@@ -507,7 +507,7 @@ class Client:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.task_handler.get_task(uid)
 
@@ -517,18 +517,18 @@ class Client:
         Parameters
         ----------
         parameters:
-            parameters accepted by the cancel tasks route:https://docs.meilisearch.com/reference/api/tasks.html#cancel-tasks.
+            parameters accepted by the cancel tasks route:https://www.meilisearch.com/docs/reference/api/tasks#cancel-tasks.
 
         Returns
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.task_handler.cancel_tasks(parameters=parameters)
 
@@ -538,16 +538,16 @@ class Client:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the delete tasks route:https://docs.meilisearch.com/reference/api/tasks.html#delete-task.
+            parameters accepted by the delete tasks route:https://www.meilisearch.com/docs/reference/api/tasks#delete-task.
         Returns
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://docs.meilisearch.com/reference/api/tasks.html#get-one-task
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.task_handler.delete_tasks(parameters=parameters)
 
@@ -576,7 +576,7 @@ class Client:
         Raises
         ------
         MeilisearchTimeoutError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://docs.meilisearch.com/errors/#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.task_handler.wait_for_task(uid, timeout_in_ms, interval_in_ms)
 
