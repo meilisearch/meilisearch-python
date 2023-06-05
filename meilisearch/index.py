@@ -310,7 +310,7 @@ class Index:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the get documents route: https://docs.meilisearch.com/reference/api/documents.html#get-documents
+            parameters accepted by the get documents route: https://www.meilisearch.com/docs/reference/api/documents#get-documents
             Note: The filter parameter is only available in Meilisearch >= 1.2.0.
 
         Returns
