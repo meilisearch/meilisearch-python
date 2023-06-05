@@ -1,8 +1,15 @@
 from __future__ import annotations
 
 import json
+from functools import wraps
+from typing import TYPE_CHECKING, Any, Callable
 
 from requests import Response
+
+if TYPE_CHECKING:
+    from meilisearch.client import Client
+    from meilisearch.index import Index
+    from meilisearch.task import TaskHandler
 
 
 class MeilisearchError(Exception):
@@ -54,3 +61,15 @@ class MeilisearchTimeoutError(MeilisearchError):
 
     def __str__(self) -> str:
         return f"MeilisearchTimeoutError, {self.message}"
+
+
+def version_error_hint_message(func: Callable) -> Any:
+    @wraps(func)
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        try:
+            return func(*args, **kwargs)
+        except MeilisearchApiError as exc:
+            exc.message = f"{exc.message}. Hint: It might not be working because you're not up to date with the Meilisearch version that {func.__name__} call requires."
+            raise exc
+
+    return wrapper

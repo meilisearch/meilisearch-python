@@ -1,6 +1,7 @@
 # pylint: disable=invalid-name
 
 from math import ceil
+from warnings import catch_warnings
 
 import pytest
 
@@ -102,6 +103,26 @@ def test_get_documents_offset_optional_params(index_with_documents):
     assert response_offset_limit.results[0].title == response.results[1].title
 
 
+def test_get_documents_filter(index_with_documents):
+    index = index_with_documents()
+    response = index.update_filterable_attributes(["genre"])
+    index.wait_for_task(response.task_uid)
+    response = index.get_documents({"filter": "genre=action"})
+    genres = {x.genre for x in response.results}
+    assert len(genres) == 1
+    assert next(iter(genres)) == "action"
+
+
+def test_get_documents_filter_with_fields(index_with_documents):
+    index = index_with_documents()
+    response = index.update_filterable_attributes(["genre"])
+    index.wait_for_task(response.task_uid)
+    response = index.get_documents({"fields": ["genre"], "filter": "genre=action"})
+    genres = {x.genre for x in response.results}
+    assert len(genres) == 1
+    assert next(iter(genres)) == "action"
+
+
 def test_update_documents(index_with_documents, small_movies):
     """Tests updating a single document and a set of documents."""
     index = index_with_documents()
@@ -160,17 +181,33 @@ def test_delete_document(index_with_documents):
         index.get_document("500682")
 
 
-def test_delete_documents(index_with_documents):
+def test_delete_documents_by_id(index_with_documents):
     """Tests deleting a set of documents."""
-    to_delete = [522681, "450465", 329996]
+    with catch_warnings(record=True) as w:
+        to_delete = [522681, "450465", 329996]
+        index = index_with_documents()
+        response = index.delete_documents(to_delete)
+        assert isinstance(response, TaskInfo)
+        assert response.task_uid is not None
+        index.wait_for_task(response.task_uid)
+        for document in to_delete:
+            with pytest.raises(Exception):
+                index.get_document(document)
+        assert "The use of ids is depreciated" in str(w[0].message)
+
+
+def test_delete_documents(index_with_documents):
     index = index_with_documents()
-    response = index.delete_documents(to_delete)
-    assert isinstance(response, TaskInfo)
-    assert response.task_uid is not None
+    response = index.update_filterable_attributes(["genre"])
     index.wait_for_task(response.task_uid)
-    for document in to_delete:
-        with pytest.raises(Exception):
-            index.get_document(document)
+    response = index.get_documents()
+    assert "action" in ([x.__dict__.get("genre") for x in response.results])
+    response = index.delete_documents(filter="genre=action")
+    index.wait_for_task(response.task_uid)
+    response = index.get_documents()
+    genres = [x.__dict__.get("genre") for x in response.results]
+    assert "action" not in genres
+    assert "cartoon" in genres
 
 
 def test_delete_all_documents(index_with_documents):

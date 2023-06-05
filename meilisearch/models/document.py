@@ -1,6 +1,4 @@
-from __future__ import annotations
-
-from typing import Any, Dict, Iterator
+from typing import Any, Dict, Iterator, List
 
 
 class Document:
@@ -22,7 +20,7 @@ class Document:
 
 class DocumentsResults:
     def __init__(self, resp: Dict[str, Any]) -> None:
-        self.results: list[Document] = [Document(doc) for doc in resp["results"]]
+        self.results: List[Document] = [Document(doc) for doc in resp["results"]]
         self.offset: int = resp["offset"]
         self.limit: int = resp["limit"]
         self.total: int = resp["total"]
