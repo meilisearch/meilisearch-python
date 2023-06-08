@@ -42,6 +42,12 @@ class Client:
             The url to the Meilisearch API (ex: http://localhost:7700)
         api_key:
             The optional API key for Meilisearch
+        timeout (optional):
+            The amount of time in seconds that the client will wait for a response before timing
+            out.
+        client_agents (optional):
+            Used to send additional client agent information for clients extending the functionality
+            of this client.
         """
         self.config = Config(url, api_key, timeout=timeout, client_agents=client_agents)
 
