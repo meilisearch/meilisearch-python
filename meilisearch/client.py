@@ -89,7 +89,7 @@ class Client:
         Returns
         -------
         task_info:
-            Dictionary containing a task to track the informations about the progress of an asynchronous process.
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
             https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
 
         Raises
