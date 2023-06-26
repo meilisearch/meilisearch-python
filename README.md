@@ -47,7 +47,7 @@ Say goodbye to server deployment and manual updates with [Meilisearch Cloud](htt
 
 ## 🔧 Installation
 
-**Note**: Python 3.7+ is required.
+**Note**: Python 3.8+ is required.
 
 With `pip3` in command line:
 
