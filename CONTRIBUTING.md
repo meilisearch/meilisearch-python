@@ -69,6 +69,8 @@ docker run -p 7700:7700 getmeili/meilisearch:latest meilisearch --master-key=mas
 pipenv run tox
 ```
 
+To check if your `yaml` files are correctly formatted, you need to [install yamllint](https://yamllint.readthedocs.io/en/stable/quickstart.html#installing-yamllint) and then run `yamllint .`
+
 ### Want to debug? <!-- omit in toc -->
 
 Import `pdb` in your file and use it:

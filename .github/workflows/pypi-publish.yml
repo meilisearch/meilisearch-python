@@ -9,25 +9,25 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.8'
-    - name: Check release validity
-      run: sh .github/scripts/check-release.sh
-    - name: Install pipenv
-      run: |
-        pip install pipx
-        pipx install pipenv
-    - name: Install dependencies
-      run: |
-        pipenv install
-        pipenv run pip3 install build setuptools wheel twine
-    - name: Build and publish
-      env:
-        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-      run: |
-        pipenv run python3 -m build
-        pipenv run twine upload dist/*
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+      - name: Check release validity
+        run: sh .github/scripts/check-release.sh
+      - name: Install pipenv
+        run: |
+          pip install pipx
+          pipx install pipenv
+      - name: Install dependencies
+        run: |
+          pipenv install
+          pipenv run pip3 install build setuptools wheel twine
+      - name: Build and publish
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: |
+          pipenv run python3 -m build
+          pipenv run twine upload dist/*

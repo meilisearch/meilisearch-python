@@ -8,30 +8,30 @@ jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-        lfs: true
-    - name: Install Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-    - name: Install pipenv
-      run: |
-        pip install pipx
-        pipx install pipenv
-    - name: Install dependencies
-      run: |
-        pipenv install --dev
-        pipenv install sphinx
-        pipenv install sphinx_rtd_theme
-    - name: Build docs
-      run: |
-        pipenv run sphinx-apidoc -f -o docs meilisearch/
-        pipenv run sphinx-build docs ./docs/_build/html/
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: docs/_build/html
-        force_orphan: true
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+      - name: Install Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install pipenv
+        run: |
+          pip install pipx
+          pipx install pipenv
+      - name: Install dependencies
+        run: |
+          pipenv install --dev
+          pipenv install sphinx
+          pipenv install sphinx_rtd_theme
+      - name: Build docs
+        run: |
+          pipenv run sphinx-apidoc -f -o docs meilisearch/
+          pipenv run sphinx-build docs ./docs/_build/html/
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/html
+          force_orphan: true
