@@ -12,10 +12,10 @@ def is_pydantic_2() -> bool:
         # Still check the version as a fail safe incase __version__ gets added to verion 1.
         if int(pydantic.__version__[:1]) >= 2:  # type: ignore[attr-defined]
             return True
-        else:  # pragma: no cover
-            # Raise an AttributeError to match the AttributeError on __version__ because in either
-            # case we need to get to the same place.
-            raise AttributeError
+
+        # Raise an AttributeError to match the AttributeError on __version__ because in either
+        # case we need to get to the same place.
+        raise AttributeError
     except AttributeError:  # pragma: no cover
         return False
 
