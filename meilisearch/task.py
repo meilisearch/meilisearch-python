@@ -73,6 +73,7 @@ class TaskHandler:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.get(f"{self.config.paths.task}/{uid}")
+        print(task)
         return Task(**task)
 
     def cancel_tasks(self, parameters: Dict[str, Any]) -> TaskInfo:

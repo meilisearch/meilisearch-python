@@ -6,6 +6,7 @@ from urllib import parse
 from warnings import warn
 
 from meilisearch._httprequests import HttpRequests
+from meilisearch._utils import iso_to_date_time
 from meilisearch.config import Config
 from meilisearch.errors import version_error_hint_message
 from meilisearch.models.document import Document, DocumentsResults
@@ -46,8 +47,8 @@ class Index:
         self.task_handler = TaskHandler(config)
         self.uid = uid
         self.primary_key = primary_key
-        self.created_at = self._iso_to_date_time(created_at)
-        self.updated_at = self._iso_to_date_time(updated_at)
+        self.created_at = iso_to_date_time(created_at)
+        self.updated_at = iso_to_date_time(updated_at)
 
     def delete(self) -> TaskInfo:
         """Delete the index.
@@ -102,8 +103,8 @@ class Index:
         """
         index_dict = self.http.get(f"{self.config.paths.index}/{self.uid}")
         self.primary_key = index_dict["primaryKey"]
-        self.created_at = self._iso_to_date_time(index_dict["createdAt"])
-        self.updated_at = self._iso_to_date_time(index_dict["updatedAt"])
+        self.created_at = iso_to_date_time(index_dict["createdAt"])
+        self.updated_at = iso_to_date_time(index_dict["updatedAt"])
         return self
 
     def get_primary_key(self) -> str | None:
@@ -1543,29 +1544,6 @@ class Index:
         total_len = len(documents)
         for i in range(0, total_len, batch_size):
             yield documents[i : i + batch_size]
-
-    @staticmethod
-    def _iso_to_date_time(iso_date: Optional[Union[datetime, str]]) -> Optional[datetime]:
-        """
-        Meilisearch returns the date time information in iso format. Python's implementation of
-        datetime can only handle up to 6 digits in microseconds, however Meilisearch sometimes
-        returns more digits than this in the micosecond sections so when that happens this method
-        reduces the number of microseconds so Python can handle it. If the value passed is either
-        None or already in datetime format the original value is returned.
-        """
-        if not iso_date:
-            return None
-
-        if isinstance(iso_date, datetime):
-            return iso_date
-
-        try:
-            return datetime.strptime(iso_date, "%Y-%m-%dT%H:%M:%S.%fZ")
-        except ValueError:
-            split = iso_date.split(".")
-            reduce = len(split[1]) - 6
-            reduced = f"{split[0]}.{split[1][:-reduce]}Z"
-            return datetime.strptime(reduced, "%Y-%m-%dT%H:%M:%S.%fZ")
 
     def __settings_url_for(self, sub_route: str) -> str:
         return f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}/{sub_route}"

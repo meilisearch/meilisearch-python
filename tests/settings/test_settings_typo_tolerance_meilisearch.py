@@ -23,7 +23,7 @@ def test_get_typo_tolerance_default(empty_index):
     """Tests getting default typo_tolerance."""
     response = empty_index().get_typo_tolerance()
 
-    assert response.dict(by_alias=True) == DEFAULT_TYPO_TOLERANCE
+    assert response.model_dump(by_alias=True) == DEFAULT_TYPO_TOLERANCE
 
 
 def test_update_typo_tolerance(empty_index):
@@ -35,9 +35,10 @@ def test_update_typo_tolerance(empty_index):
 
     assert update.status == "succeeded"
     for typo_tolerance in NEW_TYPO_TOLERANCE:  # pylint: disable=consider-using-dict-items
-        assert typo_tolerance in response_get.dict(by_alias=True)
+        assert typo_tolerance in response_get.model_dump(by_alias=True)
         assert (
-            NEW_TYPO_TOLERANCE[typo_tolerance] == response_get.dict(by_alias=True)[typo_tolerance]
+            NEW_TYPO_TOLERANCE[typo_tolerance]
+            == response_get.model_dump(by_alias=True)[typo_tolerance]
         )
 
 
@@ -59,7 +60,8 @@ def test_reset_typo_tolerance(empty_index):
     assert update1.status == "succeeded"
     for typo_tolerance in NEW_TYPO_TOLERANCE:  # pylint: disable=consider-using-dict-items
         assert (
-            NEW_TYPO_TOLERANCE[typo_tolerance] == response_get.dict(by_alias=True)[typo_tolerance]
+            NEW_TYPO_TOLERANCE[typo_tolerance]
+            == response_get.model_dump(by_alias=True)[typo_tolerance]
         )
     assert update2.status == "succeeded"
-    assert response_last.dict(by_alias=True) == DEFAULT_TYPO_TOLERANCE
+    assert response_last.model_dump(by_alias=True) == DEFAULT_TYPO_TOLERANCE
