@@ -54,7 +54,7 @@ def test_create_keys_with_options(client, test_key_info):
             "actions": test_key_info["actions"],
             "indexes": test_key_info["indexes"],
             "uid": "82acc342-d2df-4291-84bd-8400d3f05f06",
-            "expiresAt": datetime(2030, 6, 4, 21, 8, 12, 32).isoformat()[:-3] + "Z",
+            "expiresAt": datetime(2030, 6, 4, 21, 8, 12, 32).isoformat() + "Z",
         }
     )
     assert key.key is not None
