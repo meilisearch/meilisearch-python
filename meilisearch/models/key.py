@@ -1,7 +1,10 @@
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Union
 
+import pydantic
 from camel_converter.pydantic_base import CamelBase
+
+from meilisearch._utils import is_pydantic_2, iso_to_date_time
 
 
 class _KeyBase(CamelBase):
@@ -12,18 +15,75 @@ class _KeyBase(CamelBase):
     indexes: List[str]
     expires_at: Optional[datetime] = None
 
-    class Config:
-        json_encoders = {
-            datetime: lambda v: None
-            if not v
-            else f"{str(v).split('.', maxsplit=1)[0].replace(' ', 'T')}Z"
-        }
+    if is_pydantic_2():
+        model_config = pydantic.ConfigDict(ser_json_timedelta="iso8601")  # type: ignore[typeddict-unknown-key]
+
+        @pydantic.field_validator("expires_at", mode="before")  # type: ignore[attr-defined]
+        @classmethod
+        def validate_expires_at(  # pylint: disable=invalid-name
+            cls, v: str
+        ) -> Union[datetime, None]:
+            return iso_to_date_time(v)
+
+    else:
+
+        @pydantic.validator("expires_at", pre=True)
+        @classmethod
+        def validate_expires_at(  # pylint: disable=invalid-name
+            cls, v: str
+        ) -> Union[datetime, None]:
+            return iso_to_date_time(v)
+
+        class Config:
+            json_encoders = {
+                datetime: lambda v: None
+                if not v
+                else f"{str(v).split('.', maxsplit=1)[0].replace(' ', 'T')}Z"
+            }
 
 
 class Key(_KeyBase):
     key: str
     created_at: datetime
     updated_at: Optional[datetime] = None
+
+    if is_pydantic_2():
+
+        @pydantic.field_validator("created_at", mode="before")  # type: ignore[attr-defined]
+        @classmethod
+        def validate_created_at(cls, v: str) -> datetime:  # pylint: disable=invalid-name
+            converted = iso_to_date_time(v)
+
+            if not converted:
+                raise ValueError("created_at is required")
+
+            return converted
+
+        @pydantic.field_validator("updated_at", mode="before")  # type: ignore[attr-defined]
+        @classmethod
+        def validate_updated_at(  # pylint: disable=invalid-name
+            cls, v: str
+        ) -> Union[datetime, None]:
+            return iso_to_date_time(v)
+
+    else:
+
+        @pydantic.validator("created_at", pre=True)
+        @classmethod
+        def validate_created_at(cls, v: str) -> datetime:  # pylint: disable=invalid-name
+            converted = iso_to_date_time(v)
+
+            if not converted:
+                raise ValueError("created_at is required")
+
+            return converted
+
+        @pydantic.validator("updated_at", pre=True)
+        @classmethod
+        def validate_updated_at(  # pylint: disable=invalid-name
+            cls, v: str
+        ) -> Union[datetime, None]:
+            return iso_to_date_time(v)
 
 
 class KeyUpdate(CamelBase):
@@ -34,12 +94,17 @@ class KeyUpdate(CamelBase):
     indexes: Optional[List[str]] = None
     expires_at: Optional[datetime] = None
 
-    class Config:
-        json_encoders = {
-            datetime: lambda v: None
-            if not v
-            else f"{str(v).split('.', maxsplit=1)[0].replace(' ', 'T')}Z"
-        }
+    if is_pydantic_2():
+        model_config = pydantic.ConfigDict(ser_json_timedelta="iso8601")  # type: ignore[typeddict-unknown-key]
+
+    else:
+
+        class Config:
+            json_encoders = {
+                datetime: lambda v: None
+                if not v
+                else f"{str(v).split('.', maxsplit=1)[0].replace(' ', 'T')}Z"
+            }
 
 
 class KeysResults(CamelBase):
