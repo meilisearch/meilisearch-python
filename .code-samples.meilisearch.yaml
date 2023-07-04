@@ -388,7 +388,7 @@ getting_started_add_documents_md: |-
   import meilisearch
   import json
 
-  client = meilisearch.Client('http://localhost:7700')
+  client = meilisearch.Client('http://localhost:7700', 'aSampleMasterKey')
 
   json_file = open('movies.json', encoding='utf-8')
   movies = json.load(json_file)
