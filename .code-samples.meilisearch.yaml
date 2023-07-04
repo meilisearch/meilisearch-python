@@ -379,7 +379,7 @@ documents_guide_add_movie_1: |-
   }])
 getting_started_check_task_status: |-
   client.get_task(0)
-PLEASE_UPDATE_ME>>>>>>>>>>>>>getting_started_add_documents_md: |-
+getting_started_add_documents_md: |-
   ```bash
   pip3 install meilisearch
   ```
@@ -388,7 +388,7 @@ PLEASE_UPDATE_ME>>>>>>>>>>>>>getting_started_add_documents_md: |-
   import meilisearch
   import json
 
-  client = meilisearch.Client('http://localhost:7700')
+  client = meilisearch.Client('http://localhost:7700', 'aSampleMasterKey')
 
   json_file = open('movies.json', encoding='utf-8')
   movies = json.load(json_file)
