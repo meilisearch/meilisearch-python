@@ -194,10 +194,12 @@ def enable_vector_search():
         f"{common.BASE_URL}/experimental-features",
         headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
         json={"vectorStore": True},
+        timeout=10,
     )
     yield
     requests.patch(
         f"{common.BASE_URL}/experimental-features",
         headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
         json={"vectorStore": False},
+        timeout=10,
     )
