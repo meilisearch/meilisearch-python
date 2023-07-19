@@ -441,3 +441,17 @@ def test_custom_search_params_with_pagination_parameters_at_zero(index_with_docu
     assert response["totalPages"] is not None
     assert response["totalHits"] is not None
     assert "estimatedTotalHits" is not response
+
+
+def test_attributes_to_search_on_search(index_with_documents):
+    response = index_with_documents().search(
+        "How to Train Your Dragon", opt_params={"attributesToSearchOn": ["title", "overview"]}
+    )
+    assert response["hits"][0]["id"] == "166428"
+
+
+def test_attributes_to_search_on_search_no_match(index_with_documents):
+    response = index_with_documents().search(
+        "How to Train Your Dragon", opt_params={"attributesToSearchOn": ["id"]}
+    )
+    assert response["hits"] == []
