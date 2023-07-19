@@ -2,6 +2,7 @@
 import json
 from typing import Optional
 
+import requests
 from pytest import fixture
 
 import meilisearch
@@ -127,6 +128,19 @@ def index_with_documents(empty_index, small_movies):
 
 
 @fixture(scope="function")
+def index_with_documents_and_vectors(empty_index, small_movies):
+    small_movies[0]["_vectors"] = [0.1, 0.2]
+
+    def index_maker(index_uid=common.INDEX_UID, documents=small_movies):
+        index = empty_index(index_uid)
+        task = index.add_documents(documents)
+        index.wait_for_task(task.task_uid)
+        return index
+
+    return index_maker
+
+
+@fixture(scope="function")
 def test_key(client):
     key_info = {
         "description": "test",
@@ -172,3 +186,18 @@ def get_private_key(client):
     keys = client.get_keys().results
     key = next(x for x in keys if "Default Search API" in x.name)
     return key
+
+
+@fixture
+def enable_vector_search():
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"vectorStore": True},
+    )
+    yield
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"vectorStore": False},
+    )
