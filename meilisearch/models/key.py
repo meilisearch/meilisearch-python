@@ -39,7 +39,7 @@ class _KeyBase(CamelBase):
                 datetime: lambda v: None
                 if not v
                 else (
-                    f"{str(v).split('+')[0].replace(' ', 'T')}Z"
+                    f"{str(v).split('+', maxsplit=1)[0].replace(' ', 'T')}Z"
                     if "+" in str(v)
                     else f"{str(v).replace(' ', 'T')}Z"
                 )
@@ -108,7 +108,7 @@ class KeyUpdate(CamelBase):
                 datetime: lambda v: None
                 if not v
                 else (
-                    f"{str(v).split('+')[0].replace(' ', 'T')}Z"
+                    f"{str(v).split('+', maxsplit=1)[0].replace(' ', 'T')}Z"
                     if "+" in str(v)
                     else f"{str(v).replace(' ', 'T')}Z"
                 )
