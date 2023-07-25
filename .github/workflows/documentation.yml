@@ -1,9 +1,8 @@
 name: Documentation
 
 on:
-  push:
-    tags:
-      - v*
+  # Temporary change to test action before merging in `main`
+  pull_request:
   # Allows to run the workflow manually
   workflow_dispatch:
 
@@ -35,7 +34,7 @@ jobs:
       - name: Install Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: "3.10"
       - name: Install pipenv
         run: |
           pip install pipx
@@ -57,7 +56,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-pages-artifact@v2
         with:
-          path: './docs/_build/html'
+          path: "./docs/_build/html"
   deploy:
     needs: build
     environment:
