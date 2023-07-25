@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>meilisearch.client &mdash; meilisearch-python  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            meilisearch-python
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../meilisearch.html">meilisearch package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">meilisearch-python</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">meilisearch.client</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for meilisearch.client</h1><div class="highlight"><pre>
+<span></span><span class="c1"># pylint: disable=too-many-public-methods</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">import</span> <span class="nn">base64</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">hmac</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">parse</span>
+
+<span class="kn">from</span> <span class="nn">meilisearch._httprequests</span> <span class="kn">import</span> <span class="n">HttpRequests</span>
+<span class="kn">from</span> <span class="nn">meilisearch.config</span> <span class="kn">import</span> <span class="n">Config</span>
+<span class="kn">from</span> <span class="nn">meilisearch.errors</span> <span class="kn">import</span> <span class="n">MeilisearchError</span>
+<span class="kn">from</span> <span class="nn">meilisearch.index</span> <span class="kn">import</span> <span class="n">Index</span>
+<span class="kn">from</span> <span class="nn">meilisearch.models.key</span> <span class="kn">import</span> <span class="n">Key</span><span class="p">,</span> <span class="n">KeysResults</span>
+<span class="kn">from</span> <span class="nn">meilisearch.models.task</span> <span class="kn">import</span> <span class="n">Task</span><span class="p">,</span> <span class="n">TaskInfo</span><span class="p">,</span> <span class="n">TaskResults</span>
+<span class="kn">from</span> <span class="nn">meilisearch.task</span> <span class="kn">import</span> <span class="n">TaskHandler</span>
+
+
+<div class="viewcode-block" id="Client"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client">[docs]</a><span class="k">class</span> <span class="nc">Client</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A client for the Meilisearch API</span>
+
+<span class="sd">    A client instance is needed for every Meilisearch API method to know the location of</span>
+<span class="sd">    Meilisearch and its permissions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">client_agents</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        url:</span>
+<span class="sd">            The url to the Meilisearch API (ex: http://localhost:7700)</span>
+<span class="sd">        api_key:</span>
+<span class="sd">            The optional API key for Meilisearch</span>
+<span class="sd">        timeout (optional):</span>
+<span class="sd">            The amount of time in seconds that the client will wait for a response before timing</span>
+<span class="sd">            out.</span>
+<span class="sd">        client_agents (optional):</span>
+<span class="sd">            Used to send additional client agent information for clients extending the functionality</span>
+<span class="sd">            of this client.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">api_key</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span> <span class="n">client_agents</span><span class="o">=</span><span class="n">client_agents</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">http</span> <span class="o">=</span> <span class="n">HttpRequests</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">task_handler</span> <span class="o">=</span> <span class="n">TaskHandler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Client.create_index"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.create_index">[docs]</a>    <span class="k">def</span> <span class="nf">create_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TaskInfo</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create an index.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        uid: str</span>
+<span class="sd">            UID of the index.</span>
+<span class="sd">        options (optional): dict</span>
+<span class="sd">            Options passed during index creation (ex: primaryKey).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        task_info:</span>
+<span class="sd">            TaskInfo instance containing information about a task to track the progress of an asynchronous process.</span>
+<span class="sd">            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Index</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">uid</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.delete_index"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.delete_index">[docs]</a>    <span class="k">def</span> <span class="nf">delete_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TaskInfo</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Deletes an index</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        uid:</span>
+<span class="sd">            UID of the index.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        task_info:</span>
+<span class="sd">            TaskInfo instance containing information about a task to track the progress of an asynchronous process.</span>
+<span class="sd">            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">task</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">index</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">uid</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">TaskInfo</span><span class="p">(</span><span class="o">**</span><span class="n">task</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.get_indexes"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.get_indexes">[docs]</a>    <span class="k">def</span> <span class="nf">get_indexes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Index</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get all indexes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        parameters (optional):</span>
+<span class="sd">            parameters accepted by the get indexes route: https://www.meilisearch.com/docs/reference/api/indexes#list-all-indexes</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        indexes:</span>
+<span class="sd">            Dictionary with limit, offset, total and results a list of Index instances.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">parameters</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">index</span><span class="si">}</span><span class="s2">?</span><span class="si">{</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">response</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">Index</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span>
+                <span class="n">index</span><span class="p">[</span><span class="s2">&quot;uid&quot;</span><span class="p">],</span>
+                <span class="n">index</span><span class="p">[</span><span class="s2">&quot;primaryKey&quot;</span><span class="p">],</span>
+                <span class="n">index</span><span class="p">[</span><span class="s2">&quot;createdAt&quot;</span><span class="p">],</span>
+                <span class="n">index</span><span class="p">[</span><span class="s2">&quot;updatedAt&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">response</span><span class="p">[</span><span class="s2">&quot;results&quot;</span><span class="p">]</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="n">response</span></div>
+
+<div class="viewcode-block" id="Client.get_raw_indexes"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.get_raw_indexes">[docs]</a>    <span class="k">def</span> <span class="nf">get_raw_indexes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get all indexes in dictionary format.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        parameters (optional):</span>
+<span class="sd">            parameters accepted by the get indexes route: https://www.meilisearch.com/docs/reference/api/indexes#list-all-indexes</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        indexes:</span>
+<span class="sd">            Dictionary with limit, offset, total and results a list of indexes in dictionary format. (e.g [{ &#39;uid&#39;: &#39;movies&#39; &#39;primaryKey&#39;: &#39;objectID&#39; }])</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">parameters</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">index</span><span class="si">}</span><span class="s2">?</span><span class="si">{</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.get_index"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.get_index">[docs]</a>    <span class="k">def</span> <span class="nf">get_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Index</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the index.</span>
+<span class="sd">        This index should already exist.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        uid:</span>
+<span class="sd">            UID of the index.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        index:</span>
+<span class="sd">            An Index instance containing the information of the fetched index.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">uid</span><span class="p">)</span><span class="o">.</span><span class="n">fetch_info</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Client.get_raw_index"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.get_raw_index">[docs]</a>    <span class="k">def</span> <span class="nf">get_raw_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the index as a dictionary.</span>
+<span class="sd">        This index should already exist.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        uid:</span>
+<span class="sd">            UID of the index.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        index:</span>
+<span class="sd">            An index in dictionary format. (e.g { &#39;uid&#39;: &#39;movies&#39; &#39;primaryKey&#39;: &#39;objectID&#39; })</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">index</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">uid</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.index"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.index">[docs]</a>    <span class="k">def</span> <span class="nf">index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Index</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a local reference to an index identified by UID, without doing an HTTP call.</span>
+<span class="sd">        Calling this method doesn&#39;t create an index in the Meilisearch instance, but grants access to all the other methods in the Index class.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        uid:</span>
+<span class="sd">            UID of the index.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        index:</span>
+<span class="sd">            An Index instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">uid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Index</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">uid</span><span class="o">=</span><span class="n">uid</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The index UID should not be None&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.multi_search"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.multi_search">[docs]</a>    <span class="k">def</span> <span class="nf">multi_search</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">queries</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Multi-index search.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        queries:</span>
+<span class="sd">            List of dictionaries containing the specified indexes and their search queries</span>
+<span class="sd">            https://www.meilisearch.com/docs/reference/api/search#search-in-an-index</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        results:</span>
+<span class="sd">            Dictionary of results for each search query</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">multi_search</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">body</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;queries&quot;</span><span class="p">:</span> <span class="n">queries</span><span class="p">},</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.get_all_stats"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.get_all_stats">[docs]</a>    <span class="k">def</span> <span class="nf">get_all_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get all stats of Meilisearch</span>
+
+<span class="sd">        Get information about database size and all indexes</span>
+<span class="sd">        https://www.meilisearch.com/docs/reference/api/stats</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        stats:</span>
+<span class="sd">            Dictionary containing stats about your Meilisearch instance.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">stat</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.health"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.health">[docs]</a>    <span class="k">def</span> <span class="nf">health</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get health of the Meilisearch server.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        health:</span>
+<span class="sd">            Dictionary containing the status of the Meilisearch instance.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">health</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.is_healthy"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.is_healthy">[docs]</a>    <span class="k">def</span> <span class="nf">is_healthy</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get health of the Meilisearch server.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">health</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">MeilisearchError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+<div class="viewcode-block" id="Client.get_key"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.get_key">[docs]</a>    <span class="k">def</span> <span class="nf">get_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_or_uid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Key</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets information about a specific API key.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key_or_uid:</span>
+<span class="sd">            The key or the uid for which to retrieve the information.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        key:</span>
+<span class="sd">            The API key.</span>
+<span class="sd">            https://www.meilisearch.com/docs/reference/api/keys#get-key</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">keys</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">key_or_uid</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Key</span><span class="p">(</span><span class="o">**</span><span class="n">key</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.get_keys"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.get_keys">[docs]</a>    <span class="k">def</span> <span class="nf">get_keys</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KeysResults</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gets the Meilisearch API keys.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        parameters (optional):</span>
+<span class="sd">            parameters accepted by the get keys route: https://www.meilisearch.com/docs/reference/api/keys#get-all-keys</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        keys:</span>
+<span class="sd">            API keys.</span>
+<span class="sd">            https://www.meilisearch.com/docs/reference/api/keys#get-keys</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">parameters</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">keys</span><span class="si">}</span><span class="s2">?</span><span class="si">{</span><span class="n">parse</span><span class="o">.</span><span class="n">urlencode</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">KeysResults</span><span class="p">(</span><span class="o">**</span><span class="n">keys</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.create_key"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.create_key">[docs]</a>    <span class="k">def</span> <span class="nf">create_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Key</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates a new API key.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        options:</span>
+<span class="sd">            Options, the information to use in creating the key (ex: { &#39;actions&#39;: [&#39;*&#39;], &#39;indexes&#39;: [&#39;movies&#39;], &#39;description&#39;: &#39;Search Key&#39;, &#39;expiresAt&#39;: &#39;22-01-01&#39; }).</span>
+<span class="sd">            An `actions`, an `indexes` and a `expiresAt` fields are mandatory,`None` should be specified for no expiration date.</span>
+<span class="sd">            `actions`: A list of actions permitted for the key. [&quot;*&quot;] for all actions.</span>
+<span class="sd">            `indexes`: A list of indexes permitted for the key. [&quot;*&quot;] for all indexes.</span>
+<span class="sd">            Note that if an expires_at value is included it should be in UTC time.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        key:</span>
+<span class="sd">            The new API key.</span>
+<span class="sd">            https://www.meilisearch.com/docs/reference/api/keys#get-keys</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">task</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">keys</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Key</span><span class="p">(</span><span class="o">**</span><span class="n">task</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.update_key"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.update_key">[docs]</a>    <span class="k">def</span> <span class="nf">update_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_or_uid</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">options</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Key</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update an API key.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key_or_uid:</span>
+<span class="sd">            The key or the uid of the key for which to update the information.</span>
+<span class="sd">        options:</span>
+<span class="sd">            The information to use in creating the key (ex: { &#39;description&#39;: &#39;Search Key&#39;, &#39;expiresAt&#39;: &#39;22-01-01&#39; }). Note that if an</span>
+<span class="sd">            expires_at value is included it should be in UTC time.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        key:</span>
+<span class="sd">            The updated API key.</span>
+<span class="sd">            https://www.meilisearch.com/docs/reference/api/keys#get-keys</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">keys</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">key_or_uid</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Key</span><span class="p">(</span><span class="o">**</span><span class="n">key</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.delete_key"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.delete_key">[docs]</a>    <span class="k">def</span> <span class="nf">delete_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key_or_uid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Deletes an API key.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        key:</span>
+<span class="sd">            The key or the uid of the key to delete.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        keys:</span>
+<span class="sd">            The Response status code. 204 signifies a successful delete.</span>
+<span class="sd">            https://www.meilisearch.com/docs/reference/api/keys#get-keys</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">keys</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">key_or_uid</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span></div>
+
+<div class="viewcode-block" id="Client.get_version"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.get_version">[docs]</a>    <span class="k">def</span> <span class="nf">get_version</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get version Meilisearch</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        version:</span>
+<span class="sd">            Information about the version of Meilisearch.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">version</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.version"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.version">[docs]</a>    <span class="k">def</span> <span class="nf">version</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for get_version</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        version:</span>
+<span class="sd">            Information about the version of Meilisearch.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_version</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Client.create_dump"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.create_dump">[docs]</a>    <span class="k">def</span> <span class="nf">create_dump</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TaskInfo</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Trigger the creation of a Meilisearch dump.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Dump:</span>
+<span class="sd">            Information about the dump.</span>
+<span class="sd">            https://www.meilisearch.com/docs/reference/api/dump#create-a-dump</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">task</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">dumps</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">TaskInfo</span><span class="p">(</span><span class="o">**</span><span class="n">task</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.swap_indexes"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.swap_indexes">[docs]</a>    <span class="k">def</span> <span class="nf">swap_indexes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]])</span> <span class="o">-&gt;</span> <span class="n">TaskInfo</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Swap two indexes.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        indexes:</span>
+<span class="sd">            List of indexes to swap (ex: [{&quot;indexes&quot;: [&quot;indexA&quot;, &quot;indexB&quot;]}).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        task_info:</span>
+<span class="sd">            TaskInfo instance containing information about a task to track the progress of an asynchronous process.</span>
+<span class="sd">            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">TaskInfo</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">http</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">paths</span><span class="o">.</span><span class="n">swap</span><span class="p">,</span> <span class="n">parameters</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Client.get_tasks"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.get_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">get_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TaskResults</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get all tasks.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        parameters (optional):</span>
+<span class="sd">            parameters accepted by the get tasks route: https://www.meilisearch.com/docs/reference/api/tasks#get-tasks.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        task:</span>
+<span class="sd">            TaskResult instance containing limit, from, next and results containing a list of all</span>
+<span class="sd">            enqueued, processing, succeeded or failed tasks.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_handler</span><span class="o">.</span><span class="n">get_tasks</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.get_task"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.get_task">[docs]</a>    <span class="k">def</span> <span class="nf">get_task</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">uid</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Task</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get one task.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        uid:</span>
+<span class="sd">            Identifier of the task.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        task:</span>
+<span class="sd">            Task instance containing information about the processed asynchronous task.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_handler</span><span class="o">.</span><span class="n">get_task</span><span class="p">(</span><span class="n">uid</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.cancel_tasks"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.cancel_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">cancel_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">TaskInfo</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Cancel a list of enqueued or processing tasks.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        parameters:</span>
+<span class="sd">            parameters accepted by the cancel tasks route:https://www.meilisearch.com/docs/reference/api/tasks#cancel-tasks.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        task_info:</span>
+<span class="sd">            TaskInfo instance containing information about a task to track the progress of an asynchronous process.</span>
+<span class="sd">            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_handler</span><span class="o">.</span><span class="n">cancel_tasks</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.delete_tasks"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.delete_tasks">[docs]</a>    <span class="k">def</span> <span class="nf">delete_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">TaskInfo</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Delete a list of finished tasks.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        parameters (optional):</span>
+<span class="sd">            parameters accepted by the delete tasks route:https://www.meilisearch.com/docs/reference/api/tasks#delete-task.</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        task_info:</span>
+<span class="sd">            TaskInfo instance containing information about a task to track the progress of an asynchronous process.</span>
+<span class="sd">            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task</span>
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchApiError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_handler</span><span class="o">.</span><span class="n">delete_tasks</span><span class="p">(</span><span class="n">parameters</span><span class="o">=</span><span class="n">parameters</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.wait_for_task"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.wait_for_task">[docs]</a>    <span class="k">def</span> <span class="nf">wait_for_task</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">uid</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">timeout_in_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5000</span><span class="p">,</span>
+        <span class="n">interval_in_ms</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Task</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Wait until Meilisearch processes a task until it fails or succeeds.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        uid:</span>
+<span class="sd">            Identifier of the task to wait for being processed.</span>
+<span class="sd">        timeout_in_ms (optional):</span>
+<span class="sd">            Time the method should wait before raising a MeilisearchTimeoutError</span>
+<span class="sd">        interval_in_ms (optional):</span>
+<span class="sd">            Time interval the method should wait (sleep) between requests</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        task:</span>
+<span class="sd">            Task instance containing information about the processed asynchronous task.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        MeilisearchTimeoutError</span>
+<span class="sd">            An error containing details about why Meilisearch can&#39;t process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">task_handler</span><span class="o">.</span><span class="n">wait_for_task</span><span class="p">(</span><span class="n">uid</span><span class="p">,</span> <span class="n">timeout_in_ms</span><span class="p">,</span> <span class="n">interval_in_ms</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.generate_tenant_token"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.client.Client.generate_tenant_token">[docs]</a>    <span class="k">def</span> <span class="nf">generate_tenant_token</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">api_key_uid</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">search_rules</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]],</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">expires_at</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a JWT token for the use of multitenancy.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        api_key_uid:</span>
+<span class="sd">            The uid of the API key used as issuer of the token.</span>
+<span class="sd">        search_rules:</span>
+<span class="sd">            A Dictionary or list of string which contains the rules to be enforced at search time for all or specific</span>
+<span class="sd">            accessible indexes for the signing API Key.</span>
+<span class="sd">            In the specific case where you do not want to have any restrictions you can also use a list [&quot;*&quot;].</span>
+<span class="sd">        expires_at (optional):</span>
+<span class="sd">            Date and time when the key will expire. Note that if an expires_at value is included it should be in UTC time.</span>
+<span class="sd">        api_key (optional):</span>
+<span class="sd">            The API key parent of the token. If you leave it empty the client API Key will be used.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        jwt_token:</span>
+<span class="sd">           A string containing the jwt tenant token.</span>
+<span class="sd">           Note: If your token does not work remember that the search_rules is mandatory and should be well formatted.</span>
+<span class="sd">           `exp` must be a `datetime` in the future. It&#39;s not possible to create a token from the master key.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Validate all fields</span>
+        <span class="k">if</span> <span class="n">api_key</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="n">api_key</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">api_key</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;An api key is required in the client or should be passed as an argument.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">api_key_uid</span> <span class="o">==</span> <span class="s2">&quot;&quot;</span> <span class="ow">or</span> <span class="n">api_key_uid</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_valid_uuid</span><span class="p">(</span><span class="n">api_key_uid</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;An uid is required and must comply to the uuid4 format.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">search_rules</span> <span class="ow">or</span> <span class="n">search_rules</span> <span class="o">==</span> <span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The search_rules field is mandatory and should be defined.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">expires_at</span> <span class="ow">and</span> <span class="n">expires_at</span> <span class="o">&lt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The date expires_at should be in the future.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Standard JWT header for encryption with SHA256/HS256 algorithm</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;typ&quot;</span><span class="p">:</span> <span class="s2">&quot;JWT&quot;</span><span class="p">,</span> <span class="s2">&quot;alg&quot;</span><span class="p">:</span> <span class="s2">&quot;HS256&quot;</span><span class="p">}</span>
+
+        <span class="n">api_key</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">api_key</span><span class="p">)</span> <span class="k">if</span> <span class="n">api_key</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">api_key</span>
+
+        <span class="c1"># Add the required fields to the payload</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;apiKeyUid&quot;</span><span class="p">:</span> <span class="n">api_key_uid</span><span class="p">,</span>
+            <span class="s2">&quot;searchRules&quot;</span><span class="p">:</span> <span class="n">search_rules</span><span class="p">,</span>
+            <span class="s2">&quot;exp&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(</span><span class="n">expires_at</span><span class="p">))</span> <span class="k">if</span> <span class="n">expires_at</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Serialize the header and the payload</span>
+        <span class="n">json_header</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+        <span class="n">json_payload</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">))</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+
+        <span class="c1"># Encode the header and the payload to Base64Url String</span>
+        <span class="n">header_encode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base64url_encode</span><span class="p">(</span><span class="n">json_header</span><span class="p">)</span>
+        <span class="n">payload_encode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base64url_encode</span><span class="p">(</span><span class="n">json_payload</span><span class="p">)</span>
+
+        <span class="n">secret_encoded</span> <span class="o">=</span> <span class="n">api_key</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+        <span class="c1"># Create Signature Hash</span>
+        <span class="n">signature</span> <span class="o">=</span> <span class="n">hmac</span><span class="o">.</span><span class="n">new</span><span class="p">(</span>
+            <span class="n">secret_encoded</span><span class="p">,</span>
+            <span class="p">(</span><span class="n">header_encode</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">payload_encode</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">(),</span>
+            <span class="n">hashlib</span><span class="o">.</span><span class="n">sha256</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">digest</span><span class="p">()</span>
+        <span class="c1"># Create JWT</span>
+        <span class="n">jwt_token</span> <span class="o">=</span> <span class="n">header_encode</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">payload_encode</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_base64url_encode</span><span class="p">(</span><span class="n">signature</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">jwt_token</span></div>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_base64url_encode</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="nb">bytes</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">base64</span><span class="o">.</span><span class="n">urlsafe_b64encode</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_valid_uuid</span><span class="p">(</span><span class="n">uuid</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">uuid4hex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s2">&quot;^[a-f0-9]</span><span class="si">{8}</span><span class="s2">-?[a-f0-9]</span><span class="si">{4}</span><span class="s2">-?4[a-f0-9]</span><span class="si">{3}</span><span class="s2">-?[89ab][a-f0-9]</span><span class="si">{3}</span><span class="s2">-?[a-f0-9]</span><span class="si">{12}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">re</span><span class="o">.</span><span class="n">I</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">uuid4hex</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">uuid</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">match</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, Meili SAS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

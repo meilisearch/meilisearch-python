@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>meilisearch.config &mdash; meilisearch-python  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            meilisearch-python
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../meilisearch.html">meilisearch package</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">meilisearch-python</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">meilisearch.config</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for meilisearch.config</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+
+<div class="viewcode-block" id="Config"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.config.Config">[docs]</a><span class="k">class</span> <span class="nc">Config</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Client&#39;s credentials and configuration parameters</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Config.Paths"><a class="viewcode-back" href="../../meilisearch.html#meilisearch.config.Config.Paths">[docs]</a>    <span class="k">class</span> <span class="nc">Paths</span><span class="p">:</span>
+        <span class="n">health</span> <span class="o">=</span> <span class="s2">&quot;health&quot;</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="s2">&quot;keys&quot;</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;version&quot;</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="s2">&quot;indexes&quot;</span>
+        <span class="n">task</span> <span class="o">=</span> <span class="s2">&quot;tasks&quot;</span>
+        <span class="n">stat</span> <span class="o">=</span> <span class="s2">&quot;stats&quot;</span>
+        <span class="n">search</span> <span class="o">=</span> <span class="s2">&quot;search&quot;</span>
+        <span class="n">multi_search</span> <span class="o">=</span> <span class="s2">&quot;multi-search&quot;</span>
+        <span class="n">document</span> <span class="o">=</span> <span class="s2">&quot;documents&quot;</span>
+        <span class="n">setting</span> <span class="o">=</span> <span class="s2">&quot;settings&quot;</span>
+        <span class="n">ranking_rules</span> <span class="o">=</span> <span class="s2">&quot;ranking-rules&quot;</span>
+        <span class="n">distinct_attribute</span> <span class="o">=</span> <span class="s2">&quot;distinct-attribute&quot;</span>
+        <span class="n">searchable_attributes</span> <span class="o">=</span> <span class="s2">&quot;searchable-attributes&quot;</span>
+        <span class="n">displayed_attributes</span> <span class="o">=</span> <span class="s2">&quot;displayed-attributes&quot;</span>
+        <span class="n">stop_words</span> <span class="o">=</span> <span class="s2">&quot;stop-words&quot;</span>
+        <span class="n">synonyms</span> <span class="o">=</span> <span class="s2">&quot;synonyms&quot;</span>
+        <span class="n">accept_new_fields</span> <span class="o">=</span> <span class="s2">&quot;accept-new-fields&quot;</span>
+        <span class="n">filterable_attributes</span> <span class="o">=</span> <span class="s2">&quot;filterable-attributes&quot;</span>
+        <span class="n">sortable_attributes</span> <span class="o">=</span> <span class="s2">&quot;sortable-attributes&quot;</span>
+        <span class="n">typo_tolerance</span> <span class="o">=</span> <span class="s2">&quot;typo-tolerance&quot;</span>
+        <span class="n">dumps</span> <span class="o">=</span> <span class="s2">&quot;dumps&quot;</span>
+        <span class="n">pagination</span> <span class="o">=</span> <span class="s2">&quot;pagination&quot;</span>
+        <span class="n">faceting</span> <span class="o">=</span> <span class="s2">&quot;faceting&quot;</span>
+        <span class="n">swap</span> <span class="o">=</span> <span class="s2">&quot;swap-indexes&quot;</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">api_key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">client_agents</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        url:</span>
+<span class="sd">            The url to the Meilisearch API (ex: http://localhost:7700)</span>
+<span class="sd">        api_key:</span>
+<span class="sd">            The optional API key to access Meilisearch</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">api_key</span> <span class="o">=</span> <span class="n">api_key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client_agents</span> <span class="o">=</span> <span class="n">client_agents</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">paths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Paths</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2019, Meili SAS.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
