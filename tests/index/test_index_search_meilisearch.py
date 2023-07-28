@@ -458,7 +458,6 @@ def test_attributes_to_search_on_search_no_match(index_with_documents):
     )
     assert response["hits"] == []
 
-    
 @pytest.mark.usefixtures("enable_vector_search")
 def test_vector_search(index_with_documents_and_vectors):
     response = index_with_documents_and_vectors().search(
