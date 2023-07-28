@@ -1,5 +1,7 @@
 # pylint: disable=invalid-name
 
+import pytest
+
 
 def test_basic_search(index_with_documents):
     """Tests search with a simple query."""
@@ -441,3 +443,13 @@ def test_custom_search_params_with_pagination_parameters_at_zero(index_with_docu
     assert response["totalPages"] is not None
     assert response["totalHits"] is not None
     assert "estimatedTotalHits" is not response
+
+
+@pytest.mark.usefixtures("enable_vector_search")
+def test_vector_search(index_with_documents_and_vectors):
+    response = index_with_documents_and_vectors().search(
+        "How to Train Your Dragon", opt_params={"vector": [0.1, 0.2]}
+    )
+
+    assert response["hits"][0]["id"] == "287947"
+    assert response["vector"] == [0.1, 0.2]

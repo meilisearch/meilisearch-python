@@ -243,6 +243,7 @@ class Index:
         stats = self.http.get(f"{self.config.paths.index}/{self.uid}/{self.config.paths.stat}")
         return IndexStats(stats)
 
+    @version_error_hint_message
     def search(self, query: str, opt_params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Search in the index.
 
@@ -251,7 +252,13 @@ class Index:
         query:
             String containing the searched word(s)
         opt_params (optional):
-            Dictionary containing optional query parameters
+            Dictionary containing optional query parameters.
+            Note: The vector parameter is only available in Meilisearch >= v1.3.0, and is experimental
+            Meilisearch v1.3.0. In order to use this feature in Meilisearch v1.3.0 you first need to
+            enable the feature by sending a PATCH request to /experimental-features with
+            { "vectoreStore": true }. Because this feature is experimental it may be removed or
+            updated causing breaking changes in this library without a major version bump so use
+            with caution.
             https://www.meilisearch.com/docs/reference/api/search#search-in-an-index
 
         Returns
