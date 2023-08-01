@@ -2,8 +2,7 @@ name: Documentation
 
 on:
   push:
-    tags:
-      - v*
+    branches: [main]
   # Allows to run the workflow manually
   workflow_dispatch:
 
