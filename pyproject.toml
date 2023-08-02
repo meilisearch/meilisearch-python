@@ -120,3 +120,7 @@ enable=[
 
 [tool.pylint.'REPORTS']
 reports=false
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "--cov=meilisearch --cov-report term-missing"
