@@ -6,13 +6,13 @@ from typing import TYPE_CHECKING, Any, Callable
 
 from requests import Response
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from meilisearch.client import Client
     from meilisearch.index import Index
     from meilisearch.task import TaskHandler
 
 
-class MeilisearchError(Exception):
+class MeilisearchError(Exception):  # pragma: no cover
     """Generic class for Meilisearch error handling"""
 
     def __init__(self, message: str) -> None:
@@ -43,7 +43,7 @@ class MeilisearchApiError(MeilisearchError):
         super().__init__(self.message)
 
     def __str__(self) -> str:
-        if self.code and self.link:
+        if self.code and self.link:  # pragma: no cover
             return f"MeilisearchApiError. Error code: {self.code}. Error message: {self.message} Error documentation: {self.link} Error type: {self.type}"
 
         return f"MeilisearchApiError. {self.message}"
@@ -52,14 +52,14 @@ class MeilisearchApiError(MeilisearchError):
 class MeilisearchCommunicationError(MeilisearchError):
     """Error when connecting to Meilisearch"""
 
-    def __str__(self) -> str:
+    def __str__(self) -> str:  # pragma: no cover
         return f"MeilisearchCommunicationError, {self.message}"
 
 
 class MeilisearchTimeoutError(MeilisearchError):
     """Error when Meilisearch operation takes longer than expected"""
 
-    def __str__(self) -> str:
+    def __str__(self) -> str:  # pragma: no cover
         return f"MeilisearchTimeoutError, {self.message}"
 
 

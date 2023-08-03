@@ -24,7 +24,7 @@ class IndexStats:
         raise AttributeError(f"{self.__class__.__name__} object has no attribute {attr}")
 
     def __iter__(self) -> Iterator:
-        return iter(self.__dict__.items())  # type: ignore
+        return iter(self.__dict__.items())
 
 
 class Faceting(CamelBase):
