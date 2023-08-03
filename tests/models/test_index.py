@@ -1,3 +1,5 @@
+# pylint: disable=unnecessary-dunder-call
+
 import pytest
 
 from meilisearch.models.index import IndexStats
