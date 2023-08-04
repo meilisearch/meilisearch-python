@@ -14,7 +14,7 @@ updates:
     schedule:
       interval: "monthly"
       time: "04:00"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 20
     labels:
       - skip-changelog
       - dependencies
