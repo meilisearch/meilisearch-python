@@ -1,7 +1,5 @@
 # pylint: disable=invalid-name
 
-import pytest
-
 
 def test_basic_facet_search(index_with_documents_and_facets):
     """Tests facet search with a simple query."""
