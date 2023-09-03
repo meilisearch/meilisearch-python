@@ -279,6 +279,38 @@ class Index:
             body=body,
         )
 
+    def facet_search(
+        self,
+        facet_name: str,
+        facet_query: Optional[str] = None,
+        opt_params: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        """
+        Perform a facet search based on the given facet query and facet name.
+
+        Parameters
+        ----------
+        facet_name:
+            String containing the name of the facet on which the search is performed.
+        facet_query (optional):
+            String containing the searched words
+        opt_params (optional):
+            Dictionary containing optional query parameters.
+
+        Returns
+        -------
+        results:
+            Dictionary with facetHits, processingTime and initial facet query
+
+        """
+        if opt_params is None:
+            opt_params = {}
+        body = {"facetName": facet_name, "facetQuery": facet_query, **opt_params}
+        return self.http.post(
+            f"{self.config.paths.index}/{self.uid}/{self.config.paths.facet_search}",
+            body=body,
+        )
+
     def get_document(
         self, document_id: Union[str, int], parameters: Optional[Dict[str, Any]] = None
     ) -> Document:

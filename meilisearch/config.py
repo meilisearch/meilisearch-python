@@ -16,6 +16,7 @@ class Config:
         task = "tasks"
         stat = "stats"
         search = "search"
+        facet_search = "facet-search"
         multi_search = "multi-search"
         document = "documents"
         setting = "settings"

@@ -695,3 +695,9 @@ date_guide_sort_1: |-
   client.index('games').search('', {
     'sort': ['release_timestamp:desc']
   })
+facet_search_1: |-
+  client.index('books').facet_search('fiction', 'genres', {
+    'filter': 'rating > 3'
+  })
+facet_search_3: |-
+  client.index('books').facet_search('c', 'genres')
