@@ -99,7 +99,7 @@ documents = [
 index.add_documents(documents) # => { "uid": 0 }
 ```
 
-With the task `uid`, you can check the status (`enqueued`, `processing`, `succeeded` or `failed`) of your documents addition using the [task](https://www.meilisearch.com/docs/reference/api/tasks#get-tasks).
+With the task `uid`, you can check the status (`enqueued`, `canceled`, `processing`, `succeeded` or `failed`) of your documents addition using the [task](https://www.meilisearch.com/docs/reference/api/tasks#get-tasks).
 
 #### Basic Search <!-- omit in toc -->
 
