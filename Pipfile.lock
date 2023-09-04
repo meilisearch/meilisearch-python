@@ -745,11 +745,11 @@
         },
         "tox": {
             "hashes": [
-                "sha256:79399a3d4641d1fd15eb6bd62c2f35923988038bf0ecf37a688b5e7a767de7d7",
-                "sha256:89120e1568c763924301cfde61ba7d4b5c4615eeb1086d5370deb03e9cf63c41"
+                "sha256:8a8cc94b7269f8e43dfc636eff2da4b33a199a4e575b5b086cc51aae24ac4262",
+                "sha256:da761b4a57ee2b92b5ce39f48ff723fc42d185bf2af508effb683214efa662ea"
             ],
             "index": "pypi",
-            "version": "==4.7.0"
+            "version": "==4.11.1"
         },
         "tox-pipenv": {
             "hashes": [
