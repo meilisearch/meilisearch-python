@@ -279,6 +279,7 @@ class Index:
             body=body,
         )
 
+    @version_error_hint_message
     def facet_search(
         self,
         facet_name: str,
