@@ -100,13 +100,13 @@ class TaskHandler:
         response = self.http.post(f"{self.config.paths.task}/cancel?{parse.urlencode(parameters)}")
         return TaskInfo(**response)
 
-    def delete_tasks(self, parameters: Optional[Dict[str, Any]] = None) -> TaskInfo:
+    def delete_tasks(self, parameters: Dict[str, Any]) -> TaskInfo:
         """Delete a list of enqueued or processing tasks.
         Parameters
         ----------
         config:
             Config object containing permission and location of Meilisearch.
-        parameters (optional):
+        parameters:
             parameters accepted by the delete tasks route:https://www.meilisearch.com/docs/reference/api/tasks#delete-task.
         Returns
         -------
@@ -118,8 +118,6 @@ class TaskHandler:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        if parameters is None:
-            parameters = {}
         for param in parameters:
             if isinstance(parameters[param], list):
                 parameters[param] = ",".join(parameters[param])
