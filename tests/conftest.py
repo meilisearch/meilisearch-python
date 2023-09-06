@@ -141,6 +141,19 @@ def index_with_documents_and_vectors(empty_index, small_movies):
 
 
 @fixture(scope="function")
+def index_with_documents_and_facets(empty_index, small_movies):
+    def index_maker(index_uid=common.INDEX_UID, documents=small_movies):
+        index = empty_index(index_uid)
+        task_1 = index.update_filterable_attributes(["genre"])
+        index.wait_for_task(task_1.task_uid)
+        task_2 = index.add_documents(documents)
+        index.wait_for_task(task_2.task_uid)
+        return index
+
+    return index_maker
+
+
+@fixture(scope="function")
 def test_key(client):
     key_info = {
         "description": "test",
