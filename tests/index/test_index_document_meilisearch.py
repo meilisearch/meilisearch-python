@@ -103,6 +103,22 @@ def test_get_documents_offset_optional_params(index_with_documents):
     assert response_offset_limit.results[0].title == response.results[1].title
 
 
+def test_get_documents_offset_optional_params_list_of_fields(index_with_documents):
+    """Tests getting documents from a populated index with optional parameters."""
+    index = index_with_documents()
+    response = index.get_documents()
+    assert isinstance(response.results, list)
+    assert len(response.results) == 20
+    response_offset_limit = index.get_documents(
+        {"limit": 3, "offset": 1, "fields": ["title", "genre"]}
+    )
+    assert len(response_offset_limit.results) == 3
+    assert hasattr(response_offset_limit.results[0], "title")
+    assert hasattr(response_offset_limit.results[0], "genre")
+    assert response_offset_limit.results[0].title == response.results[1].title
+    assert response_offset_limit.results[0].genre == response.results[1].genre
+
+
 def test_get_documents_filter(index_with_documents):
     index = index_with_documents()
     response = index.update_filterable_attributes(["genre"])

@@ -25,7 +25,7 @@ class _KeyBase(CamelBase):
         ) -> Union[datetime, None]:
             return iso_to_date_time(v)
 
-    else:
+    else:  # pragma: no cover
 
         @pydantic.validator("expires_at", pre=True)
         @classmethod
@@ -59,7 +59,7 @@ class Key(_KeyBase):
             converted = iso_to_date_time(v)
 
             if not converted:
-                raise ValueError("created_at is required")
+                raise ValueError("created_at is required")  # pragma: no cover
 
             return converted
 
@@ -70,7 +70,7 @@ class Key(_KeyBase):
         ) -> Union[datetime, None]:
             return iso_to_date_time(v)
 
-    else:
+    else:  # pragma: no cover
 
         @pydantic.validator("created_at", pre=True)
         @classmethod
@@ -101,7 +101,7 @@ class KeyUpdate(CamelBase):
     if is_pydantic_2():
         model_config = pydantic.ConfigDict(ser_json_timedelta="iso8601")  # type: ignore[typeddict-unknown-key]
 
-    else:
+    else:  # pragma: no cover
 
         class Config:
             json_encoders = {

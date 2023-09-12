@@ -29,9 +29,8 @@ class Task(CamelBase):
         def validate_enqueued_at(cls, v: str) -> datetime:  # pylint: disable=invalid-name
             converted = iso_to_date_time(v)
 
-            if not converted:
+            if not converted:  # pragma: no cover
                 raise ValueError("enqueued_at is required")
-
             return converted
 
         @pydantic.field_validator("started_at", mode="before")  # type: ignore[attr-defined]
@@ -48,7 +47,7 @@ class Task(CamelBase):
         ) -> Union[datetime, None]:
             return iso_to_date_time(v)
 
-    else:
+    else:  # pragma: no cover
 
         @pydantic.validator("enqueued_at", pre=True)
         @classmethod
@@ -89,12 +88,12 @@ class TaskInfo(CamelBase):
         def validate_enqueued_at(cls, v: str) -> datetime:  # pylint: disable=invalid-name
             converted = iso_to_date_time(v)
 
-            if not converted:
+            if not converted:  # pragma: no cover
                 raise ValueError("enqueued_at is required")
 
             return converted
 
-    else:
+    else:  # pragma: no cover
 
         @pydantic.validator("enqueued_at", pre=True)
         @classmethod

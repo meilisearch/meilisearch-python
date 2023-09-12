@@ -1,6 +1,7 @@
 # pylint: disable=invalid-name
 
 import datetime
+from copy import deepcopy
 
 import pytest
 
@@ -52,6 +53,20 @@ def test_generate_tenant_token_with_api_key(client, get_private_key, empty_index
     response = token_client.index("indexUID").search("")
     assert isinstance(response, dict)
     assert response["query"] == ""
+
+
+def test_generate_tenant_token_no_api_key(client, get_private_key):
+    # Make a copy of the client so we don't change the value in the session scoped fixture as this
+    # would affect other tests.
+    client_copy = deepcopy(client)
+    client_copy.config.api_key = None
+    with pytest.raises(ValueError) as exc:
+        client_copy.generate_tenant_token(
+            api_key_uid=get_private_key.uid,
+            search_rules=["*"],
+        )
+
+    assert "An api key is required" in str(exc.value)
 
 
 def test_generate_tenant_token_with_expires_at(client, get_private_key, empty_index):
