@@ -38,29 +38,29 @@ class Faceting(CamelBase):
 
         @pydantic.field_validator("sort_facet_values_by")  # type: ignore[attr-defined]
         @classmethod
-        def validate_facet_order(cls, v: Optional[Dict[str, str]]) -> Optional[Dict[str, str]]:
-            if not v:  # pragma: no cover
+        def validate_facet_order(cls, val: Optional[Dict[str, str]]) -> Optional[Dict[str, str]]:
+            if not val:  # pragma: no cover
                 return None
 
-            for _, value in v.items():
+            for _, value in val.items():
                 if value not in ("alpha", "count"):
                     raise ValueError('facet_order must be either "alpha" or "count"')
 
-            return v
+            return val
 
     else:  # pragma: no cover
 
         @pydantic.validator("sort_facet_values_by")  # type: ignore[attr-defined]
         @classmethod
-        def validate_facet_order(cls, v: Optional[Dict[str, str]]) -> Optional[Dict[str, str]]:
-            if not v:
+        def validate_facet_order(cls, val: Optional[Dict[str, str]]) -> Optional[Dict[str, str]]:
+            if not val:
                 return None
 
-            for _, value in v.items():
+            for _, value in val.items():
                 if value not in ("alpha", "count"):
                     raise ValueError('facet_order must be either "alpha" or "count"')
 
-            return v
+            return val
 
 
 class Pagination(CamelBase):
