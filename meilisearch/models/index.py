@@ -2,11 +2,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, Iterator, List, Optional
 
-import pydantic
 from camel_converter import to_snake
 from camel_converter.pydantic_base import CamelBase
-
-from meilisearch._utils import is_pydantic_2
 
 
 class IndexStats:
@@ -33,34 +30,6 @@ class IndexStats:
 class Faceting(CamelBase):
     max_values_per_facet: int
     sort_facet_values_by: Optional[Dict[str, str]] = None
-
-    if is_pydantic_2():
-
-        @pydantic.field_validator("sort_facet_values_by")  # type: ignore[attr-defined]
-        @classmethod
-        def validate_facet_order(cls, val: Optional[Dict[str, str]]) -> Optional[Dict[str, str]]:
-            if not val:  # pragma: no cover
-                return None
-
-            for _, value in val.items():
-                if value not in ("alpha", "count"):
-                    raise ValueError('facet_order must be either "alpha" or "count"')
-
-            return val
-
-    else:  # pragma: no cover
-
-        @pydantic.validator("sort_facet_values_by")  # type: ignore[attr-defined]
-        @classmethod
-        def validate_facet_order(cls, val: Optional[Dict[str, str]]) -> Optional[Dict[str, str]]:
-            if not val:
-                return None
-
-            for _, value in val.items():
-                if value not in ("alpha", "count"):
-                    raise ValueError('facet_order must be either "alpha" or "count"')
-
-            return val
 
 
 class Pagination(CamelBase):

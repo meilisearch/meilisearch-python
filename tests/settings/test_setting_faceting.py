@@ -66,14 +66,6 @@ def test_update_faceting_sort_facet_values(
     assert response.model_dump() == expected
 
 
-def test_update_faceting_sort_facet_values_invalid_sort_type():
-    with pytest.raises(ValueError):
-        Faceting(
-            max_values_per_facet=2,
-            sort_facet_values_by={"*": "bad"},
-        )
-
-
 def test_reset_faceting(empty_index):
     index = empty_index()
     response = index.update_faceting_settings(
