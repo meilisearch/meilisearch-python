@@ -29,6 +29,7 @@ class IndexStats:
 
 class Faceting(CamelBase):
     max_values_per_facet: int
+    sort_facet_values_by: Optional[Dict[str, str]] = None
 
 
 class Pagination(CamelBase):
