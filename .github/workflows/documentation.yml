@@ -1,9 +1,9 @@
 name: Documentation
 
 on:
-  release:
-    types:
-      - published
+  push:
+    tags:
+      - 'v*'
   # Allows to run the workflow manually
   workflow_dispatch:
 
