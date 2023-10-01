@@ -773,12 +773,12 @@
         },
         "tox": {
             "hashes": [
-                "sha256:8a8cc94b7269f8e43dfc636eff2da4b33a199a4e575b5b086cc51aae24ac4262",
-                "sha256:da761b4a57ee2b92b5ce39f48ff723fc42d185bf2af508effb683214efa662ea"
+                "sha256:5039f68276461fae6a9452a3b2c7295798f00a0e92edcd9a3b78ba1a73577951",
+                "sha256:599af5e5bb0cad0148ac1558a0b66f8fff219ef88363483b8d92a81e4246f28f"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==4.11.1"
+            "version": "==4.11.3"
         },
         "tox-pipenv": {
             "hashes": [
