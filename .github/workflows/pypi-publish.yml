@@ -14,12 +14,11 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.8'
+          cache: "pipenv"
       - name: Check release validity
         run: sh .github/scripts/check-release.sh
       - name: Install pipenv
-        run: |
-          pip install pipx
-          pipx install pipenv
+        run: pipx install pipenv
       - name: Install dependencies
         run: |
           pipenv install

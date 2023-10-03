@@ -22,10 +22,9 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+          cache: "pipenv"
       - name: Install pipenv
-        run: |
-          pip install pipx
-          pipx install pipenv
+        run: pipx install pipenv
       - name: Install dependencies
         run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: Get the latest Meilisearch RC
