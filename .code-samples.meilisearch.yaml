@@ -676,10 +676,10 @@ date_guide_sort_1: |-
     'sort': ['release_timestamp:desc']
   })
 facet_search_1: |-
-  client.index('books').facet_search('fiction', 'genres', {
+  client.index('books').facet_search('genres', 'fiction', {
     'filter': 'rating > 3'
   })
 facet_search_2: |-
   client.index('books').update_faceting_settings({ 'sortFacetValuesBy': { 'genres': 'count' } })
 facet_search_3: |-
-  client.index('books').facet_search('c', 'genres')
+  client.index('books').facet_search('genres', 'c')
