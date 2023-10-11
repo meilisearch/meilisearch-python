@@ -26,10 +26,9 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+          cache: "pipenv"
       - name: Install pipenv
-        run: |
-          pip install pipx
-          pipx install pipenv
+        run: pipx install pipenv
       - name: Install dependencies
         run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: Meilisearch (latest version) setup with Docker
@@ -52,10 +51,9 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.8"
+          cache: "pipenv"
       - name: Install pipenv
-        run: |
-          pip install pipx
-          pipx install pipenv
+        run: pipx install pipenv
       - name: Install dependencies
         run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: Linter with pylint
@@ -70,10 +68,9 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: 3.9
+          cache: "pipenv"
       - name: Install pipenv
-        run: |
-          pip install pipx
-          pipx install pipenv
+        run: pipx install pipenv
       - name: Install dependencies
         run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: mypy type check
@@ -88,10 +85,9 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: 3.9
+          cache: "pipenv"
       - name: Install pipenv
-        run: |
-          pip install pipx
-          pipx install pipenv
+        run: pipx install pipenv
       - name: Install dependencies
         run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: black
@@ -106,10 +102,9 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: 3.9
+          cache: "pipenv"
       - name: Install pipenv
-        run: |
-          pip install pipx
-          pipx install pipenv
+        run: pipx install pipenv
       - name: Install dependencies
         run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: isort
