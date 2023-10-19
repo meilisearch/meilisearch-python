@@ -50,7 +50,7 @@ delete_one_document_1: |-
 delete_documents_by_batch_1: |-
   client.index('movies').delete_documents([23488, 153738, 437035, 363869])
 delete_documents_by_filter_1: |-
-  client.index('movies').delete_documents({filter='genres=action OR genres=adventure'})
+  client.index('movies').delete_documents(filter='genres=action OR genres=adventure')
 search_post_1: |-
   client.index('movies').search('American ninja')
 multi_search_1: |-
