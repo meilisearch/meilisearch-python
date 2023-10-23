@@ -1577,6 +1577,66 @@ class Index:
 
         return TaskInfo(**task)
 
+    # USER DICTIONARY SUB-ROUTES
+
+    def get_dictionary(self) -> List[str]:
+        """Get the dictionary entries of the index.
+
+        Returns
+        -------
+        settings:
+            List containing the dictionary entries of the index.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.http.get(self.__settings_url_for(self.config.paths.dictionary))
+
+    def update_dictionary(self, body: Union[List[str], None]) -> TaskInfo:
+        """Update the dictionary of the index.
+
+        Parameters
+        ----------
+        body:
+            List of the new dictionary entries.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.put(self.__settings_url_for(self.config.paths.dictionary), body)
+
+        return TaskInfo(**task)
+
+    def reset_dictionary(self) -> TaskInfo:
+        """Clear all entries in dictionary
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.delete(
+            self.__settings_url_for(self.config.paths.dictionary),
+        )
+
+        return TaskInfo(**task)
+
     @staticmethod
     def _batch(
         documents: List[Dict[str, Any]], batch_size: int
