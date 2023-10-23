@@ -18,6 +18,7 @@ def test_update_dictionary(empty_index):
     for word in NEW_DICTIONARY:
         assert word in dictionary
 
+
 def test_reset_dictionary(empty_index):
     """Tests resetting the user dictionary to its default empty list."""
     index = empty_index()

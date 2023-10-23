@@ -683,3 +683,9 @@ facet_search_2: |-
   client.index('books').update_faceting_settings({ 'sortFacetValuesBy': { 'genres': 'count' } })
 facet_search_3: |-
   client.index('books').facet_search('genres', 'c')
+get_dictionary_1: |-
+  client.index('books').get_dictionary()
+update_dictionary_1: |-
+  client.index('books').update_dictionary(["J. R. R.", "W. E. B."])
+reset_dictionary_1: |-
+  client.index('books').reset_dictionary()
