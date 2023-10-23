@@ -1594,7 +1594,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.dictionary))
 
-    def update_dictionary(self, body: Union[List[str], None]) -> TaskInfo:
+    def update_dictionary(self, body: List[str]) -> TaskInfo:
         """Update the dictionary of the index.
 
         Parameters
