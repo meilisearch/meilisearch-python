@@ -33,6 +33,7 @@ class Config:
         dumps = "dumps"
         pagination = "pagination"
         faceting = "faceting"
+        dictionary = "dictionary"
         swap = "swap-indexes"
 
     def __init__(
