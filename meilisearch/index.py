@@ -1669,7 +1669,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.non_separator_tokens))
 
-    def update_separator_tokens(self, body: List[str]) -> TaskInfo:
+    def update_separator_tokens(self, body: Union[List[str], None]) -> TaskInfo:
         """Update the additional separator tokens of the index.
 
         Parameters
@@ -1692,7 +1692,7 @@ class Index:
 
         return TaskInfo(**task)
 
-    def update_non_separator_tokens(self, body: List[str]) -> TaskInfo:
+    def update_non_separator_tokens(self, body: Union[List[str], None]) -> TaskInfo:
         """Update the disabled separator tokens of the index.
 
         Parameters
