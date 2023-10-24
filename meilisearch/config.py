@@ -34,6 +34,8 @@ class Config:
         pagination = "pagination"
         faceting = "faceting"
         dictionary = "dictionary"
+        separator_tokens = "separator-tokens"
+        non_separator_tokens = "non-separator-tokens"
         swap = "swap-indexes"
 
     def __init__(

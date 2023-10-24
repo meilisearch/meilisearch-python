@@ -1637,6 +1637,124 @@ class Index:
 
         return TaskInfo(**task)
 
+    # TEXT SEPARATOR SUB-ROUTES
+
+    def get_separator_tokens(self) -> List[str]:
+        """Get the additional text separator tokens set on this index.
+
+        Returns
+        -------
+        settings:
+            List containing the separator tokens of the index.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.http.get(self.__settings_url_for(self.config.paths.separator_tokens))
+
+    def get_non_separator_tokens(self) -> List[str]:
+        """Get the list of disabled text separator tokens on this index.
+
+        Returns
+        -------
+        settings:
+            List containing the disabled separator tokens of the index.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.http.get(self.__settings_url_for(self.config.paths.non_separator_tokens))
+
+    def update_separator_tokens(self, body: Union[List[str], None]) -> TaskInfo:
+        """Update the additional separator tokens of the index.
+
+        Parameters
+        ----------
+        body:
+            List of the new separator tokens.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.put(self.__settings_url_for(self.config.paths.separator_tokens), body)
+
+        return TaskInfo(**task)
+
+    def update_non_separator_tokens(self, body: Union[List[str], None]) -> TaskInfo:
+        """Update the disabled separator tokens of the index.
+
+        Parameters
+        ----------
+        body:
+            List of the newly disabled separator tokens.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.put(self.__settings_url_for(self.config.paths.non_separator_tokens), body)
+
+        return TaskInfo(**task)
+
+    def reset_separator_tokens(self) -> TaskInfo:
+        """Clear all additional separator tokens
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.delete(
+            self.__settings_url_for(self.config.paths.separator_tokens),
+        )
+
+        return TaskInfo(**task)
+
+    def reset_non_separator_tokens(self) -> TaskInfo:
+        """Clear all disabled separator tokens
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.delete(
+            self.__settings_url_for(self.config.paths.non_separator_tokens),
+        )
+
+        return TaskInfo(**task)
+
     @staticmethod
     def _batch(
         documents: List[Dict[str, Any]], batch_size: int
