@@ -683,6 +683,18 @@ facet_search_2: |-
   client.index('books').update_faceting_settings({ 'sortFacetValuesBy': { 'genres': 'count' } })
 facet_search_3: |-
   client.index('books').facet_search('genres', 'c')
+get_separator_tokens_1: |-
+  client.index('articles').get_separator_tokens()
+update_separator_tokens_1: |-
+  client.index('articles').update_separator_tokens(["|", "&hellip;"])
+reset_separator_tokens_1: |-
+  client.index('articles').reset_separator_tokens()
+get_non_separator_tokens_1: |-
+  client.index('articles').get_non_separator_tokens()
+update_non_separator_tokens_1: |-
+  client.index('articles').update_non_separator_tokens(["@", "#"])
+reset_non_separator_tokens_1: |-
+  client.index('articles').reset_non_separator_tokens()
 get_dictionary_1: |-
   client.index('books').get_dictionary()
 update_dictionary_1: |-
