@@ -14,6 +14,8 @@ categories:
     label: 'enhancement'
   - title: '🐛 Bug Fixes'
     label: 'bug'
+  - title: '⚙️ Maintenance'
+    label: 'maintenance'
   - title: '🔒 Security'
     label: 'security'
 template: |
@@ -30,4 +32,6 @@ replacers:
   - search: '/(?:and )?@bors(?:\[bot\])?,?/g'
     replace: ''
   - search: '/(?:and )?@meili-bot,?/g'
+    replace: ''
+  - search: '/(?:and )?@meili-bot(?:\[bot\])?,?/g'
     replace: ''
