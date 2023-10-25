@@ -6,7 +6,7 @@ First of all, thank you for contributing to Meilisearch! The goal of this docume
 - [How to Contribute](#how-to-contribute)
 - [Development Workflow](#development-workflow)
 - [Git Guidelines](#git-guidelines)
-- [Release Process (for internal team only)](#release-process-for-internal-team-only)
+- [Release Process (for the internal team only)](#release-process-for-the-internal-team-only)
 
 ## Assumptions
 
@@ -129,6 +129,10 @@ _[Read more about this](https://github.com/meilisearch/integration-guides/blob/m
 ### How to Publish the Release <!-- omit in toc -->
 
 ⚠️ Before doing anything, make sure you got through the guide about [Releasing an Integration](https://github.com/meilisearch/integration-guides/blob/main/resources/integration-release.md).
+
+Use [our automation](https://github.com/meilisearch/meilisearch-python/actions/workflows/update-version.yml) to update the version: click on `Run workflow``, and fill the appropriate version before validating. A PR updating the version in the `version.py` file will be created.
+
+Or do it manually:
 
 Make a PR modifying the file [`meilisearch/version.py`](/meilisearch/version.py) with the right version.
 
