@@ -130,7 +130,7 @@ _[Read more about this](https://github.com/meilisearch/integration-guides/blob/m
 
 ⚠️ Before doing anything, make sure you got through the guide about [Releasing an Integration](https://github.com/meilisearch/integration-guides/blob/main/resources/integration-release.md).
 
-Use [our automation](https://github.com/meilisearch/meilisearch-python/actions/workflows/update-version.yml) to update the version: click on `Run workflow``, and fill the appropriate version before validating. A PR updating the version in the `version.py` file will be created.
+Use [our automation](https://github.com/meilisearch/meilisearch-python/actions/workflows/update-version.yml) to update the version: click on `Run workflow`, and fill the appropriate version before validating. A PR updating the version in the [`meilisearch/version.py`](/meilisearch/version.py) file will be created.
 
 Or do it manually:
 
