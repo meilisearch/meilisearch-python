@@ -14,8 +14,10 @@ categories:
     label: 'enhancement'
   - title: '🐛 Bug Fixes'
     label: 'bug'
-  - title: '⚙️ Maintenance'
-    label: 'maintenance'
+  - title: '⚙️ Maintenance/misc'
+    label:
+      - 'maintenance'
+      - 'documentation'
   - title: '🔒 Security'
     label: 'security'
 template: |
