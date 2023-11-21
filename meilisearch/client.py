@@ -454,6 +454,7 @@ class Client:
         task = self.http.post(self.config.paths.dumps)
 
         return TaskInfo(**task)
+    
 
     def swap_indexes(self, parameters: List[Dict[str, List[str]]]) -> TaskInfo:
         """Swap two indexes.
@@ -672,3 +673,21 @@ class Client:
         )
         match = uuid4hex.match(uuid)
         return bool(match)
+
+    def create_snapshot(self) -> TaskInfo:
+        """Trigger the creation of a Meilisearch snapshot.
+
+        Returns
+        -------
+        Snapshot:
+            Information about the snapshot.
+            https://www.meilisearch.com/docs/reference/api/snapshots#create-a-snapshot
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.post(self.config.paths.snapshots)
+
+        return TaskInfo(**task)

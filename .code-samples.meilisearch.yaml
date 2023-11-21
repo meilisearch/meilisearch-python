@@ -216,8 +216,7 @@ getting_started_typo_tolerance: |-
       'oneTypo': 4
     }
   })
-get_typo_tolerance_1:
-  client.index('books').get_typo_tolerance()
+get_typo_tolerance_1: client.index('books').get_typo_tolerance()
 update_typo_tolerance_1: |-
   client.index('books').update_typo_tolerance({
     'minWordSizeForTypos': {
@@ -701,3 +700,5 @@ update_dictionary_1: |-
   client.index('books').update_dictionary(["J. R. R.", "W. E. B."])
 reset_dictionary_1: |-
   client.index('books').reset_dictionary()
+create_snapshot_1: |-
+  client.create_snapshot()
