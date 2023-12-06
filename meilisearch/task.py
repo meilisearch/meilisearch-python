@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from time import sleep
-from typing import Any, Dict, Optional
+from typing import Any, MutableMapping, Optional
 from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
@@ -27,7 +27,7 @@ class TaskHandler:
         self.config = config
         self.http = HttpRequests(config)
 
-    def get_tasks(self, parameters: Optional[Dict[str, Any]] = None) -> TaskResults:
+    def get_tasks(self, parameters: Optional[MutableMapping[str, Any]] = None) -> TaskResults:
         """Get all tasks.
 
         Parameters
@@ -75,7 +75,7 @@ class TaskHandler:
         task = self.http.get(f"{self.config.paths.task}/{uid}")
         return Task(**task)
 
-    def cancel_tasks(self, parameters: Dict[str, Any]) -> TaskInfo:
+    def cancel_tasks(self, parameters: MutableMapping[str, Any]) -> TaskInfo:
         """Cancel a list of enqueued or processing tasks.
 
         Parameters
@@ -100,7 +100,7 @@ class TaskHandler:
         response = self.http.post(f"{self.config.paths.task}/cancel?{parse.urlencode(parameters)}")
         return TaskInfo(**response)
 
-    def delete_tasks(self, parameters: Dict[str, Any]) -> TaskInfo:
+    def delete_tasks(self, parameters: MutableMapping[str, Any]) -> TaskInfo:
         """Delete a list of enqueued or processing tasks.
         Parameters
         ----------
