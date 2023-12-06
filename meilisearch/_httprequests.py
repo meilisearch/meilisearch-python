@@ -27,7 +27,7 @@ class HttpRequests:
         self,
         http_method: Callable,
         path: str,
-        body: Optional[Union[Dict[str, Any], Sequence[Mapping[str, Any]], List[str], str]] = None,
+        body: Optional[Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str], str]] = None,
         content_type: Optional[str] = None,
     ) -> Any:
         if content_type:
@@ -67,7 +67,7 @@ class HttpRequests:
     def post(
         self,
         path: str,
-        body: Optional[Union[Dict[str, Any], Sequence[Mapping[str, Any]], List[str], str]] = None,
+        body: Optional[Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str], str]] = None,
         content_type: Optional[str] = "application/json",
     ) -> Any:
         return self.send_request(requests.post, path, body, content_type)
@@ -75,7 +75,7 @@ class HttpRequests:
     def patch(
         self,
         path: str,
-        body: Optional[Union[Dict[str, Any], Sequence[Mapping[str, Any]], List[str], str]] = None,
+        body: Optional[Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str], str]] = None,
         content_type: Optional[str] = "application/json",
     ) -> Any:
         return self.send_request(requests.patch, path, body, content_type)
@@ -83,7 +83,7 @@ class HttpRequests:
     def put(
         self,
         path: str,
-        body: Optional[Union[Dict[str, Any], Sequence[Mapping[str, Any]], List[str], str]] = None,
+        body: Optional[Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str], str]] = None,
         content_type: Optional[str] = "application/json",
     ) -> Any:
         return self.send_request(requests.put, path, body, content_type)
@@ -91,7 +91,7 @@ class HttpRequests:
     def delete(
         self,
         path: str,
-        body: Optional[Union[Dict[str, Any], Sequence[Mapping[str, Any]], List[str]]] = None,
+        body: Optional[Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str]]] = None,
     ) -> Any:
         return self.send_request(requests.delete, path, body)
 
