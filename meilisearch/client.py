@@ -8,7 +8,7 @@ import hashlib
 import hmac
 import json
 import re
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Mapping, Optional, Tuple, Union
 from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
@@ -55,7 +55,7 @@ class Client:
 
         self.task_handler = TaskHandler(self.config)
 
-    def create_index(self, uid: str, options: Optional[Dict[str, Any]] = None) -> TaskInfo:
+    def create_index(self, uid: str, options: Optional[Mapping[str, Any]] = None) -> TaskInfo:
         """Create an index.
 
         Parameters
@@ -102,7 +102,7 @@ class Client:
 
         return TaskInfo(**task)
 
-    def get_indexes(self, parameters: Optional[Dict[str, Any]] = None) -> Dict[str, List[Index]]:
+    def get_indexes(self, parameters: Optional[Mapping[str, Any]] = None) -> Dict[str, List[Index]]:
         """Get all indexes.
 
         Parameters
@@ -135,7 +135,7 @@ class Client:
         ]
         return response
 
-    def get_raw_indexes(self, parameters: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+    def get_raw_indexes(self, parameters: Optional[Mapping[str, Any]] = None) -> List[Dict[str, Any]]:
         """Get all indexes in dictionary format.
 
         Parameters
@@ -305,7 +305,7 @@ class Client:
 
         return Key(**key)
 
-    def get_keys(self, parameters: Optional[Dict[str, Any]] = None) -> KeysResults:
+    def get_keys(self, parameters: Optional[Mapping[str, Any]] = None) -> KeysResults:
         """Gets the Meilisearch API keys.
 
         Parameters
@@ -455,7 +455,7 @@ class Client:
 
         return TaskInfo(**task)
 
-    def swap_indexes(self, parameters: List[Dict[str, List[str]]]) -> TaskInfo:
+    def swap_indexes(self, parameters: List[Mapping[str, List[str]]]) -> TaskInfo:
         """Swap two indexes.
 
         Parameters
@@ -476,7 +476,7 @@ class Client:
         """
         return TaskInfo(**self.http.post(self.config.paths.swap, parameters))
 
-    def get_tasks(self, parameters: Optional[Dict[str, Any]] = None) -> TaskResults:
+    def get_tasks(self, parameters: Optional[Mapping[str, Any]] = None) -> TaskResults:
         """Get all tasks.
 
         Parameters
@@ -517,7 +517,7 @@ class Client:
         """
         return self.task_handler.get_task(uid)
 
-    def cancel_tasks(self, parameters: Dict[str, Any]) -> TaskInfo:
+    def cancel_tasks(self, parameters: Mapping[str, Any]) -> TaskInfo:
         """Cancel a list of enqueued or processing tasks.
 
         Parameters
@@ -538,7 +538,7 @@ class Client:
         """
         return self.task_handler.cancel_tasks(parameters=parameters)
 
-    def delete_tasks(self, parameters: Dict[str, Any]) -> TaskInfo:
+    def delete_tasks(self, parameters: Mapping[str, Any]) -> TaskInfo:
         """Delete a list of finished tasks.
 
         Parameters

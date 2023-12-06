@@ -118,7 +118,7 @@ class Index:
         return self.fetch_info().primary_key
 
     @staticmethod
-    def create(config: Config, uid: str, options: Optional[Dict[str, Any]] = None) -> TaskInfo:
+    def create(config: Config, uid: str, options: Optional[Mapping[str, Any]] = None) -> TaskInfo:
         """Create the index.
 
         Parameters
@@ -146,7 +146,7 @@ class Index:
 
         return TaskInfo(**task)
 
-    def get_tasks(self, parameters: Optional[Dict[str, Any]] = None) -> TaskResults:
+    def get_tasks(self, parameters: Optional[Mapping[str, Any]] = None) -> TaskResults:
         """Get all tasks of a specific index from the last one.
 
         Parameters
@@ -244,7 +244,7 @@ class Index:
         return IndexStats(stats)
 
     @version_error_hint_message
-    def search(self, query: str, opt_params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def search(self, query: str, opt_params: Optional[Mapping[str, Any]] = None) -> Dict[str, Any]:
         """Search in the index.
 
         Parameters
@@ -284,7 +284,7 @@ class Index:
         self,
         facet_name: str,
         facet_query: Optional[str] = None,
-        opt_params: Optional[Dict[str, Any]] = None,
+        opt_params: Optional[Mapping[str, Any]] = None,
     ) -> Dict[str, Any]:
         """
         Perform a facet search based on the given facet query and facet name.
@@ -313,7 +313,7 @@ class Index:
         )
 
     def get_document(
-        self, document_id: Union[str, int], parameters: Optional[Dict[str, Any]] = None
+        self, document_id: Union[str, int], parameters: Optional[Mapping[str, Any]] = None
     ) -> Document:
         """Get one document with given document identifier.
 
@@ -345,7 +345,7 @@ class Index:
         return Document(document)
 
     @version_error_hint_message
-    def get_documents(self, parameters: Optional[Dict[str, Any]] = None) -> DocumentsResults:
+    def get_documents(self, parameters: Optional[Mapping[str, Any]] = None) -> DocumentsResults:
         """Get a set of documents from the index.
 
         Parameters
