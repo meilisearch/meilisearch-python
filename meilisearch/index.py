@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Dict, Generator, List, Optional, Union
+from typing import Any, Dict, Generator, List, Mapping, Optional, Sequence, Union
 from urllib import parse
 from warnings import warn
 
@@ -387,7 +387,7 @@ class Index:
 
     def add_documents(
         self,
-        documents: List[Dict[str, Any]],
+        documents: Sequence[Mapping[str, Any]],
         primary_key: Optional[str] = None,
     ) -> TaskInfo:
         """Add documents to the index.
@@ -416,7 +416,7 @@ class Index:
 
     def add_documents_in_batches(
         self,
-        documents: List[Dict[str, Any]],
+        documents: Sequence[Mapping[str, Any]],
         batch_size: int = 1000,
         primary_key: Optional[str] = None,
     ) -> List[TaskInfo]:
@@ -573,7 +573,7 @@ class Index:
         return TaskInfo(**response)
 
     def update_documents(
-        self, documents: List[Dict[str, Any]], primary_key: Optional[str] = None
+        self, documents: Sequence[Mapping[str, Any]], primary_key: Optional[str] = None
     ) -> TaskInfo:
         """Update documents in the index.
 
@@ -721,7 +721,7 @@ class Index:
 
     def update_documents_in_batches(
         self,
-        documents: List[Dict[str, Any]],
+        documents: Sequence[Mapping[str, Any]],
         batch_size: int = 1000,
         primary_key: Optional[str] = None,
     ) -> List[TaskInfo]:
@@ -1757,8 +1757,8 @@ class Index:
 
     @staticmethod
     def _batch(
-        documents: List[Dict[str, Any]], batch_size: int
-    ) -> Generator[List[Dict[str, Any]], None, None]:
+        documents: Sequence[Mapping[str, Any]], batch_size: int
+    ) -> Generator[Sequence[Mapping[str, Any]], None, None]:
         total_len = len(documents)
         for i in range(0, total_len, batch_size):
             yield documents[i : i + batch_size]
