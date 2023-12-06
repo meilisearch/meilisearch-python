@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Dict, Generator, List, Mapping, Optional, Sequence, Union
+from typing import Any, Dict, Generator, List, Mapping, MutableMapping, Optional, Sequence, Union
 from urllib import parse
 from warnings import warn
 
@@ -146,7 +146,7 @@ class Index:
 
         return TaskInfo(**task)
 
-    def get_tasks(self, parameters: Optional[Mapping[str, Any]] = None) -> TaskResults:
+    def get_tasks(self, parameters: Optional[MutableMapping[str, Any]] = None) -> TaskResults:
         """Get all tasks of a specific index from the last one.
 
         Parameters
@@ -313,7 +313,7 @@ class Index:
         )
 
     def get_document(
-        self, document_id: Union[str, int], parameters: Optional[Mapping[str, Any]] = None
+        self, document_id: Union[str, int], parameters: Optional[MutableMapping[str, Any]] = None
     ) -> Document:
         """Get one document with given document identifier.
 
@@ -345,7 +345,9 @@ class Index:
         return Document(document)
 
     @version_error_hint_message
-    def get_documents(self, parameters: Optional[Mapping[str, Any]] = None) -> DocumentsResults:
+    def get_documents(
+        self, parameters: Optional[MutableMapping[str, Any]] = None
+    ) -> DocumentsResults:
         """Get a set of documents from the index.
 
         Parameters
@@ -865,7 +867,7 @@ class Index:
         """
         return self.http.get(f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}")
 
-    def update_settings(self, body: Dict[str, Any]) -> TaskInfo:
+    def update_settings(self, body: Mapping[str, Any]) -> TaskInfo:
         """Update settings of the index.
 
         https://www.meilisearch.com/docs/reference/api/settings#update-settings
@@ -1413,7 +1415,7 @@ class Index:
 
         return TypoTolerance(**typo_tolerance)
 
-    def update_typo_tolerance(self, body: Union[Dict[str, Any], None]) -> TaskInfo:
+    def update_typo_tolerance(self, body: Union[Mapping[str, Any], None]) -> TaskInfo:
         """Update typo tolerance of the index.
 
         Parameters
@@ -1535,7 +1537,7 @@ class Index:
 
         return Faceting(**faceting)
 
-    def update_faceting_settings(self, body: Union[Dict[str, Any], None]) -> TaskInfo:
+    def update_faceting_settings(self, body: Union[Mapping[str, Any], None]) -> TaskInfo:
         """Update the faceting settings of the index.
 
         Parameters
