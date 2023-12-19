@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Dict, Generator, List, Optional, Union
+from typing import Any, Dict, Generator, List, Mapping, MutableMapping, Optional, Sequence, Union
 from urllib import parse
 from warnings import warn
 
@@ -118,7 +118,7 @@ class Index:
         return self.fetch_info().primary_key
 
     @staticmethod
-    def create(config: Config, uid: str, options: Optional[Dict[str, Any]] = None) -> TaskInfo:
+    def create(config: Config, uid: str, options: Optional[Mapping[str, Any]] = None) -> TaskInfo:
         """Create the index.
 
         Parameters
@@ -146,7 +146,7 @@ class Index:
 
         return TaskInfo(**task)
 
-    def get_tasks(self, parameters: Optional[Dict[str, Any]] = None) -> TaskResults:
+    def get_tasks(self, parameters: Optional[MutableMapping[str, Any]] = None) -> TaskResults:
         """Get all tasks of a specific index from the last one.
 
         Parameters
@@ -244,7 +244,7 @@ class Index:
         return IndexStats(stats)
 
     @version_error_hint_message
-    def search(self, query: str, opt_params: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def search(self, query: str, opt_params: Optional[Mapping[str, Any]] = None) -> Dict[str, Any]:
         """Search in the index.
 
         Parameters
@@ -284,7 +284,7 @@ class Index:
         self,
         facet_name: str,
         facet_query: Optional[str] = None,
-        opt_params: Optional[Dict[str, Any]] = None,
+        opt_params: Optional[Mapping[str, Any]] = None,
     ) -> Dict[str, Any]:
         """
         Perform a facet search based on the given facet query and facet name.
@@ -313,7 +313,7 @@ class Index:
         )
 
     def get_document(
-        self, document_id: Union[str, int], parameters: Optional[Dict[str, Any]] = None
+        self, document_id: Union[str, int], parameters: Optional[MutableMapping[str, Any]] = None
     ) -> Document:
         """Get one document with given document identifier.
 
@@ -345,7 +345,9 @@ class Index:
         return Document(document)
 
     @version_error_hint_message
-    def get_documents(self, parameters: Optional[Dict[str, Any]] = None) -> DocumentsResults:
+    def get_documents(
+        self, parameters: Optional[MutableMapping[str, Any]] = None
+    ) -> DocumentsResults:
         """Get a set of documents from the index.
 
         Parameters
@@ -387,7 +389,7 @@ class Index:
 
     def add_documents(
         self,
-        documents: List[Dict[str, Any]],
+        documents: Sequence[Mapping[str, Any]],
         primary_key: Optional[str] = None,
     ) -> TaskInfo:
         """Add documents to the index.
@@ -416,7 +418,7 @@ class Index:
 
     def add_documents_in_batches(
         self,
-        documents: List[Dict[str, Any]],
+        documents: Sequence[Mapping[str, Any]],
         batch_size: int = 1000,
         primary_key: Optional[str] = None,
     ) -> List[TaskInfo]:
@@ -573,7 +575,7 @@ class Index:
         return TaskInfo(**response)
 
     def update_documents(
-        self, documents: List[Dict[str, Any]], primary_key: Optional[str] = None
+        self, documents: Sequence[Mapping[str, Any]], primary_key: Optional[str] = None
     ) -> TaskInfo:
         """Update documents in the index.
 
@@ -721,7 +723,7 @@ class Index:
 
     def update_documents_in_batches(
         self,
-        documents: List[Dict[str, Any]],
+        documents: Sequence[Mapping[str, Any]],
         batch_size: int = 1000,
         primary_key: Optional[str] = None,
     ) -> List[TaskInfo]:
@@ -865,7 +867,7 @@ class Index:
         """
         return self.http.get(f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}")
 
-    def update_settings(self, body: Dict[str, Any]) -> TaskInfo:
+    def update_settings(self, body: Mapping[str, Any]) -> TaskInfo:
         """Update settings of the index.
 
         https://www.meilisearch.com/docs/reference/api/settings#update-settings
@@ -1413,7 +1415,7 @@ class Index:
 
         return TypoTolerance(**typo_tolerance)
 
-    def update_typo_tolerance(self, body: Union[Dict[str, Any], None]) -> TaskInfo:
+    def update_typo_tolerance(self, body: Union[Mapping[str, Any], None]) -> TaskInfo:
         """Update typo tolerance of the index.
 
         Parameters
@@ -1535,7 +1537,7 @@ class Index:
 
         return Faceting(**faceting)
 
-    def update_faceting_settings(self, body: Union[Dict[str, Any], None]) -> TaskInfo:
+    def update_faceting_settings(self, body: Union[Mapping[str, Any], None]) -> TaskInfo:
         """Update the faceting settings of the index.
 
         Parameters
@@ -1757,8 +1759,8 @@ class Index:
 
     @staticmethod
     def _batch(
-        documents: List[Dict[str, Any]], batch_size: int
-    ) -> Generator[List[Dict[str, Any]], None, None]:
+        documents: Sequence[Mapping[str, Any]], batch_size: int
+    ) -> Generator[Sequence[Mapping[str, Any]], None, None]:
         total_len = len(documents)
         for i in range(0, total_len, batch_size):
             yield documents[i : i + batch_size]
