@@ -11,16 +11,16 @@ from meilisearch._utils import is_pydantic_2, iso_to_date_time
 
 class Task(CamelBase):
     uid: int
-    index_uid: Union[str, None]
+    index_uid: Union[str, None] = None
     status: str
     type: str
-    details: Union[Dict[str, Any], None]
-    error: Union[Dict[str, Any], None]
-    canceled_by: Union[int, None]
-    duration: Optional[str]
+    details: Union[Dict[str, Any], None] = None
+    error: Union[Dict[str, Any], None] = None
+    canceled_by: Union[int, None] = None
+    duration: Optional[str] = None
     enqueued_at: datetime
-    started_at: Optional[datetime]
-    finished_at: Optional[datetime]
+    started_at: Optional[datetime] = None
+    finished_at: Optional[datetime] = None
 
     if is_pydantic_2():
 
