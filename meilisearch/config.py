@@ -31,6 +31,7 @@ class Config:
         sortable_attributes = "sortable-attributes"
         typo_tolerance = "typo-tolerance"
         dumps = "dumps"
+        snapshots = "snapshots"
         pagination = "pagination"
         faceting = "faceting"
         dictionary = "dictionary"
