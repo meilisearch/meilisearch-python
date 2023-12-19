@@ -43,7 +43,7 @@ class Config:
         url: str,
         api_key: Optional[str] = None,
         timeout: Optional[int] = None,
-        client_agents: Optional[Tuple[str]] = None,
+        client_agents: Optional[Tuple[str, ...]] = None,
     ) -> None:
         """
         Parameters
