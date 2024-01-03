@@ -14,12 +14,10 @@ tox-pipenv = "*"
 types-requests = "*"
 black = "*"
 isort = "*"
-importlib_metadata = {version = "*", markers="python_version < '3.8'"}
-zipp = {version = "==3.17.0", markers="python_version < '3.8'"}
 exceptiongroup = {version = "*", markers="python_version < '3.11'"}
 tomli = {version = "*", markers="python_version < '3.11'"}
 wrapt = {version = "*", markers="python_version < '3.11'"}
-dill = {version = "*", markers="python_version < '3.11'"}
+dill = {version = "*"}
 pytest-cov = "*"
 
 [packages]
