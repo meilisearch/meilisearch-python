@@ -208,6 +208,8 @@ index.search(
 
 This package guarantees compatibility with [version v1.x of Meilisearch](https://github.com/meilisearch/meilisearch/releases/latest), but some features may not be present. Please check the [issues](https://github.com/meilisearch/meilisearch-python/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+label%3Aenhancement) for more info.
 
+⚠️ This package is not compatible with the [`vectoreStore` experimental feature](https://www.meilisearch.com/docs/learn/experimental/vector_search) of Meilisearch v1.6.0 and later. More information on this [issue](https://github.com/meilisearch/meilisearch-python/issues/901).
+
 ## 💡 Learn more
 
 The following sections in our main documentation website may interest you:
