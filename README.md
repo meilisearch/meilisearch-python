@@ -17,9 +17,6 @@
 <p align="center">
   <a href="https://badge.fury.io/py/meilisearch"><img src="https://badge.fury.io/py/meilisearch.svg" alt="PyPI version"></a>
   <a href="https://github.com/meilisearch/meilisearch-python/actions"><img src="https://github.com/meilisearch/meilisearch-python/workflows/Tests/badge.svg" alt="Test Status"></a>
-  <a href="https://codecov.io/gh/meilisearch/meilisearch-python">
-    <img src="https://codecov.io/github/meilisearch/meilisearch-python/coverage.svg?branch=main" alt="Codecov">
-  </a>
   <a href="https://github.com/meilisearch/meilisearch-python/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-informational" alt="License"></a>
   <a href="https://ms-bors.herokuapp.com/repositories/57"><img src="https://bors.tech/images/badge_small.svg" alt="Bors enabled"></a>
 </p>
@@ -103,7 +100,7 @@ With the task `uid`, you can check the status (`enqueued`, `canceled`, `processi
 
 #### Basic Search <!-- omit in toc -->
 
-``` python
+```python
 # Meilisearch is typo-tolerant:
 index.search('caorl')
 ```
@@ -112,17 +109,17 @@ Output:
 
 ```json
 {
-    "hits": [
-        {
-            "id": 1,
-            "title": "Carol",
-            "genre": ["Romance", "Drama"]
-        }
-    ],
-    "offset": 0,
-    "limit": 20,
-    "processingTimeMs": 1,
-    "query": "caorl"
+  "hits": [
+    {
+      "id": 1,
+      "title": "Carol",
+      "genre": ["Romance", "Drama"]
+    }
+  ],
+  "offset": 0,
+  "limit": 20,
+  "processingTimeMs": 1,
+  "query": "caorl"
 }
 ```
 
@@ -143,21 +140,21 @@ JSON output:
 
 ```json
 {
-    "hits": [
-        {
-            "id": 6,
-            "title": "Philadelphia",
-            "_formatted": {
-                "id": 6,
-                "title": "<em>Phil</em>adelphia",
-                "genre": ["Drama"]
-            }
-        }
-    ],
-    "offset": 0,
-    "limit": 20,
-    "processingTimeMs": 0,
-    "query": "phil"
+  "hits": [
+    {
+      "id": 6,
+      "title": "Philadelphia",
+      "_formatted": {
+        "id": 6,
+        "title": "<em>Phil</em>adelphia",
+        "genre": ["Drama"]
+      }
+    }
+  ],
+  "offset": 0,
+  "limit": 20,
+  "processingTimeMs": 0,
+  "query": "phil"
 }
 ```
 
@@ -193,7 +190,7 @@ index.search(
     {
       "id": 2,
       "title": "Wonder Woman",
-      "genres": ["Action","Adventure"]
+      "genres": ["Action", "Adventure"]
     }
   ],
   "offset": 0,
