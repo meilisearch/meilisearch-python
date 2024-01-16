@@ -9,24 +9,17 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.8'
-          cache: "pipenv"
-      - name: Check release validity
-        run: sh .github/scripts/check-release.sh
-      - name: Install pipenv
-        run: pipx install pipenv
-      - name: Install dependencies
-        run: |
-          pipenv install
-          pipenv run pip3 install build setuptools wheel twine
-      - name: Build and publish
-        env:
-          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
-          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        run: |
-          pipenv run python3 -m build
-          pipenv run twine upload dist/*
+    - uses: actions/checkout@v4
+    - name: Install Poetry
+      run: pipx install poetry
+    - name: Add PyPi token to Poetry
+      run: poetry config pypi-token.pypi ${{ secrets.PYPI_API_TOKEN }}
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.11
+        cache: "poetry"
+    - name: Install Dependencies
+      run: poetry install
+    - name: Publish package
+      run: poetry publish --build
