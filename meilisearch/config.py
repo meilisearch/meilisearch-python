@@ -31,6 +31,7 @@ class Config:
         sortable_attributes = "sortable-attributes"
         typo_tolerance = "typo-tolerance"
         dumps = "dumps"
+        snapshots = "snapshots"
         pagination = "pagination"
         faceting = "faceting"
         dictionary = "dictionary"
@@ -43,7 +44,7 @@ class Config:
         url: str,
         api_key: Optional[str] = None,
         timeout: Optional[Union[int, float, Tuple[Union[int, float], Union[int, float]]]] = None,
-        client_agents: Optional[Tuple[str]] = None,
+        client_agents: Optional[Tuple[str, ...]] = None,
     ) -> None:
         """
         Parameters

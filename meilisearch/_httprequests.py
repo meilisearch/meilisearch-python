@@ -119,7 +119,7 @@ class HttpRequests:
 
 
 @lru_cache(maxsize=1)
-def _build_user_agent(client_agents: Optional[Tuple[str]] = None) -> str:
+def _build_user_agent(client_agents: Optional[Tuple[str, ...]] = None) -> str:
     user_agent = qualified_version()
     if not client_agents:
         return user_agent

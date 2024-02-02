@@ -33,7 +33,7 @@ class Client:
         url: str,
         api_key: Optional[str] = None,
         timeout: Optional[int] = None,
-        client_agents: Optional[Tuple[str]] = None,
+        client_agents: Optional[Tuple[str, ...]] = None,
     ) -> None:
         """
         Parameters
@@ -454,6 +454,24 @@ class Client:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.post(self.config.paths.dumps)
+
+        return TaskInfo(**task)
+
+    def create_snapshot(self) -> TaskInfo:
+        """Trigger the creation of a Meilisearch snapshot.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.post(self.config.paths.snapshots)
 
         return TaskInfo(**task)
 

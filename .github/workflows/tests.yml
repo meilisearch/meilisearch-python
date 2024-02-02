@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           cache: "pipenv"
@@ -35,12 +35,6 @@ jobs:
         run: docker run -d -p 7700:7700 getmeili/meilisearch:latest meilisearch --no-analytics --master-key=masterKey
       - name: Test with pytest
         run: pipenv run pytest --cov-report=xml
-      - name: Upload coverage
-        uses: codecov/codecov-action@v3
-        with:
-          fail_ci_if_error: true
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   pylint:
     name: pylint
@@ -48,7 +42,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3.8
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.8"
           cache: "pipenv"
@@ -65,7 +59,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3.9
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: 3.9
           cache: "pipenv"
@@ -82,7 +76,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3.9
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: 3.9
           cache: "pipenv"
@@ -99,7 +93,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3.9
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: 3.9
           cache: "pipenv"
