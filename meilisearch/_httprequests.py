@@ -22,6 +22,7 @@ class HttpRequests:
             "Authorization": f"Bearer {self.config.api_key}",
             "User-Agent": _build_user_agent(config.client_agents),
         }
+        self.session = requests.Session()
 
     def send_request(
         self,
@@ -64,7 +65,7 @@ class HttpRequests:
             raise MeilisearchCommunicationError(str(err)) from err
 
     def get(self, path: str) -> Any:
-        return self.send_request(requests.get, path)
+        return self.send_request(self.session.get, path)
 
     def post(
         self,
@@ -74,7 +75,7 @@ class HttpRequests:
         ] = None,
         content_type: Optional[str] = "application/json",
     ) -> Any:
-        return self.send_request(requests.post, path, body, content_type)
+        return self.send_request(self.session.post, path, body, content_type)
 
     def patch(
         self,
@@ -84,7 +85,7 @@ class HttpRequests:
         ] = None,
         content_type: Optional[str] = "application/json",
     ) -> Any:
-        return self.send_request(requests.patch, path, body, content_type)
+        return self.send_request(self.session.patch, path, body, content_type)
 
     def put(
         self,
@@ -94,14 +95,14 @@ class HttpRequests:
         ] = None,
         content_type: Optional[str] = "application/json",
     ) -> Any:
-        return self.send_request(requests.put, path, body, content_type)
+        return self.send_request(self.session.put, path, body, content_type)
 
     def delete(
         self,
         path: str,
         body: Optional[Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str]]] = None,
     ) -> Any:
-        return self.send_request(requests.delete, path, body)
+        return self.send_request(self.session.delete, path, body)
 
     @staticmethod
     def __to_json(request: requests.Response) -> Any:

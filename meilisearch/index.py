@@ -31,6 +31,7 @@ class Index:
         primary_key: Optional[str] = None,
         created_at: Optional[Union[datetime, str]] = None,
         updated_at: Optional[Union[datetime, str]] = None,
+        http: Optional[HttpRequests] = None,
     ) -> None:
         """
         Parameters
@@ -43,7 +44,7 @@ class Index:
             Primary-key of the index.
         """
         self.config = config
-        self.http = HttpRequests(config)
+        self.http = http if http is not None else HttpRequests(config)
         self.task_handler = TaskHandler(config)
         self.uid = uid
         self.primary_key = primary_key

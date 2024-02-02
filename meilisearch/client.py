@@ -130,6 +130,7 @@ class Client:
                 index["primaryKey"],
                 index["createdAt"],
                 index["updatedAt"],
+                self.http
             )
             for index in response["results"]
         ]
@@ -178,7 +179,7 @@ class Client:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return Index(self.config, uid).fetch_info()
+        return Index(self.config, uid, http=self.http).fetch_info()
 
     def get_raw_index(self, uid: str) -> Dict[str, Any]:
         """Get the index as a dictionary.
@@ -216,7 +217,7 @@ class Client:
             An Index instance.
         """
         if uid is not None:
-            return Index(self.config, uid=uid)
+            return Index(self.config, uid=uid, http=self.http)
         raise ValueError("The index UID should not be None")
 
     def multi_search(self, queries: Sequence[Mapping[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
