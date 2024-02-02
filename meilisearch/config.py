@@ -42,7 +42,7 @@ class Config:
         self,
         url: str,
         api_key: Optional[str] = None,
-        timeout: Optional[Union[Union[int, float], Tuple[Union[int, float]]]] = None,
+        timeout: Optional[Union[int, float, Tuple[Union[int, float], Union[int, float]]]] = None,
         client_agents: Optional[Tuple[str]] = None,
     ) -> None:
         """
