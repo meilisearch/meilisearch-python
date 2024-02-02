@@ -130,7 +130,7 @@ class Client:
                 index["primaryKey"],
                 index["createdAt"],
                 index["updatedAt"],
-                self.http
+                self.http,
             )
             for index in response["results"]
         ]
