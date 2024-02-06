@@ -5,7 +5,6 @@ from typing import Any, Dict, Iterator, List, Optional, Union
 from camel_converter import to_snake
 from camel_converter.pydantic_base import CamelBase
 
-
 class IndexStats:
     __dict: Dict
 
@@ -68,6 +67,4 @@ class UserProvidedEmbedder(CamelBase):
 
 
 class Embedders(CamelBase):
-    def __init__(self, embedders: Optional[Dict[str, Union[OpenAiEmbedder, HuggingFaceEmbedder, UserProvidedEmbedder]]] = None):
-        super().__init__()
-        self.embedders = embedders if embedders is not None else {}
+    embedders: Dict[str, Union[OpenAiEmbedder, HuggingFaceEmbedder, UserProvidedEmbedder]]
