@@ -5,6 +5,7 @@ from typing import Any, Dict, Iterator, List, Optional, Union
 from camel_converter import to_snake
 from camel_converter.pydantic_base import CamelBase
 
+
 class IndexStats:
     __dict: Dict
 
@@ -48,21 +49,21 @@ class TypoTolerance(CamelBase):
 
 
 class OpenAiEmbedder(CamelBase):
-    source: str = 'openAi'
-    model: Optional[str] = None # Defaults to text-embedding-ada-002
-    api_key: Optional[str] = None # Can be provided through a CLI option or environment variable
+    source: str = "openAi"
+    model: Optional[str] = None  # Defaults to text-embedding-ada-002
+    api_key: Optional[str] = None  # Can be provided through a CLI option or environment variable
     document_template: Optional[str] = None
 
 
 class HuggingFaceEmbedder(CamelBase):
-    source: str = 'huggingFace'
-    model: Optional[str] = None # Defaults to BAAI/bge-base-en-v1.5
+    source: str = "huggingFace"
+    model: Optional[str] = None  # Defaults to BAAI/bge-base-en-v1.5
     revision: Optional[str] = None
     document_template: Optional[str] = None
 
 
 class UserProvidedEmbedder(CamelBase):
-    source: str = 'userProvided'
+    source: str = "userProvided"
     dimensions: int
 
 

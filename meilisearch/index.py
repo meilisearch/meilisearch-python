@@ -10,7 +10,7 @@ from meilisearch._utils import iso_to_date_time
 from meilisearch.config import Config
 from meilisearch.errors import version_error_hint_message
 from meilisearch.models.document import Document, DocumentsResults
-from meilisearch.models.index import Faceting, IndexStats, Pagination, TypoTolerance, Embedders
+from meilisearch.models.index import Embedders, Faceting, IndexStats, Pagination, TypoTolerance
 from meilisearch.models.task import Task, TaskInfo, TaskResults
 from meilisearch.task import TaskHandler
 

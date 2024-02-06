@@ -1,12 +1,14 @@
 import pytest
+
 from meilisearch.models.index import Embedders
 
 NEW_EMBEDDERS = {
     "default": {
-        "source": 'userProvided',
+        "source": "userProvided",
         "dimensions": 1,
     }
 }
+
 
 @pytest.mark.usefixtures("enable_vector_search")
 def test_get_default_embedders(empty_index):
@@ -14,6 +16,7 @@ def test_get_default_embedders(empty_index):
     response = empty_index().get_embedders()
 
     assert response is None
+
 
 @pytest.mark.usefixtures("enable_vector_search")
 def test_update_embedders_with_user_provided_source(empty_index):
@@ -24,9 +27,7 @@ def test_update_embedders_with_user_provided_source(empty_index):
     response_get = index.get_embedders()
     print(response_get)
     assert update.status == "succeeded"
-    assert response_get == Embedders(
-        embedders=NEW_EMBEDDERS
-    )
+    assert response_get == Embedders(embedders=NEW_EMBEDDERS)
 
 
 @pytest.mark.usefixtures("enable_vector_search")
@@ -46,8 +47,6 @@ def test_reset_embedders(empty_index):
     response_last = index.get_embedders()
 
     assert update1.status == "succeeded"
-    assert response_get == Embedders(
-        embedders=NEW_EMBEDDERS
-    )
+    assert response_get == Embedders(embedders=NEW_EMBEDDERS)
     assert update2.status == "succeeded"
     assert response_last is None

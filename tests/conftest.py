@@ -135,10 +135,10 @@ def index_with_documents_and_vectors(empty_index, small_movies):
         index = empty_index(index_uid)
         settings_update_task = index.update_embedders(
             {
-            "default": {
-                "source": 'userProvided',
-                "dimensions": 2,
-            }
+                "default": {
+                    "source": "userProvided",
+                    "dimensions": 2,
+                }
             }
         )
         index.wait_for_task(settings_update_task.task_uid)
