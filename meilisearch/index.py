@@ -1759,7 +1759,7 @@ class Index:
 
     # EMBEDDERS SUB-ROUTES
 
-    def get_embedders(self) -> Embedders:
+    def get_embedders(self) -> Embedders | None:
         """Get embedders of the index.
 
         Returns
@@ -1772,9 +1772,12 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        embedders = self.http.get(self.__settings_url_for(self.config.paths.embedders))
+        response = self.http.get(self.__settings_url_for(self.config.paths.embedders))
 
-        return Embedders(**embedders)
+        if not response:
+            return None
+
+        return Embedders(embedders=response)
 
     def update_embedders(self, body: Union[Mapping[str, Any], None]) -> TaskInfo:
         """Update embedders of the index.
