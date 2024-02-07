@@ -23,7 +23,6 @@ def test_update_embedders_with_user_provided_source(new_embedders, empty_index):
 
 
 @pytest.mark.usefixtures("enable_vector_search")
-@pytest.mark.usefixtures("new_embedders")
 def test_reset_embedders(new_embedders, empty_index):
     """Tests resetting the typo_tolerance setting to its default value."""
     index = empty_index()
