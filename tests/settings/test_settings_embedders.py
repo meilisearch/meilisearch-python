@@ -2,12 +2,14 @@ import pytest
 
 from meilisearch.models.index import Embedders
 
-NEW_EMBEDDERS = {
-    "default": {
-        "source": "userProvided",
-        "dimensions": 1,
+@pytest.fixture
+def new_embedders():
+    return {
+        "default": {
+            "source": "userProvided",
+            "dimensions": 1,
+        }
     }
-}
 
 
 @pytest.mark.usefixtures("enable_vector_search")
