@@ -2,6 +2,7 @@ import pytest
 
 from meilisearch.models.index import Embedders
 
+
 @pytest.fixture
 def new_embedders():
     return {
