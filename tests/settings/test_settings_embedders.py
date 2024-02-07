@@ -3,16 +3,6 @@ import pytest
 from meilisearch.models.index import Embedders
 
 
-@pytest.fixture
-def new_embedders():
-    return {
-        "default": {
-            "source": "userProvided",
-            "dimensions": 1,
-        }
-    }
-
-
 @pytest.mark.usefixtures("enable_vector_search")
 def test_get_default_embedders(empty_index):
     """Tests getting default embedders."""
@@ -33,6 +23,7 @@ def test_update_embedders_with_user_provided_source(new_embedders, empty_index):
 
 
 @pytest.mark.usefixtures("enable_vector_search")
+@pytest.mark.usefixtures("new_embedders")
 def test_reset_embedders(new_embedders, empty_index):
     """Tests resetting the typo_tolerance setting to its default value."""
     index = empty_index()

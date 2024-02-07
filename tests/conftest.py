@@ -225,3 +225,13 @@ def enable_vector_search():
         json={"vectorStore": False},
         timeout=10,
     )
+
+
+@fixture
+def new_embedders():
+    return {
+        "default": {
+            "source": "userProvided",
+            "dimensions": 1,
+        }
+    }
