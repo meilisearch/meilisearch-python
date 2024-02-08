@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Iterator, List, Optional
+from typing import Any, Dict, Iterator, List, Optional, Union
 
 from camel_converter import to_snake
 from camel_converter.pydantic_base import CamelBase
@@ -46,3 +46,26 @@ class TypoTolerance(CamelBase):
     disable_on_attributes: Optional[List[str]] = None
     disable_on_words: Optional[List[str]] = None
     min_word_size_for_typos: Optional[MinWordSizeForTypos] = None
+
+
+class OpenAiEmbedder(CamelBase):
+    source: str = "openAi"
+    model: Optional[str] = None  # Defaults to text-embedding-ada-002
+    api_key: Optional[str] = None  # Can be provided through a CLI option or environment variable
+    document_template: Optional[str] = None
+
+
+class HuggingFaceEmbedder(CamelBase):
+    source: str = "huggingFace"
+    model: Optional[str] = None  # Defaults to BAAI/bge-base-en-v1.5
+    revision: Optional[str] = None
+    document_template: Optional[str] = None
+
+
+class UserProvidedEmbedder(CamelBase):
+    source: str = "userProvided"
+    dimensions: int
+
+
+class Embedders(CamelBase):
+    embedders: Dict[str, Union[OpenAiEmbedder, HuggingFaceEmbedder, UserProvidedEmbedder]]

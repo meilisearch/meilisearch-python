@@ -10,7 +10,7 @@ from meilisearch._utils import iso_to_date_time
 from meilisearch.config import Config
 from meilisearch.errors import version_error_hint_message
 from meilisearch.models.document import Document, DocumentsResults
-from meilisearch.models.index import Faceting, IndexStats, Pagination, TypoTolerance
+from meilisearch.models.index import Embedders, Faceting, IndexStats, Pagination, TypoTolerance
 from meilisearch.models.task import Task, TaskInfo, TaskResults
 from meilisearch.task import TaskHandler
 
@@ -1753,6 +1753,71 @@ class Index:
         """
         task = self.http.delete(
             self.__settings_url_for(self.config.paths.non_separator_tokens),
+        )
+
+        return TaskInfo(**task)
+
+    # EMBEDDERS SUB-ROUTES
+
+    def get_embedders(self) -> Embedders | None:
+        """Get embedders of the index.
+
+        Returns
+        -------
+        settings:
+            The embedders settings of the index.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        response = self.http.get(self.__settings_url_for(self.config.paths.embedders))
+
+        if not response:
+            return None
+
+        return Embedders(embedders=response)
+
+    def update_embedders(self, body: Union[Mapping[str, Any], None]) -> TaskInfo:
+        """Update embedders of the index.
+
+        Parameters
+        ----------
+        body: dict
+            Dictionary containing the embedders.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.patch(self.__settings_url_for(self.config.paths.embedders), body)
+
+        return TaskInfo(**task)
+
+    def reset_embedders(self) -> TaskInfo:
+        """Reset embedders of the index to default values.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.delete(
+            self.__settings_url_for(self.config.paths.embedders),
         )
 
         return TaskInfo(**task)
