@@ -1,11 +1,7 @@
+# pylint: disable=redefined-outer-name
 import pytest
 
-from meilisearch.models.index import (
-    Embedders,
-    HuggingFaceEmbedder,
-    OpenAiEmbedder,
-    UserProvidedEmbedder,
-)
+from meilisearch.models.index import HuggingFaceEmbedder, OpenAiEmbedder, UserProvidedEmbedder
 
 
 @pytest.mark.usefixtures("enable_vector_search")
