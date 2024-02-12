@@ -7,6 +7,7 @@ from pytest import fixture
 
 import meilisearch
 from meilisearch.errors import MeilisearchApiError
+from meilisearch.models.index import HuggingFaceEmbedder, OpenAiEmbedder, UserProvidedEmbedder
 from tests import common
 
 
@@ -230,8 +231,7 @@ def enable_vector_search():
 @fixture
 def new_embedders():
     return {
-        "default": {
-            "source": "userProvided",
-            "dimensions": 1,
-        }
+        "default": UserProvidedEmbedder(dimensions=1).model_dump(by_alias=True),
+        "open_ai": OpenAiEmbedder().model_dump(by_alias=True),
+        "hugging_face": HuggingFaceEmbedder().model_dump(by_alias=True),
     }
