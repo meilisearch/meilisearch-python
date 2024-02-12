@@ -874,7 +874,9 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        settings =  self.http.get(f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}")
+        settings = self.http.get(
+            f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}"
+        )
 
         if settings.get("embedders"):
             embedders: dict[str, OpenAiEmbedder | HuggingFaceEmbedder | UserProvidedEmbedder] = {}
