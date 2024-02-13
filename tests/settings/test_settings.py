@@ -1,7 +1,17 @@
-NEW_SETTINGS = {
-    "rankingRules": ["typo", "words"],
-    "searchableAttributes": ["title", "overview"],
-}
+# pylint: disable=redefined-outer-name
+import pytest
+
+from meilisearch.models.index import HuggingFaceEmbedder, OpenAiEmbedder, UserProvidedEmbedder
+
+
+@pytest.fixture
+def new_settings(new_embedders):
+    return {
+        "rankingRules": ["typo", "words"],
+        "searchableAttributes": ["title", "overview"],
+        "embedders": new_embedders,
+    }
+
 
 DEFAULT_RANKING_RULES = ["words", "typo", "proximity", "attribute", "sort", "exactness"]
 
@@ -31,36 +41,41 @@ def test_get_settings_default(empty_index):
     assert response["synonyms"] == {}
 
 
-def test_update_settings(empty_index):
+@pytest.mark.usefixtures("enable_vector_search")
+def test_update_settings(new_settings, empty_index):
     """Tests updating some settings."""
     index = empty_index()
-    response = index.update_settings(NEW_SETTINGS)
+    response = index.update_settings(new_settings)
     update = index.wait_for_task(response.task_uid)
     assert update.status == "succeeded"
     response = index.get_settings()
-    for rule in NEW_SETTINGS["rankingRules"]:
+    for rule in new_settings["rankingRules"]:
         assert rule in response["rankingRules"]
     assert response["distinctAttribute"] is None
-    for attribute in NEW_SETTINGS["searchableAttributes"]:
+    for attribute in new_settings["searchableAttributes"]:
         assert attribute in response["searchableAttributes"]
     assert response["displayedAttributes"] == ["*"]
     assert response["stopWords"] == []
     assert response["synonyms"] == {}
+    assert isinstance(response["embedders"]["default"], UserProvidedEmbedder)
+    assert isinstance(response["embedders"]["open_ai"], OpenAiEmbedder)
+    assert isinstance(response["embedders"]["hugging_face"], HuggingFaceEmbedder)
 
 
-def test_reset_settings(empty_index):
+@pytest.mark.usefixtures("enable_vector_search")
+def test_reset_settings(new_settings, empty_index):
     """Tests resetting all the settings to their default value."""
     index = empty_index()
     # Update settings first
-    response = index.update_settings(NEW_SETTINGS)
+    response = index.update_settings(new_settings)
     update = index.wait_for_task(response.task_uid)
     assert update.status == "succeeded"
     # Check the settings have been correctly updated
     response = index.get_settings()
-    for rule in NEW_SETTINGS["rankingRules"]:
+    for rule in new_settings["rankingRules"]:
         assert rule in response["rankingRules"]
     assert response["distinctAttribute"] is None
-    for attribute in NEW_SETTINGS["searchableAttributes"]:
+    for attribute in new_settings["searchableAttributes"]:
         assert attribute in response["searchableAttributes"]
     assert response["displayedAttributes"] == ["*"]
     assert response["stopWords"] == []
@@ -80,3 +95,4 @@ def test_reset_settings(empty_index):
     assert response["searchableAttributes"] == ["*"]
     assert response["stopWords"] == []
     assert response["synonyms"] == {}
+    assert response.get("embedders") is None
