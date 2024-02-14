@@ -5,6 +5,7 @@ from functools import lru_cache
 from typing import Any, Callable, List, Mapping, Optional, Sequence, Tuple, Union
 
 import requests
+from requests import Session
 
 from meilisearch.config import Config
 from meilisearch.errors import (
@@ -16,13 +17,21 @@ from meilisearch.version import qualified_version
 
 
 class HttpRequests:
+    _instance = None
+    _session = Session()
+
+    def __new__(cls, config: Config):
+        if cls._instance is None:
+            cls._instance = super(HttpRequests, cls).__new__(cls)
+        return cls._instance
+
     def __init__(self, config: Config) -> None:
         self.config = config
         self.headers = {
             "Authorization": f"Bearer {self.config.api_key}",
             "User-Agent": _build_user_agent(config.client_agents),
         }
-        self.session = requests.Session()
+        self.session = self._session
 
     def send_request(
         self,
