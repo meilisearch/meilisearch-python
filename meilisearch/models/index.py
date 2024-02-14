@@ -51,6 +51,7 @@ class TypoTolerance(CamelBase):
 class OpenAiEmbedder(CamelBase):
     source: str = "openAi"
     model: Optional[str] = None  # Defaults to text-embedding-ada-002
+    dimensions: Optional[int] = None  # Uses the model default
     api_key: Optional[str] = None  # Can be provided through a CLI option or environment variable
     document_template: Optional[str] = None
 
