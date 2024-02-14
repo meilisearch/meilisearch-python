@@ -7,6 +7,7 @@ from pytest import fixture
 
 import meilisearch
 from meilisearch.errors import MeilisearchApiError
+from meilisearch.models.index import HuggingFaceEmbedder, OpenAiEmbedder, UserProvidedEmbedder
 from tests import common
 
 
@@ -129,12 +130,21 @@ def index_with_documents(empty_index, small_movies):
 
 @fixture(scope="function")
 def index_with_documents_and_vectors(empty_index, small_movies):
-    small_movies[0]["_vectors"] = [0.1, 0.2]
+    small_movies[0]["_vectors"] = {"default": [0.1, 0.2]}
 
     def index_maker(index_uid=common.INDEX_UID, documents=small_movies):
         index = empty_index(index_uid)
-        task = index.add_documents(documents)
-        index.wait_for_task(task.task_uid)
+        settings_update_task = index.update_embedders(
+            {
+                "default": {
+                    "source": "userProvided",
+                    "dimensions": 2,
+                }
+            }
+        )
+        index.wait_for_task(settings_update_task.task_uid)
+        document_addition_task = index.add_documents(documents)
+        index.wait_for_task(document_addition_task.task_uid)
         return index
 
     return index_maker
@@ -216,3 +226,12 @@ def enable_vector_search():
         json={"vectorStore": False},
         timeout=10,
     )
+
+
+@fixture
+def new_embedders():
+    return {
+        "default": UserProvidedEmbedder(dimensions=1).model_dump(by_alias=True),
+        "open_ai": OpenAiEmbedder().model_dump(by_alias=True),
+        "hugging_face": HuggingFaceEmbedder().model_dump(by_alias=True),
+    }

@@ -38,6 +38,7 @@ class Config:
         separator_tokens = "separator-tokens"
         non_separator_tokens = "non-separator-tokens"
         swap = "swap-indexes"
+        embedders = "embedders"
 
     def __init__(
         self,
