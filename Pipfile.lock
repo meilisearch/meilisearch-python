@@ -454,11 +454,11 @@
         },
         "filelock": {
             "hashes": [
-                "sha256:521f5f56c50f8426f5e03ad3b281b490a87ef15bc6c526f168290f0c7148d44e",
-                "sha256:57dbda9b35157b05fb3e58ee91448612eb674172fab98ee235ccb0b5bee19a1c"
+                "sha256:5ffa845303983e7a0b7ae17636509bc97997d58afeafa72fb141a17b152284cb",
+                "sha256:a79895a25bbefdf55d1a2a0a80968f7dbb28edcd6d4234a0afb3f37ecde4b546"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==3.13.1"
+            "version": "==3.13.3"
         },
         "importlib-metadata": {
             "hashes": [
@@ -736,12 +736,12 @@
         },
         "tox": {
             "hashes": [
-                "sha256:1143c7e2489c68026a55d3d4ae84c02c449f073b28e62f80e3e440a3b72a4afa",
-                "sha256:dd789a554c16c4b532924ba393c92fc8991323c4b3d466712bfecc8c9b9f24f7"
+                "sha256:0defb44f6dafd911b61788325741cc6b2e12ea71f987ac025ad4d649f1f1a104",
+                "sha256:2900c4eb7b716af4a928a7fdc2ed248ad6575294ed7cfae2ea41203937422847"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==4.13.0"
+            "version": "==4.14.2"
         },
         "tox-pipenv": {
             "hashes": [
@@ -753,12 +753,12 @@
         },
         "types-requests": {
             "hashes": [
-                "sha256:a82807ec6ddce8f00fe0e949da6d6bc1fbf1715420218a9640d695f70a9e5a9b",
-                "sha256:f1721dba8385958f504a5386240b92de4734e047a08a40751c1654d1ac3349c5"
+                "sha256:47872893d65a38e282ee9f277a4ee50d1b28bd592040df7d1fdaffdf3779937d",
+                "sha256:b1c1b66abfb7fa79aae09097a811c4aa97130eb8831c60e47aee4ca344731ca5"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==2.31.0.20240218"
+            "version": "==2.31.0.20240311"
         },
         "typing-extensions": {
             "hashes": [
