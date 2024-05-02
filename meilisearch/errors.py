@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from functools import wraps
-from typing import TYPE_CHECKING, Any, Callable
+from typing import TYPE_CHECKING, Any, Callable, TypeVar
 
 from requests import Response
 
@@ -10,6 +10,8 @@ if TYPE_CHECKING:  # pragma: no cover
     from meilisearch.client import Client
     from meilisearch.index import Index
     from meilisearch.task import TaskHandler
+
+T = TypeVar("T")
 
 
 class MeilisearchError(Exception):  # pragma: no cover
@@ -63,7 +65,7 @@ class MeilisearchTimeoutError(MeilisearchError):
         return f"MeilisearchTimeoutError, {self.message}"
 
 
-def version_error_hint_message(func: Callable) -> Any:
+def version_error_hint_message(func: Callable[..., T]) -> Callable[..., T]:
     @wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
         try:
