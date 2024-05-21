@@ -131,6 +131,8 @@ def index_with_documents(empty_index, small_movies):
 @fixture(scope="function")
 def index_with_documents_and_vectors(empty_index, small_movies):
     small_movies[0]["_vectors"] = {"default": [0.1, 0.2]}
+    for movie in small_movies[1:]:
+        movie["_vectors"] = {"default": [0.9, 0.9]}
 
     def index_maker(index_uid=common.INDEX_UID, documents=small_movies):
         index = empty_index(index_uid)
