@@ -464,4 +464,4 @@ def test_vector_search(index_with_documents_and_vectors):
     response = index_with_documents_and_vectors().search(
         "", opt_params={"vector": [0.1, 0.2], "hybrid": {"semanticRatio": 1.0}}
     )
-    assert response["hits"] == []
+    assert len(response["hits"]) > 0
