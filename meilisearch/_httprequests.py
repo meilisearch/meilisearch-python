@@ -28,7 +28,7 @@ class HttpRequests:
         http_method: Callable,
         path: str,
         body: Optional[
-            Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str], str]
+            Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str], str, int]
         ] = None,
         content_type: Optional[str] = None,
     ) -> Any:
@@ -90,7 +90,7 @@ class HttpRequests:
         self,
         path: str,
         body: Optional[
-            Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str], str]
+            Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str], str, int]
         ] = None,
         content_type: Optional[str] = "application/json",
     ) -> Any:

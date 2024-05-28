@@ -139,7 +139,8 @@ update_settings_1: |-
     },
     'faceting': {
       'maxValuesPerFacet': 200
-    }
+    },
+    'searchCutoffMs': 150
   })
 reset_settings_1: |-
   client.index('movies').reset_settings()
@@ -703,3 +704,9 @@ reset_dictionary_1: |-
   client.index('books').reset_dictionary()
 create_snapshot_1: |-
   client.create_snapshot()
+get_search_cutoff_1: |-
+  client.index('movies').get_search_cutoff_ms()
+update_search_cutoff_1: |-
+  client.index('movies').update_search_cutoff_ms(150)
+reset_search_cutoff_1: |-
+  client.index('movies').reset_search_cutoff_ms()
