@@ -39,6 +39,7 @@ class Config:
         non_separator_tokens = "non-separator-tokens"
         swap = "swap-indexes"
         embedders = "embedders"
+        search_cutoff_ms = "search-cutoff-ms"
 
     def __init__(
         self,

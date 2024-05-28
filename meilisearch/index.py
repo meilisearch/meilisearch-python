@@ -1857,6 +1857,66 @@ class Index:
 
         return TaskInfo(**task)
 
+    # SEARCH CUTOFF MS SETTINGS
+
+    def get_search_cutoff_ms(self) -> int | None:
+        """Get the search cutoff in ms of the index.
+
+        Returns
+        -------
+        settings:
+            Integer value of search cutoff in ms of the index.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.http.get(self.__settings_url_for(self.config.paths.search_cutoff_ms))
+
+    def update_search_cutoff_ms(self, body: Union[int, None]) -> TaskInfo:
+        """Update the search cutoff in ms of the index.
+
+        Parameters
+        ----------
+        body:
+            Integer value of the search cutoff time in ms.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.put(self.__settings_url_for(self.config.paths.search_cutoff_ms), body)
+
+        return TaskInfo(**task)
+
+    def reset_search_cutoff_ms(self) -> TaskInfo:
+        """Reset the search cutoff of the index
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.delete(
+            self.__settings_url_for(self.config.paths.search_cutoff_ms),
+        )
+
+        return TaskInfo(**task)
+
     @staticmethod
     def _batch(
         documents: Sequence[Mapping[str, Any]], batch_size: int
