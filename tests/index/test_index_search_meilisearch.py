@@ -459,6 +459,20 @@ def test_attributes_to_search_on_search_no_match(index_with_documents):
     assert response["hits"] == []
 
 
+def test_show_ranking_score_details(index_with_documents):
+    """Tests search with show ranking score details"""
+    response = index_with_documents().search(
+        "man loves",
+        {"showRankingScoreDetails": True},
+    )
+
+    assert isinstance(response, dict)
+    assert len(response["hits"]) > 1
+    assert response["hits"][0]["_rankingScoreDetails"] is not None
+    assert response["hits"][0]["_rankingScoreDetails"]["words"] is not None
+    assert response["hits"][0]["_rankingScoreDetails"]["words"]["score"] == 1
+
+
 @pytest.mark.usefixtures("enable_vector_search")
 def test_vector_search(index_with_documents_and_vectors):
     response = index_with_documents_and_vectors().search(
