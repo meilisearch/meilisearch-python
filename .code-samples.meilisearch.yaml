@@ -358,7 +358,7 @@ typo_tolerance_guide_4: |-
   })
 search_parameter_guide_show_ranking_score_1: |-
   client.index('movies').search('dragon', {
-    'showRankingScore': true
+    'showRankingScore': True
   })
 search_parameter_guide_show_ranking_score_details_1: |-
   client.index('movies').search('dragon', {

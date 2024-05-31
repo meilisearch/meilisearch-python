@@ -473,6 +473,19 @@ def test_show_ranking_score_details(index_with_documents):
     assert response["hits"][0]["_rankingScoreDetails"]["words"]["score"] == 1
 
 
+def test_show_ranking_score(index_with_documents):
+    """Tests search with show ranking score"""
+    response = index_with_documents().search(
+        "man loves",
+        {"showRankingScore": True},
+    )
+
+    assert isinstance(response, dict)
+    assert len(response["hits"]) > 1
+    assert response["hits"][0]["_rankingScore"] is not None
+    assert response["hits"][0]["_rankingScore"] >= 0.9
+
+
 @pytest.mark.usefixtures("enable_vector_search")
 def test_vector_search(index_with_documents_and_vectors):
     response = index_with_documents_and_vectors().search(
