@@ -8,7 +8,7 @@ from meilisearch.errors import MeilisearchTimeoutError
 from tests import BASE_URL, MASTER_KEY
 
 
-@patch("requests.get")
+@patch("requests.Session.get")
 def test_client_timeout_error(mock_get):
     mock_get.configure_mock(__name__="get")
     mock_get.side_effect = requests.exceptions.Timeout()
