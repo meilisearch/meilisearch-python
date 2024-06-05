@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from enum import Enum
 from typing import Any, Dict, Iterator, List, Optional, Union
 
 from camel_converter import to_snake
@@ -46,6 +47,11 @@ class TypoTolerance(CamelBase):
     disable_on_attributes: Optional[List[str]] = None
     disable_on_words: Optional[List[str]] = None
     min_word_size_for_typos: Optional[MinWordSizeForTypos] = None
+
+
+class ProximityPrecision(str, Enum):
+    BY_WORD = "byWord"
+    BY_ATTRIBUTE = "byAttribute"
 
 
 class OpenAiEmbedder(CamelBase):

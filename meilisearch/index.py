@@ -5,6 +5,8 @@ from typing import Any, Dict, Generator, List, Mapping, MutableMapping, Optional
 from urllib import parse
 from warnings import warn
 
+from camel_converter import to_snake
+
 from meilisearch._httprequests import HttpRequests
 from meilisearch._utils import iso_to_date_time
 from meilisearch.config import Config
@@ -17,6 +19,7 @@ from meilisearch.models.index import (
     IndexStats,
     OpenAiEmbedder,
     Pagination,
+    ProximityPrecision,
     TypoTolerance,
     UserProvidedEmbedder,
 )
@@ -24,7 +27,7 @@ from meilisearch.models.task import Task, TaskInfo, TaskResults
 from meilisearch.task import TaskHandler
 
 
-# pylint: disable=too-many-public-methods
+# pylint: disable=too-many-public-methods, too-many-lines
 class Index:
     """
     Indexes routes wrapper.
@@ -1913,6 +1916,67 @@ class Index:
         """
         task = self.http.delete(
             self.__settings_url_for(self.config.paths.search_cutoff_ms),
+        )
+
+        return TaskInfo(**task)
+
+    # PROXIMITY PRECISION SETTINGS
+
+    def get_proximity_precision(self) -> ProximityPrecision:
+        """Get the proximity_precision of the index.
+
+        Returns
+        -------
+        settings:
+            proximity_precision of the index.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        response = self.http.get(self.__settings_url_for(self.config.paths.proximity_precision))
+        return ProximityPrecision[to_snake(response).upper()]
+
+    def update_proximity_precision(self, body: Union[ProximityPrecision, None]) -> TaskInfo:
+        """Update the proximity_precision of the index.
+
+        Parameters
+        ----------
+        body:
+            proximity_precision
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.put(self.__settings_url_for(self.config.paths.proximity_precision), body)
+
+        return TaskInfo(**task)
+
+    def reset_proximity_precision(self) -> TaskInfo:
+        """Reset the proximity_precision of the index
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.delete(
+            self.__settings_url_for(self.config.paths.proximity_precision),
         )
 
         return TaskInfo(**task)

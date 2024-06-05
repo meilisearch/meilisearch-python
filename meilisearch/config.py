@@ -40,6 +40,7 @@ class Config:
         swap = "swap-indexes"
         embedders = "embedders"
         search_cutoff_ms = "search-cutoff-ms"
+        proximity_precision = "proximity-precision"
 
     def __init__(
         self,
