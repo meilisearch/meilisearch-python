@@ -1,7 +1,19 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Dict, Generator, List, Mapping, MutableMapping, Optional, Sequence, Union
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Dict,
+    Generator,
+    List,
+    Mapping,
+    MutableMapping,
+    Optional,
+    Sequence,
+    Type,
+    Union,
+)
 from urllib import parse
 from warnings import warn
 
@@ -25,6 +37,9 @@ from meilisearch.models.index import (
 )
 from meilisearch.models.task import Task, TaskInfo, TaskResults
 from meilisearch.task import TaskHandler
+
+if TYPE_CHECKING:
+    from json import JSONEncoder
 
 
 # pylint: disable=too-many-public-methods, too-many-lines
@@ -403,6 +418,8 @@ class Index:
         self,
         documents: Sequence[Mapping[str, Any]],
         primary_key: Optional[str] = None,
+        *,
+        serializer: Optional[Type[JSONEncoder]] = None,
     ) -> TaskInfo:
         """Add documents to the index.
 
@@ -412,6 +429,9 @@ class Index:
             List of documents. Each document should be a dictionary.
         primary_key (optional):
             The primary-key used in index. Ignored if already set up.
+        serializer (optional):
+            A custom JSONEncode to handle serializing fields that the build in json.dumps
+            cannot handle, for example UUID and datetime.
 
         Returns
         -------
@@ -425,7 +445,7 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         url = self._build_url(primary_key)
-        add_document_task = self.http.post(url, documents)
+        add_document_task = self.http.post(url, documents, serializer=serializer)
         return TaskInfo(**add_document_task)
 
     def add_documents_in_batches(
@@ -433,6 +453,8 @@ class Index:
         documents: Sequence[Mapping[str, Any]],
         batch_size: int = 1000,
         primary_key: Optional[str] = None,
+        *,
+        serializer: Optional[Type[JSONEncoder]] = None,
     ) -> List[TaskInfo]:
         """Add documents to the index in batches.
 
@@ -444,6 +466,9 @@ class Index:
             The number of documents that should be included in each batch. Default = 1000
         primary_key (optional):
             The primary-key used in index. Ignored if already set up.
+        serializer (optional):
+            A custom JSONEncode to handle serializing fields that the build in json.dumps
+            cannot handle, for example UUID and datetime.
 
         Returns
         -------
@@ -461,7 +486,7 @@ class Index:
         tasks: List[TaskInfo] = []
 
         for document_batch in self._batch(documents, batch_size):
-            task = self.add_documents(document_batch, primary_key)
+            task = self.add_documents(document_batch, primary_key, serializer=serializer)
             tasks.append(task)
 
         return tasks
@@ -470,6 +495,8 @@ class Index:
         self,
         str_documents: str,
         primary_key: Optional[str] = None,
+        *,
+        serializer: Optional[Type[JSONEncoder]] = None,
     ) -> TaskInfo:
         """Add string documents from JSON file to the index.
 
@@ -479,6 +506,9 @@ class Index:
             String of document from a JSON file.
         primary_key (optional):
             The primary-key used in index. Ignored if already set up.
+        serializer (optional):
+            A custom JSONEncode to handle serializing fields that the build in json.dumps
+            cannot handle, for example UUID and datetime.
 
         Returns
         -------
@@ -491,7 +521,9 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return self.add_documents_raw(str_documents, primary_key, "application/json")
+        return self.add_documents_raw(
+            str_documents, primary_key, "application/json", serializer=serializer
+        )
 
     def add_documents_csv(
         self,
@@ -556,6 +588,8 @@ class Index:
         primary_key: Optional[str] = None,
         content_type: Optional[str] = None,
         csv_delimiter: Optional[str] = None,
+        *,
+        serializer: Optional[Type[JSONEncoder]] = None,
     ) -> TaskInfo:
         """Add string documents to the index.
 
@@ -570,6 +604,9 @@ class Index:
         csv_delimiter:
             One ASCII character used to customize the delimiter for CSV.
             Note: The csv delimiter can only be used with the Content-Type text/csv.
+        serializer (optional):
+            A custom JSONEncode to handle serializing fields that the build in json.dumps
+            cannot handle, for example UUID and datetime.
 
         Returns
         -------
@@ -583,11 +620,15 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         url = self._build_url(primary_key=primary_key, csv_delimiter=csv_delimiter)
-        response = self.http.post(url, str_documents, content_type)
+        response = self.http.post(url, str_documents, content_type, serializer=serializer)
         return TaskInfo(**response)
 
     def update_documents(
-        self, documents: Sequence[Mapping[str, Any]], primary_key: Optional[str] = None
+        self,
+        documents: Sequence[Mapping[str, Any]],
+        primary_key: Optional[str] = None,
+        *,
+        serializer: Optional[Type[JSONEncoder]] = None,
     ) -> TaskInfo:
         """Update documents in the index.
 
@@ -597,6 +638,9 @@ class Index:
             List of documents. Each document should be a dictionary.
         primary_key (optional):
             The primary-key used in index. Ignored if already set up
+        serializer (optional):
+            A custom JSONEncode to handle serializing fields that the build in json.dumps
+            cannot handle, for example UUID and datetime.
 
         Returns
         -------
@@ -610,7 +654,7 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         url = self._build_url(primary_key)
-        response = self.http.put(url, documents)
+        response = self.http.put(url, documents, serializer=serializer)
         return TaskInfo(**response)
 
     def update_documents_ndjson(
@@ -644,6 +688,8 @@ class Index:
         self,
         str_documents: str,
         primary_key: Optional[str] = None,
+        *,
+        serializer: Optional[Type[JSONEncoder]] = None,
     ) -> TaskInfo:
         """Update documents as a json string in the index.
 
@@ -653,6 +699,9 @@ class Index:
             String of document from a JSON file.
         primary_key (optional):
             The primary-key used in index. Ignored if already set up
+        serializer (optional):
+            A custom JSONEncode to handle serializing fields that the build in json.dumps
+            cannot handle, for example UUID and datetime.
 
         Returns
         -------
@@ -665,7 +714,9 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return self.update_documents_raw(str_documents, primary_key, "application/json")
+        return self.update_documents_raw(
+            str_documents, primary_key, "application/json", serializer=serializer
+        )
 
     def update_documents_csv(
         self,
@@ -703,6 +754,8 @@ class Index:
         primary_key: Optional[str] = None,
         content_type: Optional[str] = None,
         csv_delimiter: Optional[str] = None,
+        *,
+        serializer: Optional[Type[JSONEncoder]] = None,
     ) -> TaskInfo:
         """Update documents as a string in the index.
 
@@ -717,6 +770,9 @@ class Index:
         csv_delimiter:
             One ASCII character used to customize the delimiter for CSV.
             Note: The csv delimiter can only be used with the Content-Type text/csv.
+        serializer (optional):
+            A custom JSONEncode to handle serializing fields that the build in json.dumps
+            cannot handle, for example UUID and datetime.
 
         Returns
         -------
@@ -730,7 +786,7 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         url = self._build_url(primary_key=primary_key, csv_delimiter=csv_delimiter)
-        response = self.http.put(url, str_documents, content_type)
+        response = self.http.put(url, str_documents, content_type, serializer=serializer)
         return TaskInfo(**response)
 
     def update_documents_in_batches(
@@ -738,6 +794,7 @@ class Index:
         documents: Sequence[Mapping[str, Any]],
         batch_size: int = 1000,
         primary_key: Optional[str] = None,
+        serializer: Optional[Type[JSONEncoder]] = None,
     ) -> List[TaskInfo]:
         """Update documents to the index in batches.
 
@@ -749,6 +806,9 @@ class Index:
             The number of documents that should be included in each batch. Default = 1000
         primary_key (optional):
             The primary-key used in index. Ignored if already set up.
+        serializer (optional):
+            A custom JSONEncode to handle serializing fields that the build in json.dumps
+            cannot handle, for example UUID and datetime.
 
         Returns
         -------
@@ -766,7 +826,7 @@ class Index:
         tasks = []
 
         for document_batch in self._batch(documents, batch_size):
-            update_task = self.update_documents(document_batch, primary_key)
+            update_task = self.update_documents(document_batch, primary_key, serializer=serializer)
             tasks.append(update_task)
 
         return tasks
