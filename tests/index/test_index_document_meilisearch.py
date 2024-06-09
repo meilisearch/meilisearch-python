@@ -119,7 +119,9 @@ def test_add_documents_raw_custom_serializer(empty_index):
         {"id": uuid4(), "title": "Test 2", "when": datetime.now()},
     ]
     index = empty_index()
-    response = index.add_documents_raw(documents, content_type="application/json", serializer=CustomEncoder)
+    response = index.add_documents_raw(
+        documents, content_type="application/json", serializer=CustomEncoder
+    )
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     update = index.wait_for_task(response.task_uid)
@@ -175,7 +177,9 @@ def test_update_documents_raw_custom_serializer(empty_index):
         {"id": uuid4(), "title": "Test 2", "when": datetime.now()},
     ]
     index = empty_index()
-    response = index.update_documents_raw(documents, content_type="application/json", serializer=CustomEncoder)
+    response = index.update_documents_raw(
+        documents, content_type="application/json", serializer=CustomEncoder
+    )
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     update = index.wait_for_task(response.task_uid)
