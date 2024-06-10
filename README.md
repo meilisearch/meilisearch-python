@@ -193,7 +193,6 @@ documents = [
     {"id": uuid4(), "title": "test 1", "when": datetime.now()},
     {"id": uuid4(), "title": "Test 2", "when": datetime.now()},
 ]
-index = empty_index()
 index.add_documents(documents, serializer=CustomEncoder)
 ```
 
