@@ -169,6 +169,34 @@ index.update_filterable_attributes([
 ])
 ```
 
+#### Custom Serializer for documents <!-- omit in toc -->
+
+If your documents contain fields that the Python JSON serializer does not know how to handle you
+can use your own custom serializer.
+
+```py
+from datetime import datetime
+from json import JSONEncoder
+from uuid import uuid4
+
+
+class CustomEncoder(JSONEncoder):
+    def default(self, o):
+        if isinstance(o, (UUID, datetime)):
+            return str(o)
+
+        # Let the base class default method raise the TypeError
+        return super().default(o)
+
+
+documents = [
+    {"id": uuid4(), "title": "test 1", "when": datetime.now()},
+    {"id": uuid4(), "title": "Test 2", "when": datetime.now()},
+]
+index = empty_index()
+index.add_documents(documents, serializer=CustomEncoder)
+```
+
 You only need to perform this operation once.
 
 Note that Meilisearch will rebuild your index whenever you update `filterableAttributes`. Depending on the size of your dataset, this might take time. You can track the process using the [task](https://www.meilisearch.com/docs/reference/api/tasks#get-tasks).
@@ -204,7 +232,6 @@ index.search(
 ## 🤖 Compatibility with Meilisearch
 
 This package guarantees compatibility with [version v1.x of Meilisearch](https://github.com/meilisearch/meilisearch/releases/latest), but some features may not be present. Please check the [issues](https://github.com/meilisearch/meilisearch-python/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+label%3Aenhancement) for more info.
-
 
 ## 💡 Learn more
 

@@ -1,12 +1,24 @@
 # pylint: disable=invalid-name
 
+from datetime import datetime
+from json import JSONEncoder
 from math import ceil
+from uuid import UUID, uuid4
 from warnings import catch_warnings
 
 import pytest
 
 from meilisearch.models.document import Document
 from meilisearch.models.task import TaskInfo
+
+
+class CustomEncoder(JSONEncoder):
+    def default(self, o):
+        if isinstance(o, (UUID, datetime)):
+            return str(o)
+
+        # Let the base class default method raise the TypeError
+        return super().default(o)
 
 
 def test_get_documents_default(empty_index):
@@ -58,6 +70,121 @@ def test_add_documents_in_batches(
         assert update.status == "succeeded"
 
     assert index.get_primary_key() == expected_primary_key
+
+
+def test_add_documents_custom_serializer(empty_index):
+    documents = [
+        {"id": uuid4(), "title": "test 1", "when": datetime.now()},
+        {"id": uuid4(), "title": "Test 2", "when": datetime.now()},
+    ]
+    index = empty_index()
+    response = index.add_documents(documents, serializer=CustomEncoder)
+    assert isinstance(response, TaskInfo)
+    assert response.task_uid is not None
+    update = index.wait_for_task(response.task_uid)
+    assert index.get_primary_key() == "id"
+    assert update.status == "succeeded"
+
+
+def test_add_documents_in_batches_custom_serializer(empty_index):
+    documents = [
+        {"id": uuid4(), "title": "test 1", "when": datetime.now()},
+        {"id": uuid4(), "title": "Test 2", "when": datetime.now()},
+    ]
+    index = empty_index()
+    response = index.add_documents_in_batches(documents, batch_size=1, serializer=CustomEncoder)
+    for task in response:
+        update = index.wait_for_task(task.task_uid)
+        assert update.status == "succeeded"
+    assert index.get_primary_key() == "id"
+
+
+def test_add_documents_json_custom_serializer(empty_index):
+    documents = [
+        {"id": uuid4(), "title": "test 1", "when": datetime.now()},
+        {"id": uuid4(), "title": "Test 2", "when": datetime.now()},
+    ]
+    index = empty_index()
+    response = index.add_documents_json(documents, serializer=CustomEncoder)
+    assert isinstance(response, TaskInfo)
+    assert response.task_uid is not None
+    update = index.wait_for_task(response.task_uid)
+    assert index.get_primary_key() == "id"
+    assert update.status == "succeeded"
+
+
+def test_add_documents_raw_custom_serializer(empty_index):
+    documents = [
+        {"id": uuid4(), "title": "test 1", "when": datetime.now()},
+        {"id": uuid4(), "title": "Test 2", "when": datetime.now()},
+    ]
+    index = empty_index()
+    response = index.add_documents_raw(
+        documents, content_type="application/json", serializer=CustomEncoder
+    )
+    assert isinstance(response, TaskInfo)
+    assert response.task_uid is not None
+    update = index.wait_for_task(response.task_uid)
+    assert index.get_primary_key() == "id"
+    assert update.status == "succeeded"
+
+
+def test_update_documents_custom_serializer(empty_index):
+    documents = [
+        {"id": uuid4(), "title": "test 1", "when": datetime.now()},
+        {"id": uuid4(), "title": "Test 2", "when": datetime.now()},
+    ]
+    index = empty_index()
+    response = index.update_documents(documents, serializer=CustomEncoder)
+    assert isinstance(response, TaskInfo)
+    assert response.task_uid is not None
+    update = index.wait_for_task(response.task_uid)
+    assert index.get_primary_key() == "id"
+    assert update.status == "succeeded"
+
+
+def test_update_documents_in_batches_custom_serializer(empty_index):
+    documents = [
+        {"id": uuid4(), "title": "test 1", "when": datetime.now()},
+        {"id": uuid4(), "title": "Test 2", "when": datetime.now()},
+    ]
+    index = empty_index()
+    response = index.update_documents_in_batches(documents, batch_size=1, serializer=CustomEncoder)
+    for task in response:
+        update = index.wait_for_task(task.task_uid)
+        assert update.status == "succeeded"
+    assert index.get_primary_key() == "id"
+
+
+def test_update_documents_json_custom_serializer(empty_index):
+    documents = [
+        {"id": uuid4(), "title": "test 1", "when": datetime.now()},
+        {"id": uuid4(), "title": "Test 2", "when": datetime.now()},
+    ]
+    index = empty_index()
+    response = index.update_documents_json(documents, serializer=CustomEncoder)
+    assert isinstance(response, TaskInfo)
+    assert response.task_uid is not None
+    update = index.wait_for_task(response.task_uid)
+    assert index.get_primary_key() == "id"
+    assert update.status == "succeeded"
+
+
+def test_update_documents_raw_custom_serializer(empty_index):
+
+    documents = [
+        {"id": uuid4(), "title": "test 1", "when": datetime.now()},
+        {"id": uuid4(), "title": "Test 2", "when": datetime.now()},
+    ]
+    index = empty_index()
+    response = index.update_documents_raw(
+        documents, content_type="application/json", serializer=CustomEncoder
+    )
+    assert isinstance(response, TaskInfo)
+    assert response.task_uid is not None
+    update = index.wait_for_task(response.task_uid)
+    assert index.get_primary_key() == "id"
+    assert update.status == "succeeded"
 
 
 def test_get_document(index_with_documents):

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from functools import lru_cache
-from typing import Any, Callable, List, Mapping, Optional, Sequence, Tuple, Union
+from typing import Any, Callable, List, Mapping, Optional, Sequence, Tuple, Type, Union
 
 import requests
 
@@ -39,6 +39,8 @@ class HttpRequests:
             ]
         ] = None,
         content_type: Optional[str] = None,
+        *,
+        serializer: Optional[Type[json.JSONEncoder]] = None,
     ) -> Any:
         if content_type:
             self.headers["Content-Type"] = content_type
@@ -58,11 +60,10 @@ class HttpRequests:
                     data=body,
                 )
             else:
+                data = json.dumps(body, cls=serializer) if body else "" if body == "" else "null"
+
                 request = http_method(
-                    request_path,
-                    timeout=self.config.timeout,
-                    headers=self.headers,
-                    data=json.dumps(body) if body else "" if body == "" else "null",
+                    request_path, timeout=self.config.timeout, headers=self.headers, data=data
                 )
             return self.__validate(request)
 
@@ -81,8 +82,10 @@ class HttpRequests:
             Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str], str]
         ] = None,
         content_type: Optional[str] = "application/json",
+        *,
+        serializer: Optional[Type[json.JSONEncoder]] = None,
     ) -> Any:
-        return self.send_request(requests.post, path, body, content_type)
+        return self.send_request(requests.post, path, body, content_type, serializer=serializer)
 
     def patch(
         self,
@@ -108,8 +111,10 @@ class HttpRequests:
             ]
         ] = None,
         content_type: Optional[str] = "application/json",
+        *,
+        serializer: Optional[Type[json.JSONEncoder]] = None,
     ) -> Any:
-        return self.send_request(requests.put, path, body, content_type)
+        return self.send_request(requests.put, path, body, content_type, serializer=serializer)
 
     def delete(
         self,
