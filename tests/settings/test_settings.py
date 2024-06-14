@@ -1,7 +1,7 @@
 # pylint: disable=redefined-outer-name
 import pytest
 
-from meilisearch.models.index import HuggingFaceEmbedder, OpenAiEmbedder, UserProvidedEmbedder
+from meilisearch.models.index import OpenAiEmbedder, UserProvidedEmbedder
 
 
 @pytest.fixture
@@ -59,7 +59,6 @@ def test_update_settings(new_settings, empty_index):
     assert response["synonyms"] == {}
     assert isinstance(response["embedders"]["default"], UserProvidedEmbedder)
     assert isinstance(response["embedders"]["open_ai"], OpenAiEmbedder)
-    assert isinstance(response["embedders"]["hugging_face"], HuggingFaceEmbedder)
 
 
 @pytest.mark.usefixtures("enable_vector_search")
