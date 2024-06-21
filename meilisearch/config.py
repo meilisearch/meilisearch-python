@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Union
 
 
 class Config:
@@ -46,7 +46,7 @@ class Config:
         self,
         url: str,
         api_key: Optional[str] = None,
-        timeout: Optional[int] = None,
+        timeout: Optional[Union[int, float, Tuple[Union[int, float], Union[int, float]]]] = None,
         client_agents: Optional[Tuple[str, ...]] = None,
     ) -> None:
         """
