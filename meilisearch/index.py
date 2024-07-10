@@ -1081,7 +1081,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.distinct_attribute))
 
-    def update_distinct_attribute(self, body: Union[Dict[str, Any], None]) -> TaskInfo:
+    def update_distinct_attribute(self, body: str) -> TaskInfo:
         """Update distinct attribute of the index.
 
         Parameters
