@@ -1,7 +1,7 @@
 # pylint: disable=redefined-outer-name
 import pytest
 
-from meilisearch.models.index import HuggingFaceEmbedder, OpenAiEmbedder, UserProvidedEmbedder
+from meilisearch.models.index import OpenAiEmbedder, UserProvidedEmbedder
 
 
 @pytest.mark.usefixtures("enable_vector_search")
@@ -22,7 +22,6 @@ def test_update_embedders_with_user_provided_source(new_embedders, empty_index):
     assert update.status == "succeeded"
     assert isinstance(response_get.embedders["default"], UserProvidedEmbedder)
     assert isinstance(response_get.embedders["open_ai"], OpenAiEmbedder)
-    assert isinstance(response_get.embedders["hugging_face"], HuggingFaceEmbedder)
 
 
 @pytest.mark.usefixtures("enable_vector_search")
@@ -38,7 +37,6 @@ def test_reset_embedders(new_embedders, empty_index):
     response_get = index.get_embedders()
     assert isinstance(response_get.embedders["default"], UserProvidedEmbedder)
     assert isinstance(response_get.embedders["open_ai"], OpenAiEmbedder)
-    assert isinstance(response_get.embedders["hugging_face"], HuggingFaceEmbedder)
     # Reset the setting
     response_reset = index.reset_embedders()
     update2 = index.wait_for_task(response_reset.task_uid)
@@ -46,6 +44,5 @@ def test_reset_embedders(new_embedders, empty_index):
     assert update2.status == "succeeded"
     assert isinstance(response_get.embedders["default"], UserProvidedEmbedder)
     assert isinstance(response_get.embedders["open_ai"], OpenAiEmbedder)
-    assert isinstance(response_get.embedders["hugging_face"], HuggingFaceEmbedder)
     response_last = index.get_embedders()
     assert response_last is None
