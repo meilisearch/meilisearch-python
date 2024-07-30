@@ -418,6 +418,7 @@ def test_custom_search_params_with_matching_strategy_last(index_with_documents):
     assert isinstance(response, dict)
     assert len(response["hits"]) > 1
 
+
 def test_custom_search_params_with_matching_strategy_frequency(index_with_documents):
     """Tests search with matching strategy param set to frequency"""
     response = index_with_documents().search(
