@@ -76,6 +76,7 @@ class Client:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
+        print("Creating index")
         return Index.create(self.config, uid, options)
 
     def delete_index(self, uid: str) -> TaskInfo:

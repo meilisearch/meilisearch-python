@@ -169,7 +169,9 @@ class Index:
         if options is None:
             options = {}
         payload = {**options, "uid": uid}
+        print(f"{payload=}")
         task = HttpRequests(config).post(config.paths.index, payload)
+        print(f"{task=}")
 
         return TaskInfo(**task)
 

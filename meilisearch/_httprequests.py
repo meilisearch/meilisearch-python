@@ -45,6 +45,7 @@ class HttpRequests:
         if content_type:
             self.headers["Content-Type"] = content_type
         try:
+            print(f"{self.headers=}")
             request_path = self.config.url + "/" + path
             if http_method.__name__ == "get":
                 request = http_method(
@@ -65,6 +66,7 @@ class HttpRequests:
                 request = http_method(
                     request_path, timeout=self.config.timeout, headers=self.headers, data=data
                 )
+            print(f"Server raw response: {request}")
             return self.__validate(request)
 
         except requests.exceptions.Timeout as err:
@@ -85,6 +87,11 @@ class HttpRequests:
         *,
         serializer: Optional[Type[json.JSONEncoder]] = None,
     ) -> Any:
+        print(f"Post: {path=}")
+        print(f"Post: {body=}")
+        print(f"Post: {content_type=}")
+        print(f"Post: {serializer=}")
+
         return self.send_request(requests.post, path, body, content_type, serializer=serializer)
 
     def patch(
