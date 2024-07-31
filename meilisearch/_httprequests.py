@@ -67,6 +67,7 @@ class HttpRequests:
                     request_path, timeout=self.config.timeout, headers=self.headers, data=data
                 )
             print(f"Server raw response: {request}")
+            print(f"Server raw response json: {request.json()}")
             return self.__validate(request)
 
         except requests.exceptions.Timeout as err:
