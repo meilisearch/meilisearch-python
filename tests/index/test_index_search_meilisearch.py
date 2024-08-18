@@ -506,3 +506,11 @@ def test_vector_search(index_with_documents_and_vectors):
         "", opt_params={"vector": [0.1, 0.2], "hybrid": {"semanticRatio": 1.0}}
     )
     assert len(response["hits"]) > 0
+
+
+def test_search_distinct(index_with_documents):
+    index_with_documents().update_filterable_attributes(["genre"])
+    response = index_with_documents().search("How to train your dragin", {"distinct": "genre"})
+    assert isinstance(response, dict)
+    assert len(response["hits"]) == 1
+    assert response["hits"][0]["id"] == "166428"
