@@ -1,5 +1,7 @@
 # pylint: disable=invalid-name
 
+from typing import Counter
+
 import pytest
 
 
@@ -510,7 +512,9 @@ def test_vector_search(index_with_documents_and_vectors):
 
 def test_search_distinct(index_with_documents):
     index_with_documents().update_filterable_attributes(["genre"])
-    response = index_with_documents().search("How to train your dragin", {"distinct": "genre"})
+    response = index_with_documents().search("with", {"distinct": "genre"})
+    genres = dict(Counter([x.get("genre") for x in response["hits"]]))
     assert isinstance(response, dict)
-    assert len(response["hits"]) == 1
-    assert response["hits"][0]["id"] == "166428"
+    assert len(response["hits"]) == 11
+    assert genres == {None: 9, "action": 1, "Sci Fi": 1}
+    assert response["hits"][0]["id"] == "399579"
