@@ -1,5 +1,7 @@
 # pylint: disable=invalid-name
 
+from collections import Counter
+
 import pytest
 
 
@@ -506,3 +508,13 @@ def test_vector_search(index_with_documents_and_vectors):
         "", opt_params={"vector": [0.1, 0.2], "hybrid": {"semanticRatio": 1.0}}
     )
     assert len(response["hits"]) > 0
+
+
+def test_search_distinct(index_with_documents):
+    index_with_documents().update_filterable_attributes(["genre"])
+    response = index_with_documents().search("with", {"distinct": "genre"})
+    genres = dict(Counter([x.get("genre") for x in response["hits"]]))
+    assert isinstance(response, dict)
+    assert len(response["hits"]) == 11
+    assert genres == {None: 9, "action": 1, "Sci Fi": 1}
+    assert response["hits"][0]["id"] == "399579"

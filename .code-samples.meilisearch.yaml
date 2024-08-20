@@ -372,6 +372,10 @@ search_parameter_guide_attributes_to_search_on_1: |-
   client.index('movies').search('adventure', {
     'attributesToSearchOn': ['overview']
   })
+distinct_attribute_guide_filterable_1: |-
+  client.index('products').update_filterable_attributes(['product_id', 'sku', 'url'])
+distinct_attribute_guide_distinct_parameter_1: |-
+  client.index('products').search('white shirt', { distinct: 'sku' })
 add_movies_json_1: |-
   import json
 
