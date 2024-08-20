@@ -1,6 +1,6 @@
 # pylint: disable=invalid-name
 
-from typing import Counter
+from collections import Counter
 
 import pytest
 
