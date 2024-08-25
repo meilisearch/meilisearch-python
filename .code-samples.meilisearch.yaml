@@ -372,6 +372,8 @@ search_parameter_guide_attributes_to_search_on_1: |-
   client.index('movies').search('adventure', {
     'attributesToSearchOn': ['overview']
   })
+search_parameter_reference_distinct_1: |-
+  client.index('INDEX_NAME').search('QUERY_TERMS', { distinct: 'ATTRIBUTE_A' })
 distinct_attribute_guide_filterable_1: |-
   client.index('products').update_filterable_attributes(['product_id', 'sku', 'url'])
 distinct_attribute_guide_distinct_parameter_1: |-
