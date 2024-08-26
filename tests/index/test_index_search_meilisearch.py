@@ -518,3 +518,19 @@ def test_search_distinct(index_with_documents):
     assert len(response["hits"]) == 11
     assert genres == {None: 9, "action": 1, "Sci Fi": 1}
     assert response["hits"][0]["id"] == "399579"
+
+
+@pytest.mark.parametrize(
+    "query, ranking_score_threshold, expected",
+    (
+        ("Husband and wife", 1, 0),
+        ("Husband and wife", 0.9, 1),
+        ("wife", 0.9, 0),
+        ("wife", 0.5, 2),
+    ),
+)
+def test_search_ranking_threshold(query, ranking_score_threshold, expected, index_with_documents):
+    response = index_with_documents().search(
+        query, {"rankingScoreThreshold": ranking_score_threshold}
+    )
+    assert len(response["hits"]) == expected
