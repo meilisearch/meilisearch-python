@@ -520,16 +520,17 @@ def test_search_distinct(index_with_documents):
     assert response["hits"][0]["id"] == "399579"
 
 
-def test_search_ranking_threshold(index_with_documents):
-    # No documents matched with exact phrase and ranking threshold 1
-    response = index_with_documents().search("Husband and wife", {"rankingScoreThreshold": 1})
-    assert len(response["hits"]) == 0
-    # Only one document contains this phrase
-    response = index_with_documents().search("Husband and wife", {"rankingScoreThreshold": 0.9})
-    assert len(response["hits"]) == 1
-    # No documents matched with too high of a threshold for this term
-    response = index_with_documents().search("wife", {"rankingScoreThreshold": 0.9})
-    assert len(response["hits"]) == 0
-    # Two documents do contain the term but they only match at a lower threshold
-    response = index_with_documents().search("wife", {"rankingScoreThreshold": 0.5})
-    assert len(response["hits"]) == 2
+@pytest.mark.parametrize(
+    "query, ranking_score_threshold, expected",
+    (
+        ("Husband and wife", 1, 0),
+        ("Husband and wife", 0.9, 1),
+        ("wife", 0.9, 0),
+        ("wife", 0.5, 2),
+    ),
+)
+def test_search_ranking_threshold(query, ranking_score_threshold, expected, index_with_documents):
+    response = index_with_documents().search(
+        query, {"rankingScoreThreshold": ranking_score_threshold}
+    )
+    assert len(response["hits"]) == expected
