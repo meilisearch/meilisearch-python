@@ -730,3 +730,5 @@ update_proximity_precision_settings_1: |-
   client.index('books').update_proximity_precision(ProximityPrecision.BY_ATTRIBUTE)
 reset_proximity_precision_settings_1: |-
   client.index('books').reset_proximity_precision()
+search_parameter_reference_ranking_score_threshold_1: |-
+  client.index('INDEX_NAME').search('badman', { rankingScoreThreshold: 0.2 })
