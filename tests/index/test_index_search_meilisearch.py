@@ -518,3 +518,18 @@ def test_search_distinct(index_with_documents):
     assert len(response["hits"]) == 11
     assert genres == {None: 9, "action": 1, "Sci Fi": 1}
     assert response["hits"][0]["id"] == "399579"
+
+
+def test_search_ranking_threshold(index_with_documents):
+    # No documents matched with exact phrase and ranking threshold 1
+    response = index_with_documents().search("Husband and wife", {"rankingScoreThreshold": 1})
+    assert len(response["hits"]) == 0
+    # Only one document contains this phrase
+    response = index_with_documents().search("Husband and wife", {"rankingScoreThreshold": 0.9})
+    assert len(response["hits"]) == 1
+    # No documents matched with too high of a threshold for this term
+    response = index_with_documents().search("wife", {"rankingScoreThreshold": 0.9})
+    assert len(response["hits"]) == 0
+    # Two documents do contain the term but they only match at a lower threshold 
+    response = index_with_documents().search("wife", {"rankingScoreThreshold": 0.5})
+    assert len(response["hits"]) == 2
