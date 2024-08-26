@@ -530,6 +530,6 @@ def test_search_ranking_threshold(index_with_documents):
     # No documents matched with too high of a threshold for this term
     response = index_with_documents().search("wife", {"rankingScoreThreshold": 0.9})
     assert len(response["hits"]) == 0
-    # Two documents do contain the term but they only match at a lower threshold 
+    # Two documents do contain the term but they only match at a lower threshold
     response = index_with_documents().search("wife", {"rankingScoreThreshold": 0.5})
     assert len(response["hits"]) == 2
