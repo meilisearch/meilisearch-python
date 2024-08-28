@@ -219,7 +219,7 @@ class Client:
             return Index(self.config, uid=uid)
         raise ValueError("The index UID should not be None")
 
-    def multi_search(self, queries: Sequence[Mapping[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
+    def multi_search(self, queries: Sequence[Mapping[str, Any]], federation: Optional[Dict[str, Any]] = None) -> Dict[str, List[Dict[str, Any]]]:
         """Multi-index search.
 
         Parameters
@@ -227,6 +227,9 @@ class Client:
         queries:
             List of dictionaries containing the specified indexes and their search queries
             https://www.meilisearch.com/docs/reference/api/search#search-in-an-index
+        federation: (optional):
+            List of dictionaries containing offset and limit
+            https://www.meilisearch.com/docs/reference/api/multi_search
 
         Returns
         -------
@@ -240,7 +243,7 @@ class Client:
         """
         return self.http.post(
             f"{self.config.paths.multi_search}",
-            body={"queries": queries},
+            body={"queries": queries, "federation": federation},
         )
 
     def get_all_stats(self) -> Dict[str, Any]:
