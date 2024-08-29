@@ -219,8 +219,9 @@ class Client:
             return Index(self.config, uid=uid)
         raise ValueError("The index UID should not be None")
 
-    def multi_search(self, queries: Sequence[Mapping[str, Any]], 
-                     federation: Optional[Dict[str, Any]] = None) -> Dict[str, List[Dict[str, Any]]]:
+    def multi_search(
+        self, queries: Sequence[Mapping[str, Any]], federation: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, List[Dict[str, Any]]]:
         """Multi-index search.
 
         Parameters
