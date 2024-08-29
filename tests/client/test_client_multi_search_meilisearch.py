@@ -35,7 +35,8 @@ def test_multi_search_on_no_index(client):
         client.multi_search([{"indexUid": "indexDoesNotExist", "q": ""}])
 
 
-def test_multi_search_with_no_value_in_federation(client, empty_index, index_with_documents):
+def test_multi_search_with_no_value_in_federation(client, empty_index,
+                                                  index_with_documents):
     """Tests multi-search with federation, but no value"""
     index_with_documents()
     empty_index("indexB")
@@ -48,11 +49,15 @@ def test_multi_search_with_no_value_in_federation(client, empty_index, index_wit
     assert response["limit"] == 20
     assert response["offset"] == 0
 
-def test_multi_search_with_offset_and_limit_in_federation(client, index_with_documents):
+
+def test_multi_search_with_offset_and_limit_in_federation(
+        client,
+        index_with_documents):
     """Tests multi-search with federation, with offset and limit value"""
     index_with_documents()
-    response = client.multi_search([{"indexUid": INDEX_UID, "q": ""}], {"offset": 2, "limit": 2})
-    
+    response = client.multi_search([{"indexUid": INDEX_UID, "q": ""}],
+                                   {"offset": 2, "limit": 2})
+
     assert "results" not in response
     assert len(response["hits"]) == 2
     assert "_federation" in response["hits"][0]
@@ -63,7 +68,9 @@ def test_multi_search_with_offset_and_limit_in_federation(client, index_with_doc
 def test_multi_search_with_federation_options(client, index_with_documents):
     """Tests multi-search with federation, with federation options"""
     index_with_documents()
-    response = client.multi_search([{"indexUid": INDEX_UID, "q": "", "federationOptions": {"weight": 0.99}}], {"limit": 2})
+    response = client.multi_search(
+        [{"indexUid": INDEX_UID, "q": "", 
+          "federationOptions": {"weight": 0.99}}], {"limit": 2})
 
     assert "results" not in response
     assert response["hits"][0]["_federation"]["indexUid"] == INDEX_UID
