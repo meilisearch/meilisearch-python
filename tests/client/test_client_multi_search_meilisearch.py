@@ -73,9 +73,9 @@ def test_multi_search_with_federation_options(client, index_with_documents):
           "federationOptions": {"weight": 0.99}}], {"limit": 2})
 
     assert "results" not in response
-    assert response["hits"][0]["_federation"]["indexUid"] == INDEX_UID
     assert isinstance(response["hits"], list)
-    assert response["hits"][0]["_federation"]["weightedRankingScore"] >= 0.99
     assert len(response["hits"]) == 2
+    assert response["hits"][0]["_federation"]["indexUid"] == INDEX_UID
+    assert response["hits"][0]["_federation"]["weightedRankingScore"] >= 0.99
     assert response["limit"] == 2
     assert response["offset"] == 0
