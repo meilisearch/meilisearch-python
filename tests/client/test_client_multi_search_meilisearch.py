@@ -1,6 +1,7 @@
 import pytest
 
 from meilisearch.errors import MeilisearchApiError
+from tests.common import INDEX_UID
 
 
 def test_basic_multi_search(client, empty_index):
@@ -34,26 +35,40 @@ def test_multi_search_on_no_index(client):
         client.multi_search([{"indexUid": "indexDoesNotExist", "q": ""}])
 
 
-def test_multi_search_with_no_value_in_federation(client, empty_index):
+def test_multi_search_with_no_value_in_federation(client, empty_index, index_with_documents):
     """Tests multi-search with federation, but no value"""
-    empty_index("indexA")
-    response = client.multi_search([{"indexUid": "indexA", "q": ""}], {})
+    index_with_documents()
+    empty_index("indexB")
+    response = client.multi_search(
+        [{"indexUid": INDEX_UID, "q": ""}, {"indexUid": "indexB", "q": ""}], {}
+    )
+    assert "results" not in response
+    assert len(response["hits"]) > 0
+    assert "_federation" in response["hits"][0]
+    assert response["limit"] == 20
+    assert response["offset"] == 0
 
-    assert response["hits"][0]["_federation"]['indexUid'] == "indexA" if len(response["hits"]) >= 1 else isinstance(response, dict)
-
-
-def test_multi_search_with_offset_and_limit_in_federation(client, empty_index):
+def test_multi_search_with_offset_and_limit_in_federation(client, index_with_documents):
     """Tests multi-search with federation, with offset and limit value"""
-    empty_index("indexA")
-    response = client.multi_search([{"indexUid": "indexA", "q": ""}], {"offset": 2, "limit": 2})
+    index_with_documents()
+    response = client.multi_search([{"indexUid": INDEX_UID, "q": ""}], {"offset": 2, "limit": 2})
     
-    assert len(response["hits"]) == 2 if response['hits'] else True
+    assert "results" not in response
+    assert len(response["hits"]) == 2
+    assert "_federation" in response["hits"][0]
+    assert response["limit"] == 2
+    assert response["offset"] == 2
 
 
-def test_multi_search_with_federation_options(client, empty_index):
+def test_multi_search_with_federation_options(client, index_with_documents):
     """Tests multi-search with federation, with federation options"""
-    empty_index("indexA")
-    response = client.multi_search([{"indexUid": "indexA", "q": "", "federationOptions": {"weight": 0.99}}], {"offset": 2, "limit": 2})
+    index_with_documents()
+    response = client.multi_search([{"indexUid": INDEX_UID, "q": "", "federationOptions": {"weight": 0.99}}], {"limit": 2})
 
+    assert "results" not in response
+    assert response["hits"][0]["_federation"]["indexUid"] == INDEX_UID
     assert isinstance(response["hits"], list)
-    assert response["hits"][0]["_federation"]["weightedRankingScore"] < 0.99 if len(response["hits"]) >= 1 else True
+    assert response["hits"][0]["_federation"]["weightedRankingScore"] >= 0.99
+    assert len(response["hits"]) == 2
+    assert response["limit"] == 2
+    assert response["offset"] == 0

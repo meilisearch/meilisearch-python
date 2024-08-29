@@ -228,7 +228,7 @@ class Client:
             List of dictionaries containing the specified indexes and their search queries
             https://www.meilisearch.com/docs/reference/api/search#search-in-an-index
         federation: (optional):
-            List of dictionaries containing offset and limit
+            Dictionary containing offset and limit
             https://www.meilisearch.com/docs/reference/api/multi_search
 
         Returns
