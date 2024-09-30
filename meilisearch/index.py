@@ -955,7 +955,7 @@ class Index:
 
         return settings
 
-    def update_settings(self, body: Mapping[str, Any]) -> TaskInfo:
+    def update_settings(self, body: MutableMapping[str, Any]) -> TaskInfo:
         """Update settings of the index.
 
         https://www.meilisearch.com/docs/reference/api/settings#update-settings
@@ -978,6 +978,11 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
+        if body.get("embedders"):
+            for _, v in body["embedders"].items():
+                if "documentTemplateMaxBytes" in v and v["documentTemplateMaxBytes"] is None:
+                    del v["documentTemplateMaxBytes"]
+
         task = self.http.patch(
             f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}", body
         )
@@ -1867,7 +1872,6 @@ class Index:
 
         embedders: dict[str, OpenAiEmbedder | HuggingFaceEmbedder | UserProvidedEmbedder] = {}
         for k, v in response.items():
-            print(v.get("source"))
             if v.get("source") == "openAi":
                 embedders[k] = OpenAiEmbedder(**v)
             elif v.get("source") == "huggingFace":
@@ -1877,7 +1881,7 @@ class Index:
 
         return Embedders(embedders=embedders)
 
-    def update_embedders(self, body: Union[Mapping[str, Any], None]) -> TaskInfo:
+    def update_embedders(self, body: Union[MutableMapping[str, Any], None]) -> TaskInfo:
         """Update embedders of the index.
 
         Parameters
@@ -1896,6 +1900,12 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
+
+        if body:
+            for _, v in body.items():
+                if "documentTemplateMaxBytes" in v and v["documentTemplateMaxBytes"] is None:
+                    del v["documentTemplateMaxBytes"]
+
         task = self.http.patch(self.__settings_url_for(self.config.paths.embedders), body)
 
         return TaskInfo(**task)
