@@ -505,7 +505,8 @@ def test_show_ranking_score(index_with_documents):
 @pytest.mark.usefixtures("enable_vector_search")
 def test_vector_search(index_with_documents_and_vectors):
     response = index_with_documents_and_vectors().search(
-        "", opt_params={"vector": [0.1, 0.2], "hybrid": {"semanticRatio": 1.0}}
+        "",
+        opt_params={"vector": [0.1, 0.2], "hybrid": {"semanticRatio": 1.0, "embedder": "default"}},
     )
     assert len(response["hits"]) > 0
 
