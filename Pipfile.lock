@@ -295,11 +295,11 @@
     "develop": {
         "astroid": {
             "hashes": [
-                "sha256:0e14202810b30da1b735827f78f5157be2bbd4a7a59b7707ca0bfc2fb4c0063a",
-                "sha256:413658a61eeca6202a59231abb473f932038fbcbf1666587f66d482083413a25"
+                "sha256:5eba185467253501b62a9f113c263524b4f5d55e1b30456370eed4cdbd6438fd",
+                "sha256:e73d0b62dd680a7c07cb2cd0ce3c22570b044dd01bd994bc3a2dd16c6cbba162"
             ],
-            "markers": "python_full_version >= '3.8.0'",
-            "version": "==3.2.4"
+            "markers": "python_full_version >= '3.9.0'",
+            "version": "==3.3.4"
         },
         "black": {
             "hashes": [
@@ -436,7 +436,6 @@
                 "sha256:468dff3b89520b474c0397703366b7b95eebe6303f108adf9b19da1f702be87a",
                 "sha256:81aa267dddf68cbfe8029c42ca9ec6a4ab3b22371d1c450abc54422577b4512c"
             ],
-            "index": "pypi",
             "markers": "python_version >= '3.8'",
             "version": "==0.3.9"
         },
@@ -671,12 +670,12 @@
         },
         "pylint": {
             "hashes": [
-                "sha256:02f4aedeac91be69fb3b4bea997ce580a4ac68ce58b89eaefeaf06749df73f4b",
-                "sha256:1b7a721b575eaeaa7d39db076b6e7743c993ea44f57979127c517c6c572c803e"
+                "sha256:2f846a466dd023513240bc140ad2dd73bfc080a5d85a710afdb728c420a5a2b9",
+                "sha256:9f3dcc87b1203e612b78d91a896407787e708b3f189b5fa0b307712d49ff0c6e"
             ],
             "index": "pypi",
-            "markers": "python_full_version >= '3.8.0'",
-            "version": "==3.2.7"
+            "markers": "python_full_version >= '3.9.0'",
+            "version": "==3.3.1"
         },
         "pyproject-api": {
             "hashes": [
