@@ -56,10 +56,11 @@ class ProximityPrecision(str, Enum):
 
 class OpenAiEmbedder(CamelBase):
     source: str = "openAi"
-    model: Optional[str] = None  # Defaults to text-embedding-ada-002
+    model: Optional[str] = None  # Defaults to text-embedding-3-small
     dimensions: Optional[int] = None  # Uses the model default
     api_key: Optional[str] = None  # Can be provided through a CLI option or environment variable
     document_template: Optional[str] = None
+    document_template_max_bytes: Optional[int] = None  # Default to 400
 
 
 class HuggingFaceEmbedder(CamelBase):
@@ -67,6 +68,7 @@ class HuggingFaceEmbedder(CamelBase):
     model: Optional[str] = None  # Defaults to BAAI/bge-base-en-v1.5
     revision: Optional[str] = None
     document_template: Optional[str] = None
+    document_template_max_bytes: Optional[int] = None  # Default to 400
 
 
 class UserProvidedEmbedder(CamelBase):
