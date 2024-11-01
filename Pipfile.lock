@@ -27,12 +27,12 @@
                 "pydantic"
             ],
             "hashes": [
-                "sha256:7d067f4738889e0537fe1a9b228786bacdccafd2c0328682bc21f88a3f4a7156",
-                "sha256:eb390d299f810f22346bd261f936790e201ec7a1219c8d7b275184361fd6f214"
+                "sha256:0cba7ca1354a29ca2191983deecc9dcf28889f606c28d6ed18ac7d4586b163ac",
+                "sha256:401414549ae4ac4073e38cdc4aa6d464dc534fc40aa06ff787bf0960b0c86535"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.8' and python_version < '4.0'",
-            "version": "==3.1.2"
+            "markers": "python_version >= '3.9'",
+            "version": "==4.0.1"
         },
         "certifi": {
             "hashes": [
