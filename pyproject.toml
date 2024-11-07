@@ -113,6 +113,7 @@ disable=[
   "missing-docstring",
   "too-few-public-methods",
   "line-too-long",
+  "too-many-positional-arguments",
 ]
 enable=[
   "use-symbolic-message-instead",
