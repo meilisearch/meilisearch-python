@@ -1,11 +1,11 @@
 status = [
   'pylint',
   'mypy',
-  'integration-tests (3.8)',
   'integration-tests (3.9)',
   'integration-tests (3.10)',
   'integration-tests (3.11)',
   'integration-tests (3.12)',
+  'integration-tests (3.13)',
 ]
 # 1 hour timeout
 timeout-sec = 3600
