@@ -650,11 +650,12 @@
         },
         "pdoc3": {
             "hashes": [
-                "sha256:20bf2aad8110892573fd350b1bf95f6612b53b55e29b0fc143b5f2b5bcbabfb6"
+                "sha256:db2d713ed2b034af38a0f5e0004c88259873df8eb8e950ca8513ef991408bcc5",
+                "sha256:e90ac2f0570b11e7a0e83ae21f353d70c1d33046bd6d98604deb535187cade15"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.9'",
-            "version": "==0.11.1"
+            "version": "==0.11.3"
         },
         "pipenv": {
             "hashes": [
