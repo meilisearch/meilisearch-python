@@ -224,7 +224,7 @@ def test_get_documents_offset_optional_params(index_with_documents):
     response = index.get_documents()
     assert isinstance(response.results, list)
     assert len(response.results) == 20
-    response_offset_limit = index.get_documents({"limit": 3, "offset": 1, "fields": "title"})
+    response_offset_limit = index.get_documents({"limit": 3, "offset": 1, "fields": ["title"]})
     assert len(response_offset_limit.results) == 3
     assert hasattr(response_offset_limit.results[0], "title")
     assert response_offset_limit.results[0].title == response.results[1].title
