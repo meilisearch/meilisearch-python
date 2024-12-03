@@ -397,17 +397,8 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        if parameters is None or parameters.get("filter") is None:
-            if parameters is None:
-                parameters = {}
-            elif "fields" in parameters and isinstance(parameters["fields"], list):
-                parameters["fields"] = ",".join(parameters["fields"])
-
-            response = self.http.get(
-                f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{parse.urlencode(parameters)}"
-            )
-            return DocumentsResults(response)
-
+        if parameters is None:
+            parameters = {}
         response = self.http.post(
             f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}/fetch",
             body=parameters,
