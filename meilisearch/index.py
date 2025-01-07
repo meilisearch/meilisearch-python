@@ -576,8 +576,8 @@ class Index:
     def add_documents_raw(
         self,
         str_documents: bytes,
-        content_type: str,
         primary_key: Optional[str] = None,
+        content_type: Optional[str] = None,
         csv_delimiter: Optional[str] = None,
         *,
         serializer: Optional[Type[JSONEncoder]] = None,

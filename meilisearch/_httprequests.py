@@ -33,6 +33,7 @@ class HttpRequests:
                 Mapping[str, Any],
                 Sequence[Mapping[str, Any]],
                 List[str],
+                bytes,
                 str,
                 int,
                 ProximityPrecision,
@@ -84,7 +85,7 @@ class HttpRequests:
         self,
         path: str,
         body: Optional[
-            Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str], str]
+            Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str], bytes, str]
         ] = None,
         content_type: Optional[str] = "application/json",
         *,
@@ -96,7 +97,7 @@ class HttpRequests:
         self,
         path: str,
         body: Optional[
-            Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str], str]
+            Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str], bytes, str]
         ] = None,
         content_type: Optional[str] = "application/json",
     ) -> Any:
@@ -110,6 +111,7 @@ class HttpRequests:
                 Mapping[str, Any],
                 Sequence[Mapping[str, Any]],
                 List[str],
+                bytes,
                 str,
                 int,
                 ProximityPrecision,
