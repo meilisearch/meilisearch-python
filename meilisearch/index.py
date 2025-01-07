@@ -484,17 +484,17 @@ class Index:
 
     def add_documents_json(
         self,
-        str_documents: str,
+        str_documents: bytes,
         primary_key: Optional[str] = None,
         *,
         serializer: Optional[Type[JSONEncoder]] = None,
     ) -> TaskInfo:
-        """Add string documents from JSON file to the index.
+        """Add documents to the index from a byte-encoded JSON string.
 
         Parameters
         ----------
         str_documents:
-            String of document from a JSON file.
+            Byte-encoded JSON string.
         primary_key (optional):
             The primary-key used in index. Ignored if already set up.
         serializer (optional):
@@ -518,16 +518,16 @@ class Index:
 
     def add_documents_csv(
         self,
-        str_documents: str,
+        str_documents: bytes,
         primary_key: Optional[str] = None,
         csv_delimiter: Optional[str] = None,
     ) -> TaskInfo:
-        """Add string documents from a CSV file to the index.
+        """Add documents to the index from a byte-encoded CSV string.
 
         Parameters
         ----------
         str_documents:
-            String of document from a CSV file.
+            Byte-encoded CSV string.
         primary_key (optional):
             The primary-key used in index. Ignored if already set up.
         csv_delimiter:
@@ -548,15 +548,15 @@ class Index:
 
     def add_documents_ndjson(
         self,
-        str_documents: str,
+        str_documents: bytes,
         primary_key: Optional[str] = None,
     ) -> TaskInfo:
-        """Add string documents from a NDJSON file to the index.
+        """Add documents to the index from a byte-encoded NDJSON string.
 
         Parameters
         ----------
         str_documents:
-            String of document from a NDJSON file.
+            Byte-encoded NDJSON string.
         primary_key (optional):
             The primary-key used in index. Ignored if already set up.
 
@@ -575,24 +575,24 @@ class Index:
 
     def add_documents_raw(
         self,
-        str_documents: str,
+        str_documents: bytes,
         primary_key: Optional[str] = None,
         content_type: Optional[str] = None,
         csv_delimiter: Optional[str] = None,
         *,
         serializer: Optional[Type[JSONEncoder]] = None,
     ) -> TaskInfo:
-        """Add string documents to the index.
+        """Add documents to the index from a byte-encoded string.
 
         Parameters
         ----------
         str_documents:
-            String of document.
+            Byte-encoded string.
+        content_type:
+            The content MIME type: 'application/json', 'application/x-dnjson', or 'text/csv'.
         primary_key (optional):
             The primary-key used in index. Ignored if already set up.
-        type:
-            The type of document. Type available: 'csv', 'json', 'jsonl'.
-        csv_delimiter:
+        csv_delimiter (optional):
             One ASCII character used to customize the delimiter for CSV.
             Note: The csv delimiter can only be used with the Content-Type text/csv.
         serializer (optional):
