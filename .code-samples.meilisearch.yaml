@@ -732,3 +732,13 @@ reset_proximity_precision_settings_1: |-
   client.index('books').reset_proximity_precision()
 search_parameter_reference_ranking_score_threshold_1: |-
   client.index('INDEX_NAME').search('badman', { 'rankingScoreThreshold': 0.2 })
+search_parameter_reference_locales_1: |-
+  client.index('INDEX_NAME').search('進撃の巨人', { 'locales': ['jpn'] })
+get_localized_attribute_settings_1: |-
+  client.index('INDEX_NAME').get_localized_attributes()
+update_localized_attribute_settings_1: |-
+  client.index('INDEX_NAME').update_localized_attributes([
+    {'attribute_patterns': ['*_ja'], 'locales': ['jpn']}
+  ])
+reset_localized_attribute_settings_1: |-
+  client.index('INDEX_NAME').reset_localized_attributes()
