@@ -29,6 +29,7 @@ from meilisearch.models.index import (
     Faceting,
     HuggingFaceEmbedder,
     IndexStats,
+    LocalizedAttributes,
     OpenAiEmbedder,
     Pagination,
     ProximityPrecision,
@@ -2044,8 +2045,8 @@ class Index:
 
     # LOCALIZED ATTRIBUTES SETTINGS
 
-    def get_localized_attributes(self) -> Union[List[Dict[str, List[str]]], None]:
-        """Get the proximity_precision of the index.
+    def get_localized_attributes(self) -> Union[List[LocalizedAttributes], None]:
+        """Get the localized_attributes of the index.
 
         Returns
         -------
@@ -2057,10 +2058,15 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return self.http.get(self.__settings_url_for(self.config.paths.localized_attributes))
+        response = self.http.get(self.__settings_url_for(self.config.paths.localized_attributes))
+
+        if not response:
+            return None
+
+        return [LocalizedAttributes(**attrs) for attrs in response]
 
     def update_localized_attributes(
-        self, body: Union[List[Dict[str, List[str]]], None]
+        self, body: Union[List[Mapping[str, List[str]]], None]
     ) -> TaskInfo:
         """Update the localized_attributes of the index.
 

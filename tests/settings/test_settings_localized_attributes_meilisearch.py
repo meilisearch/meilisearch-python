@@ -1,4 +1,12 @@
+from typing import List
+
+from meilisearch.models.index import LocalizedAttributes
+
 NEW_LOCALIZED_ATTRIBUTES = [{"attributePatterns": ["title"], "locales": ["eng"]}]
+
+
+def unpack_loc_attrs_response(response: List[LocalizedAttributes]):
+    return [loc_attrs.model_dump(by_alias=True) for loc_attrs in response]
 
 
 def test_get_localized_attributes(empty_index):
@@ -14,7 +22,7 @@ def test_update_localized_attributes(empty_index):
     update = index.wait_for_task(response.task_uid)
     assert update.status == "succeeded"
     response = index.get_localized_attributes()
-    assert NEW_LOCALIZED_ATTRIBUTES == response
+    assert NEW_LOCALIZED_ATTRIBUTES == unpack_loc_attrs_response(response)
 
 
 def test_reset_localized_attributes(empty_index):
@@ -26,7 +34,7 @@ def test_reset_localized_attributes(empty_index):
     assert update.status == "succeeded"
     # Check the settings have been correctly updated
     response = index.get_localized_attributes()
-    assert NEW_LOCALIZED_ATTRIBUTES == response
+    assert NEW_LOCALIZED_ATTRIBUTES == unpack_loc_attrs_response(response)
     # Check the reset of the settings
     response = index.reset_localized_attributes()
     update = index.wait_for_task(response.task_uid)

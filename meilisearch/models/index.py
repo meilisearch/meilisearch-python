@@ -54,6 +54,11 @@ class ProximityPrecision(str, Enum):
     BY_ATTRIBUTE = "byAttribute"
 
 
+class LocalizedAttributes(CamelBase):
+    attribute_patterns: List[str]
+    locales: List[str]
+
+
 class OpenAiEmbedder(CamelBase):
     source: str = "openAi"
     model: Optional[str] = None  # Defaults to text-embedding-3-small
