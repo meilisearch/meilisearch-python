@@ -41,6 +41,7 @@ class Config:
         embedders = "embedders"
         search_cutoff_ms = "search-cutoff-ms"
         proximity_precision = "proximity-precision"
+        localized_attributes = "localized-attributes"
 
     def __init__(
         self,

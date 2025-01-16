@@ -29,6 +29,7 @@ from meilisearch.models.index import (
     Faceting,
     HuggingFaceEmbedder,
     IndexStats,
+    LocalizedAttributes,
     OpenAiEmbedder,
     Pagination,
     ProximityPrecision,
@@ -2038,6 +2039,73 @@ class Index:
         """
         task = self.http.delete(
             self.__settings_url_for(self.config.paths.proximity_precision),
+        )
+
+        return TaskInfo(**task)
+
+    # LOCALIZED ATTRIBUTES SETTINGS
+
+    def get_localized_attributes(self) -> Union[List[LocalizedAttributes], None]:
+        """Get the localized_attributes of the index.
+
+        Returns
+        -------
+        settings:
+            localized_attributes of the index.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        response = self.http.get(self.__settings_url_for(self.config.paths.localized_attributes))
+
+        if not response:
+            return None
+
+        return [LocalizedAttributes(**attrs) for attrs in response]
+
+    def update_localized_attributes(
+        self, body: Union[List[Mapping[str, List[str]]], None]
+    ) -> TaskInfo:
+        """Update the localized_attributes of the index.
+
+        Parameters
+        ----------
+        body:
+            localized_attributes
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.put(self.__settings_url_for(self.config.paths.localized_attributes), body)
+
+        return TaskInfo(**task)
+
+    def reset_localized_attributes(self) -> TaskInfo:
+        """Reset the localized_attributes of the index
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.delete(
+            self.__settings_url_for(self.config.paths.localized_attributes),
         )
 
         return TaskInfo(**task)
