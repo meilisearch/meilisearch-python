@@ -747,3 +747,7 @@ multi_search_federated_1: |-
     [{"indexUid": "movies", "q": "batman"}, {"indexUid": "comics", "q": "batman"}],
     {}
   )
+get_all_batches_1: |-
+  client.get_batches()
+get_batch_1: |-
+  client.get_batch(BATCH_UID)
