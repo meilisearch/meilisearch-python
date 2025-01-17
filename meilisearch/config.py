@@ -14,6 +14,7 @@ class Config:
         version = "version"
         index = "indexes"
         task = "tasks"
+        batch = "batches"
         stat = "stats"
         search = "search"
         facet_search = "facet-search"
