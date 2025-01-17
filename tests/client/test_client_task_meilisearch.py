@@ -156,3 +156,12 @@ def test_delete_tasks_by_filter(client):
     assert (
         "statuses=succeeded%2Cfailed%2Ccanceled" in tasks_after.results[0].details["originalFilter"]
     )
+
+
+@pytest.mark.usefixtures("create_tasks")
+def test_get_tasks_in_reverse(client):
+    """Tests getting the global tasks list in reverse."""
+    tasks = client.get_tasks({})
+    reverse_tasks = client.get_tasks({"reverse": "true"})
+
+    assert reverse_tasks.results[0] == tasks.results[-1]
