@@ -266,6 +266,32 @@ def test_get_documents_filter_with_fields(index_with_documents):
     assert next(iter(genres)) == "action"
 
 
+@pytest.mark.usefixtures("enable_vector_search")
+def test_get_similar_documents(empty_index):
+    index = empty_index()
+    index.update_embedders({"manual": {"source": "userProvided", "dimensions": 3}})
+
+    hp3 = {
+        "id": 1,
+        "title": "Harry Potter and the Prisoner of Azkaban",
+        "_vectors": {"manual": [0.8, 0.8, 0.8]},
+    }
+    hp4 = {
+        "id": 2,
+        "title": "Harry Potter and the Goblet of Fire",
+        "_vectors": {"manual": [0.7, 0.7, 0.9]},
+    }
+    lotr = {"id": 3, "title": "The Lord of the Rings", "_vectors": {"manual": [0.6, 0.5, 0.2]}}
+
+    addition = index.add_documents([hp3, hp4, lotr])
+    index.wait_for_task(addition.task_uid)
+
+    similars = index.get_similar_documents({"id": hp4["id"], "embedder": "manual"})
+
+    assert similars["hits"][0]["id"] == hp3["id"]
+    assert similars["hits"][1]["id"] == lotr["id"]
+
+
 def test_update_documents(index_with_documents, small_movies):
     """Tests updating a single document and a set of documents."""
     index = index_with_documents()
