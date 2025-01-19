@@ -742,3 +742,8 @@ update_localized_attribute_settings_1: |-
   ])
 reset_localized_attribute_settings_1: |-
   client.index('INDEX_NAME').reset_localized_attributes()
+multi_search_federated_1: |-
+  client.multi_search(
+    [{"indexUid": "movies", "q": "batman"}, {"indexUid": "comics", "q": "batman"}],
+    {}
+  )
