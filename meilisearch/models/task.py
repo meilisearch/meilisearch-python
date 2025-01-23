@@ -113,3 +113,46 @@ class TaskResults:
         self.total: int = resp["total"]
         self.from_: int = resp["from"]
         self.next_: int = resp["next"]
+
+
+class Batch(CamelBase):
+    uid: int
+    details: Optional[Dict[str, Any]] = None
+    stats: Optional[Dict[str, Union[int, Dict[str, Any]]]] = None
+    duration: Optional[str] = None
+    started_at: Optional[datetime] = None
+    finished_at: Optional[datetime] = None
+    progress: Optional[Dict[str, Union[float, List[Dict[str, Any]]]]] = None
+
+    if is_pydantic_2():
+
+        @pydantic.field_validator("started_at", mode="before")  # type: ignore[attr-defined]
+        @classmethod
+        def validate_started_at(cls, v: str) -> Optional[datetime]:  # pylint: disable=invalid-name
+            return iso_to_date_time(v)
+
+        @pydantic.field_validator("finished_at", mode="before")  # type: ignore[attr-defined]
+        @classmethod
+        def validate_finished_at(cls, v: str) -> Optional[datetime]:  # pylint: disable=invalid-name
+            return iso_to_date_time(v)
+
+    else:  # pragma: no cover
+
+        @pydantic.validator("started_at", pre=True)
+        @classmethod
+        def validate_started_at(cls, v: str) -> Optional[datetime]:  # pylint: disable=invalid-name
+            return iso_to_date_time(v)
+
+        @pydantic.validator("finished_at", pre=True)
+        @classmethod
+        def validate_finished_at(cls, v: str) -> Optional[datetime]:  # pylint: disable=invalid-name
+            return iso_to_date_time(v)
+
+
+class BatchResults(CamelBase):
+    results: List[Batch]
+    total: int
+    limit: int
+    from_: int
+    # None means last page
+    next_: Optional[int]

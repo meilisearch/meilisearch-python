@@ -8,7 +8,7 @@ from urllib import parse
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
 from meilisearch.errors import MeilisearchTimeoutError
-from meilisearch.models.task import Task, TaskInfo, TaskResults
+from meilisearch.models.task import Batch, BatchResults, Task, TaskInfo, TaskResults
 
 
 class TaskHandler:
@@ -26,6 +26,53 @@ class TaskHandler:
         """
         self.config = config
         self.http = HttpRequests(config)
+
+    def get_batches(self, parameters: Optional[MutableMapping[str, Any]] = None) -> BatchResults:
+        """Get all task batches.
+
+        Parameters
+        ----------
+        parameters (optional):
+            parameters accepted by the get batches route: https://www.meilisearch.com/docs/reference/api/batches#get-batches.
+
+        Returns
+        -------
+        batch:
+            BatchResults instance contining limit, from, next and results containing a list of all batches.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        if parameters is None:
+            parameters = {}
+        for param in parameters:
+            if isinstance(parameters[param], (list, tuple)):
+                parameters[param] = ",".join(parameters[param])
+        batches = self.http.get(f"{self.config.paths.batch}?{parse.urlencode(parameters)}")
+        return BatchResults(**batches)
+
+    def get_batch(self, uid: int) -> Batch:
+        """Get one tasks batch.
+
+        Parameters
+        ----------
+        uid:
+            Identifier of the batch.
+
+        Returns
+        -------
+        task:
+            Batch instance containing information about the progress of the asynchronous batch.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        batch = self.http.get(f"{self.config.paths.batch}/{uid}")
+        return Batch(**batch)
 
     def get_tasks(self, parameters: Optional[MutableMapping[str, Any]] = None) -> TaskResults:
         """Get all tasks.
