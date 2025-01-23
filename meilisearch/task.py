@@ -48,10 +48,10 @@ class TaskHandler:
         if parameters is None:
             parameters = {}
         for param in parameters:
-            if isinstance(parameters[param], list):
+            if isinstance(parameters[param], (list, tuple)):
                 parameters[param] = ",".join(parameters[param])
         batches = self.http.get(f"{self.config.paths.batch}?{parse.urlencode(parameters)}")
-        return BatchResults(batches)
+        return BatchResults(**batches)
 
     def get_batch(self, uid: int) -> Batch:
         """Get one tasks batch.

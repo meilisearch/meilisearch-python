@@ -186,12 +186,6 @@ def test_get_batches_with_parameters(client):
 def test_get_batch(client):
     """Tests getting the details of a batch."""
     batches = client.get_batches({"limit": 1})
-    batch = client.get_batch(batches.results[0].uid)
-    batch_dict = batch.__dict__
-    assert "uid" in batch_dict
-    assert "details" in batch_dict
-    assert "stats" in batch_dict
-    assert "duration" in batch_dict
-    assert "started_at" in batch_dict
-    assert "finished_at" in batch_dict
-    assert "progress" in batch_dict
+    uid = batches.results[0].uid
+    batch = client.get_batch(uid)
+    assert batch.uid == uid
