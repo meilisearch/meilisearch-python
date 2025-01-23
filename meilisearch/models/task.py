@@ -149,10 +149,10 @@ class Batch(CamelBase):
             return iso_to_date_time(v)
 
 
-class BatchResults:
-    def __init__(self, resp: Dict[str, Any]) -> None:
-        self.results: List[Batch] = [Batch(**batch) for batch in resp["results"]]
-        self.total: int = resp["total"]
-        self.limit: int = resp["limit"]
-        self.from_: int = resp["from"]
-        self.next_: int = resp["next"]
+class BatchResults(CamelBase):
+    results: List[Batch]
+    total: int
+    limit: int
+    from_: int
+    # None means last page
+    next_: Optional[int]
