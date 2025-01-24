@@ -20,6 +20,7 @@ class Config:
         facet_search = "facet-search"
         multi_search = "multi-search"
         document = "documents"
+        similar = "similar"
         setting = "settings"
         ranking_rules = "ranking-rules"
         distinct_attribute = "distinct-attribute"
