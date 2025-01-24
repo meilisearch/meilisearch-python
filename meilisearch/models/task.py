@@ -106,13 +106,12 @@ class TaskInfo(CamelBase):
             return converted
 
 
-class TaskResults:
-    def __init__(self, resp: Dict[str, Any]) -> None:
-        self.results: List[Task] = [Task(**task) for task in resp["results"]]
-        self.limit: int = resp["limit"]
-        self.total: int = resp["total"]
-        self.from_: int = resp["from"]
-        self.next_: int = resp["next"]
+class TaskResults(CamelBase):
+    results: List[Task]
+    limit: int
+    total: int
+    from_: int
+    next_: Optional[int]
 
 
 class Batch(CamelBase):

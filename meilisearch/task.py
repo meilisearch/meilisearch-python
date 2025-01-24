@@ -99,7 +99,7 @@ class TaskHandler:
             if isinstance(parameters[param], list):
                 parameters[param] = ",".join(parameters[param])
         tasks = self.http.get(f"{self.config.paths.task}?{parse.urlencode(parameters)}")
-        return TaskResults(tasks)
+        return TaskResults(**tasks)
 
     def get_task(self, uid: int) -> Task:
         """Get one task.
