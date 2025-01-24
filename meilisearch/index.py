@@ -1628,6 +1628,57 @@ class Index:
 
         return TaskInfo(**task)
 
+    def get_facet_search_settings(self) -> bool:
+        """Get the facet search settings of an index.
+
+        Returns
+        -------
+        bool:
+            True if facet search is enabled, False if disabled.
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+
+        return self.http.get(self.__settings_url_for(self.config.paths.facet_search))
+
+    def update_facet_search_settings(self, body: Union[bool, None]) -> TaskInfo:
+        """Update the facet search settings of the index.
+
+        Parameters
+        ----------
+        body: bool
+            True to enable facet search, False to disable it.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.put(self.__settings_url_for(self.config.paths.facet_search), body=body)
+
+        return TaskInfo(**task)
+
+    def reset_facet_search_settings(self) -> TaskInfo:
+        """Reset facet search settings of the index to default values.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks
+        """
+        task = self.http.delete(self.__settings_url_for(self.config.paths.facet_search))
+        
+        return TaskInfo(**task)
+
     def get_faceting_settings(self) -> Faceting:
         """Get the faceting settings of an index.
 
@@ -1641,7 +1692,6 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-
         faceting = self.http.get(self.__settings_url_for(self.config.paths.faceting))
 
         return Faceting(**faceting)
