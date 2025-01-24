@@ -364,7 +364,7 @@ class Index:
         """
         if parameters is None:
             parameters = {}
-        elif "fields" in parameters and isinstance(parameters["fields"], list):
+        elif "fields" in parameters and isinstance(parameters["fields"], (list, tuple)):
             parameters["fields"] = ",".join(parameters["fields"])
 
         document = self.http.get(
