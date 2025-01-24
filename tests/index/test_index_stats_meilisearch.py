@@ -13,5 +13,5 @@ def test_get_stats_default(index_with_documents):
     response = index_with_documents().get_stats()
     assert isinstance(response, IndexStats)
     assert response.number_of_documents == 31
-    assert "genre" in response.field_distribution
-    assert response.field_distribution["genre"] == 11
+    assert hasattr(response.field_distribution, "genre")
+    assert response.field_distribution.genre == 11
