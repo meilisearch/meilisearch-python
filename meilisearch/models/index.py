@@ -49,6 +49,18 @@ class TypoTolerance(CamelBase):
     min_word_size_for_typos: Optional[MinWordSizeForTypos] = None
 
 
+class PrefixSearch(str, Enum):
+    INDEXING_TIME = "indexingTime"
+    """
+    Calculate prefix search during indexing. This is the default behavior.
+    """
+
+    DISABLED = "disabled"
+    """
+    Do not calculate prefix search. May speed up indexing, but will severely impact search result relevancy.
+    """
+
+
 class ProximityPrecision(str, Enum):
     BY_WORD = "byWord"
     BY_ATTRIBUTE = "byAttribute"

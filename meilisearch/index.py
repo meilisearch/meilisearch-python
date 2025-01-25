@@ -32,6 +32,7 @@ from meilisearch.models.index import (
     LocalizedAttributes,
     OpenAiEmbedder,
     Pagination,
+    PrefixSearch,
     ProximityPrecision,
     TypoTolerance,
     UserProvidedEmbedder,
@@ -2052,6 +2053,58 @@ class Index:
         """
         task = self.http.delete(
             self.__settings_url_for(self.config.paths.search_cutoff_ms),
+        )
+
+        return TaskInfo(**task)
+
+    # PREFIX SEARCH
+
+    def get_prefix_search(self) -> PrefixSearch:
+        """Get the prefix search settings of an index.
+
+        Returns
+        -------
+        settings:
+            The prefix search settings of the index.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        prefix_search = self.http.get(self.__settings_url_for(self.config.paths.prefix_search))
+
+        return PrefixSearch[to_snake(prefix_search).upper()]
+
+    def update_prefix_search(self, body: Union[PrefixSearch, None]) -> TaskInfo:
+        """Update the prefix search settings of the index.
+
+        Parameters
+        ----------
+        body:
+            Prefix search settings
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks
+        """
+        task = self.http.put(self.__settings_url_for(self.config.paths.prefix_search), body)
+
+        return TaskInfo(**task)
+
+    def reset_prefix_search(self) -> TaskInfo:
+        """Reset the prefix search settings of the index
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks
+        """
+        task = self.http.delete(
+            self.__settings_url_for(self.config.paths.prefix_search),
         )
 
         return TaskInfo(**task)

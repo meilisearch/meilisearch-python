@@ -12,7 +12,7 @@ from meilisearch.errors import (
     MeilisearchCommunicationError,
     MeilisearchTimeoutError,
 )
-from meilisearch.models.index import ProximityPrecision
+from meilisearch.models.index import PrefixSearch, ProximityPrecision
 from meilisearch.version import qualified_version
 
 
@@ -116,6 +116,7 @@ class HttpRequests:
                 bytes,
                 str,
                 int,
+                PrefixSearch,
                 ProximityPrecision,
             ]
         ] = None,
