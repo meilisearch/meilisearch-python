@@ -1677,7 +1677,7 @@ class Index:
             https://www.meilisearch.com/docs/reference/api/tasks
         """
         task = self.http.delete(self.__settings_url_for(self.config.paths.facet_search))
-        
+
         return TaskInfo(**task)
 
     def get_faceting_settings(self) -> Faceting:

@@ -1,6 +1,5 @@
 from meilisearch.models.index import PrefixSearch
 
-
 DEFAULT_PREFIX_SEARCH_SETTINGS = PrefixSearch.INDEXING_TIME
 
 
