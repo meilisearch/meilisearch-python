@@ -248,7 +248,9 @@ class Client:
             body={"queries": queries, "federation": federation},
         )
 
-    def update_documents_by_function(self, index_uid: str, queries: Dict[str, List[Dict[str, Any]]]) -> Dict[str, Any]:
+    def update_documents_by_function(
+        self, index_uid: str, queries: Dict[str, List[Dict[str, Any]]]
+    ) -> Dict[str, Any]:
         """Update Documents by function
         Parameters
         ----------
@@ -268,8 +270,10 @@ class Client:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return self.http.post(path=f"{self.config.paths.index}/{index_uid}/{self.config.paths.document}/{self.config.paths.edit}",
-                              body=dict(queries))
+        return self.http.post(
+            path=f"{self.config.paths.index}/{index_uid}/{self.config.paths.document}/{self.config.paths.edit}",
+            body=dict(queries),
+        )
 
     def get_all_stats(self) -> Dict[str, Any]:
         """Get all stats of Meilisearch

@@ -65,7 +65,9 @@ class HttpRequests:
                 data = (
                     json.dumps(body, cls=serializer)
                     if serialize_body
-                    else "" if body == "" else "null"
+                    else ""
+                    if body == ""
+                    else "null"
                 )
 
                 request = http_method(
