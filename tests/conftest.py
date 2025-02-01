@@ -231,6 +231,23 @@ def enable_vector_search():
 
 
 @fixture
+def enable_edit_documents_by_function():
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"editDocumentsByFunction": True},
+        timeout=10,
+    )
+    yield
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"editDocumentsByFunction": False},
+        timeout=10,
+    )
+
+
+@fixture
 def new_embedders():
     return {
         "default": UserProvidedEmbedder(dimensions=1).model_dump(by_alias=True),
