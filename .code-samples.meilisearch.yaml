@@ -634,6 +634,12 @@ update_pagination_settings_1: |-
   client.index('books').update_pagination_settings({'maxTotalHits': 100})
 reset_pagination_settings_1: |-
   client.index('books').reset_pagination_settings()
+get_facet_search_settings_1: |-
+  client.index('books').get_facet_search_settings()
+update_facet_search_settings_1: |-
+  client.index('books').update_facet_search_settings(False)
+reset_facet_search_settings_1: |-
+  client.index('books').reset_facet_search_settings()
 get_faceting_settings_1: |-
   client.index('books').get_faceting_settings()
 update_faceting_settings_1: |-
@@ -724,6 +730,12 @@ update_search_cutoff_1: |-
   client.index('movies').update_search_cutoff_ms(150)
 reset_search_cutoff_1: |-
   client.index('movies').reset_search_cutoff_ms()
+get_prefix_search_settings_1: |-
+  client.index('books').get_prefix_search()
+update_prefix_search_settings_1: |-
+  client.index('books').update_prefix_search(PrefixSearch.DISABLED)
+reset_prefix_search_settings_1: |-
+  client.index('books').reset_prefix_search()
 get_proximity_precision_settings_1: |-
   client.index('books').get_proximity_precision()
 update_proximity_precision_settings_1: |-
