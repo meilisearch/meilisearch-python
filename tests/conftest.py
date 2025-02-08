@@ -214,23 +214,6 @@ def get_private_key(client):
 
 
 @fixture
-def enable_vector_search():
-    requests.patch(
-        f"{common.BASE_URL}/experimental-features",
-        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
-        json={"vectorStore": True},
-        timeout=10,
-    )
-    yield
-    requests.patch(
-        f"{common.BASE_URL}/experimental-features",
-        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
-        json={"vectorStore": False},
-        timeout=10,
-    )
-
-
-@fixture
 def new_embedders():
     return {
         "default": UserProvidedEmbedder(dimensions=1).model_dump(by_alias=True),
