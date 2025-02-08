@@ -207,6 +207,27 @@ def test_key_info(client):
 
 
 @fixture(scope="function")
+def test_nondescript_key_info(client):
+    key_info = {
+        "name": "keyWithoutDescription",
+        "actions": ["search"],
+        "indexes": [common.INDEX_UID],
+        "expiresAt": None,
+    }
+
+    yield key_info
+
+    try:
+        keys = client.get_keys().results
+        key = next(x for x in keys if x.name == key_info["name"])
+        client.delete_key(key.key)
+    except MeilisearchApiError:
+        pass
+    except StopIteration:
+        pass
+
+
+@fixture(scope="function")
 def get_private_key(client):
     keys = client.get_keys().results
     key = next(x for x in keys if "Default Search API" in x.name)

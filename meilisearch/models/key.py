@@ -10,7 +10,7 @@ from meilisearch._utils import is_pydantic_2, iso_to_date_time
 class _KeyBase(CamelBase):
     uid: str
     name: Optional[str] = None
-    description: str
+    description: Optional[str]
     actions: List[str]
     indexes: List[str]
     expires_at: Optional[datetime] = None
