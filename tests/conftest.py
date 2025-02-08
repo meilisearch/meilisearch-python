@@ -2,7 +2,6 @@
 import json
 from typing import Optional
 
-import requests
 from pytest import fixture
 
 import meilisearch
