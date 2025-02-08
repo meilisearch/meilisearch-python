@@ -92,4 +92,4 @@ def test_reset_settings(new_settings, empty_index):
     assert response["searchableAttributes"] == ["*"]
     assert response["stopWords"] == []
     assert response["synonyms"] == {}
-    assert response.get("embedders") is {}
+    assert response["embedders"] == {}
