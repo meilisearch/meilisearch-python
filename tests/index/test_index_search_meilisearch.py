@@ -502,7 +502,6 @@ def test_show_ranking_score(index_with_documents):
     assert response["hits"][0]["_rankingScore"] >= 0.9
 
 
-@pytest.mark.usefixtures("enable_vector_search")
 def test_vector_search(index_with_documents_and_vectors):
     response = index_with_documents_and_vectors().search(
         "",

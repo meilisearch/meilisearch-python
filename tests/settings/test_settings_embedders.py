@@ -1,10 +1,8 @@
 # pylint: disable=redefined-outer-name
-import pytest
 
 from meilisearch.models.index import OpenAiEmbedder, UserProvidedEmbedder
 
 
-@pytest.mark.usefixtures("enable_vector_search")
 def test_get_default_embedders(empty_index):
     """Tests getting default embedders."""
     response = empty_index().get_embedders()
@@ -12,7 +10,6 @@ def test_get_default_embedders(empty_index):
     assert response is None
 
 
-@pytest.mark.usefixtures("enable_vector_search")
 def test_update_embedders_with_user_provided_source(new_embedders, empty_index):
     """Tests updating embedders."""
     index = empty_index()
@@ -24,7 +21,6 @@ def test_update_embedders_with_user_provided_source(new_embedders, empty_index):
     assert isinstance(response_get.embedders["open_ai"], OpenAiEmbedder)
 
 
-@pytest.mark.usefixtures("enable_vector_search")
 def test_reset_embedders(new_embedders, empty_index):
     """Tests resetting the typo_tolerance setting to its default value."""
     index = empty_index()
