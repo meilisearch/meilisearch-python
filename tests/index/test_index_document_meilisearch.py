@@ -171,7 +171,6 @@ def test_update_documents_json_custom_serializer(empty_index):
 
 
 def test_update_documents_raw_custom_serializer(empty_index):
-
     documents = [
         {"id": uuid4(), "title": "test 1", "when": datetime.now()},
         {"id": uuid4(), "title": "Test 2", "when": datetime.now()},

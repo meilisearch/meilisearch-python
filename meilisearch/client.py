@@ -248,6 +248,33 @@ class Client:
             body={"queries": queries, "federation": federation},
         )
 
+    def update_documents_by_function(
+        self, index_uid: str, queries: Dict[str, List[Dict[str, Any]]]
+    ) -> Dict[str, Any]:
+        """Update Documents by function
+        Parameters
+        ----------
+        index_uid:
+            The index_uid where you want to update documents of.
+        queries:
+            List of dictionaries containing functions with or without filters that you want to use to update documents.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.http.post(
+            path=f"{self.config.paths.index}/{index_uid}/{self.config.paths.document}/{self.config.paths.edit}",
+            body=dict(queries),
+        )
+
     def get_all_stats(self) -> Dict[str, Any]:
         """Get all stats of Meilisearch
 
