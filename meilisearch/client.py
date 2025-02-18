@@ -16,7 +16,7 @@ from meilisearch.config import Config
 from meilisearch.errors import MeilisearchError
 from meilisearch.index import Index
 from meilisearch.models.key import Key, KeysResults
-from meilisearch.models.task import Task, TaskInfo, TaskResults
+from meilisearch.models.task import Batch, BatchResults, Task, TaskInfo, TaskResults
 from meilisearch.task import TaskHandler
 
 
@@ -610,6 +610,46 @@ class Client:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.task_handler.wait_for_task(uid, timeout_in_ms, interval_in_ms)
+
+    def get_batches(self, parameters: Optional[MutableMapping[str, Any]] = None) -> BatchResults:
+        """Get all batches.
+
+        Parameters
+        ----------
+        parameters (optional):
+            parameters accepted by the get batches route: https://www.meilisearch.com/docs/reference/api/batches#get-batches.
+
+        Returns
+        -------
+        batch:
+            BatchResult instance containing limit, from, next and results containing a list of all batches.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.task_handler.get_batches(parameters=parameters)
+
+    def get_batch(self, uid: int) -> Batch:
+        """Get one tasks batch.
+
+        Parameters
+        ----------
+        uid:
+            Identifier of the batch.
+
+        Returns
+        -------
+        batch:
+            Batch instance containing information about the progress of the asynchronous batch.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.task_handler.get_batch(uid)
 
     def generate_tenant_token(
         self,

@@ -742,3 +742,14 @@ update_localized_attribute_settings_1: |-
   ])
 reset_localized_attribute_settings_1: |-
   client.index('INDEX_NAME').reset_localized_attributes()
+multi_search_federated_1: |-
+  client.multi_search(
+    [{"indexUid": "movies", "q": "batman"}, {"indexUid": "comics", "q": "batman"}],
+    {}
+  )
+get_all_batches_1: |-
+  client.get_batches()
+get_batch_1: |-
+  client.get_batch(BATCH_UID)
+get_similar_post_1: |-
+  client.index("INDEX_NAME").get_similar_documents({"id": "TARGET_DOCUMENT_ID", "embedder": "default"})

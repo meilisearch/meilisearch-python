@@ -165,3 +165,27 @@ def test_get_tasks_in_reverse(client):
     reverse_tasks = client.get_tasks({"reverse": "true"})
 
     assert reverse_tasks.results[0] == tasks.results[-1]
+
+
+def test_get_batches_default(client):
+    """Tests getting the batches."""
+    batches = client.get_batches()
+    assert len(batches.results) >= 1
+
+
+@pytest.mark.usefixtures("create_tasks")
+def test_get_batches_with_parameters(client):
+    """Tests getting batches with a parameter (empty or otherwise)."""
+    rev_batches = client.get_batches({"reverse": "true"})
+    batches = client.get_batches({})
+
+    assert len(batches.results) > 1
+    assert rev_batches.results[0].uid == batches.results[-1].uid
+
+
+def test_get_batch(client):
+    """Tests getting the details of a batch."""
+    batches = client.get_batches({"limit": 1})
+    uid = batches.results[0].uid
+    batch = client.get_batch(uid)
+    assert batch.uid == uid

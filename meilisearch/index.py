@@ -401,6 +401,30 @@ class Index:
         )
         return DocumentsResults(response)
 
+    def get_similar_documents(self, parameters: Mapping[str, Any]) -> Dict[str, Any]:
+        """Get the documents similar to a document.
+
+        Parameters
+        ----------
+        parameters:
+            parameters accepted by the get similar documents route: https://www.meilisearch.com/docs/reference/api/similar#body
+            "id" and "embedder" are required.
+
+        Returns
+        -------
+        results:
+            Dictionary with hits, offset, limit, processingTimeMs, and id
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.http.post(
+            f"{self.config.paths.index}/{self.uid}/{self.config.paths.similar}",
+            body=parameters,
+        )
+
     def add_documents(
         self,
         documents: Sequence[Mapping[str, Any]],
