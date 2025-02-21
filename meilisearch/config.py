@@ -42,6 +42,7 @@ class Config:
         swap = "swap-indexes"
         embedders = "embedders"
         search_cutoff_ms = "search-cutoff-ms"
+        prefix_search = "prefix-search"
         proximity_precision = "proximity-precision"
         localized_attributes = "localized-attributes"
 
