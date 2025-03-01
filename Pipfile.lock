@@ -487,12 +487,12 @@
         },
         "isort": {
             "hashes": [
-                "sha256:567954102bb47bb12e0fae62606570faacddd441e45683968c8d1734fb1af892",
-                "sha256:75d9d8a1438a9432a7d7b54f2d3b45cad9a4a0fdba43617d9873379704a8bdf1"
+                "sha256:1cb5df28dfbc742e490c5e41bad6da41b805b0a8be7bc93cd0fb2a8a890ac450",
+                "sha256:2dc5d7f65c9678d94c88dfc29161a320eec67328bc97aad576874cb4be1e9615"
             ],
             "index": "pypi",
             "markers": "python_full_version >= '3.9.0'",
-            "version": "==6.0.0"
+            "version": "==6.0.1"
         },
         "mako": {
             "hashes": [
