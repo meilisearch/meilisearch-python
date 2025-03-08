@@ -968,6 +968,58 @@ class Index:
 
         return settings
 
+    def __validate_embedder_config(
+        self, embedder_name: str, embedder_config: MutableMapping[str, Any]
+    ) -> None:
+        """Validate an embedder configuration.
+
+        Parameters
+        ----------
+        embedder_name: str
+            The name of the embedder
+        embedder_config: dict
+            The embedder configuration to validate
+
+        Raises
+        ------
+        ValueError
+            If the embedder configuration is invalid
+        """
+        # Validate source field
+        source = embedder_config.get("source")
+        if source not in ["openAi", "huggingFace", "ollama", "rest", "userProvided"]:
+            raise ValueError(
+                f"Invalid source for embedder '{embedder_name}'. "
+                f"Must be one of: 'openAi', 'huggingFace', 'ollama', 'rest', 'userProvided'."
+            )
+
+        # Validate required fields for REST embedder
+        if source == "rest" and (
+            "request" not in embedder_config or "response" not in embedder_config
+        ):
+            raise ValueError(
+                f"Embedder '{embedder_name}' with source 'rest' must include 'request' and 'response' fields."
+            )
+
+        # Validate required fields for UserProvided embedder
+        if source == "userProvided" and "dimensions" not in embedder_config:
+            raise ValueError(
+                f"Embedder '{embedder_name}' with source 'userProvided' must include 'dimensions' field."
+            )
+
+        # Validate that documentTemplate is not used with userProvided
+        if source == "userProvided" and "documentTemplate" in embedder_config:
+            raise ValueError(
+                f"Embedder '{embedder_name}' with source 'userProvided' cannot include 'documentTemplate' field."
+            )
+
+        # Clean up None values for optional fields
+        if (
+            "documentTemplateMaxBytes" in embedder_config
+            and embedder_config["documentTemplateMaxBytes"] is None
+        ):
+            del embedder_config["documentTemplateMaxBytes"]
+
     def update_settings(self, body: MutableMapping[str, Any]) -> TaskInfo:
         """Update settings of the index.
 
@@ -1008,45 +1060,14 @@ class Index:
 
         Raises
         ------
+        ValueError
+            If the provided embedder configuration is invalid.
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         if body.get("embedders"):
             for embedder_name, embedder_config in body["embedders"].items():
-                # Validate source field
-                source = embedder_config.get("source")
-                if source not in ["openAi", "huggingFace", "ollama", "rest", "userProvided"]:
-                    raise ValueError(
-                        f"Invalid source for embedder '{embedder_name}'. "
-                        f"Must be one of: 'openAi', 'huggingFace', 'ollama', 'rest', 'userProvided'."
-                    )
-
-                # Validate required fields for REST embedder
-                if source == "rest" and (
-                    "request" not in embedder_config or "response" not in embedder_config
-                ):
-                    raise ValueError(
-                        f"Embedder '{embedder_name}' with source 'rest' must include 'request' and 'response' fields."
-                    )
-
-                # Validate required fields for UserProvided embedder
-                if source == "userProvided" and "dimensions" not in embedder_config:
-                    raise ValueError(
-                        f"Embedder '{embedder_name}' with source 'userProvided' must include 'dimensions' field."
-                    )
-
-                # Validate that documentTemplate is not used with userProvided
-                if source == "userProvided" and "documentTemplate" in embedder_config:
-                    raise ValueError(
-                        f"Embedder '{embedder_name}' with source 'userProvided' cannot include 'documentTemplate' field."
-                    )
-
-                # Clean up None values for optional fields
-                if (
-                    "documentTemplateMaxBytes" in embedder_config
-                    and embedder_config["documentTemplateMaxBytes"] is None
-                ):
-                    del embedder_config["documentTemplateMaxBytes"]
+                self.__validate_embedder_config(embedder_name, embedder_config)
 
         task = self.http.patch(
             f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}", body
@@ -1977,6 +1998,14 @@ class Index:
         body: dict
             Dictionary containing the embedders configuration. Each key represents an embedder name,
             and the value is a dictionary with the embedder configuration.
+
+            Supported embedder sources:
+            - 'openAi': OpenAI embedder
+            - 'huggingFace': HuggingFace embedder
+            - 'ollama': Ollama embedder
+            - 'rest': REST API embedder
+            - 'userProvided': User-provided embedder
+
         Returns
         -------
         task_info:
@@ -1985,46 +2014,15 @@ class Index:
 
         Raises
         ------
+        ValueError
+            If the provided embedder configuration is invalid.
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
 
         if body:
             for embedder_name, embedder_config in body.items():
-                # Validate source field
-                source = embedder_config.get("source")
-                if source not in ["openAi", "huggingFace", "ollama", "rest", "userProvided"]:
-                    raise ValueError(
-                        f"Invalid source for embedder '{embedder_name}'. "
-                        f"Must be one of: 'openAi', 'huggingFace', 'ollama', 'rest', 'userProvided'."
-                    )
-
-                # Validate required fields for REST embedder
-                if source == "rest" and (
-                    "request" not in embedder_config or "response" not in embedder_config
-                ):
-                    raise ValueError(
-                        f"Embedder '{embedder_name}' with source 'rest' must include 'request' and 'response' fields."
-                    )
-
-                # Validate required fields for UserProvided embedder
-                if source == "userProvided" and "dimensions" not in embedder_config:
-                    raise ValueError(
-                        f"Embedder '{embedder_name}' with source 'userProvided' must include 'dimensions' field."
-                    )
-
-                # Validate that documentTemplate is not used with userProvided
-                if source == "userProvided" and "documentTemplate" in embedder_config:
-                    raise ValueError(
-                        f"Embedder '{embedder_name}' with source 'userProvided' cannot include 'documentTemplate' field."
-                    )
-
-                # Clean up None values for optional fields
-                if (
-                    "documentTemplateMaxBytes" in embedder_config
-                    and embedder_config["documentTemplateMaxBytes"] is None
-                ):
-                    del embedder_config["documentTemplateMaxBytes"]
+                self.__validate_embedder_config(embedder_name, embedder_config)
 
         task = self.http.patch(self.__settings_url_for(self.config.paths.embedders), body)
 
