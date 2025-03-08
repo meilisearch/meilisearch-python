@@ -1888,10 +1888,13 @@ class Index:
     def get_embedders(self) -> Embedders | None:
         """Get embedders of the index.
 
+        Retrieves the current embedder configuration from Meilisearch.
+
         Returns
         -------
-        settings:
-            The embedders settings of the index.
+        Embedders:
+            The embedders settings of the index, or None if no embedders are configured.
+            Contains a dictionary of embedder configurations, where keys are embedder names.
 
         Raises
         ------
@@ -1934,11 +1937,14 @@ class Index:
     def update_embedders(self, body: Union[MutableMapping[str, Any], None]) -> TaskInfo:
         """Update embedders of the index.
 
+        Updates the embedder configuration for the index. The embedder configuration
+        determines how Meilisearch generates vector embeddings for documents.
+
         Parameters
         ----------
         body: dict
-            Dictionary containing the embedders.
-
+            Dictionary containing the embedders configuration. Each key represents an embedder name,
+            and the value is a dictionary with the embedder configuration.
         Returns
         -------
         task_info:
@@ -1969,6 +1975,18 @@ class Index:
                         f"Embedder '{embedder_name}' with source 'rest' must include 'request' and 'response' fields."
                     )
 
+                # Validate required fields for UserProvided embedder
+                if source == "userProvided" and "dimensions" not in embedder_config:
+                    raise ValueError(
+                        f"Embedder '{embedder_name}' with source 'userProvided' must include 'dimensions' field."
+                    )
+
+                # Validate that documentTemplate is not used with userProvided
+                if source == "userProvided" and "documentTemplate" in embedder_config:
+                    raise ValueError(
+                        f"Embedder '{embedder_name}' with source 'userProvided' cannot include 'documentTemplate' field."
+                    )
+
                 # Clean up None values for optional fields
                 if (
                     "documentTemplateMaxBytes" in embedder_config
@@ -1982,6 +2000,8 @@ class Index:
 
     def reset_embedders(self) -> TaskInfo:
         """Reset embedders of the index to default values.
+
+        Removes all embedder configurations from the index.
 
         Returns
         -------
