@@ -40,7 +40,6 @@ from meilisearch.models.embedders import (
     OpenAiEmbedder,
     RestEmbedder,
     UserProvidedEmbedder,
-    validate_embedders,
 )
 from meilisearch.models.task import Task, TaskInfo, TaskResults
 from meilisearch.task import TaskHandler
@@ -1012,21 +1011,12 @@ class Index:
 
         Raises
         ------
-        ValueError
-            If the provided embedder configuration is invalid.
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request.
             Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        # Create a copy of the body to avoid modifying the original
-        body_copy = body.copy()
-
-        # Validate embedders if present
-        if "embedders" in body_copy:
-            body_copy["embedders"] = validate_embedders(body_copy["embedders"])
-
         task = self.http.patch(
-            f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}", body_copy
+            f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}", body
         )
 
         return TaskInfo(**task)
@@ -1986,16 +1976,11 @@ class Index:
 
         Raises
         ------
-        ValueError
-            If the provided embedder configuration is invalid.
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request.
             Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        # Validate embedders
-        validated_body = validate_embedders(body) if body else None
-
-        task = self.http.patch(self.__settings_url_for(self.config.paths.embedders), validated_body)
+        task = self.http.patch(self.__settings_url_for(self.config.paths.embedders), body)
 
         return TaskInfo(**task)
 
