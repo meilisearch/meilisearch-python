@@ -35,6 +35,8 @@ from meilisearch.models.index import (
     ProximityPrecision,
     TypoTolerance,
     UserProvidedEmbedder,
+    OllamaEmbedder,
+    RestEmbedder,
 )
 from meilisearch.models.task import Task, TaskInfo, TaskResults
 from meilisearch.task import TaskHandler
@@ -990,9 +992,29 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         if body.get("embedders"):
-            for _, v in body["embedders"].items():
-                if "documentTemplateMaxBytes" in v and v["documentTemplateMaxBytes"] is None:
-                    del v["documentTemplateMaxBytes"]
+            for embedder_name, embedder_config in body["embedders"].items():
+                # Validate source field
+                source = embedder_config.get("source")
+                if source not in ["openAi", "huggingFace", "ollama", "rest", "userProvided"]:
+                    raise ValueError(
+                        f"Invalid source for embedder '{embedder_name}'. "
+                        f"Must be one of: 'openAi', 'huggingFace', 'ollama', 'rest', 'userProvided'."
+                    )
+
+                # Validate required fields for REST embedder
+                if source == "rest" and (
+                    "request" not in embedder_config or "response" not in embedder_config
+                ):
+                    raise ValueError(
+                        f"Embedder '{embedder_name}' with source 'rest' must include 'request' and 'response' fields."
+                    )
+
+                # Clean up None values for optional fields
+                if (
+                    "documentTemplateMaxBytes" in embedder_config
+                    and embedder_config["documentTemplateMaxBytes"] is None
+                ):
+                    del embedder_config["documentTemplateMaxBytes"]
 
         task = self.http.patch(
             f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}", body
@@ -1881,13 +1903,30 @@ class Index:
         if not response:
             return None
 
-        embedders: dict[str, OpenAiEmbedder | HuggingFaceEmbedder | UserProvidedEmbedder] = {}
+        embedders: dict[
+            str,
+            Union[
+                OpenAiEmbedder,
+                HuggingFaceEmbedder,
+                OllamaEmbedder,
+                RestEmbedder,
+                UserProvidedEmbedder,
+            ],
+        ] = {}
         for k, v in response.items():
-            if v.get("source") == "openAi":
+            source = v.get("source")
+            if source == "openAi":
                 embedders[k] = OpenAiEmbedder(**v)
-            elif v.get("source") == "huggingFace":
+            elif source == "huggingFace":
                 embedders[k] = HuggingFaceEmbedder(**v)
+            elif source == "ollama":
+                embedders[k] = OllamaEmbedder(**v)
+            elif source == "rest":
+                embedders[k] = RestEmbedder(**v)
+            elif source == "userProvided":
+                embedders[k] = UserProvidedEmbedder(**v)
             else:
+                # Default to UserProvidedEmbedder for unknown sources
                 embedders[k] = UserProvidedEmbedder(**v)
 
         return Embedders(embedders=embedders)
@@ -1913,9 +1952,29 @@ class Index:
         """
 
         if body:
-            for _, v in body.items():
-                if "documentTemplateMaxBytes" in v and v["documentTemplateMaxBytes"] is None:
-                    del v["documentTemplateMaxBytes"]
+            for embedder_name, embedder_config in body.items():
+                # Validate source field
+                source = embedder_config.get("source")
+                if source not in ["openAi", "huggingFace", "ollama", "rest", "userProvided"]:
+                    raise ValueError(
+                        f"Invalid source for embedder '{embedder_name}'. "
+                        f"Must be one of: 'openAi', 'huggingFace', 'ollama', 'rest', 'userProvided'."
+                    )
+
+                # Validate required fields for REST embedder
+                if source == "rest" and (
+                    "request" not in embedder_config or "response" not in embedder_config
+                ):
+                    raise ValueError(
+                        f"Embedder '{embedder_name}' with source 'rest' must include 'request' and 'response' fields."
+                    )
+
+                # Clean up None values for optional fields
+                if (
+                    "documentTemplateMaxBytes" in embedder_config
+                    and embedder_config["documentTemplateMaxBytes"] is None
+                ):
+                    del embedder_config["documentTemplateMaxBytes"]
 
         task = self.http.patch(self.__settings_url_for(self.config.paths.embedders), body)
 
