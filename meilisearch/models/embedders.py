@@ -1,11 +1,8 @@
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional, Union, Mapping, MutableMapping, Type, TypeVar
+from typing import Any, Dict, List, Optional, Union
 
 from camel_converter.pydantic_base import CamelBase
-
-
-T = TypeVar("T", bound="CamelBase")
 
 
 class Distribution(CamelBase):
@@ -212,100 +209,3 @@ class Embedders(CamelBase):
             OpenAiEmbedder, HuggingFaceEmbedder, OllamaEmbedder, RestEmbedder, UserProvidedEmbedder
         ],
     ]
-
-
-def validate_embedder_config(embedder_name: str, config: Dict[str, Any]) -> Dict[str, Any]:
-    """Validate an embedder configuration.
-
-    Parameters
-    ----------
-    embedder_name: str
-        The name of the embedder
-    config: Dict[str, Any]
-        The embedder configuration
-
-    Returns
-    -------
-    Dict[str, Any]
-        The validated and cleaned embedder configuration
-
-    Raises
-    ------
-    ValueError
-        If the configuration is invalid
-    """
-    # Validate source field
-    source = config.get("source")
-    if source not in ["openAi", "huggingFace", "ollama", "rest", "userProvided"]:
-        raise ValueError(
-            f"Invalid source for embedder '{embedder_name}'. "
-            f"Must be one of: 'openAi', 'huggingFace', 'ollama', 'rest', 'userProvided'."
-        )
-
-    # Create a copy of the config to avoid modifying the original
-    cleaned_config = config.copy()
-
-    # Validate based on source type
-    if source == "openAi":
-        OpenAiEmbedder(**cleaned_config)
-    elif source == "huggingFace":
-        HuggingFaceEmbedder(**cleaned_config)
-    elif source == "ollama":
-        OllamaEmbedder(**cleaned_config)
-    elif source == "rest":
-        # Validate required fields for REST embedder
-        if "request" not in cleaned_config or "response" not in cleaned_config:
-            raise ValueError(
-                f"Embedder '{embedder_name}' with source 'rest' must include 'request' and 'response' fields."
-            )
-        RestEmbedder(**cleaned_config)
-    elif source == "userProvided":
-        # Validate required fields for UserProvided embedder
-        if "dimensions" not in cleaned_config:
-            raise ValueError(
-                f"Embedder '{embedder_name}' with source 'userProvided' must include 'dimensions' field."
-            )
-
-        # Remove fields not supported by UserProvided
-        for field in ["documentTemplate", "documentTemplateMaxBytes"]:
-            if field in cleaned_config:
-                del cleaned_config[field]
-
-        UserProvidedEmbedder(**cleaned_config)
-
-    # Clean up None values for optional fields
-    if (
-        "documentTemplateMaxBytes" in cleaned_config
-        and cleaned_config["documentTemplateMaxBytes"] is None
-    ):
-        del cleaned_config["documentTemplateMaxBytes"]
-
-    return cleaned_config
-
-
-def validate_embedders(embedders: MutableMapping[str, Any]) -> MutableMapping[str, Any]:
-    """Validate a dictionary of embedder configurations.
-
-    Parameters
-    ----------
-    embedders: MutableMapping[str, Any]
-        Dictionary of embedder configurations
-
-    Returns
-    -------
-    MutableMapping[str, Any]
-        The validated and cleaned embedder configurations
-
-    Raises
-    ------
-    ValueError
-        If any configuration is invalid
-    """
-    if not embedders:
-        return embedders
-
-    cleaned_embedders = {}
-    for embedder_name, config in embedders.items():
-        cleaned_embedders[embedder_name] = validate_embedder_config(embedder_name, config)
-
-    return cleaned_embedders
