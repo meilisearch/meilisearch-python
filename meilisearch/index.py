@@ -25,18 +25,22 @@ from meilisearch.config import Config
 from meilisearch.errors import version_error_hint_message
 from meilisearch.models.document import Document, DocumentsResults
 from meilisearch.models.index import (
-    Embedders,
     Faceting,
-    HuggingFaceEmbedder,
     IndexStats,
     LocalizedAttributes,
-    OpenAiEmbedder,
     Pagination,
     ProximityPrecision,
     TypoTolerance,
-    UserProvidedEmbedder,
+)
+from meilisearch.models.embedders import (
+    Distribution,
+    Embedders,
+    HuggingFaceEmbedder,
     OllamaEmbedder,
+    OpenAiEmbedder,
     RestEmbedder,
+    UserProvidedEmbedder,
+    validate_embedders,
 )
 from meilisearch.models.task import Task, TaskInfo, TaskResults
 from meilisearch.task import TaskHandler
@@ -968,58 +972,6 @@ class Index:
 
         return settings
 
-    def __validate_embedder_config(
-        self, embedder_name: str, embedder_config: MutableMapping[str, Any]
-    ) -> None:
-        """Validate an embedder configuration.
-
-        Parameters
-        ----------
-        embedder_name: str
-            The name of the embedder
-        embedder_config: dict
-            The embedder configuration to validate
-
-        Raises
-        ------
-        ValueError
-            If the embedder configuration is invalid
-        """
-        # Validate source field
-        source = embedder_config.get("source")
-        if source not in ["openAi", "huggingFace", "ollama", "rest", "userProvided"]:
-            raise ValueError(
-                f"Invalid source for embedder '{embedder_name}'. "
-                f"Must be one of: 'openAi', 'huggingFace', 'ollama', 'rest', 'userProvided'."
-            )
-
-        # Validate required fields for REST embedder
-        if source == "rest" and (
-            "request" not in embedder_config or "response" not in embedder_config
-        ):
-            raise ValueError(
-                f"Embedder '{embedder_name}' with source 'rest' must include 'request' and 'response' fields."
-            )
-
-        # Validate required fields for UserProvided embedder
-        if source == "userProvided" and "dimensions" not in embedder_config:
-            raise ValueError(
-                f"Embedder '{embedder_name}' with source 'userProvided' must include 'dimensions' field."
-            )
-
-        # Validate that documentTemplate is not used with userProvided
-        if source == "userProvided" and "documentTemplate" in embedder_config:
-            raise ValueError(
-                f"Embedder '{embedder_name}' with source 'userProvided' cannot include 'documentTemplate' field."
-            )
-
-        # Clean up None values for optional fields
-        if (
-            "documentTemplateMaxBytes" in embedder_config
-            and embedder_config["documentTemplateMaxBytes"] is None
-        ):
-            del embedder_config["documentTemplateMaxBytes"]
-
     def update_settings(self, body: MutableMapping[str, Any]) -> TaskInfo:
         """Update settings of the index.
 
@@ -1063,14 +1015,18 @@ class Index:
         ValueError
             If the provided embedder configuration is invalid.
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request.
+            Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        if body.get("embedders"):
-            for embedder_name, embedder_config in body["embedders"].items():
-                self.__validate_embedder_config(embedder_name, embedder_config)
+        # Create a copy of the body to avoid modifying the original
+        body_copy = body.copy()
+
+        # Validate embedders if present
+        if "embedders" in body_copy:
+            body_copy["embedders"] = validate_embedders(body_copy["embedders"])
 
         task = self.http.patch(
-            f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}", body
+            f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}", body_copy
         )
 
         return TaskInfo(**task)
@@ -2006,6 +1962,22 @@ class Index:
             - 'rest': REST API embedder
             - 'userProvided': User-provided embedder
 
+            Required fields depend on the embedder source:
+            - 'rest' requires 'request' and 'response' fields
+            - 'userProvided' requires 'dimensions' field
+
+            Optional fields (availability depends on source):
+            - 'url': The URL Meilisearch contacts when querying the embedder
+            - 'apiKey': Authentication token for the embedder
+            - 'model': The model used for generating vectors
+            - 'documentTemplate': Template defining the data sent to the embedder
+            - 'documentTemplateMaxBytes': Maximum size of rendered document template
+            - 'dimensions': Number of dimensions in the chosen model
+            - 'revision': Model revision hash (only for 'huggingFace')
+            - 'distribution': Object with 'mean' and 'sigma' fields
+            - 'binaryQuantized': Boolean to convert vector dimensions to 1-bit values
+            - 'headers': Custom headers for requests (only for 'rest')
+
         Returns
         -------
         task_info:
@@ -2017,14 +1989,13 @@ class Index:
         ValueError
             If the provided embedder configuration is invalid.
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request.
+            Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
+        # Validate embedders
+        validated_body = validate_embedders(body) if body else None
 
-        if body:
-            for embedder_name, embedder_config in body.items():
-                self.__validate_embedder_config(embedder_name, embedder_config)
-
-        task = self.http.patch(self.__settings_url_for(self.config.paths.embedders), body)
+        task = self.http.patch(self.__settings_url_for(self.config.paths.embedders), validated_body)
 
         return TaskInfo(**task)
 

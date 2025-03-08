@@ -1,8 +1,11 @@
 from __future__ import annotations
 
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Union, Mapping, MutableMapping, Type, TypeVar
 
 from camel_converter.pydantic_base import CamelBase
+
+
+T = TypeVar("T", bound="CamelBase")
 
 
 class Distribution(CamelBase):
@@ -55,25 +58,6 @@ class OpenAiEmbedder(CamelBase):
     distribution: Optional[Distribution] = None
     binary_quantized: Optional[bool] = None
 
-    @classmethod
-    def validate_config(cls, name: str, config: Dict[str, Any]) -> None:
-        """Validate the configuration for an OpenAI embedder.
-
-        Parameters
-        ----------
-        name: str
-            The name of the embedder
-        config: Dict[str, Any]
-            The configuration to validate
-
-        Raises
-        ------
-        ValueError
-            If the configuration is invalid
-        """
-        if config.get("source") != "openAi":
-            raise ValueError(f"Embedder '{name}' must have source 'openAi'")
-
 
 class HuggingFaceEmbedder(CamelBase):
     """HuggingFace embedder configuration.
@@ -113,25 +97,6 @@ class HuggingFaceEmbedder(CamelBase):
     distribution: Optional[Distribution] = None
     binary_quantized: Optional[bool] = None
 
-    @classmethod
-    def validate_config(cls, name: str, config: Dict[str, Any]) -> None:
-        """Validate the configuration for a HuggingFace embedder.
-
-        Parameters
-        ----------
-        name: str
-            The name of the embedder
-        config: Dict[str, Any]
-            The configuration to validate
-
-        Raises
-        ------
-        ValueError
-            If the configuration is invalid
-        """
-        if config.get("source") != "huggingFace":
-            raise ValueError(f"Embedder '{name}' must have source 'huggingFace'")
-
 
 class OllamaEmbedder(CamelBase):
     """Ollama embedder configuration.
@@ -167,25 +132,6 @@ class OllamaEmbedder(CamelBase):
     document_template_max_bytes: Optional[int] = None
     distribution: Optional[Distribution] = None
     binary_quantized: Optional[bool] = None
-
-    @classmethod
-    def validate_config(cls, name: str, config: Dict[str, Any]) -> None:
-        """Validate the configuration for an Ollama embedder.
-
-        Parameters
-        ----------
-        name: str
-            The name of the embedder
-        config: Dict[str, Any]
-            The configuration to validate
-
-        Raises
-        ------
-        ValueError
-            If the configuration is invalid
-        """
-        if config.get("source") != "ollama":
-            raise ValueError(f"Embedder '{name}' must have source 'ollama'")
 
 
 class RestEmbedder(CamelBase):
@@ -229,31 +175,6 @@ class RestEmbedder(CamelBase):
     distribution: Optional[Distribution] = None
     binary_quantized: Optional[bool] = None
 
-    @classmethod
-    def validate_config(cls, name: str, config: Dict[str, Any]) -> None:
-        """Validate the configuration for a REST embedder.
-
-        Parameters
-        ----------
-        name: str
-            The name of the embedder
-        config: Dict[str, Any]
-            The configuration to validate
-
-        Raises
-        ------
-        ValueError
-            If the configuration is invalid
-        """
-        if config.get("source") != "rest":
-            raise ValueError(f"Embedder '{name}' must have source 'rest'")
-
-        if "request" not in config:
-            raise ValueError(f"Embedder '{name}' with source 'rest' must include 'request' field")
-
-        if "response" not in config:
-            raise ValueError(f"Embedder '{name}' with source 'rest' must include 'response' field")
-
 
 class UserProvidedEmbedder(CamelBase):
     """User-provided embedder configuration.
@@ -275,35 +196,6 @@ class UserProvidedEmbedder(CamelBase):
     distribution: Optional[Distribution] = None
     binary_quantized: Optional[bool] = None
 
-    @classmethod
-    def validate_config(cls, name: str, config: Dict[str, Any]) -> None:
-        """Validate the configuration for a user-provided embedder.
-
-        Parameters
-        ----------
-        name: str
-            The name of the embedder
-        config: Dict[str, Any]
-            The configuration to validate
-
-        Raises
-        ------
-        ValueError
-            If the configuration is invalid
-        """
-        if config.get("source") != "userProvided":
-            raise ValueError(f"Embedder '{name}' must have source 'userProvided'")
-
-        if "dimensions" not in config:
-            raise ValueError(
-                f"Embedder '{name}' with source 'userProvided' must include 'dimensions' field"
-            )
-
-        if "documentTemplate" in config:
-            raise ValueError(
-                f"Embedder '{name}' with source 'userProvided' cannot include 'documentTemplate' field"
-            )
-
 
 class Embedders(CamelBase):
     """Container for embedder configurations.
@@ -321,43 +213,99 @@ class Embedders(CamelBase):
         ],
     ]
 
-    @classmethod
-    def validate_config(cls, config: Dict[str, Dict[str, Any]]) -> None:
-        """Validate the configuration for embedders.
 
-        Parameters
-        ----------
-        config: Dict[str, Dict[str, Any]]
-            The configuration to validate, where keys are embedder names and values are embedder configurations
+def validate_embedder_config(embedder_name: str, config: Dict[str, Any]) -> Dict[str, Any]:
+    """Validate an embedder configuration.
 
-        Raises
-        ------
-        ValueError
-            If the configuration is invalid
-        """
-        for name, embedder_config in config.items():
-            source = embedder_config.get("source")
-            if source not in ["openAi", "huggingFace", "ollama", "rest", "userProvided"]:
-                raise ValueError(
-                    f"Invalid source for embedder '{name}'. "
-                    f"Must be one of: 'openAi', 'huggingFace', 'ollama', 'rest', 'userProvided'."
-                )
+    Parameters
+    ----------
+    embedder_name: str
+        The name of the embedder
+    config: Dict[str, Any]
+        The embedder configuration
 
-            # Clean up None values for optional fields
-            if (
-                "documentTemplateMaxBytes" in embedder_config
-                and embedder_config["documentTemplateMaxBytes"] is None
-            ):
-                del embedder_config["documentTemplateMaxBytes"]
+    Returns
+    -------
+    Dict[str, Any]
+        The validated and cleaned embedder configuration
 
-            # Validate based on source
-            if source == "openAi":
-                OpenAiEmbedder.validate_config(name, embedder_config)
-            elif source == "huggingFace":
-                HuggingFaceEmbedder.validate_config(name, embedder_config)
-            elif source == "ollama":
-                OllamaEmbedder.validate_config(name, embedder_config)
-            elif source == "rest":
-                RestEmbedder.validate_config(name, embedder_config)
-            elif source == "userProvided":
-                UserProvidedEmbedder.validate_config(name, embedder_config)
+    Raises
+    ------
+    ValueError
+        If the configuration is invalid
+    """
+    # Validate source field
+    source = config.get("source")
+    if source not in ["openAi", "huggingFace", "ollama", "rest", "userProvided"]:
+        raise ValueError(
+            f"Invalid source for embedder '{embedder_name}'. "
+            f"Must be one of: 'openAi', 'huggingFace', 'ollama', 'rest', 'userProvided'."
+        )
+
+    # Create a copy of the config to avoid modifying the original
+    cleaned_config = config.copy()
+
+    # Validate based on source type
+    if source == "openAi":
+        OpenAiEmbedder(**cleaned_config)
+    elif source == "huggingFace":
+        HuggingFaceEmbedder(**cleaned_config)
+    elif source == "ollama":
+        OllamaEmbedder(**cleaned_config)
+    elif source == "rest":
+        # Validate required fields for REST embedder
+        if "request" not in cleaned_config or "response" not in cleaned_config:
+            raise ValueError(
+                f"Embedder '{embedder_name}' with source 'rest' must include 'request' and 'response' fields."
+            )
+        RestEmbedder(**cleaned_config)
+    elif source == "userProvided":
+        # Validate required fields for UserProvided embedder
+        if "dimensions" not in cleaned_config:
+            raise ValueError(
+                f"Embedder '{embedder_name}' with source 'userProvided' must include 'dimensions' field."
+            )
+
+        # Remove fields not supported by UserProvided
+        for field in ["documentTemplate", "documentTemplateMaxBytes"]:
+            if field in cleaned_config:
+                del cleaned_config[field]
+
+        UserProvidedEmbedder(**cleaned_config)
+
+    # Clean up None values for optional fields
+    if (
+        "documentTemplateMaxBytes" in cleaned_config
+        and cleaned_config["documentTemplateMaxBytes"] is None
+    ):
+        del cleaned_config["documentTemplateMaxBytes"]
+
+    return cleaned_config
+
+
+def validate_embedders(embedders: MutableMapping[str, Any]) -> MutableMapping[str, Any]:
+    """Validate a dictionary of embedder configurations.
+
+    Parameters
+    ----------
+    embedders: MutableMapping[str, Any]
+        Dictionary of embedder configurations
+
+    Returns
+    -------
+    MutableMapping[str, Any]
+        The validated and cleaned embedder configurations
+
+    Raises
+    ------
+    ValueError
+        If any configuration is invalid
+    """
+    if not embedders:
+        return embedders
+
+    cleaned_embedders = {}
+    for embedder_name, config in embedders.items():
+        cleaned_embedders[embedder_name] = validate_embedder_config(embedder_name, config)
+
+    return cleaned_embedders
