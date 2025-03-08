@@ -65,8 +65,6 @@ class HuggingFaceEmbedder(CamelBase):
         The embedder source, must be "huggingFace"
     url: Optional[str]
         The URL Meilisearch contacts when querying the embedder
-    api_key: Optional[str]
-        Authentication token Meilisearch should send with each request to the embedder
     model: Optional[str]
         The model your embedder uses when generating vectors (defaults to BAAI/bge-base-en-v1.5)
     dimensions: Optional[int]
@@ -85,7 +83,6 @@ class HuggingFaceEmbedder(CamelBase):
 
     source: str = "huggingFace"
     url: Optional[str] = None
-    api_key: Optional[str] = None
     model: Optional[str] = None  # Defaults to BAAI/bge-base-en-v1.5
     dimensions: Optional[int] = None
     revision: Optional[str] = None
@@ -143,7 +140,7 @@ class RestEmbedder(CamelBase):
     api_key: Optional[str]
         Authentication token Meilisearch should send with each request to the embedder
     dimensions: Optional[int]
-        Number of dimensions in the chosen model
+        Number of dimensions in the embeddings
     document_template: Optional[str]
         Template defining the data Meilisearch sends to the embedder
     document_template_max_bytes: Optional[int]
