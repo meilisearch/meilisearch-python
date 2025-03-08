@@ -6,6 +6,16 @@ from typing import Any, Dict, Iterator, List, Optional, Union
 from camel_converter import to_snake
 from camel_converter.pydantic_base import CamelBase
 
+from meilisearch.models.embedders import (
+    Distribution,
+    Embedders,
+    HuggingFaceEmbedder,
+    OllamaEmbedder,
+    OpenAiEmbedder,
+    RestEmbedder,
+    UserProvidedEmbedder,
+)
+
 
 class IndexStats:
     __dict: Dict
@@ -57,77 +67,3 @@ class ProximityPrecision(str, Enum):
 class LocalizedAttributes(CamelBase):
     attribute_patterns: List[str]
     locales: List[str]
-
-
-class Distribution(CamelBase):
-    mean: float
-    sigma: float
-
-
-class OpenAiEmbedder(CamelBase):
-    source: str = "openAi"
-    url: Optional[str] = None
-    api_key: Optional[str] = None  # Can be provided through a CLI option or environment variable
-    model: Optional[str] = None  # Defaults to text-embedding-3-small
-    dimensions: Optional[int] = None  # Uses the model default
-    document_template: Optional[str] = None
-    document_template_max_bytes: Optional[int] = None  # Default to 400
-    distribution: Optional[Distribution] = None
-    binary_quantized: Optional[bool] = None
-
-
-class HuggingFaceEmbedder(CamelBase):
-    source: str = "huggingFace"
-    url: Optional[str] = None
-    api_key: Optional[str] = None
-    model: Optional[str] = None  # Defaults to BAAI/bge-base-en-v1.5
-    dimensions: Optional[int] = None
-    revision: Optional[str] = None
-    document_template: Optional[str] = None
-    document_template_max_bytes: Optional[int] = None  # Default to 400
-    distribution: Optional[Distribution] = None
-    binary_quantized: Optional[bool] = None
-
-
-class OllamaEmbedder(CamelBase):
-    source: str = "ollama"
-    url: Optional[str] = None
-    api_key: Optional[str] = None
-    model: Optional[str] = None
-    dimensions: Optional[int] = None
-    document_template: Optional[str] = None
-    document_template_max_bytes: Optional[int] = None
-    distribution: Optional[Distribution] = None
-    binary_quantized: Optional[bool] = None
-
-
-class RestEmbedder(CamelBase):
-    source: str = "rest"
-    url: Optional[str] = None
-    api_key: Optional[str] = None
-    dimensions: Optional[int] = None
-    document_template: Optional[str] = None
-    document_template_max_bytes: Optional[int] = None
-    request: Dict[str, Any]
-    response: Dict[str, Any]
-    headers: Optional[Dict[str, str]] = None
-    distribution: Optional[Distribution] = None
-    binary_quantized: Optional[bool] = None
-
-
-class UserProvidedEmbedder(CamelBase):
-    source: str = "userProvided"
-    dimensions: int
-    document_template: Optional[str] = None
-    document_template_max_bytes: Optional[int] = None
-    distribution: Optional[Distribution] = None
-    binary_quantized: Optional[bool] = None
-
-
-class Embedders(CamelBase):
-    embedders: Dict[
-        str,
-        Union[
-            OpenAiEmbedder, HuggingFaceEmbedder, OllamaEmbedder, RestEmbedder, UserProvidedEmbedder
-        ],
-    ]
