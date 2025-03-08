@@ -977,6 +977,26 @@ class Index:
         ----------
         body:
             Dictionary containing the settings of the index.
+            Supported settings include:
+            - 'rankingRules': List of ranking rules
+            - 'distinctAttribute': Attribute for deduplication
+            - 'searchableAttributes': Attributes that can be searched
+            - 'displayedAttributes': Attributes to display in search results
+            - 'stopWords': Words ignored in search queries
+            - 'synonyms': Dictionary of synonyms
+            - 'filterableAttributes': Attributes that can be used for filtering
+            - 'sortableAttributes': Attributes that can be used for sorting
+            - 'typoTolerance': Settings for typo tolerance
+            - 'pagination': Settings for pagination
+            - 'faceting': Settings for faceting
+            - 'dictionary': List of custom dictionary words
+            - 'separatorTokens': List of separator tokens
+            - 'nonSeparatorTokens': List of non-separator tokens
+            - 'embedders': Dictionary of embedder configurations for AI-powered search
+            - 'searchCutoffMs': Maximum search time in milliseconds
+            - 'proximityPrecision': Precision for proximity ranking
+            - 'localizedAttributes': Settings for localized attributes
+
             More information:
             https://www.meilisearch.com/docs/reference/api/settings#update-settings
 
@@ -1007,6 +1027,18 @@ class Index:
                 ):
                     raise ValueError(
                         f"Embedder '{embedder_name}' with source 'rest' must include 'request' and 'response' fields."
+                    )
+
+                # Validate required fields for UserProvided embedder
+                if source == "userProvided" and "dimensions" not in embedder_config:
+                    raise ValueError(
+                        f"Embedder '{embedder_name}' with source 'userProvided' must include 'dimensions' field."
+                    )
+
+                # Validate that documentTemplate is not used with userProvided
+                if source == "userProvided" and "documentTemplate" in embedder_config:
+                    raise ValueError(
+                        f"Embedder '{embedder_name}' with source 'userProvided' cannot include 'documentTemplate' field."
                     )
 
                 # Clean up None values for optional fields
