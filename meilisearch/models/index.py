@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Dict, Iterator, List, Optional, Union
+from typing import Any, Dict, Iterator, List, Optional
 
 from camel_converter import to_snake
 from camel_converter.pydantic_base import CamelBase
@@ -57,29 +57,3 @@ class ProximityPrecision(str, Enum):
 class LocalizedAttributes(CamelBase):
     attribute_patterns: List[str]
     locales: List[str]
-
-
-class OpenAiEmbedder(CamelBase):
-    source: str = "openAi"
-    model: Optional[str] = None  # Defaults to text-embedding-3-small
-    dimensions: Optional[int] = None  # Uses the model default
-    api_key: Optional[str] = None  # Can be provided through a CLI option or environment variable
-    document_template: Optional[str] = None
-    document_template_max_bytes: Optional[int] = None  # Default to 400
-
-
-class HuggingFaceEmbedder(CamelBase):
-    source: str = "huggingFace"
-    model: Optional[str] = None  # Defaults to BAAI/bge-base-en-v1.5
-    revision: Optional[str] = None
-    document_template: Optional[str] = None
-    document_template_max_bytes: Optional[int] = None  # Default to 400
-
-
-class UserProvidedEmbedder(CamelBase):
-    source: str = "userProvided"
-    dimensions: int
-
-
-class Embedders(CamelBase):
-    embedders: Dict[str, Union[OpenAiEmbedder, HuggingFaceEmbedder, UserProvidedEmbedder]]
