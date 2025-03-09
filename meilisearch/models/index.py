@@ -1,20 +1,10 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Dict, Iterator, List, Optional, Union
+from typing import Any, Dict, Iterator, List, Optional
 
 from camel_converter import to_snake
 from camel_converter.pydantic_base import CamelBase
-
-from meilisearch.models.embedders import (
-    Distribution,
-    Embedders,
-    HuggingFaceEmbedder,
-    OllamaEmbedder,
-    OpenAiEmbedder,
-    RestEmbedder,
-    UserProvidedEmbedder,
-)
 
 
 class IndexStats:

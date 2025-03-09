@@ -33,7 +33,6 @@ from meilisearch.models.index import (
     TypoTolerance,
 )
 from meilisearch.models.embedders import (
-    Distribution,
     Embedders,
     HuggingFaceEmbedder,
     OllamaEmbedder,
