@@ -509,6 +509,10 @@ def test_vector_search(index_with_documents_and_vectors):
         opt_params={"vector": [0.1, 0.2], "hybrid": {"semanticRatio": 1.0, "embedder": "default"}},
     )
     assert len(response["hits"]) > 0
+    # Check that semanticHitCount field is present in the response
+    assert "semanticHitCount" in response
+    # With semanticRatio = 1.0, all hits should be semantic
+    assert response["semanticHitCount"] == len(response["hits"])
 
 
 def test_hybrid_search(index_with_documents_and_vectors):
@@ -517,6 +521,10 @@ def test_hybrid_search(index_with_documents_and_vectors):
         "movie", opt_params={"hybrid": {"semanticRatio": 0.5, "embedder": "default"}}
     )
     assert len(response["hits"]) > 0
+    # Check that semanticHitCount field is present in the response
+    assert "semanticHitCount" in response
+    # semanticHitCount should be an integer
+    assert isinstance(response["semanticHitCount"], int)
 
 
 def test_search_distinct(index_with_documents):
