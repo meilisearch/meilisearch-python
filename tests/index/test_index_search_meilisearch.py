@@ -543,3 +543,18 @@ def test_search_ranking_threshold(query, ranking_score_threshold, expected, inde
         query, {"rankingScoreThreshold": ranking_score_threshold}
     )
     assert len(response["hits"]) == expected
+
+
+def test_vector_search_with_retrieve_vectors(index_with_documents_and_vectors):
+    """Tests vector search with retrieveVectors parameter."""
+    response = index_with_documents_and_vectors().search(
+        "",
+        opt_params={
+            "vector": [0.1, 0.2],
+            "retrieveVectors": True,
+            "hybrid": {"semanticRatio": 1.0, "embedder": "default"},
+        },
+    )
+    assert len(response["hits"]) > 0
+    # Check that _vectors field is present in the response
+    assert "_vectors" in response["hits"][0]
