@@ -564,5 +564,5 @@ def test_vector_search_with_retrieve_vectors(index_with_documents_and_vectors):
         },
     )
     assert len(response["hits"]) > 0
-    # Check that _vectors field is present in the response
+    # Check that _vectors field is present in the response hits
     assert "_vectors" in response["hits"][0]
