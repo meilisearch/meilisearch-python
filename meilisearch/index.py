@@ -280,14 +280,15 @@ class Index:
     def search(self, query: str, opt_params: Optional[Mapping[str, Any]] = None) -> Dict[str, Any]:
         """Search in the index.
 
+        https://www.meilisearch.com/docs/reference/api/search
+
         Parameters
         ----------
         query:
             String containing the searched word(s)
         opt_params (optional):
             Dictionary containing optional query parameters.
-            Note: The vector parameter is only available in Meilisearch >= v1.13.0
-            https://www.meilisearch.com/docs/reference/api/search#search-in-an-index
+            For hybrid search, include a 'hybrid' object with 'semanticRatio' and 'embedder' fields.
 
         Returns
         -------
@@ -301,7 +302,9 @@ class Index:
         """
         if opt_params is None:
             opt_params = {}
+
         body = {"q": query, **opt_params}
+
         return self.http.post(
             f"{self.config.paths.index}/{self.uid}/{self.config.paths.search}",
             body=body,

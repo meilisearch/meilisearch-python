@@ -503,9 +503,18 @@ def test_show_ranking_score(index_with_documents):
 
 
 def test_vector_search(index_with_documents_and_vectors):
+    """Tests vector search with hybrid parameters."""
     response = index_with_documents_and_vectors().search(
         "",
         opt_params={"vector": [0.1, 0.2], "hybrid": {"semanticRatio": 1.0, "embedder": "default"}},
+    )
+    assert len(response["hits"]) > 0
+
+
+def test_hybrid_search(index_with_documents_and_vectors):
+    """Tests hybrid search with semantic ratio and embedder."""
+    response = index_with_documents_and_vectors().search(
+        "movie", opt_params={"hybrid": {"semanticRatio": 0.5, "embedder": "default"}}
     )
     assert len(response["hits"]) > 0
 
