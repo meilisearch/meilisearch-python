@@ -564,5 +564,57 @@ def test_vector_search_with_retrieve_vectors(index_with_documents_and_vectors):
         },
     )
     assert len(response["hits"]) > 0
-    # Check that _vectors field is present in the response hits
+    # Check that the first hit has a _vectors field
     assert "_vectors" in response["hits"][0]
+    # Check that the _vectors field contains the default embedder
+    assert "default" in response["hits"][0]["_vectors"]
+
+
+def test_get_similar_documents_with_identical_vectors(empty_index):
+    """Tests get_similar_documents method with documents having identical vectors."""
+    # Create documents with identical vector embeddings
+    identical_vector = [0.5, 0.5]
+    documents = [
+        {"id": "doc1", "title": "Document 1", "_vectors": {"default": identical_vector}},
+        {"id": "doc2", "title": "Document 2", "_vectors": {"default": identical_vector}},
+        {"id": "doc3", "title": "Document 3", "_vectors": {"default": identical_vector}},
+        # Add a document with a different vector to verify it's not returned first
+        {"id": "doc4", "title": "Document 4", "_vectors": {"default": [0.1, 0.1]}},
+    ]
+
+    # Set up the index with the documents
+    index = empty_index()
+
+    # Configure the embedder
+    settings_update_task = index.update_embedders(
+        {
+            "default": {
+                "source": "userProvided",
+                "dimensions": 2,
+            }
+        }
+    )
+    index.wait_for_task(settings_update_task.task_uid)
+
+    # Add the documents
+    document_addition_task = index.add_documents(documents)
+    index.wait_for_task(document_addition_task.task_uid)
+
+    # Test get_similar_documents with doc1
+    response = index.get_similar_documents({"id": "doc1", "embedder": "default"})
+
+    # Verify response structure
+    assert isinstance(response, dict)
+    assert "hits" in response
+    assert len(response["hits"]) >= 2  # Should find at least doc2 and doc3
+    assert "id" in response
+    assert response["id"] == "doc1"
+
+    # Verify that doc2 and doc3 are in the results (they have identical vectors to doc1)
+    result_ids = [hit["id"] for hit in response["hits"]]
+    assert "doc2" in result_ids
+    assert "doc3" in result_ids
+
+    # Verify that doc4 is not the first result (it has a different vector)
+    if "doc4" in result_ids:
+        assert result_ids[0] != "doc4"
