@@ -1,4 +1,4 @@
-FROM python:3.8.4-buster
+FROM python:3.9-buster
 
 COPY Pipfile .
 COPY Pipfile.lock .
