@@ -288,7 +288,13 @@ class Index:
             String containing the searched word(s)
         opt_params (optional):
             Dictionary containing optional query parameters.
-            For hybrid search, include a 'hybrid' object with 'semanticRatio' and 'embedder' fields.
+            Common parameters include:
+            - hybrid: Dict with 'semanticRatio' and 'embedder' fields for hybrid search
+            - vector: Array of numbers for vector search
+            - retrieveVectors: Boolean to include vector data in search results
+            - filter: Filter queries by an attribute's value
+            - limit: Maximum number of documents returned
+            - offset: Number of documents to skip
 
         Returns
         -------
