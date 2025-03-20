@@ -1942,31 +1942,7 @@ class Index:
         Parameters
         ----------
         body: dict
-            Dictionary containing the embedders configuration. Each key represents an embedder name,
-            and the value is a dictionary with the embedder configuration.
-
-            Supported embedder sources:
-            - 'openAi': OpenAI embedder
-            - 'huggingFace': HuggingFace embedder
-            - 'ollama': Ollama embedder
-            - 'rest': REST API embedder
-            - 'userProvided': User-provided embedder
-
-            Required fields depend on the embedder source:
-            - 'rest' requires 'request' and 'response' fields
-            - 'userProvided' requires 'dimensions' field
-
-            Optional fields (availability depends on source):
-            - 'url': The URL Meilisearch contacts when querying the embedder
-            - 'apiKey': Authentication token for the embedder
-            - 'model': The model used for generating vectors
-            - 'documentTemplate': Template defining the data sent to the embedder
-            - 'documentTemplateMaxBytes': Maximum size of rendered document template
-            - 'dimensions': Number of dimensions in the chosen model
-            - 'revision': Model revision hash (only for 'huggingFace')
-            - 'distribution': Object with 'mean' and 'sigma' fields
-            - 'binaryQuantized': Boolean to convert vector dimensions to 1-bit values
-            - 'headers': Custom headers for requests (only for 'rest')
+            Dictionary containing the embedders configuration.
 
         Returns
         -------
