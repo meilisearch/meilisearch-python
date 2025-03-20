@@ -1961,7 +1961,7 @@ class Index:
             An error containing details about why Meilisearch can't process your request.
             Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        if body.get("embedders"):
+        if body is not None and body.get("embedders"):
             for _, v in body["embedders"].items():
                 if "documentTemplateMaxBytes" in v and v["documentTemplateMaxBytes"] is None:
                     del v["documentTemplateMaxBytes"]
