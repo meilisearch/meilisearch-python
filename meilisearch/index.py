@@ -1024,6 +1024,11 @@ class Index:
             An error containing details about why Meilisearch can't process your request.
             Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
+        if body.get("embedders"):
+            for _, v in body["embedders"].items():
+                if "documentTemplateMaxBytes" in v and v["documentTemplateMaxBytes"] is None:
+                    del v["documentTemplateMaxBytes"]
+
         task = self.http.patch(
             f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}", body
         )
@@ -1956,6 +1961,11 @@ class Index:
             An error containing details about why Meilisearch can't process your request.
             Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
+        if body.get("embedders"):
+            for _, v in body["embedders"].items():
+                if "documentTemplateMaxBytes" in v and v["documentTemplateMaxBytes"] is None:
+                    del v["documentTemplateMaxBytes"]
+
         task = self.http.patch(self.__settings_url_for(self.config.paths.embedders), body)
 
         return TaskInfo(**task)
