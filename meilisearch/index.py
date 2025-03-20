@@ -26,6 +26,7 @@ from meilisearch.errors import version_error_hint_message
 from meilisearch.models.document import Document, DocumentsResults
 from meilisearch.models.embedders import (
     Embedders,
+    EmbedderType,
     HuggingFaceEmbedder,
     OllamaEmbedder,
     OpenAiEmbedder,
@@ -966,7 +967,7 @@ class Index:
         )
 
         if settings.get("embedders"):
-            embedders: dict[str, OpenAiEmbedder | HuggingFaceEmbedder | UserProvidedEmbedder] = {}
+            embedders: dict[str, EmbedderType] = {}
             for k, v in settings["embedders"].items():
                 if v.get("source") == "openAi":
                     embedders[k] = OpenAiEmbedder(**v)
@@ -1913,16 +1914,7 @@ class Index:
         if not response:
             return None
 
-        embedders: dict[
-            str,
-            Union[
-                OpenAiEmbedder,
-                HuggingFaceEmbedder,
-                OllamaEmbedder,
-                RestEmbedder,
-                UserProvidedEmbedder,
-            ],
-        ] = {}
+        embedders: dict[str, EmbedderType] = {}
         for k, v in response.items():
             source = v.get("source")
             if source == "openAi":

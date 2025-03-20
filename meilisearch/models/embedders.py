@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 from typing import Any, Dict, Optional, Union
+
 from camel_converter.pydantic_base import CamelBase
 
 
@@ -189,6 +191,16 @@ class UserProvidedEmbedder(CamelBase):
     binary_quantized: Optional[bool] = None
 
 
+# Type alias for the embedder union type
+EmbedderType = Union[
+    OpenAiEmbedder,
+    HuggingFaceEmbedder,
+    OllamaEmbedder,
+    RestEmbedder,
+    UserProvidedEmbedder,
+]
+
+
 class Embedders(CamelBase):
     """Container for embedder configurations.
 
@@ -198,9 +210,4 @@ class Embedders(CamelBase):
         Dictionary of embedder configurations, where keys are embedder names
     """
 
-    embedders: Dict[
-        str,
-        Union[
-            OpenAiEmbedder, HuggingFaceEmbedder, OllamaEmbedder, RestEmbedder, UserProvidedEmbedder
-        ],
-    ]
+    embedders: Dict[str, EmbedderType]
