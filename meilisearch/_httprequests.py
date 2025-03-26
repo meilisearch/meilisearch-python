@@ -12,7 +12,7 @@ from meilisearch.errors import (
     MeilisearchCommunicationError,
     MeilisearchTimeoutError,
 )
-from meilisearch.models.index import ProximityPrecision
+from meilisearch.models.index import PrefixSearch, ProximityPrecision
 from meilisearch.version import qualified_version
 
 
@@ -33,6 +33,7 @@ class HttpRequests:
                 Mapping[str, Any],
                 Sequence[Mapping[str, Any]],
                 List[str],
+                bool,
                 bytes,
                 str,
                 int,
@@ -64,7 +65,7 @@ class HttpRequests:
                 serialize_body = isinstance(body, dict) or body
                 data = (
                     json.dumps(body, cls=serializer)
-                    if serialize_body
+                    if isinstance(body, bool) or serialize_body
                     else "" if body == "" else "null"
                 )
 
@@ -111,9 +112,11 @@ class HttpRequests:
                 Mapping[str, Any],
                 Sequence[Mapping[str, Any]],
                 List[str],
+                bool,
                 bytes,
                 str,
                 int,
+                PrefixSearch,
                 ProximityPrecision,
             ]
         ] = None,
