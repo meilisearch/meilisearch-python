@@ -24,17 +24,22 @@ from meilisearch._utils import iso_to_date_time
 from meilisearch.config import Config
 from meilisearch.errors import version_error_hint_message
 from meilisearch.models.document import Document, DocumentsResults
-from meilisearch.models.index import (
+from meilisearch.models.embedders import (
     Embedders,
-    Faceting,
+    EmbedderType,
     HuggingFaceEmbedder,
+    OllamaEmbedder,
+    OpenAiEmbedder,
+    RestEmbedder,
+    UserProvidedEmbedder,
+)
+from meilisearch.models.index import (
+    Faceting,
     IndexStats,
     LocalizedAttributes,
-    OpenAiEmbedder,
     Pagination,
     ProximityPrecision,
     TypoTolerance,
-    UserProvidedEmbedder,
 )
 from meilisearch.models.task import Task, TaskInfo, TaskResults
 from meilisearch.task import TaskHandler
@@ -275,14 +280,21 @@ class Index:
     def search(self, query: str, opt_params: Optional[Mapping[str, Any]] = None) -> Dict[str, Any]:
         """Search in the index.
 
+        https://www.meilisearch.com/docs/reference/api/search
+
         Parameters
         ----------
         query:
             String containing the searched word(s)
         opt_params (optional):
             Dictionary containing optional query parameters.
-            Note: The vector parameter is only available in Meilisearch >= v1.13.0
-            https://www.meilisearch.com/docs/reference/api/search#search-in-an-index
+            Common parameters include:
+            - hybrid: Dict with 'semanticRatio' and 'embedder' fields for hybrid search
+            - vector: Array of numbers for vector search
+            - retrieveVectors: Boolean to include vector data in search results
+            - filter: Filter queries by an attribute's value
+            - limit: Maximum number of documents returned
+            - offset: Number of documents to skip
 
         Returns
         -------
@@ -296,7 +308,9 @@ class Index:
         """
         if opt_params is None:
             opt_params = {}
+
         body = {"q": query, **opt_params}
+
         return self.http.post(
             f"{self.config.paths.index}/{self.uid}/{self.config.paths.search}",
             body=body,
@@ -953,7 +967,7 @@ class Index:
         )
 
         if settings.get("embedders"):
-            embedders: dict[str, OpenAiEmbedder | HuggingFaceEmbedder | UserProvidedEmbedder] = {}
+            embedders: dict[str, EmbedderType] = {}
             for k, v in settings["embedders"].items():
                 if v.get("source") == "openAi":
                     embedders[k] = OpenAiEmbedder(**v)
@@ -975,6 +989,26 @@ class Index:
         ----------
         body:
             Dictionary containing the settings of the index.
+            Supported settings include:
+            - 'rankingRules': List of ranking rules
+            - 'distinctAttribute': Attribute for deduplication
+            - 'searchableAttributes': Attributes that can be searched
+            - 'displayedAttributes': Attributes to display in search results
+            - 'stopWords': Words ignored in search queries
+            - 'synonyms': Dictionary of synonyms
+            - 'filterableAttributes': Attributes that can be used for filtering
+            - 'sortableAttributes': Attributes that can be used for sorting
+            - 'typoTolerance': Settings for typo tolerance
+            - 'pagination': Settings for pagination
+            - 'faceting': Settings for faceting
+            - 'dictionary': List of custom dictionary words
+            - 'separatorTokens': List of separator tokens
+            - 'nonSeparatorTokens': List of non-separator tokens
+            - 'embedders': Dictionary of embedder configurations for AI-powered search
+            - 'searchCutoffMs': Maximum search time in milliseconds
+            - 'proximityPrecision': Precision for proximity ranking
+            - 'localizedAttributes': Settings for localized attributes
+
             More information:
             https://www.meilisearch.com/docs/reference/api/settings#update-settings
 
@@ -987,7 +1021,8 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request.
+            Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         if body.get("embedders"):
             for _, v in body["embedders"].items():
@@ -1866,10 +1901,13 @@ class Index:
     def get_embedders(self) -> Embedders | None:
         """Get embedders of the index.
 
+        Retrieves the current embedder configuration from Meilisearch.
+
         Returns
         -------
-        settings:
-            The embedders settings of the index.
+        Embedders:
+            The embedders settings of the index, or None if no embedders are configured.
+            Contains a dictionary of embedder configurations, where keys are embedder names.
 
         Raises
         ------
@@ -1881,13 +1919,21 @@ class Index:
         if not response:
             return None
 
-        embedders: dict[str, OpenAiEmbedder | HuggingFaceEmbedder | UserProvidedEmbedder] = {}
+        embedders: dict[str, EmbedderType] = {}
         for k, v in response.items():
-            if v.get("source") == "openAi":
+            source = v.get("source")
+            if source == "openAi":
                 embedders[k] = OpenAiEmbedder(**v)
-            elif v.get("source") == "huggingFace":
+            elif source == "huggingFace":
                 embedders[k] = HuggingFaceEmbedder(**v)
+            elif source == "ollama":
+                embedders[k] = OllamaEmbedder(**v)
+            elif source == "rest":
+                embedders[k] = RestEmbedder(**v)
+            elif source == "userProvided":
+                embedders[k] = UserProvidedEmbedder(**v)
             else:
+                # Default to UserProvidedEmbedder for unknown sources
                 embedders[k] = UserProvidedEmbedder(**v)
 
         return Embedders(embedders=embedders)
@@ -1895,10 +1941,13 @@ class Index:
     def update_embedders(self, body: Union[MutableMapping[str, Any], None]) -> TaskInfo:
         """Update embedders of the index.
 
+        Updates the embedder configuration for the index. The embedder configuration
+        determines how Meilisearch generates vector embeddings for documents.
+
         Parameters
         ----------
         body: dict
-            Dictionary containing the embedders.
+            Dictionary containing the embedders configuration.
 
         Returns
         -------
@@ -1909,11 +1958,11 @@ class Index:
         Raises
         ------
         MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+            An error containing details about why Meilisearch can't process your request.
+            Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-
-        if body:
-            for _, v in body.items():
+        if body is not None and body.get("embedders"):
+            for _, v in body["embedders"].items():
                 if "documentTemplateMaxBytes" in v and v["documentTemplateMaxBytes"] is None:
                     del v["documentTemplateMaxBytes"]
 
@@ -1923,6 +1972,8 @@ class Index:
 
     def reset_embedders(self) -> TaskInfo:
         """Reset embedders of the index to default values.
+
+        Removes all embedder configurations from the index.
 
         Returns
         -------

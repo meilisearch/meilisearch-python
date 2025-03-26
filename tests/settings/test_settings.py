@@ -1,7 +1,7 @@
 # pylint: disable=redefined-outer-name
 import pytest
 
-from meilisearch.models.index import OpenAiEmbedder, UserProvidedEmbedder
+from meilisearch.models.embedders import OpenAiEmbedder, UserProvidedEmbedder
 
 
 @pytest.fixture
