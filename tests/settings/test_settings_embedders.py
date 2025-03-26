@@ -44,11 +44,10 @@ def test_reset_embedders(new_embedders, empty_index):
     assert response_last is None
 
 
-def test_embedder_format_fields(empty_index):
-    """Tests that each embedder type has the required fields and proper format."""
+def test_openai_embedder_format(empty_index):
+    """Tests that OpenAi embedder has the required fields and proper format."""
     index = empty_index()
 
-    # Test OpenAi embedder
     openai_embedder = {
         "openai": {
             "source": "openAi",
@@ -72,7 +71,11 @@ def test_embedder_format_fields(empty_index):
     assert embedders.embedders["openai"].distribution.sigma == 0.1
     assert embedders.embedders["openai"].binary_quantized is False
 
-    # Test HuggingFace embedder
+
+def test_huggingface_embedder_format(empty_index):
+    """Tests that HuggingFace embedder has the required fields and proper format."""
+    index = empty_index()
+
     huggingface_embedder = {
         "huggingface": {
             "source": "huggingFace",
@@ -95,7 +98,11 @@ def test_embedder_format_fields(empty_index):
     assert embedders.embedders["huggingface"].distribution.sigma == 0.1
     assert embedders.embedders["huggingface"].binary_quantized is False
 
-    # Test Ollama embedder
+
+def test_ollama_embedder_format(empty_index):
+    """Tests that Ollama embedder has the required fields and proper format."""
+    index = empty_index()
+
     ollama_embedder = {
         "ollama": {
             "source": "ollama",
@@ -121,7 +128,11 @@ def test_embedder_format_fields(empty_index):
     assert embedders.embedders["ollama"].distribution.sigma == 0.1
     assert embedders.embedders["ollama"].binary_quantized is False
 
-    # Test Rest embedder
+
+def test_rest_embedder_format(empty_index):
+    """Tests that Rest embedder has the required fields and proper format."""
+    index = empty_index()
+
     rest_embedder = {
         "rest": {
             "source": "rest",
@@ -151,7 +162,11 @@ def test_embedder_format_fields(empty_index):
     assert embedders.embedders["rest"].distribution.sigma == 0.1
     assert embedders.embedders["rest"].binary_quantized is False
 
-    # Test UserProvided embedder
+
+def test_user_provided_embedder_format(empty_index):
+    """Tests that UserProvided embedder has the required fields and proper format."""
+    index = empty_index()
+
     user_provided_embedder = {
         "user_provided": {
             "source": "userProvided",
