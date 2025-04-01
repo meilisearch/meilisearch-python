@@ -471,11 +471,11 @@
         },
         "importlib-metadata": {
             "hashes": [
-                "sha256:45e54197d28b7a7f1559e60b95e7c567032b602131fbd588f1497f47880aa68b",
-                "sha256:71522656f0abace1d072b9e5481a48f07c138e00f079c38c8f883823f9c26bd7"
+                "sha256:02a89390c1e15fdfdc0d7c6b25cb3e62650d0494005c97d6f148bf5b9787525e",
+                "sha256:310b41d755445d74569f993ccfc22838295d9fe005425094fad953d7f15c8580"
             ],
-            "markers": "python_version >= '3.8'",
-            "version": "==8.5.0"
+            "markers": "python_version >= '3.9'",
+            "version": "==8.6.1"
         },
         "iniconfig": {
             "hashes": [
@@ -496,11 +496,11 @@
         },
         "mako": {
             "hashes": [
-                "sha256:42f48953c7eb91332040ff567eb7eea69b22e7a4affbc5ba8e845e8f730f6627",
-                "sha256:577b97e414580d3e088d47c2dbbe9594aa7a5146ed2875d4dfa9075af2dd3cc8"
+                "sha256:95920acccb578427a9aa38e37a186b1e43156c87260d7ba18ca63aa4c7cbd3a1",
+                "sha256:b5d65ff3462870feec922dbccf38f6efb44e5714d7b593a656be86663d8600ac"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==1.3.8"
+            "version": "==1.3.9"
         },
         "markdown": {
             "hashes": [
@@ -650,12 +650,12 @@
         },
         "pdoc3": {
             "hashes": [
-                "sha256:b614436239716e1655e538f68a42c62a0bac566e70ddd86c58bc66d6a9ec90a0",
-                "sha256:fc40607e3f46860ba42c02d30075fe1a52c039b77ffa8e86c1cbc4a8078841b3"
+                "sha256:1ea5e84b87a754d191fb64bf5e517ca6c50d0d84a614c1efecf6b46d290ae387",
+                "sha256:8b72723767bd48d899812d2aec8375fc1c3476e179455db0b4575e6dccb44b93"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.9'",
-            "version": "==0.11.5"
+            "version": "==0.11.6"
         },
         "pipenv": {
             "hashes": [
@@ -918,11 +918,11 @@
         },
         "zipp": {
             "hashes": [
-                "sha256:a817ac80d6cf4b23bf7f2828b7cabf326f15a001bea8b1f9b49631780ba28350",
-                "sha256:bc9eb26f4506fda01b81bcde0ca78103b6e62f991b381fec825435c836edbc29"
+                "sha256:2c9958f6430a2040341a52eb608ed6dd93ef4392e02ffe219417c1b28b5dd1f4",
+                "sha256:ac1bbe05fd2991f160ebce24ffbac5f6d11d83dc90891255885223d42b3cd931"
             ],
-            "markers": "python_version >= '3.8'",
-            "version": "==3.20.2"
+            "markers": "python_version >= '3.9'",
+            "version": "==3.21.0"
         }
     }
 }
