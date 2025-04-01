@@ -799,12 +799,12 @@
         },
         "types-requests": {
             "hashes": [
-                "sha256:0003e0124e2cbefefb88222ff822b48616af40c74df83350f599a650c8de483b",
-                "sha256:3d909dc4eaab159c0d964ebe8bfa326a7afb4578d8706408d417e17d61b0c500"
+                "sha256:72ff80f84b15eb3aa7a8e2625fffb6a93f2ad5a0c20215fc1dcfa61117bcb2a2",
+                "sha256:c9e67228ea103bd811c96984fac36ed2ae8da87a36a633964a21f199d60baf32"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.9'",
-            "version": "==2.32.0.20250301"
+            "version": "==2.32.0.20250328"
         },
         "typing-extensions": {
             "hashes": [
