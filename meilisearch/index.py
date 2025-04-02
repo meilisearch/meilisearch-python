@@ -28,8 +28,6 @@ from meilisearch.models.embedders import (
     Embedders,
     EmbedderType,
     HuggingFaceEmbedder,
-    OllamaEmbedder,
-    OpenAiEmbedder,
     RestEmbedder,
     UserProvidedEmbedder,
 )
@@ -37,8 +35,11 @@ from meilisearch.models.index import (
     Faceting,
     IndexStats,
     LocalizedAttributes,
+    OllamaEmbedder,
+    OpenAiEmbedder,
     Pagination,
     ProximityPrecision,
+    RestEmbedder,
     TypoTolerance,
 )
 from meilisearch.models.task import Task, TaskInfo, TaskResults
@@ -971,8 +972,12 @@ class Index:
             for k, v in settings["embedders"].items():
                 if v.get("source") == "openAi":
                     embedders[k] = OpenAiEmbedder(**v)
+                elif v.get("source") == "ollama":
+                    embedders[k] = OllamaEmbedder(**v)
                 elif v.get("source") == "huggingFace":
                     embedders[k] = HuggingFaceEmbedder(**v)
+                elif v.get("source") == "rest":
+                    embedders[k] = RestEmbedder(**v)
                 else:
                     embedders[k] = UserProvidedEmbedder(**v)
 
@@ -1918,6 +1923,7 @@ class Index:
 
         if not response:
             return None
+
 
         embedders: dict[str, EmbedderType] = {}
         for k, v in response.items():

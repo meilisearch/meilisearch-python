@@ -54,6 +54,11 @@ class ProximityPrecision(str, Enum):
     BY_ATTRIBUTE = "byAttribute"
 
 
+class EmbedderDistribution(CamelBase):
+    mean: float
+    sigma: float
+
+
 class LocalizedAttributes(CamelBase):
     attribute_patterns: List[str]
     locales: List[str]
