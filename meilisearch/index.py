@@ -28,6 +28,8 @@ from meilisearch.models.embedders import (
     Embedders,
     EmbedderType,
     HuggingFaceEmbedder,
+    OllamaEmbedder,
+    OpenAiEmbedder,
     RestEmbedder,
     UserProvidedEmbedder,
 )
@@ -35,11 +37,8 @@ from meilisearch.models.index import (
     Faceting,
     IndexStats,
     LocalizedAttributes,
-    OllamaEmbedder,
-    OpenAiEmbedder,
     Pagination,
     ProximityPrecision,
-    RestEmbedder,
     TypoTolerance,
 )
 from meilisearch.models.task import Task, TaskInfo, TaskResults
@@ -1924,7 +1923,6 @@ class Index:
         if not response:
             return None
 
-
         embedders: dict[str, EmbedderType] = {}
         for k, v in response.items():
             source = v.get("source")
@@ -1968,9 +1966,24 @@ class Index:
             Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         if body is not None and body.get("embedders"):
-            for _, v in body["embedders"].items():
-                if "documentTemplateMaxBytes" in v and v["documentTemplateMaxBytes"] is None:
-                    del v["documentTemplateMaxBytes"]
+            embedders: dict[str, EmbedderType] = {}
+            for k, v in body["embedders"].items():
+                source = v.get("source")
+                if source == "openAi":
+                    embedders[k] = OpenAiEmbedder(**v)
+                elif source == "huggingFace":
+                    embedders[k] = HuggingFaceEmbedder(**v)
+                elif source == "ollama":
+                    embedders[k] = OllamaEmbedder(**v)
+                elif source == "rest":
+                    embedders[k] = RestEmbedder(**v)
+                elif source == "userProvided":
+                    embedders[k] = UserProvidedEmbedder(**v)
+                else:
+                    # Default to UserProvidedEmbedder for unknown sources
+                    embedders[k] = UserProvidedEmbedder(**v)
+
+            body = {"embedders": {k: v.model_dump(by_alias=True) for k, v in embedders.items()}}
 
         task = self.http.patch(self.__settings_url_for(self.config.paths.embedders), body)
 
