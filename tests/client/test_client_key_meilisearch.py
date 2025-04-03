@@ -46,6 +46,15 @@ def test_create_keys_default(client, test_key_info):
     assert key.indexes == test_key_info["indexes"]
 
 
+def test_create_keys_without_desc(client, test_nondescript_key_info):
+    """Tests the creation of a key with no optional argument."""
+    key = client.create_key(test_nondescript_key_info)
+    print(key)
+
+    assert key.name == "keyWithoutDescription"
+    assert key.description is None
+
+
 def test_create_keys_with_options(client, test_key_info):
     """Tests the creation of a key with arguments."""
     key = client.create_key(
