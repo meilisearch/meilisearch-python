@@ -30,9 +30,11 @@ from meilisearch.models.index import (
     HuggingFaceEmbedder,
     IndexStats,
     LocalizedAttributes,
+    OllamaEmbedder,
     OpenAiEmbedder,
     Pagination,
     ProximityPrecision,
+    RestEmbedder,
     TypoTolerance,
     UserProvidedEmbedder,
 )
@@ -281,12 +283,7 @@ class Index:
             String containing the searched word(s)
         opt_params (optional):
             Dictionary containing optional query parameters.
-            Note: The vector parameter is only available in Meilisearch >= v1.3.0, and is experimental
-            Meilisearch v1.3.0. In order to use this feature in Meilisearch v1.3.0 you first need to
-            enable the feature by sending a PATCH request to /experimental-features with
-            { "vectoreStore": true }. Because this feature is experimental it may be removed or
-            updated causing breaking changes in this library without a major version bump so use
-            with caution.
+            Note: The vector parameter is only available in Meilisearch >= v1.13.0
             https://www.meilisearch.com/docs/reference/api/search#search-in-an-index
 
         Returns
@@ -958,12 +955,23 @@ class Index:
         )
 
         if settings.get("embedders"):
-            embedders: dict[str, OpenAiEmbedder | HuggingFaceEmbedder | UserProvidedEmbedder] = {}
+            embedders: dict[
+                str,
+                OpenAiEmbedder
+                | HuggingFaceEmbedder
+                | OllamaEmbedder
+                | RestEmbedder
+                | UserProvidedEmbedder,
+            ] = {}
             for k, v in settings["embedders"].items():
                 if v.get("source") == "openAi":
                     embedders[k] = OpenAiEmbedder(**v)
+                elif v.get("source") == "ollama":
+                    embedders[k] = OllamaEmbedder(**v)
                 elif v.get("source") == "huggingFace":
                     embedders[k] = HuggingFaceEmbedder(**v)
+                elif v.get("source") == "rest":
+                    embedders[k] = RestEmbedder(**v)
                 else:
                     embedders[k] = UserProvidedEmbedder(**v)
 
@@ -1886,12 +1894,23 @@ class Index:
         if not response:
             return None
 
-        embedders: dict[str, OpenAiEmbedder | HuggingFaceEmbedder | UserProvidedEmbedder] = {}
+        embedders: dict[
+            str,
+            OpenAiEmbedder
+            | HuggingFaceEmbedder
+            | OllamaEmbedder
+            | RestEmbedder
+            | UserProvidedEmbedder,
+        ] = {}
         for k, v in response.items():
             if v.get("source") == "openAi":
                 embedders[k] = OpenAiEmbedder(**v)
+            elif v.get("source") == "ollama":
+                embedders[k] = OllamaEmbedder(**v)
             elif v.get("source") == "huggingFace":
                 embedders[k] = HuggingFaceEmbedder(**v)
+            elif v.get("source") == "rest":
+                embedders[k] = RestEmbedder(**v)
             else:
                 embedders[k] = UserProvidedEmbedder(**v)
 

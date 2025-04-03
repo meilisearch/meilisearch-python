@@ -41,7 +41,6 @@ def test_get_settings_default(empty_index):
     assert response["synonyms"] == {}
 
 
-@pytest.mark.usefixtures("enable_vector_search")
 def test_update_settings(new_settings, empty_index):
     """Tests updating some settings."""
     index = empty_index()
@@ -61,7 +60,6 @@ def test_update_settings(new_settings, empty_index):
     assert isinstance(response["embedders"]["open_ai"], OpenAiEmbedder)
 
 
-@pytest.mark.usefixtures("enable_vector_search")
 def test_reset_settings(new_settings, empty_index):
     """Tests resetting all the settings to their default value."""
     index = empty_index()
@@ -94,4 +92,4 @@ def test_reset_settings(new_settings, empty_index):
     assert response["searchableAttributes"] == ["*"]
     assert response["stopWords"] == []
     assert response["synonyms"] == {}
-    assert response.get("embedders") is None
+    assert response["embedders"] == {}

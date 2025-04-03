@@ -265,7 +265,6 @@ def test_get_documents_filter_with_fields(index_with_documents):
     assert next(iter(genres)) == "action"
 
 
-@pytest.mark.usefixtures("enable_vector_search")
 def test_get_similar_documents(empty_index):
     index = empty_index()
     index.update_embedders({"manual": {"source": "userProvided", "dimensions": 3}})
