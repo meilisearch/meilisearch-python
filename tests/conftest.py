@@ -2,6 +2,7 @@
 import json
 from typing import Optional
 
+import requests
 from pytest import fixture
 
 import meilisearch
@@ -231,6 +232,40 @@ def get_private_key(client):
     keys = client.get_keys().results
     key = next(x for x in keys if "Default Search API" in x.name)
     return key
+
+
+@fixture
+def enable_vector_search():
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"vectorStore": True},
+        timeout=10,
+    )
+    yield
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"vectorStore": False},
+        timeout=10,
+    )
+
+
+@fixture
+def enable_edit_documents_by_function():
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"editDocumentsByFunction": True},
+        timeout=10,
+    )
+    yield
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"editDocumentsByFunction": False},
+        timeout=10,
+    )
 
 
 @fixture
