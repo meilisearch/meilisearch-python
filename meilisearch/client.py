@@ -756,6 +756,28 @@ class Client:
 
         return jwt_token
 
+    def add_or_update_networks(self, body: Union[MutableMapping[str, Any], None]):
+        """Set all the Remote Networks
+
+        Parameters
+        ----------
+        body:
+            Remote networks that are allowed
+
+        Returns
+        -------
+        remote networks:
+            Remote Networks containing information about the networks allowed/present.
+            https://www.meilisearch.com/docs/reference/api/network
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        response = self.http.patch(path=f"{self.config.paths.network}", body=body)
+        return response
+
     @staticmethod
     def _base64url_encode(data: bytes) -> str:
         return base64.urlsafe_b64encode(data).decode("utf-8").replace("=", "")
