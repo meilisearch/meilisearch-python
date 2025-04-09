@@ -80,6 +80,16 @@ class HttpRequests:
             raise MeilisearchTimeoutError(str(err)) from err
         except requests.exceptions.ConnectionError as err:
             raise MeilisearchCommunicationError(str(err)) from err
+        except requests.exceptions.InvalidSchema as err:
+            if "://" not in self.config.url:
+                raise MeilisearchCommunicationError(
+                    f"""
+                    Invalid URL {self.config.url}, no scheme/protocol supplied.
+                    Did you mean https://{self.config.url}?
+                    """
+                ) from err
+
+            raise MeilisearchCommunicationError(str(err)) from err
 
     def get(self, path: str) -> Any:
         return self.send_request(requests.get, path)
