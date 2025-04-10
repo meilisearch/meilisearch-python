@@ -756,7 +756,7 @@ class Client:
 
         return jwt_token
 
-    def add_or_update_networks(self, body: Union[MutableMapping[str, Any], None]):
+    def add_or_update_networks(self, body: Union[MutableMapping[str, Any], None]) -> HttpRequests:
         """Set all the Remote Networks
 
         Parameters
