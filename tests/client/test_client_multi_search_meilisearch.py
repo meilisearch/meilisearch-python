@@ -1,7 +1,7 @@
 import pytest
 
 from meilisearch.errors import MeilisearchApiError
-from tests.common import INDEX_UID, REMOTE_MS_1
+from tests.common import INDEX_UID, REMOTE_MS_1, REMOTE_MS_2
 
 
 def test_basic_multi_search(client, empty_index):
@@ -81,11 +81,26 @@ def test_multi_search_with_federation_options(client, index_with_documents):
 def test_multi_search_with_network(client, index_with_documents):
     """Tests multi-search with network, with federation options."""
     index_with_documents()
+    resp = client.add_or_update_networks(
+        {
+            "remotes": {
+                REMOTE_MS_1: {
+                    "url": "http://ms-1235.example.meilisearch.io",
+                    "searchApiKey": "xxxxxxxx",
+                },
+                REMOTE_MS_2: {
+                    "url": "http://ms-1255.example.meilisearch.io",
+                    "searchApiKey": "xxxxxxxx",
+                },
+            }
+        }
+    )
     response = client.multi_search(
         [{"indexUid": INDEX_UID, "q": "", "federationOptions": {"remote": REMOTE_MS_1}}],
         federation={},
     )
 
+    assert "results" not in resp
     assert "results" not in response
     assert isinstance(response["hits"], list)
     assert len(response["hits"]) >= 0
