@@ -81,12 +81,13 @@ def test_multi_search_with_network(client, index_with_documents):
     """Tests multi-search with network, with federation options."""
     index_with_documents()
     response = client.multi_search(
-        [{"indexUid": INDEX_UID, "q": "", "federationOptions": {"remote": REMOTE_MS_1}}], federation={}
+        [{"indexUid": INDEX_UID, "q": "", "federationOptions": {"remote": REMOTE_MS_1}}],
+        federation={},
     )
 
     assert "results" not in response
     assert isinstance(response["hits"], list)
     assert len(response["hits"]) >= 0
-    assert response['hits'][0]["_federation"]["indexUid"] == INDEX_UID
-    assert response['hits'][0]["_federation"]["remote"] == REMOTE_MS_1
+    assert response["hits"][0]["_federation"]["indexUid"] == INDEX_UID
+    assert response["hits"][0]["_federation"]["remote"] == REMOTE_MS_1
     assert response["remoteErrors"] == {}
