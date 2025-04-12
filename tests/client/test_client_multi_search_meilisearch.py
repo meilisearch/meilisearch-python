@@ -77,6 +77,7 @@ def test_multi_search_with_federation_options(client, index_with_documents):
     assert response["offset"] == 0
 
 
+@pytest.mark.usefixtures("enable_network_options")
 def test_multi_search_with_network(client, index_with_documents):
     """Tests multi-search with network, with federation options."""
     index_with_documents()
