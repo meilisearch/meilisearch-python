@@ -282,7 +282,7 @@ def enable_network_options():
         f"{common.BASE_URL}/experimental-features",
         headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
         json={"network": True},
-        timeout=10
+        timeout=10,
     )
     yield
     requests.patch(
