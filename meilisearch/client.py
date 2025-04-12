@@ -233,6 +233,8 @@ class Client:
         queries:
             List of dictionaries containing the specified indexes and their search queries
             https://www.meilisearch.com/docs/reference/api/search#search-in-an-index
+            It can also include remote options in federationOptions for each query
+            https://www.meilisearch.com/docs/reference/api/network
         federation: (optional):
             Dictionary containing offset and limit
             https://www.meilisearch.com/docs/reference/api/multi_search
@@ -756,7 +758,7 @@ class Client:
 
         return jwt_token
 
-    def add_or_update_networks(self, body: Union[MutableMapping[str, Any], None]) -> HttpRequests:
+    def add_or_update_networks(self, body: Union[MutableMapping[str, Any], None]) -> Dict[str, str]:
         """Set all the Remote Networks
 
         Parameters
@@ -775,8 +777,23 @@ class Client:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        response = self.http.patch(path=f"{self.config.paths.network}", body=body)
-        return response
+
+        return self.http.patch(path=f"{self.config.paths.network}", body=body)
+
+    def get_all_networks(self) -> Dict[str, str]:
+        """Fetches all the remote-networks present
+
+        Returns
+        -------
+        remote networks:
+            All remote networks containeing information about each remote and their respective remote-name and searchApi key
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.http.get(path=f"{self.config.paths.network}")
 
     @staticmethod
     def _base64url_encode(data: bytes) -> str:

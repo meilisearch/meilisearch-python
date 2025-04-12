@@ -274,3 +274,20 @@ def new_embedders():
         "default": UserProvidedEmbedder(dimensions=1).model_dump(by_alias=True),
         "open_ai": OpenAiEmbedder().model_dump(by_alias=True),
     }
+
+
+@fixture
+def enable_network_options():
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"network": True},
+        timeout=10
+    )
+    yield
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"network": False},
+        timeout=10,
+    )
