@@ -93,7 +93,7 @@ def test_multi_search_with_network(client, index_with_documents):
                     "url": "http://ms-1255.example.meilisearch.io",
                     "searchApiKey": "xxxxxxxx",
                 },
-            },
+            }
         }
     )
     response = client.multi_search(
