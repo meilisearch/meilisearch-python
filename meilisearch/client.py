@@ -786,7 +786,7 @@ class Client:
         Returns
         -------
         remote networks:
-            All remote networks containeing information about each remote and their respective remote-name and searchApi key
+            All remote networks containing information about each remote and their respective remote-name and searchApi key
 
         Raises
         ------
