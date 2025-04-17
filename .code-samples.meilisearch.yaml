@@ -397,12 +397,11 @@ landing_getting_started_1: |-
   ])
 getting_started_check_task_status: |-
   client.get_task(0)
-getting_started_add_documents_md: |-
-  ```bash
-  pip3 install meilisearch
-  ```
+getting_started_add_documents: |-
+  # In the command line:
+  # pip3 install meilisearch
 
-  ```python
+  # In your .py file:
   import meilisearch
   import json
 
@@ -411,15 +410,8 @@ getting_started_add_documents_md: |-
   json_file = open('movies.json', encoding='utf-8')
   movies = json.load(json_file)
   client.index('movies').add_documents(movies)
-  ```
-
-  [About this SDK](https://github.com/meilisearch/meilisearch-python/)
-getting_started_search_md: |-
-  ```python
+getting_started_search: |-
   client.index('movies').search('botman')
-  ```
-
-  [About this SDK](https://github.com/meilisearch/meilisearch-python/)
 getting_started_add_meteorites: |-
   import json
 
