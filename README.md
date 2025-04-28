@@ -235,3 +235,23 @@ If you want to know more about the development workflow or want to contribute, p
 <hr>
 
 **Meilisearch** provides and maintains many **SDKs and Integration tools** like this one. We want to provide everyone with an **amazing search experience for any kind of project**. If you want to contribute, make suggestions, or just know what's going on right now, visit us in the [integration-guides](https://github.com/meilisearch/integration-guides) repository.
+
+## Auto-Launch Feature
+
+When using the Python client with `auto_launch=True`, the client will automatically start a MeiliSearch instance if one is not already running. The port management system ensures:
+
+- If port 0 is specified (`http://localhost:0`), an available port will be automatically assigned
+- Port conflicts are handled gracefully with automatic fallback to another available port
+- Proper cleanup of port locks when the client is terminated
+- Thread-safe port allocation to prevent race conditions
+
+Example:
+```python
+from meilisearch.client import Client
+
+# Will automatically find an available port
+client = Client("http://localhost:0", auto_launch=True)
+
+# Will use port 7700 if available, otherwise find another port
+client = Client("http://localhost:7700", auto_launch=True)
+```
