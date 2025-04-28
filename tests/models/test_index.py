@@ -7,7 +7,7 @@ from meilisearch.models.index import IndexStats
 
 def test_getattr():
     document = IndexStats({"field1": "test 1", "fiels2": "test 2"})
-    assert document.__getattr__("field1") == "field1"
+    assert document.__getattr__("field1") == "test 1"
 
 
 def test_getattr_not_found():
