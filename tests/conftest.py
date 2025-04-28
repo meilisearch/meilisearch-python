@@ -7,7 +7,7 @@ from pytest import fixture
 
 import meilisearch
 from meilisearch.errors import MeilisearchApiError
-from meilisearch.models.index import OpenAiEmbedder, UserProvidedEmbedder
+from meilisearch.models.embedders import OpenAiEmbedder, UserProvidedEmbedder
 from tests import common
 
 
