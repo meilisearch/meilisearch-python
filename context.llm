@@ -1,0 +1,51 @@
+# Meilisearch Python Client Context
+
+## Project Overview
+This repository contains the official Python client for Meilisearch, an open-source search engine. The client provides a Python interface to interact with Meilisearch's REST API, making it easy for Python developers to integrate search functionality into their applications.
+
+## Key Components
+1. **Client (`client.py`)**: The main entry point for interacting with Meilisearch
+2. **Index (`index.py`)**: Handles document management and search operations
+3. **HTTP Requests (`_httprequests.py`)**: Manages API communication
+4. **Models**: Contains data structures for API responses
+5. **Task Management (`task.py`)**: Handles asynchronous operations
+
+## Core Features
+- Document management (add, update, delete)
+- Search functionality with typo tolerance
+- Custom search parameters and filters
+- Index settings management
+- Task tracking for asynchronous operations
+- Custom serialization support
+
+## Technical Requirements
+- Python 3.8+
+- Compatible with Meilisearch v1.2 and above
+- Uses standard Python libraries for HTTP requests
+
+## Project Structure
+```
+meilisearch/
+├── client.py          # Main client implementation
+├── index.py           # Index operations
+├── _httprequests.py   # HTTP communication
+├── task.py           # Task management
+├── models/           # Data structures
+└── errors.py         # Error handling
+```
+
+## Important Notes
+- The client is designed to be simple and intuitive
+- Supports both synchronous and asynchronous operations
+- Provides type hints for better IDE support
+- Follows Meilisearch's API conventions
+- Includes comprehensive error handling
+
+## Development Guidelines
+- Follows Python best practices
+- Maintains backward compatibility
+- Includes comprehensive testing
+- Provides detailed documentation
+- Supports custom serialization for complex data types
+
+This context file will be updated as we work on the project to maintain a clear understanding of the codebase and its evolution. 
