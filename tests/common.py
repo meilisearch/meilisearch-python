@@ -13,3 +13,6 @@ INDEX_FIXTURE = [
     {"uid": INDEX_UID2, "options": {"primaryKey": "book_id"}},
     {"uid": INDEX_UID3, "options": {"uid": "wrong", "primaryKey": "book_id"}},
 ]
+
+REMOTE_MS_1 = "ms_001"
+REMOTE_MS_2 = "ms_002"
