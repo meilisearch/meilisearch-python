@@ -1,6 +1,7 @@
 # pylint: disable=redefined-outer-name
 
-from meilisearch.models.index import OpenAiEmbedder, UserProvidedEmbedder
+from meilisearch.models.index import CompositeEmbedder, HuggingFaceEmbedder, OpenAiEmbedder, UserProvidedEmbedder
+import pytest
 
 
 def test_get_default_embedders(empty_index):
@@ -42,3 +43,30 @@ def test_reset_embedders(new_embedders, empty_index):
     assert isinstance(response_get.embedders["open_ai"], OpenAiEmbedder)
     response_last = index.get_embedders()
     assert response_last is None
+
+
+@pytest.mark.usefixtures("enable_composite_embedders")
+def test_composite_embedders_configurable(empty_index):
+    """Tests composite embedders."""
+    index = empty_index()
+
+    hf_model = HuggingFaceEmbedder().model_dump(by_alias=True, exclude_none=True)
+
+    # create composite embedder
+    composite_spec = {
+        "default": {
+            "source": "composite",
+            "searchEmbedder": hf_model,
+            "indexingEmbedder": hf_model,
+        }
+    }
+
+    response_update = index.update_embedders(composite_spec)
+    update = index.wait_for_task(response_update.task_uid)
+    response_get = index.get_embedders()
+    assert update.status == "succeeded"
+
+    embedder = response_get.embedders["default"]
+    assert isinstance(embedder, CompositeEmbedder)
+    assert isinstance(embedder.search_embedder, HuggingFaceEmbedder)
+    assert isinstance(embedder.indexing_embedder, HuggingFaceEmbedder)

@@ -274,3 +274,20 @@ def new_embedders():
         "default": UserProvidedEmbedder(dimensions=1).model_dump(by_alias=True),
         "open_ai": OpenAiEmbedder().model_dump(by_alias=True),
     }
+
+
+@fixture
+def enable_composite_embedders():
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"compositeEmbedders": True},
+        timeout=10,
+    )
+    yield
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"compositeEmbedders": False},
+        timeout=10,
+    )
