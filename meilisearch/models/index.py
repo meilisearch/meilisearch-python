@@ -127,18 +127,10 @@ class UserProvidedEmbedder(CamelBase):
 class CompositeEmbedder(CamelBase):
     source: str = "composite"
     search_embedder: Union[
-        OpenAiEmbedder,
-        HuggingFaceEmbedder,
-        OllamaEmbedder,
-        RestEmbedder,
-        UserProvidedEmbedder
+        OpenAiEmbedder, HuggingFaceEmbedder, OllamaEmbedder, RestEmbedder, UserProvidedEmbedder
     ]
     indexing_embedder: Union[
-        OpenAiEmbedder,
-        HuggingFaceEmbedder,
-        OllamaEmbedder,
-        RestEmbedder,
-        UserProvidedEmbedder
+        OpenAiEmbedder, HuggingFaceEmbedder, OllamaEmbedder, RestEmbedder, UserProvidedEmbedder
     ]
 
 

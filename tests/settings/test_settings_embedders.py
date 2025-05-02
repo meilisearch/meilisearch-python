@@ -1,7 +1,13 @@
 # pylint: disable=redefined-outer-name
 
-from meilisearch.models.index import CompositeEmbedder, HuggingFaceEmbedder, OpenAiEmbedder, UserProvidedEmbedder
 import pytest
+
+from meilisearch.models.index import (
+    CompositeEmbedder,
+    HuggingFaceEmbedder,
+    OpenAiEmbedder,
+    UserProvidedEmbedder,
+)
 
 
 def test_get_default_embedders(empty_index):
