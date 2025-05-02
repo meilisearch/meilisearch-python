@@ -64,6 +64,12 @@ class LocalizedAttributes(CamelBase):
     locales: List[str]
 
 
+class PoolingOpt(str, Enum):
+    USE_MODEL = "useModel"
+    FORCE_MEAN = "forceMean"
+    FORCE_CLS = "forceCls"
+
+
 class OpenAiEmbedder(CamelBase):
     source: str = "openAi"
     url: Optional[str] = None
@@ -84,6 +90,7 @@ class HuggingFaceEmbedder(CamelBase):
     document_template_max_bytes: Optional[int] = None  # Default to 400
     distribution: Optional[EmbedderDistribution] = None
     binary_quantized: Optional[bool] = None
+    pooling: Optional[PoolingOpt] = None
 
 
 class OllamaEmbedder(CamelBase):
@@ -117,10 +124,33 @@ class UserProvidedEmbedder(CamelBase):
     binary_quantized: Optional[bool] = None
 
 
+class CompositeEmbedder(CamelBase):
+    source: str = "composite"
+    search_embedder: Union[
+        OpenAiEmbedder,
+        HuggingFaceEmbedder,
+        OllamaEmbedder,
+        RestEmbedder,
+        UserProvidedEmbedder
+    ]
+    indexing_embedder: Union[
+        OpenAiEmbedder,
+        HuggingFaceEmbedder,
+        OllamaEmbedder,
+        RestEmbedder,
+        UserProvidedEmbedder
+    ]
+
+
 class Embedders(CamelBase):
     embedders: Dict[
         str,
         Union[
-            OpenAiEmbedder, HuggingFaceEmbedder, OllamaEmbedder, RestEmbedder, UserProvidedEmbedder
+            OpenAiEmbedder,
+            HuggingFaceEmbedder,
+            OllamaEmbedder,
+            RestEmbedder,
+            UserProvidedEmbedder,
+            CompositeEmbedder,
         ],
     ]
