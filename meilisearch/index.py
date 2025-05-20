@@ -25,6 +25,7 @@ from meilisearch.config import Config
 from meilisearch.errors import version_error_hint_message
 from meilisearch.models.document import Document, DocumentsResults
 from meilisearch.models.embedders import (
+    CompositeEmbedder,
     Embedders,
     EmbedderType,
     HuggingFaceEmbedder,
@@ -32,7 +33,6 @@ from meilisearch.models.embedders import (
     OpenAiEmbedder,
     RestEmbedder,
     UserProvidedEmbedder,
-    CompositeEmbedder,
 )
 from meilisearch.models.index import (
     Faceting,
