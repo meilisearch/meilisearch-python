@@ -219,14 +219,7 @@ class CompositeEmbedder(CamelBase):
     Parameters
     ----------
     source: str
-        The embedder source, must be "userProvided"
-    indexing_embedder: Union[OpenAiEmbedder, HuggingFaceEmbedder, OllamaEmbedder, RestEmbedder, UserProvidedEmbedder]
-        The embedder used for indexing queries remotely
-    search_embedder: Union[OpenAiEmbedder, HuggingFaceEmbedder, OllamaEmbedder, RestEmbedder, UserProvidedEmbedder]
-        The embedder used for processing queries locally
-    """
-
-    source: str = "composite"
+        The embedder source, must be "composite"
     indexing_embedder: Union[
         OpenAiEmbedder,
         HuggingFaceEmbedder,
@@ -241,7 +234,6 @@ class CompositeEmbedder(CamelBase):
         RestEmbedder,
         UserProvidedEmbedder,
     ]
-
 
 # Type alias for the embedder union type
 EmbedderType = Union[
