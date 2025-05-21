@@ -143,6 +143,27 @@ JSON output:
 }
 ```
 
+#### Hybrid Search <!-- omit in toc -->
+
+Hybrid search combines traditional keyword search with semantic search for more relevant results. You need to have an embedder configured in your index settings to use this feature.
+
+```python
+# Using hybrid search with the search method
+index.search(
+  'action movie',
+  {
+    "hybrid": {"semanticRatio": 0.5, "embedder": "default"}
+  }
+)
+```
+
+The `semanticRatio` parameter (between 0 and 1) controls the balance between keyword search and semantic search:
+- 0: Only keyword search
+- 1: Only semantic search
+- Values in between: A mix of both approaches
+
+The `embedder` parameter specifies which configured embedder to use for the semantic search component.
+
 #### Custom Search With Filters <!-- omit in toc -->
 
 If you want to enable filtering, you must add your attributes to the `filterableAttributes` index setting.

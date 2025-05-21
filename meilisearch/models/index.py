@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Dict, Iterator, List, Optional, Union
+from typing import Any, Dict, Iterator, List, Optional
 
 from camel_converter import to_snake
 from camel_converter.pydantic_base import CamelBase
@@ -62,65 +62,3 @@ class EmbedderDistribution(CamelBase):
 class LocalizedAttributes(CamelBase):
     attribute_patterns: List[str]
     locales: List[str]
-
-
-class OpenAiEmbedder(CamelBase):
-    source: str = "openAi"
-    url: Optional[str] = None
-    model: Optional[str] = None  # Defaults to text-embedding-3-small
-    dimensions: Optional[int] = None  # Uses the model default
-    api_key: Optional[str] = None  # Can be provided through a CLI option or environment variable
-    document_template: Optional[str] = None
-    document_template_max_bytes: Optional[int] = None  # Default to 400
-    distribution: Optional[EmbedderDistribution] = None
-    binary_quantized: Optional[bool] = None
-
-
-class HuggingFaceEmbedder(CamelBase):
-    source: str = "huggingFace"
-    model: Optional[str] = None  # Defaults to BAAI/bge-base-en-v1.5
-    revision: Optional[str] = None
-    document_template: Optional[str] = None
-    document_template_max_bytes: Optional[int] = None  # Default to 400
-    distribution: Optional[EmbedderDistribution] = None
-    binary_quantized: Optional[bool] = None
-
-
-class OllamaEmbedder(CamelBase):
-    source: str = "ollama"
-    url: Optional[str] = None
-    api_key: Optional[str] = None
-    model: str
-    document_template: Optional[str] = None
-    document_template_max_bytes: Optional[int] = None  # Default to 400
-    distribution: Optional[EmbedderDistribution] = None
-    binary_quantized: Optional[bool] = None
-
-
-class RestEmbedder(CamelBase):
-    source: str = "rest"
-    url: str
-    api_key: Optional[str]  # required for protected APIs
-    document_template: Optional[str] = None
-    document_template_max_bytes: Optional[int] = None  # Default to 400
-    request: Dict[str, Any]
-    response: Dict[str, Any]
-    distribution: Optional[EmbedderDistribution] = None
-    headers: Optional[Dict[str, Any]] = None
-    binary_quantized: Optional[bool] = None
-
-
-class UserProvidedEmbedder(CamelBase):
-    source: str = "userProvided"
-    dimensions: int
-    distribution: Optional[EmbedderDistribution] = None
-    binary_quantized: Optional[bool] = None
-
-
-class Embedders(CamelBase):
-    embedders: Dict[
-        str,
-        Union[
-            OpenAiEmbedder, HuggingFaceEmbedder, OllamaEmbedder, RestEmbedder, UserProvidedEmbedder
-        ],
-    ]
