@@ -25,6 +25,7 @@ from meilisearch.config import Config
 from meilisearch.errors import version_error_hint_message
 from meilisearch.models.document import Document, DocumentsResults
 from meilisearch.models.embedders import (
+    CompositeEmbedder,
     Embedders,
     EmbedderType,
     HuggingFaceEmbedder,
@@ -977,6 +978,8 @@ class Index:
                     embedders[k] = HuggingFaceEmbedder(**v)
                 elif v.get("source") == "rest":
                     embedders[k] = RestEmbedder(**v)
+                elif v.get("source") == "composite":
+                    embedders[k] = CompositeEmbedder(**v)
                 else:
                     embedders[k] = UserProvidedEmbedder(**v)
 
@@ -1934,6 +1937,8 @@ class Index:
                 embedders[k] = OllamaEmbedder(**v)
             elif source == "rest":
                 embedders[k] = RestEmbedder(**v)
+            elif source == "composite":
+                embedders[k] = CompositeEmbedder(**v)
             elif source == "userProvided":
                 embedders[k] = UserProvidedEmbedder(**v)
             else:
@@ -1977,6 +1982,8 @@ class Index:
                     embedders[k] = OllamaEmbedder(**v)
                 elif source == "rest":
                     embedders[k] = RestEmbedder(**v)
+                elif source == "composite":
+                    embedders[k] = CompositeEmbedder(**v)
                 elif source == "userProvided":
                     embedders[k] = UserProvidedEmbedder(**v)
                 else:
