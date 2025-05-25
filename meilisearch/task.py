@@ -96,10 +96,10 @@ class TaskHandler:
         if parameters is None:
             parameters = {}
         for param in parameters:
-            if isinstance(parameters[param], list):
+            if isinstance(parameters[param], (list, tuple)):
                 parameters[param] = ",".join(parameters[param])
         tasks = self.http.get(f"{self.config.paths.task}?{parse.urlencode(parameters)}")
-        return TaskResults(tasks)
+        return TaskResults(**tasks)
 
     def get_task(self, uid: int) -> Task:
         """Get one task.
@@ -142,7 +142,7 @@ class TaskHandler:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         for param in parameters:
-            if isinstance(parameters[param], list):
+            if isinstance(parameters[param], (list, tuple)):
                 parameters[param] = ",".join(parameters[param])
         response = self.http.post(f"{self.config.paths.task}/cancel?{parse.urlencode(parameters)}")
         return TaskInfo(**response)
@@ -166,7 +166,7 @@ class TaskHandler:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         for param in parameters:
-            if isinstance(parameters[param], list):
+            if isinstance(parameters[param], (list, tuple)):
                 parameters[param] = ",".join(parameters[param])
         response = self.http.delete(f"{self.config.paths.task}?{parse.urlencode(parameters)}")
         return TaskInfo(**response)
