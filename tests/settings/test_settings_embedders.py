@@ -6,6 +6,7 @@ from meilisearch.models.embedders import (
     CompositeEmbedder,
     HuggingFaceEmbedder,
     OpenAiEmbedder,
+    PoolingType,
     UserProvidedEmbedder,
 )
 
@@ -104,7 +105,7 @@ def test_huggingface_embedder_format(empty_index):
     assert embedders.embedders["huggingface"].distribution.mean == 0.5
     assert embedders.embedders["huggingface"].distribution.sigma == 0.1
     assert embedders.embedders["huggingface"].binary_quantized is False
-    assert embedders.embedders["huggingface"].pooling is False
+    assert embedders.embedders["huggingface"].pooling is PoolingType.USE_MODEL
 
 
 def test_ollama_embedder_format(empty_index):

@@ -233,7 +233,24 @@ class CompositeEmbedder(CamelBase):
         OllamaEmbedder,
         RestEmbedder,
         UserProvidedEmbedder,
+    ]"""
+
+    source: str = "composite"
+    search_embedder: Union[
+        OpenAiEmbedder,
+        HuggingFaceEmbedder,
+        OllamaEmbedder,
+        RestEmbedder,
+        UserProvidedEmbedder,
     ]
+    indexing_embedder: Union[
+        OpenAiEmbedder,
+        HuggingFaceEmbedder,
+        OllamaEmbedder,
+        RestEmbedder,
+        UserProvidedEmbedder,
+    ]
+
 
 # Type alias for the embedder union type
 EmbedderType = Union[
