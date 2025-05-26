@@ -147,3 +147,8 @@ dmypy.json
 html/
 
 .vscode
+
+# Meilisearch
+data.ms/
+*.ms
+meili_data/
