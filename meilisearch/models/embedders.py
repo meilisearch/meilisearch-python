@@ -111,7 +111,7 @@ class HuggingFaceEmbedder(CamelBase):
     document_template_max_bytes: Optional[int] = None  # Default to 400
     distribution: Optional[Distribution] = None
     binary_quantized: Optional[bool] = None
-    pooling: Optional[PoolingType] = None
+    pooling: Optional[PoolingType] = PoolingType.USE_MODEL
 
 
 class OllamaEmbedder(CamelBase):
