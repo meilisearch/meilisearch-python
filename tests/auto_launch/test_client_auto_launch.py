@@ -57,7 +57,7 @@ def test_client_with_url_no_auto_launch():
 
     # Should not have a local server
     assert client._local_server is None
-    
+
     # Should have the correct configuration
     assert client.config.url == "http://127.0.0.1:7700"
     assert client.config.api_key == "masterKey"
@@ -84,10 +84,10 @@ def test_client_auto_launch_no_api_key():
         # Verify the client has a local server
         assert client._local_server is not None
         assert client._local_server.master_key is None
-        
+
         # Health check should work without authentication
         assert client.is_healthy()
-        
+
         # Version check should work without authentication
         version = client.get_version()
         assert "pkgVersion" in version
