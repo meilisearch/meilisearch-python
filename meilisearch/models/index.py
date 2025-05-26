@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Dict, Iterator, List, Optional
+from typing import Any, Dict, Iterator, List, Optional, Union
 
 from camel_converter import to_snake
 from camel_converter.pydantic_base import CamelBase
@@ -120,5 +120,7 @@ class UserProvidedEmbedder(CamelBase):
 class Embedders(CamelBase):
     embedders: Dict[
         str,
-        Union[OpenAiEmbedder, HuggingFaceEmbedder, OllamaEmbedder, RestEmbedder, UserProvidedEmbedder],
+        Union[
+            OpenAiEmbedder, HuggingFaceEmbedder, OllamaEmbedder, RestEmbedder, UserProvidedEmbedder
+        ],
     ]
