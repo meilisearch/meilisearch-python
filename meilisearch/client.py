@@ -12,6 +12,7 @@ from typing import Any, Dict, List, Mapping, MutableMapping, Optional, Sequence,
 from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
+from meilisearch._local_server import LocalMeilisearchServer
 from meilisearch.config import Config
 from meilisearch.errors import MeilisearchError
 from meilisearch.index import Index
@@ -30,7 +31,7 @@ class Client:
 
     def __init__(
         self,
-        url: str,
+        url: Optional[str] = None,
         api_key: Optional[str] = None,
         timeout: Optional[int] = None,
         client_agents: Optional[Tuple[str, ...]] = None,
@@ -39,10 +40,12 @@ class Client:
         """
         Parameters
         ----------
-        url:
-            The url to the Meilisearch API (ex: http://localhost:7700)
-        api_key:
-            The optional API key for Meilisearch
+        url (optional):
+            The url to the Meilisearch API (ex: http://localhost:7700).
+            If not provided, a local Meilisearch instance will be automatically launched.
+        api_key (optional):
+            The optional API key for Meilisearch.
+            If not provided when auto-launching, no master key will be set.
         timeout (optional):
             The amount of time in seconds that the client will wait for a response before timing
             out.
@@ -52,6 +55,16 @@ class Client:
         custom_headers (optional):
             Custom headers to add when sending data to Meilisearch.
         """
+        self._local_server: Optional[LocalMeilisearchServer] = None
+
+        # If no URL is provided, start a local Meilisearch instance
+        if url is None:
+            self._local_server = LocalMeilisearchServer(master_key=api_key)
+            self._local_server.start()
+            url = self._local_server.url
+            # Use the same API key for the client
+            if api_key is None and self._local_server.master_key is not None:
+                api_key = self._local_server.master_key
 
         self.config = Config(url, api_key, timeout=timeout, client_agents=client_agents)
 
@@ -768,3 +781,22 @@ class Client:
         )
         match = uuid4hex.match(uuid)
         return bool(match)
+
+    def close(self) -> None:
+        """Close the client and stop the local Meilisearch server if it was auto-launched."""
+        if self._local_server:
+            self._local_server.stop()
+            self._local_server = None
+
+    def __enter__(self) -> "Client":
+        """Support using the client as a context manager."""
+        return self
+
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> bool:
+        """Clean up when exiting the context manager."""
+        self.close()
+        return False
+
+    def __del__(self) -> None:
+        """Ensure cleanup on object destruction."""
+        self.close()

@@ -42,7 +42,7 @@ To learn more about Meilisearch Python, refer to the in-depth [Meilisearch Pytho
 
 ## 🔧 Installation
 
-**Note**: Python 3.8+ is required.
+**Note**: Python 3.9+ is required.
 
 With `pip3` in command line:
 
@@ -52,9 +52,19 @@ pip3 install meilisearch
 
 ### Run Meilisearch <!-- omit in toc -->
 
-⚡️ **Launch, scale, and streamline in minutes with Meilisearch Cloud**—no maintenance, no commitment, cancel anytime. [Try it free now](https://cloud.meilisearch.com/login?utm_campaign=oss&utm_source=github&utm_medium=meilisearch-python).
+There are three ways to use Meilisearch:
 
-🪨  Prefer to self-host? [Download and deploy](https://www.meilisearch.com/docs/learn/self_hosted/getting_started_with_self_hosted_meilisearch?utm_campaign=oss&utm_source=github&utm_medium=meilisearch-python) our fast, open-source search engine on your own infrastructure.
+1. **🆕 Auto-Launch (Easiest)**: Let the Python client automatically download and run Meilisearch for you:
+```python
+import meilisearch
+
+# No URL needed - Meilisearch will be automatically launched!
+client = meilisearch.Client()
+```
+
+2. **☁️ Meilisearch Cloud**: Launch, scale, and streamline in minutes—no maintenance, no commitment, cancel anytime. [Try it free now](https://cloud.meilisearch.com/login?utm_campaign=oss&utm_source=github&utm_medium=meilisearch-python).
+
+3. **🪨 Self-Host**: [Download and deploy](https://www.meilisearch.com/docs/learn/self_hosted/getting_started_with_self_hosted_meilisearch?utm_campaign=oss&utm_source=github&utm_medium=meilisearch-python) our fast, open-source search engine on your own infrastructure.
 
 ## 🚀 Getting started
 
@@ -63,7 +73,11 @@ pip3 install meilisearch
 ```python
 import meilisearch
 
-client = meilisearch.Client('http://127.0.0.1:7700', 'masterKey')
+# Automatic launch - no setup required!
+client = meilisearch.Client()
+
+# Or connect to an existing instance
+# client = meilisearch.Client('http://127.0.0.1:7700', 'masterKey')
 
 # An index is where the documents are stored.
 index = client.index('movies')
@@ -233,6 +247,44 @@ index.search(
   "query": "wonder"
 }
 ```
+
+### Auto-Launch Feature <!-- omit in toc -->
+
+The Python SDK can automatically launch a local Meilisearch instance for you, making development even easier:
+
+```python
+import meilisearch
+
+# No URL needed - Meilisearch will be automatically launched!
+client = meilisearch.Client()
+
+# Use it like normal
+index = client.index('products')
+index.add_documents([{"id": 1, "name": "Laptop"}])
+
+# The server will be automatically stopped when the client is destroyed
+```
+
+You can also use it with a context manager for automatic cleanup:
+
+```python
+with meilisearch.Client() as client:
+    # Meilisearch is running
+    client.index('products').add_documents([{"id": 1, "name": "Laptop"}])
+# Meilisearch is automatically stopped here
+```
+
+With a custom master key:
+
+```python
+client = meilisearch.Client(api_key='myMasterKey')
+```
+
+**Note**: The auto-launch feature will:
+- Check if Meilisearch is installed in your PATH
+- If not found, automatically download the latest version for your platform
+- Store the binary in `~/.meilisearch/bin/`
+- Create temporary data directories that are cleaned up on exit
 
 ## 🤖 Compatibility with Meilisearch
 
