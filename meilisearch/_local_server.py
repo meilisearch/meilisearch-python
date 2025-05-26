@@ -13,6 +13,7 @@ import tempfile
 import time
 from pathlib import Path
 from typing import Optional, Tuple
+from urllib.error import URLError
 from urllib.parse import urlparse
 from urllib.request import urlopen
 
@@ -104,14 +105,14 @@ class LocalMeilisearchServer:
         if not binary_path.exists():
             print(f"Downloading Meilisearch binary from {download_url}...")
             try:
-                response = urlopen(download_url, timeout=300)
-                with open(binary_path, "wb") as f:
-                    f.write(response.read())
+                with urlopen(download_url, timeout=300) as response:
+                    with open(binary_path, "wb") as f:
+                        f.write(response.read())
                 # Make it executable
                 binary_path.chmod(0o755)
                 print(f"Downloaded Meilisearch to {binary_path}")
             except Exception as e:
-                raise RuntimeError(f"Failed to download Meilisearch: {e}")
+                raise RuntimeError(f"Failed to download Meilisearch: {e}") from e
 
         return str(binary_path)
 
@@ -146,6 +147,8 @@ class LocalMeilisearchServer:
 
         # Start the process
         try:
+            # pylint: disable=consider-using-with
+            # We don't use 'with' here because we want the process to run in the background
             self.process = subprocess.Popen(
                 cmd,
                 stdout=subprocess.PIPE,
@@ -161,17 +164,17 @@ class LocalMeilisearchServer:
 
         except Exception as e:
             self.stop()
-            raise RuntimeError(f"Failed to start Meilisearch: {e}")
+            raise RuntimeError(f"Failed to start Meilisearch: {e}") from e
 
     def _wait_for_server(self, timeout: int = 30) -> None:
         """Wait for the server to be ready."""
         start_time = time.time()
         while time.time() - start_time < timeout:
             try:
-                response = urlopen(f"{self.url}/health", timeout=1)
-                if response.status == 200:
-                    return
-            except Exception:
+                with urlopen(f"{self.url}/health", timeout=1) as response:
+                    if response.status == 200:
+                        return
+            except (OSError, URLError):
                 pass
 
             # Check if process has died
@@ -207,7 +210,7 @@ class LocalMeilisearchServer:
         if self._temp_data_dir and os.path.exists(self.data_path):
             try:
                 shutil.rmtree(self.data_path)
-            except Exception:
+            except OSError:
                 pass  # Ignore cleanup errors
 
     def __del__(self) -> None:
