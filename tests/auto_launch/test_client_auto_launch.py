@@ -1,5 +1,7 @@
 """Tests for auto-launch functionality."""
 
+import time
+
 import meilisearch
 from meilisearch._local_server import LocalMeilisearchServer
 
@@ -28,6 +30,9 @@ def test_client_auto_launch():
         documents = [{"id": 1, "title": "Test Document"}, {"id": 2, "title": "Another Document"}]
         task = index.add_documents(documents)
         client.wait_for_task(task.task_uid)
+
+        # Give Meilisearch a moment to process
+        time.sleep(0.5)
 
         # Search
         results = index.search("test")

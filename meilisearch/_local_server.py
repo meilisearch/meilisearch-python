@@ -7,6 +7,7 @@ import os
 import platform
 import shutil
 import signal
+import socket
 import subprocess
 import sys
 import tempfile
@@ -23,17 +24,23 @@ class LocalMeilisearchServer:
 
     def __init__(
         self,
-        port: int = 7700,
+        port: Optional[int] = None,
         data_path: Optional[str] = None,
         master_key: Optional[str] = None,
     ):
-        self.port = port
+        self.port = port or self._find_available_port()
         self.data_path = data_path or tempfile.mkdtemp(prefix="meilisearch_")
         self.master_key = master_key
         self.process: Optional[subprocess.Popen] = None
         self.binary_path: Optional[str] = None
         self.url = f"http://127.0.0.1:{self.port}"
         self._temp_data_dir = data_path is None
+
+    def _find_available_port(self) -> int:
+        """Find an available port to use."""
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.bind(("", 0))
+            return sock.getsockname()[1]
 
     def _find_meilisearch_binary(self) -> Optional[str]:
         """Find Meilisearch binary in PATH or common locations."""
