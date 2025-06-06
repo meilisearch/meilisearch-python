@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from enum import Enum
 from typing import Any, Dict, Optional, Union
 
 from camel_converter.pydantic_base import CamelBase
@@ -18,6 +19,24 @@ class Distribution(CamelBase):
 
     mean: float
     sigma: float
+
+
+class PoolingType(str, Enum):
+    """Pooling strategies for HuggingFaceEmbedder.
+
+    Attributes
+    ----------
+    USE_MODEL : str
+        Use the model's default pooling strategy.
+    FORCE_MEAN : str
+        Force mean pooling over the token embeddings.
+    FORCE_CLS : str
+        Use the [CLS] token embedding as the sentence representation.
+    """
+
+    USE_MODEL = "useModel"
+    FORCE_MEAN = "forceMean"
+    FORCE_CLS = "forceCls"
 
 
 class OpenAiEmbedder(CamelBase):
@@ -79,6 +98,8 @@ class HuggingFaceEmbedder(CamelBase):
         Describes the natural distribution of search results
     binary_quantized: Optional[bool]
         Once set to true, irreversibly converts all vector dimensions to 1-bit values
+    pooling: Optional[PoolingType]
+        Configures how individual tokens are merged into a single embedding
     """
 
     source: str = "huggingFace"
@@ -90,6 +111,7 @@ class HuggingFaceEmbedder(CamelBase):
     document_template_max_bytes: Optional[int] = None  # Default to 400
     distribution: Optional[Distribution] = None
     binary_quantized: Optional[bool] = None
+    pooling: Optional[PoolingType] = PoolingType.USE_MODEL
 
 
 class OllamaEmbedder(CamelBase):
@@ -191,6 +213,45 @@ class UserProvidedEmbedder(CamelBase):
     binary_quantized: Optional[bool] = None
 
 
+class CompositeEmbedder(CamelBase):
+    """Composite embedder configuration.
+
+    Parameters
+    ----------
+    source: str
+        The embedder source, must be "composite"
+    indexing_embedder: Union[
+        OpenAiEmbedder,
+        HuggingFaceEmbedder,
+        OllamaEmbedder,
+        RestEmbedder,
+        UserProvidedEmbedder,
+    ]
+    search_embedder: Union[
+        OpenAiEmbedder,
+        HuggingFaceEmbedder,
+        OllamaEmbedder,
+        RestEmbedder,
+        UserProvidedEmbedder,
+    ]"""
+
+    source: str = "composite"
+    search_embedder: Union[
+        OpenAiEmbedder,
+        HuggingFaceEmbedder,
+        OllamaEmbedder,
+        RestEmbedder,
+        UserProvidedEmbedder,
+    ]
+    indexing_embedder: Union[
+        OpenAiEmbedder,
+        HuggingFaceEmbedder,
+        OllamaEmbedder,
+        RestEmbedder,
+        UserProvidedEmbedder,
+    ]
+
+
 # Type alias for the embedder union type
 EmbedderType = Union[
     OpenAiEmbedder,
@@ -198,6 +259,7 @@ EmbedderType = Union[
     OllamaEmbedder,
     RestEmbedder,
     UserProvidedEmbedder,
+    CompositeEmbedder,
 ]
 
 
