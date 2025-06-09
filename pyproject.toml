@@ -114,7 +114,6 @@ disable=[
   "too-few-public-methods",
   "line-too-long",
   "too-many-positional-arguments",
-  "raise-missing-from",
 ]
 enable=[
   "use-symbolic-message-instead",

@@ -5,11 +5,10 @@ class Document:
     def __init__(self, doc: Dict[str, Any]) -> None:
         self.__dict__.update(**doc)
 
-    def __getattr__(self, attr: str) -> str:
-        try:
+    def __getattr__(self, attr: str) -> Any:
+        if attr in self.__dict__:
             return self.__dict__[attr]
-        except Exception as _:
-            raise AttributeError(f"{self.__class__.__name__} object has no attribute {attr}")
+        raise AttributeError(f"{self.__class__.__name__} object has no attribute {attr}")
 
     def __iter__(self) -> Iterator:
         return iter(self.__dict__.items())
