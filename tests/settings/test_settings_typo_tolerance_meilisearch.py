@@ -1,6 +1,5 @@
 from meilisearch.models.index import TypoTolerance
 
-
 DEFAULT_TYPO_TOLERANCE = {
     "enabled": True,
     "disableOnNumbers": False,
