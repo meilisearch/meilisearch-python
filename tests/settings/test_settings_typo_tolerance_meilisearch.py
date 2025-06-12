@@ -1,5 +1,8 @@
+from meilisearch.models.index import TypoTolerance
+
 DEFAULT_TYPO_TOLERANCE = {
     "enabled": True,
+    "disableOnNumbers": False,
     "minWordSizeForTypos": {
         "oneTypo": 5,
         "twoTypos": 9,
@@ -10,6 +13,7 @@ DEFAULT_TYPO_TOLERANCE = {
 
 NEW_TYPO_TOLERANCE = {
     "enabled": True,
+    "disableOnNumbers": False,
     "minWordSizeForTypos": {
         "oneTypo": 6,
         "twoTypos": 10,
@@ -65,3 +69,16 @@ def test_reset_typo_tolerance(empty_index):
         )
     assert update2.status == "succeeded"
     assert response_last.model_dump(by_alias=True) == DEFAULT_TYPO_TOLERANCE
+
+
+def test_disable_numbers_true(empty_index):
+    index = empty_index()
+
+    # Update settings
+    response_update = index.update_typo_tolerance({"disableOnNumbers": True})
+    update = index.wait_for_task(response_update.task_uid)
+    assert update.status == "succeeded"
+
+    # Fetch updated settings
+    tolerance: TypoTolerance = index.get_typo_tolerance()
+    assert tolerance.disable_on_numbers
