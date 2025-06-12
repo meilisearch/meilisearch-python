@@ -360,6 +360,10 @@ typo_tolerance_guide_4: |-
       'twoTypos': 10
     }
   })
+typo_tolerance_guide_5: |-
+  client.index('movies').update_typo_tolerance({
+    'disableOnNumbers': True
+  })
 search_parameter_guide_show_ranking_score_1: |-
   client.index('movies').search('dragon', {
     'showRankingScore': True
