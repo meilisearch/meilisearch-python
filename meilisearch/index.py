@@ -276,7 +276,7 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         stats = self.http.get(f"{self.config.paths.index}/{self.uid}/{self.config.paths.stat}")
-        return IndexStats(stats)
+        return IndexStats(**stats)
 
     @version_error_hint_message
     def search(self, query: str, opt_params: Optional[Mapping[str, Any]] = None) -> Dict[str, Any]:
@@ -375,7 +375,7 @@ class Index:
         """
         if parameters is None:
             parameters = {}
-        elif "fields" in parameters and isinstance(parameters["fields"], list):
+        elif "fields" in parameters and isinstance(parameters["fields"], (list, tuple)):
             parameters["fields"] = ",".join(parameters["fields"])
 
         document = self.http.get(
