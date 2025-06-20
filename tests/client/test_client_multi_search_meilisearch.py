@@ -1,7 +1,7 @@
 import pytest
 
 from meilisearch.errors import MeilisearchApiError
-from tests.common import INDEX_UID
+from tests.common import INDEX_UID, REMOTE_MS_1, REMOTE_MS_2
 
 
 def test_basic_multi_search(client, empty_index):
@@ -75,3 +75,36 @@ def test_multi_search_with_federation_options(client, index_with_documents):
     assert response["hits"][0]["_federation"]["weightedRankingScore"] >= 0.99
     assert response["limit"] == 2
     assert response["offset"] == 0
+
+
+@pytest.mark.usefixtures("enable_network_options")
+def test_multi_search_with_network(client, index_with_documents):
+    """Tests multi-search with network, with federation options."""
+    index_with_documents()
+    resp = client.add_or_update_networks(
+        {
+            "self": REMOTE_MS_1,
+            "remotes": {
+                REMOTE_MS_1: {
+                    "url": "http://ms-1235.example.meilisearch.io",
+                    "searchApiKey": "xxxxxxxx",
+                },
+                REMOTE_MS_2: {
+                    "url": "http://ms-1255.example.meilisearch.io",
+                    "searchApiKey": "xxxxxxxx",
+                },
+            },
+        }
+    )
+    response = client.multi_search(
+        [{"indexUid": INDEX_UID, "q": "", "federationOptions": {"remote": REMOTE_MS_1}}],
+        federation={},
+    )
+
+    assert "results" not in resp
+    assert "results" not in response
+    assert isinstance(response["hits"], list)
+    assert len(response["hits"]) >= 0
+    assert response["hits"][0]["_federation"]["indexUid"] == INDEX_UID
+    assert response["hits"][0]["_federation"]["remote"] == REMOTE_MS_1
+    assert response["remoteErrors"] == {}

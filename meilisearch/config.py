@@ -46,6 +46,7 @@ class Config:
         proximity_precision = "proximity-precision"
         localized_attributes = "localized-attributes"
         edit = "edit"
+        network = "network"
 
     def __init__(
         self,
