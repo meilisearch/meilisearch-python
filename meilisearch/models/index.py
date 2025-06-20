@@ -44,6 +44,7 @@ class MinWordSizeForTypos(CamelBase):
 
 class TypoTolerance(CamelBase):
     enabled: bool = True
+    disable_on_numbers: bool = False
     disable_on_attributes: Optional[List[str]] = None
     disable_on_words: Optional[List[str]] = None
     min_word_size_for_typos: Optional[MinWordSizeForTypos] = None
