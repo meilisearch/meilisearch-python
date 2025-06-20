@@ -2,16 +2,12 @@ from typing import Any, Dict, Iterator, List
 
 
 class Document:
-    __doc: Dict
-
     def __init__(self, doc: Dict[str, Any]) -> None:
-        self.__doc = doc
-        for key in doc:
-            setattr(self, key, doc[key])
+        self.__dict__.update(**doc)
 
-    def __getattr__(self, attr: str) -> str:
-        if attr in self.__doc.keys():
-            return attr
+    def __getattr__(self, attr: str) -> Any:
+        if attr in self.__dict__:
+            return self.__dict__[attr]
         raise AttributeError(f"{self.__class__.__name__} object has no attribute {attr}")
 
     def __iter__(self) -> Iterator:
