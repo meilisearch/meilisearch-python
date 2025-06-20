@@ -276,7 +276,6 @@ def new_embedders():
     }
 
 
-
 @fixture
 def enable_composite_embedders():
     requests.patch(
