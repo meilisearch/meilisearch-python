@@ -276,6 +276,24 @@ def new_embedders():
     }
 
 
+
+@fixture
+def enable_composite_embedders():
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"compositeEmbedders": True},
+        timeout=10,
+    )
+    yield
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"compositeEmbedders": False},
+        timeout=10,
+    )
+
+
 @fixture
 def enable_network_options():
     requests.patch(

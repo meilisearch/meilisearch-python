@@ -7,11 +7,14 @@ from tests import common
 
 
 def test_get_keys_default(client):
-    """Tests if search and admin keys have been generated and can be retrieved."""
+    """Tests if default keys have been generated and can be retrieved."""
     keys = client.get_keys()
-    assert len(keys.results) == 2
-    assert keys.results[0].key is not None
-    assert keys.results[1].key is not None
+    assert len(keys.results) >= 2
+
+    key_names = {key.name for key in keys.results if key.name}
+
+    assert "Default Admin API Key" in key_names
+    assert "Default Search API Key" in key_names
 
 
 def test_get_keys_with_parameters(client):

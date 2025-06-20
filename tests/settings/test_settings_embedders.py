@@ -1,6 +1,14 @@
 # pylint: disable=redefined-outer-name
 
-from meilisearch.models.embedders import OpenAiEmbedder, UserProvidedEmbedder
+import pytest
+
+from meilisearch.models.embedders import (
+    CompositeEmbedder,
+    HuggingFaceEmbedder,
+    OpenAiEmbedder,
+    PoolingType,
+    UserProvidedEmbedder,
+)
 
 
 def test_get_default_embedders(empty_index):
@@ -97,6 +105,7 @@ def test_huggingface_embedder_format(empty_index):
     assert embedders.embedders["huggingface"].distribution.mean == 0.5
     assert embedders.embedders["huggingface"].distribution.sigma == 0.1
     assert embedders.embedders["huggingface"].binary_quantized is False
+    assert embedders.embedders["huggingface"].pooling is PoolingType.USE_MODEL
 
 
 def test_ollama_embedder_format(empty_index):
@@ -183,3 +192,43 @@ def test_user_provided_embedder_format(empty_index):
     assert embedders.embedders["user_provided"].distribution.mean == 0.5
     assert embedders.embedders["user_provided"].distribution.sigma == 0.1
     assert embedders.embedders["user_provided"].binary_quantized is False
+
+
+@pytest.mark.usefixtures("enable_composite_embedders")
+def test_composite_embedder_format(empty_index):
+    """Tests that CompositeEmbedder embedder has the required fields and proper format."""
+    index = empty_index()
+
+    embedder = HuggingFaceEmbedder().model_dump(by_alias=True, exclude_none=True)
+
+    # create composite embedder
+    composite_embedder = {
+        "composite": {
+            "source": "composite",
+            "searchEmbedder": embedder,
+            "indexingEmbedder": embedder,
+        }
+    }
+
+    response = index.update_embedders(composite_embedder)
+    update = index.wait_for_task(response.task_uid)
+    embedders = index.get_embedders()
+    assert update.status == "succeeded"
+
+    assert embedders.embedders["composite"].source == "composite"
+
+    # ensure serialization roundtrips nicely
+    assert isinstance(embedders.embedders["composite"], CompositeEmbedder)
+    assert isinstance(embedders.embedders["composite"].search_embedder, HuggingFaceEmbedder)
+    assert isinstance(embedders.embedders["composite"].indexing_embedder, HuggingFaceEmbedder)
+
+    # ensure search_embedder has no document_template
+    assert getattr(embedders.embedders["composite"].search_embedder, "document_template") is None
+    assert (
+        getattr(
+            embedders.embedders["composite"].search_embedder,
+            "document_template_max_bytes",
+        )
+        is None
+    )
+    assert getattr(embedders.embedders["composite"].indexing_embedder, "document_template")

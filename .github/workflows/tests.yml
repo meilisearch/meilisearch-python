@@ -8,6 +8,7 @@ on:
       - trying
       - staging
       - main
+  merge_group:
 
 jobs:
   integration_tests:
