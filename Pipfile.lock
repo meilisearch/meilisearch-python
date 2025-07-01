@@ -317,11 +317,11 @@
         },
         "cachetools": {
             "hashes": [
-                "sha256:82e73ba88f7b30228b5507dce1a1f878498fc669d972aef2dde4f3a3c24f103e",
-                "sha256:f225782b84438f828328fc2ad74346522f27e5b1440f4e9fd18b20ebfd1aa2cf"
+                "sha256:1c7bb3cf9193deaf3508b7c5f2a79986c13ea38965c5adcff1f84519cf39163e",
+                "sha256:b4c4f404392848db3ce7aac34950d17be4d864da4b8b66911008e430bc544587"
             ],
             "markers": "python_version >= '3.9'",
-            "version": "==6.0.0"
+            "version": "==6.1.0"
         },
         "certifi": {
             "hashes": [
@@ -771,12 +771,12 @@
         },
         "tox": {
             "hashes": [
-                "sha256:75f17aaf09face9b97bd41645028d9f722301e912be8b4c65a3f938024560224",
-                "sha256:a83b3b67b0159fa58e44e646505079e35a43317a62d2ae94725e0586266faeca"
+                "sha256:2b8a7fb986b82aa2c830c0615082a490d134e0626dbc9189986da46a313c4f20",
+                "sha256:b97d5ecc0c0d5755bcc5348387fef793e1bfa68eb33746412f4c60881d7f5f57"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.9'",
-            "version": "==4.26.0"
+            "version": "==4.27.0"
         },
         "tox-pipenv": {
             "hashes": [
