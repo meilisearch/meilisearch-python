@@ -47,10 +47,15 @@ Each PR should pass the tests, mypy type checking, and the linter to be accepted
 Your PR also needs to be formatted using black and isort.
 
 ```bash
-# Tests
+# Tests (Option 1 - Auto-launch)
+# The SDK will automatically download and launch Meilisearch if needed
+pipenv run pytest tests
+
+# Tests (Option 2 - Manual setup)
 curl -L https://install.meilisearch.com | sh # download Meilisearch
 ./meilisearch --master-key=masterKey --no-analytics # run Meilisearch
 pipenv run pytest tests
+
 # MyPy
 pipenv run mypy meilisearch
 # Linter
