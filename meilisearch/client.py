@@ -8,12 +8,23 @@ import hashlib
 import hmac
 import json
 import re
-from typing import Any, Dict, Iterator, List, Mapping, MutableMapping, Optional, Sequence, Tuple, Union
+from typing import (
+    Any,
+    Dict,
+    Iterator,
+    List,
+    Mapping,
+    MutableMapping,
+    Optional,
+    Sequence,
+    Tuple,
+    Union,
+)
 from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
-from meilisearch.errors import MeilisearchApiError, MeilisearchCommunicationError, MeilisearchError
+from meilisearch.errors import MeilisearchCommunicationError, MeilisearchError
 from meilisearch.index import Index
 from meilisearch.models.key import Key, KeysResults
 from meilisearch.models.task import Batch, BatchResults, Task, TaskInfo, TaskResults
@@ -839,31 +850,30 @@ class Client:
             "messages": messages,
             "stream": True
         }
-        
+
         # Construct the URL for the chat completions route.
         endpoint = f"chats/{workspace_uid}/chat/completions"
-        
+
         # Initiate the HTTP POST request in streaming mode.
         response = self.http.post_stream(endpoint, body=payload)
-        
+
         try:
             # Iterate over the streaming response lines
             for raw_line in response.iter_lines():
                 if raw_line is None or raw_line == b'':
-                    continue  
-                
+                    continue
+
                 line = raw_line.decode('utf-8')
                 if line.startswith("data: "):
-                    data = line[len("data: "):]  
+                    data = line[len("data: "):]
                     if data.strip() == "[DONE]":
-                        break 
-                    
+                        break
+
                     try:
                         chunk = json.loads(data)
                         yield chunk
                     except json.JSONDecodeError as e:
-                    
-                        raise MeilisearchCommunicationError(f"Failed to parse chat chunk: {e}")
+                        raise MeilisearchCommunicationError(f"Failed to parse chat chunk: {e}") from e
         finally:
             response.close()
 

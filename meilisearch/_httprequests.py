@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from functools import lru_cache
-from typing import Any, Callable, Iterator, List, Mapping, Optional, Sequence, Tuple, Type, Union
+from typing import Any, Callable, List, Mapping, Optional, Sequence, Tuple, Type, Union
 
 import requests
 
@@ -157,14 +157,14 @@ class HttpRequests:
         serializer: Optional[Type[json.JSONEncoder]] = None,
     ) -> requests.Response:
         """Send a POST request with streaming enabled.
-        
+
         Returns the raw response object for streaming consumption.
         """
         if content_type:
             self.headers["Content-Type"] = content_type
         try:
             request_path = self.config.url + "/" + path
-            
+
             if isinstance(body, bytes):
                 response = requests.post(
                     request_path,
@@ -182,17 +182,17 @@ class HttpRequests:
                 )
 
                 response = requests.post(
-                    request_path, 
-                    timeout=self.config.timeout, 
-                    headers=self.headers, 
+                    request_path,
+                    timeout=self.config.timeout,
+                    headers=self.headers,
                     data=data,
                     stream=True,
                 )
-            
+
             # For streaming responses, we validate status but don't parse JSON
             if not response.ok:
                 response.raise_for_status()
-            
+
             return response
 
         except requests.exceptions.Timeout as err:
