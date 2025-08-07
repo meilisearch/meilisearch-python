@@ -24,7 +24,7 @@ from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
-from meilisearch.errors import MeilisearchCommunicationError, MeilisearchError
+from meilisearch.errors import MeilisearchApiError, MeilisearchCommunicationError, MeilisearchError
 from meilisearch.index import Index
 from meilisearch.models.key import Key, KeysResults
 from meilisearch.models.task import Batch, BatchResults, Task, TaskInfo, TaskResults
