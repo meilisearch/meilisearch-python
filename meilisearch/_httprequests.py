@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import json
 from functools import lru_cache
-from typing import Any, Callable, List, Mapping, Optional, Sequence, Tuple, Type, Union
+from typing import Any, Callable, Iterator, List, Mapping, Optional, Sequence, Tuple, Type, Union
 
 import requests
 
@@ -145,6 +145,72 @@ class HttpRequests:
         body: Optional[Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str]]] = None,
     ) -> Any:
         return self.send_request(requests.delete, path, body)
+
+    def post_stream(
+        self,
+        path: str,
+        body: Optional[
+            Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str], bytes, str]
+        ] = None,
+        content_type: Optional[str] = "application/json",
+        *,
+        serializer: Optional[Type[json.JSONEncoder]] = None,
+    ) -> requests.Response:
+        """Send a POST request with streaming enabled.
+        
+        Returns the raw response object for streaming consumption.
+        """
+        if content_type:
+            self.headers["Content-Type"] = content_type
+        try:
+            request_path = self.config.url + "/" + path
+            
+            if isinstance(body, bytes):
+                response = requests.post(
+                    request_path,
+                    timeout=self.config.timeout,
+                    headers=self.headers,
+                    data=body,
+                    stream=True,
+                )
+            else:
+                serialize_body = isinstance(body, dict) or body
+                data = (
+                    json.dumps(body, cls=serializer)
+                    if isinstance(body, bool) or serialize_body
+                    else "" if body == "" else "null"
+                )
+
+                response = requests.post(
+                    request_path, 
+                    timeout=self.config.timeout, 
+                    headers=self.headers, 
+                    data=data,
+                    stream=True,
+                )
+            
+            # For streaming responses, we validate status but don't parse JSON
+            if not response.ok:
+                response.raise_for_status()
+            
+            return response
+
+        except requests.exceptions.Timeout as err:
+            raise MeilisearchTimeoutError(str(err)) from err
+        except requests.exceptions.ConnectionError as err:
+            raise MeilisearchCommunicationError(str(err)) from err
+        except requests.exceptions.HTTPError as err:
+            raise MeilisearchApiError(str(err), response) from err
+        except requests.exceptions.InvalidSchema as err:
+            if "://" not in self.config.url:
+                raise MeilisearchCommunicationError(
+                    f"""
+                    Invalid URL {self.config.url}, no scheme/protocol supplied.
+                    Did you mean https://{self.config.url}?
+                    """
+                ) from err
+
+            raise MeilisearchCommunicationError(str(err)) from err
 
     @staticmethod
     def __to_json(request: requests.Response) -> Any:

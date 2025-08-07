@@ -8,12 +8,12 @@ import hashlib
 import hmac
 import json
 import re
-from typing import Any, Dict, List, Mapping, MutableMapping, Optional, Sequence, Tuple, Union
+from typing import Any, Dict, Iterator, List, Mapping, MutableMapping, Optional, Sequence, Tuple, Union
 from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
-from meilisearch.errors import MeilisearchError
+from meilisearch.errors import MeilisearchApiError, MeilisearchCommunicationError, MeilisearchError
 from meilisearch.index import Index
 from meilisearch.models.key import Key, KeysResults
 from meilisearch.models.task import Batch, BatchResults, Task, TaskInfo, TaskResults
@@ -794,6 +794,156 @@ class Client:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.http.get(path=f"{self.config.paths.network}")
+
+    def create_chat_completion(
+        self,
+        workspace_uid: str,
+        messages: List[Dict[str, str]],
+        model: str = "gpt-3.5-turbo",
+        stream: bool = True,
+    ) -> Iterator[Dict[str, Any]]:
+        """Streams a chat completion from the Meilisearch chat API.
+
+        Parameters
+        ----------
+        workspace_uid:
+            Unique identifier of the chat workspace to use.
+        messages:
+            List of message dicts (e.g. {"role": "user", "content": "..."}) comprising the chat history.
+        model:
+            The model name to use for completion (should correspond to the LLM in workspace settings).
+        stream:
+            Whether to stream the response. Must be True for now (only streaming is supported).
+
+        Returns
+        -------
+        chunks:
+            Parsed chunks of the completion as Python dicts. Each chunk is a partial response (in OpenAI format).
+            Iteration ends when the completion is done.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        MeilisearchCommunicationError
+            If a network error occurs.
+        ValueError
+            If stream=False is passed (not currently supported).
+        """
+        if not stream:
+            # The API currently only supports streaming responses:
+            raise ValueError("Non-streaming chat completions are not supported. Use stream=True.")
+
+        payload = {
+            "model": model,
+            "messages": messages,
+            "stream": True
+        }
+        
+        # Construct the URL for the chat completions route.
+        endpoint = f"chats/{workspace_uid}/chat/completions"
+        
+        # Initiate the HTTP POST request in streaming mode.
+        response = self.http.post_stream(endpoint, body=payload)
+        
+        try:
+            # Iterate over the streaming response lines
+            for raw_line in response.iter_lines():
+                if raw_line is None or raw_line == b'':
+                    continue  
+                
+                line = raw_line.decode('utf-8')
+                if line.startswith("data: "):
+                    data = line[len("data: "):]  
+                    if data.strip() == "[DONE]":
+                        break 
+                    
+                    try:
+                        chunk = json.loads(data)
+                        yield chunk
+                    except json.JSONDecodeError as e:
+                    
+                        raise MeilisearchCommunicationError(f"Failed to parse chat chunk: {e}")
+        finally:
+            response.close()
+
+    def get_chat_workspaces(
+        self,
+        *,
+        offset: Optional[int] = None,
+        limit: Optional[int] = None,
+    ) -> Dict[str, Any]:
+        """Get all chat workspaces.
+
+        Parameters
+        ----------
+        offset (optional):
+            Number of workspaces to skip.
+        limit (optional):
+            Maximum number of workspaces to return.
+
+        Returns
+        -------
+        workspaces
+            Dictionary containing the list of chat workspaces and pagination information.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        q = []
+        if offset is not None:
+            q.append(f"offset={offset}")
+        if limit is not None:
+            q.append(f"limit={limit}")
+        path = "chats" + ("?" + "&".join(q) if q else "")
+        return self.http.get(path)
+
+    def get_chat_workspace_settings(self, workspace_uid: str) -> Dict[str, Any]:
+        """Get the settings for a specific chat workspace.
+
+        Parameters
+        ----------
+        workspace_uid:
+            Unique identifier of the chat workspace.
+
+        Returns
+        -------
+        settings:
+            Dictionary containing the workspace settings.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.http.get(f"chats/{workspace_uid}/settings")
+
+
+    def update_chat_workspace_settings(
+        self, workspace_uid: str, settings: Mapping[str, Any]
+    ) -> Dict[str, Any]:
+        """Update the settings for a specific chat workspace.
+
+        Parameters
+        ----------
+        workspace_uid:
+            Unique identifier of the chat workspace.
+        settings:
+            Dictionary containing the settings to update.
+
+        Returns
+        -------
+        settings:
+            Dictionary containing the updated workspace settings.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.http.patch(f"chats/{workspace_uid}/settings", body=settings)
 
     @staticmethod
     def _base64url_encode(data: bytes) -> str:
