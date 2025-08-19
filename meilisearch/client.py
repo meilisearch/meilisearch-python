@@ -839,17 +839,19 @@ class Client:
         MeilisearchCommunicationError
             If a network error occurs.
         ValueError
-            If stream=False is passed (not currently supported).
+            If stream=False is passed (not currently supported), or if workspace_uid is empty or contains path separators.
         """
         if not stream:
             # The API currently only supports streaming responses:
             raise ValueError("Non-streaming chat completions are not supported. Use stream=True.")
 
-        payload = {
-            "model": model,
-            "messages": messages,
-            "stream": True
-        }
+        # Basic security validation (only what's needed)
+        if not workspace_uid:
+            raise ValueError("workspace_uid is required and cannot be empty")
+        if "/" in workspace_uid or "\\" in workspace_uid:
+            raise ValueError("Invalid workspace_uid: must not contain path separators")
+
+        payload = {"model": model, "messages": messages, "stream": True}
 
         # Construct the URL for the chat completions route.
         endpoint = f"chats/{workspace_uid}/chat/completions"
@@ -860,12 +862,12 @@ class Client:
         try:
             # Iterate over the streaming response lines
             for raw_line in response.iter_lines():
-                if raw_line is None or raw_line == b'':
+                if raw_line is None or raw_line == b"":
                     continue
 
-                line = raw_line.decode('utf-8')
+                line = raw_line.decode("utf-8")
                 if line.startswith("data: "):
-                    data = line[len("data: "):]
+                    data = line[len("data: ") :]
                     if data.strip() == "[DONE]":
                         break
 
@@ -873,7 +875,9 @@ class Client:
                         chunk = json.loads(data)
                         yield chunk
                     except json.JSONDecodeError as e:
-                        raise MeilisearchCommunicationError(f"Failed to parse chat chunk: {e}") from e
+                        raise MeilisearchCommunicationError(
+                            f"Failed to parse chat chunk: {e}"
+                        ) from e
         finally:
             response.close()
 
@@ -902,12 +906,12 @@ class Client:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        q = []
+        params = {}
         if offset is not None:
-            q.append(f"offset={offset}")
+            params["offset"] = offset
         if limit is not None:
-            q.append(f"limit={limit}")
-        path = "chats" + ("?" + "&".join(q) if q else "")
+            params["limit"] = limit
+        path = "chats" + ("?" + parse.urlencode(params) if params else "")
         return self.http.get(path)
 
     def get_chat_workspace_settings(self, workspace_uid: str) -> Dict[str, Any]:
@@ -927,9 +931,16 @@ class Client:
         ------
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        ValueError
+            If workspace_uid is empty or contains path separators.
         """
-        return self.http.get(f"chats/{workspace_uid}/settings")
+        # Basic security validation (only what's needed)
+        if not workspace_uid:
+            raise ValueError("workspace_uid is required and cannot be empty")
+        if "/" in workspace_uid or "\\" in workspace_uid:
+            raise ValueError("Invalid workspace_uid: must not contain path separators")
 
+        return self.http.get(f"chats/{workspace_uid}/settings")
 
     def update_chat_workspace_settings(
         self, workspace_uid: str, settings: Mapping[str, Any]
@@ -952,7 +963,18 @@ class Client:
         ------
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        ValueError
+            If workspace_uid is empty or contains path separators, or if settings is empty.
         """
+        # Basic security validation (only what's needed)
+        if not workspace_uid:
+            raise ValueError("workspace_uid is required and cannot be empty")
+        if "/" in workspace_uid or "\\" in workspace_uid:
+            raise ValueError("Invalid workspace_uid: must not contain path separators")
+
+        if not settings:
+            raise ValueError("settings cannot be empty")
+
         return self.http.patch(f"chats/{workspace_uid}/settings", body=settings)
 
     @staticmethod
