@@ -37,22 +37,18 @@ def test_create_chat_completion_basic_stream(client):
     dummy_lines = [
         b'data: {"id":"chatcmpl-1","object":"chat.completion.chunk","choices":[{"delta":{"content":"Hello"}}]}',
         b'data: {"id":"chatcmpl-1","object":"chat.completion.chunk","choices":[{"delta":{"content":" world"}}]}',
-        b'data: [DONE]'
+        b"data: [DONE]",
     ]
     mock_resp = MockStreamingResponse(dummy_lines)
 
-    with patch.object(client.http, 'post_stream', return_value=mock_resp) as mock_post:
+    with patch.object(client.http, "post_stream", return_value=mock_resp) as mock_post:
         messages = [{"role": "user", "content": "Hi"}]
         chunks = list(client.create_chat_completion("my-assistant", messages=messages))
 
         # Verify the HTTP call was made correctly
         mock_post.assert_called_once_with(
             "chats/my-assistant/chat/completions",
-            body={
-                "model": "gpt-3.5-turbo",
-                "messages": messages,
-                "stream": True
-            }
+            body={"model": "gpt-3.5-turbo", "messages": messages, "stream": True},
         )
 
         # Verify the chunks are parsed correctly
@@ -77,7 +73,7 @@ def test_create_chat_completion_json_decode_error(client):
     ]
     mock_resp = MockStreamingResponse(dummy_lines)
 
-    with patch.object(client.http, 'post_stream', return_value=mock_resp):
+    with patch.object(client.http, "post_stream", return_value=mock_resp):
         messages = [{"role": "user", "content": "Test"}]
 
         with pytest.raises(MeilisearchCommunicationError, match="Failed to parse chat chunk"):
@@ -86,8 +82,10 @@ def test_create_chat_completion_json_decode_error(client):
 
 def test_create_chat_completion_http_error_propagated(client):
     """Test that HTTP errors from post_stream are properly propagated."""
-    with patch.object(client.http, 'post_stream') as mock_post:
-        error_response = MockStreamingResponse([], ok=False, status_code=400, text='{"message": "API Error"}')
+    with patch.object(client.http, "post_stream") as mock_post:
+        error_response = MockStreamingResponse(
+            [], ok=False, status_code=400, text='{"message": "API Error"}'
+        )
         mock_post.side_effect = MeilisearchApiError("API Error", error_response)
         messages = [{"role": "user", "content": "Test"}]
 
@@ -100,14 +98,14 @@ def test_get_chat_workspaces(client):
     mock_response = {
         "results": [
             {"uid": "workspace1", "name": "My Workspace", "model": "gpt-3.5-turbo"},
-            {"uid": "workspace2", "name": "Another Workspace", "model": "gpt-4"}
+            {"uid": "workspace2", "name": "Another Workspace", "model": "gpt-4"},
         ],
         "offset": 0,
         "limit": 20,
-        "total": 2
+        "total": 2,
     }
 
-    with patch.object(client.http, 'get', return_value=mock_response) as mock_get:
+    with patch.object(client.http, "get", return_value=mock_response) as mock_get:
         result = client.get_chat_workspaces()
 
         # Verify the HTTP call was made correctly
@@ -119,18 +117,11 @@ def test_get_chat_workspaces(client):
 
 def test_update_chat_workspace_settings(client):
     """Test basic update_chat_workspace_settings functionality."""
-    mock_response = {
-        "model": "gpt-4-turbo",
-        "temperature": 0.8,
-        "max_tokens": 1500
-    }
+    mock_response = {"model": "gpt-4-turbo", "temperature": 0.8, "max_tokens": 1500}
 
-    settings_update = {
-        "temperature": 0.8,
-        "max_tokens": 1500
-    }
+    settings_update = {"temperature": 0.8, "max_tokens": 1500}
 
-    with patch.object(client.http, 'patch', return_value=mock_response) as mock_patch:
+    with patch.object(client.http, "patch", return_value=mock_response) as mock_patch:
         result = client.update_chat_workspace_settings("my-workspace", settings_update)
 
         # Verify the HTTP call was made correctly
