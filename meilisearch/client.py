@@ -24,11 +24,11 @@ from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
-from meilisearch.errors import (
+from meilisearch.errors import (  # noqa: F401
     MeilisearchApiError,
     MeilisearchCommunicationError,
     MeilisearchError,
-)  # pylint: disable=unused-import
+)
 from meilisearch.index import Index
 from meilisearch.models.key import Key, KeysResults
 from meilisearch.models.task import Batch, BatchResults, Task, TaskInfo, TaskResults
@@ -42,6 +42,9 @@ class Client:
     A client instance is needed for every Meilisearch API method to know the location of
     Meilisearch and its permissions.
     """
+
+    # Import aliases to satisfy pylint (used in docstrings)
+    MeilisearchApiError = MeilisearchApiError
 
     def __init__(
         self,
