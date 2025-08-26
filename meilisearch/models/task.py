@@ -110,7 +110,7 @@ class TaskResults(CamelBase):
     results: List[Task]
     limit: int
     total: int
-    from_: int
+    from_: Optional[int]
     next_: Optional[int]
 
 
