@@ -55,7 +55,7 @@ jobs:
           echo "$CUSTOM_DOMAIN" > ./docs/_build/html/CNAME
           echo "Created CNAME in ./docs/_build/html/: $CUSTOM_DOMAIN"
       - name: Upload artifacts
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: "./docs/_build/html"
   deploy:
