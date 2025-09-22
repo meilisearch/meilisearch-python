@@ -16,6 +16,7 @@ categories:
     label: 'bug'
   - title: '⚙️ Maintenance/misc'
     label:
+      - 'dependencies'
       - 'maintenance'
       - 'documentation'
   - title: '🔒 Security'
@@ -27,10 +28,6 @@ template: |
 no-changes-template: 'Changes are coming soon 😎'
 sort-direction: 'ascending'
 replacers:
-  - search: '/(?:and )?@dependabot-preview(?:\[bot\])?,?/g'
-    replace: ''
-  - search: '/(?:and )?@dependabot(?:\[bot\])?,?/g'
-    replace: ''
   - search: '/(?:and )?@meili-bot,?/g'
     replace: ''
   - search: '/(?:and )?@meili-bot(?:\[bot\])?,?/g'
