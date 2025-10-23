@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-__version__ = "0.37.0"
+__version__ = "0.37.1"
 
 
 def qualified_version() -> str:
