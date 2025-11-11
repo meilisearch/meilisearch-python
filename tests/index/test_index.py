@@ -224,8 +224,7 @@ def test_delete_index(client):
 @pytest.mark.usefixtures("indexes_sample")
 def test_index_compact(client):
     """Tests the compaction of an index."""
-    assert client.get_index(uid=common.INDEX_UID)
-    index: Index = client.index("movies")
+    index = client.index(common.INDEX_UID)
     # Get stats before compaction
     stats_before = index.get_stats()
     print(
