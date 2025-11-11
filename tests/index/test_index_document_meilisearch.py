@@ -269,15 +269,12 @@ def test_get_documents_sort_fields(index_with_documents):
     params = {
         "limit": 5,
         "fields": ["id", "title", "release_date", "rating"],
-        "sort": ["rating:desc", "release_date:asc"]
+        "sort": ["rating:desc", "release_date:asc"],
     }
     response = index.get_documents(params)
 
     # prepare expected order
-    sorted_docs = sorted(
-        documents,
-        key=lambda d: (-d["rating"], d["release_date"])
-    )
+    sorted_docs = sorted(documents, key=lambda d: (-d["rating"], d["release_date"]))
 
     for resp_doc, expected_doc in zip(response.results, sorted_docs):
         assert resp_doc.id == expected_doc["id"]
