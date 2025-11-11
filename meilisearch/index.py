@@ -403,6 +403,7 @@ class Index:
             - offset
             - limit
             - results : list of Document instances containing the documents information
+            - sort:  A list of attributes written as an array or as a comma-separated string
 
         Raises
         ------
@@ -411,6 +412,12 @@ class Index:
         """
         if parameters is None:
             parameters = {}
+
+        # convert comma-separated sort string to list
+        sort = parameters.get("sort")
+        if isinstance(sort, str):
+            parameters["sort"] = [s.strip() for s in sort.split(",") if s.strip()]
+
         response = self.http.post(
             f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}/fetch",
             body=parameters,

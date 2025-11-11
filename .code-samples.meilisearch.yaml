@@ -24,12 +24,15 @@ get_one_document_1: |-
     'fields': ['id', 'title', 'poster', 'release_date']
   })
 get_documents_1: |-
-  client.index('movies').get_documents({'limit':2, 'filter': 'genres=action'})
+  client.index('movies').get_documents({
+    'limit':2, 'filter': 'genres=action', 'sort': ['rating:desc', 'release_date:asc']  # list format
+  })
 get_documents_post_1: |-
   client.index('books').get_documents({
     'limit':3,
     'fields': ['title', 'genres', 'rating', 'language'],
-    'filter': '(rating > 3 AND (genres=Adventure OR genres=Fiction)) AND language=English'
+    'filter': '(rating > 3 AND (genres=Adventure OR genres=Fiction)) AND language=English',
+    'sort': 'rating:desc, title:asc'  # comma-separated string format
   })
 add_or_replace_documents_1: |-
   client.index('movies').add_documents([{
