@@ -2333,3 +2333,17 @@ class Index:
         if primary_key is None and csv_delimiter is None:
             return f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}"
         return f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{parse.urlencode(parameters)}"
+
+    def compact(self) -> TaskInfo:
+        """
+        Trigger the compaction of the index.
+        This is an asynchronous operation in Meilisearch.
+
+        Returns
+        -------
+        task_info: TaskInfo
+            Contains information to track the progress of the compaction task.
+        """
+        path = f"{self.config.paths.index}/{self.uid}/compact"
+        task = self.http.post(path)
+        return TaskInfo(**task)
