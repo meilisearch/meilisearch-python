@@ -227,19 +227,10 @@ def test_index_compact(client):
     index = client.index(common.INDEX_UID)
     # Get stats before compaction
     stats_before = index.get_stats()
-    print(
-        "Before compaction:",
-        f"number_of_documents={stats_before.number_of_documents}, "
-        f"is_indexing={stats_before.is_indexing}"
-    )
 
     task_info = index.compact()
     client.wait_for_task(task_info.task_uid)
     stats_after = index.get_stats()
-    print(
-        "After compaction:",
-        f"number_of_documents={stats_after.number_of_documents}, "
-        f"is_indexing={stats_after.is_indexing}"
-    )
+
     assert stats_before.number_of_documents == stats_after.number_of_documents
     assert stats_after.is_indexing is False
