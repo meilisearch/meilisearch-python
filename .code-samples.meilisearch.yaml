@@ -11,6 +11,8 @@ create_an_index_1: |-
   client.create_index('movies', {'primaryKey': 'id'})
 update_an_index_1: |-
   client.index('movies').update(primary_key='id')
+compact_index_1: |-
+    client.index('movies').compact()
 delete_an_index_1: |-
   client.delete_index('movies')
   // OR

@@ -219,3 +219,18 @@ def test_delete_index(client):
     client.wait_for_task(deleted.task_uid)
     with pytest.raises(MeilisearchApiError):
         client.get_index(uid=common.INDEX_UID)
+
+
+@pytest.mark.usefixtures("indexes_sample")
+def test_index_compact(client):
+    """Tests the compaction of an index."""
+    index = client.index(common.INDEX_UID)
+    # Get stats before compaction
+    stats_before = index.get_stats()
+
+    task_info = index.compact()
+    client.wait_for_task(task_info.task_uid)
+    stats_after = index.get_stats()
+
+    assert stats_before.number_of_documents == stats_after.number_of_documents
+    assert stats_after.is_indexing is False
