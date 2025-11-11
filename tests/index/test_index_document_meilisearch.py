@@ -282,6 +282,43 @@ def test_get_documents_sort_fields(index_with_documents):
         assert resp_doc.release_date == expected_doc["release_date"]
 
 
+@pytest.mark.parametrize(
+    "sort_param",
+    [
+        ["rating:desc", "release_date:asc"],  # list format
+        "rating:desc, release_date:asc",  # comma-separated string
+    ],
+)
+def test_get_documents_sort_formats(index_with_documents, sort_param):
+    index = index_with_documents()
+
+    # Make fields sortable
+    sortable_attributes = ["rating", "release_date"]
+    task = index.update_sortable_attributes(sortable_attributes)
+    index.wait_for_task(task.task_uid)
+
+    documents = [
+        {"id": 1, "title": "Inception", "release_date": "2010-07-16", "rating": 8.8},
+        {"id": 2, "title": "Interstellar", "release_date": "2014-11-07", "rating": 8.6},
+        {"id": 3, "title": "Parasite", "release_date": "2019-05-30", "rating": 8.6},
+        {"id": 4, "title": "The Matrix", "release_date": "1999-03-31", "rating": 8.7},
+        {"id": 5, "title": "The Dark Knight", "release_date": "2008-07-18", "rating": 9.0},
+    ]
+
+    task = index.add_documents(documents)
+    index.wait_for_task(task.task_uid)
+
+    params = {"limit": 5, "fields": ["id", "title", "release_date", "rating"], "sort": sort_param}
+    response = index.get_documents(params)
+
+    sorted_docs = sorted(documents, key=lambda d: (-d["rating"], d["release_date"]))
+
+    for resp_doc, expected_doc in zip(response.results, sorted_docs):
+        assert resp_doc.id == expected_doc["id"]
+        assert resp_doc.rating == expected_doc["rating"]
+        assert resp_doc.release_date == expected_doc["release_date"]
+
+
 def test_get_documents_filter(index_with_documents):
     index = index_with_documents()
     response = index.update_filterable_attributes(["genre"])
