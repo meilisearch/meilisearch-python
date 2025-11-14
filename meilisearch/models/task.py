@@ -21,6 +21,7 @@ class Task(CamelBase):
     enqueued_at: datetime
     started_at: Optional[datetime] = None
     finished_at: Optional[datetime] = None
+    network: Optional[Dict[str, Any]] = None
 
     if is_pydantic_2():
 

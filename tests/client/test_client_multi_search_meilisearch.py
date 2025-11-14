@@ -84,14 +84,17 @@ def test_multi_search_with_network(client, index_with_documents):
     resp = client.add_or_update_networks(
         {
             "self": REMOTE_MS_1,
+            "sharding": True,
             "remotes": {
                 REMOTE_MS_1: {
                     "url": "http://ms-1235.example.meilisearch.io",
                     "searchApiKey": "xxxxxxxx",
+                    "writeApiKey": "xxxxxxxx",
                 },
                 REMOTE_MS_2: {
                     "url": "http://ms-1255.example.meilisearch.io",
                     "searchApiKey": "xxxxxxxx",
+                    "writeApiKey": "xxxxxxxx",
                 },
             },
         }
