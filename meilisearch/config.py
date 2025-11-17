@@ -47,6 +47,7 @@ class Config:
         localized_attributes = "localized-attributes"
         edit = "edit"
         network = "network"
+        experimental_features = "experimental-features"
 
     def __init__(
         self,

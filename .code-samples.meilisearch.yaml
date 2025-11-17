@@ -767,3 +767,17 @@ get_batch_1: |-
   client.get_batch(BATCH_UID)
 get_similar_post_1: |-
   client.index("INDEX_NAME").get_similar_documents({"id": "TARGET_DOCUMENT_ID", "embedder": "default"})
+search_parameter_reference_media_1: |-
+  client.index('movies_fragments').search(
+      "",
+      {
+          "media": {
+              "image_url": "https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg"
+          },
+          "hybrid": {
+              "embedder": "voyage",
+              "semanticRatio": 1.0
+          },
+          "limit": 3
+      }
+  )

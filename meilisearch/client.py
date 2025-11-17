@@ -531,6 +531,27 @@ class Client:
 
         return TaskInfo(**task)
 
+    def swap_indexes(self, parameters: List[Mapping[str, List[str]]]) -> TaskInfo:
+        """Swap two indexes.
+
+        Parameters
+        ----------
+        indexes:
+            List of indexes to swap (ex: [{"indexes": ["indexA", "indexB"]}).
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return TaskInfo(**self.http.post(self.config.paths.swap, parameters))
+
     def get_tasks(self, parameters: Optional[MutableMapping[str, Any]] = None) -> TaskResults:
         """Get all tasks.
 
@@ -977,48 +998,21 @@ class Client:
         return bool(match)
 
     def get_experimental_features(self) -> dict:
-        """Get current experimental features settings."""
+        """
+        Retrieve the current settings for all experimental features.
+        Returns:
+            dict: A mapping of feature names to their enabled/disabled state.
+        """
         return self.http.get(self.config.paths.experimental_features)
 
     def update_experimental_features(self, features: dict) -> dict:
-        """Update experimental features settings."""
+        """
+        Update one or more experimental features.
+
+        Args:
+            features (dict): A dictionary mapping feature names to booleans.
+                             For example, {"multimodal": True} to enable multimodal.
+        Returns:
+            dict: The updated experimental features settings.
+        """
         return self.http.patch(self.config.paths.experimental_features, body=features)
-
-    def enable_multimodal(self) -> dict:
-        """Enable multimodal experimental feature."""
-        return self.update_experimental_features({"multimodal": True})
-
-    def disable_multimodal(self) -> dict:
-        """Disable multimodal experimental feature."""
-        return self.update_experimental_features({"multimodal": False})
-
-    def swap_indexes(self, swaps: List[Dict[str, list]]) -> TaskInfo:
-        """
-        Swap or rename indexes in Meilisearch.
-        This method accepts a list of swap instructions.
-        Each instruction must contain:
-
-        - "indexes": a list of exactly two index UIDs
-        - "rename" (optional): boolean flag
-            * False (default): swap two existing indexes
-            * True: rename index_a → index_b (index_b must NOT exist)
-
-        A single request can perform multiple swap or rename operations.
-        All operations in the request are atomic—either all succeed, or none do.
-
-        Example:
-            [
-                {"indexes": ["A", "B"]},
-                {"indexes": ["C_tmp", "C"], "rename": True}
-            ]
-
-        Returns
-        -------
-        TaskInfo
-            Task information for the asynchronous swap/rename task.
-        """
-        if not swaps or not all("indexes" in s and len(s["indexes"]) == 2 for s in swaps):
-            raise ValueError("Each swap must contain exactly two index UIDs under 'indexes' key.")
-
-        task = self.http.post("/swap-indexes",swaps)
-        return TaskInfo(**task)
