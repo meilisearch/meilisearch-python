@@ -996,3 +996,20 @@ class Client:
         )
         match = uuid4hex.match(uuid)
         return bool(match)
+
+    def get_experimental_features(self) -> dict:
+        """Get current experimental features settings."""
+        return self.http.get(self.config.paths.experimental_features)
+
+    def update_experimental_features(self, features: dict) -> dict:
+        """Update experimental features settings."""
+        return self.http.patch(self.config.paths.experimental_features, body=features)
+
+    def enable_multimodal(self) -> dict:
+        """Enable multimodal experimental feature."""
+        return self.update_experimental_features({"multimodal": True})
+
+    def disable_multimodal(self) -> dict:
+        """Disable multimodal experimental feature."""
+        return self.update_experimental_features({"multimodal": False})
+
