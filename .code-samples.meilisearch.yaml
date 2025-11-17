@@ -25,7 +25,8 @@ get_one_document_1: |-
   })
 get_documents_1: |-
   client.index('movies').get_documents({
-    'limit':2, 'filter': 'genres=action', 'sort': ['rating:desc', 'release_date:asc']  # list format
+    'limit':2, 'filter': 'genres=action', 
+    'sort': ['rating:desc', 'release_date:asc']  # list format
   })
 get_documents_post_1: |-
   client.index('books').get_documents({
