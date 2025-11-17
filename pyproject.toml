@@ -48,7 +48,7 @@ Homepage = "https://github.com/meilisearch/meilisearch-python"
 
 [tool.black]
 line-length = 100
-target-version = ['py38']
+target-version = ['py39']
 include = '\.pyi?$'
 extend-exclude = '''
 /(
