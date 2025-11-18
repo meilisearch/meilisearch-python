@@ -1,7 +1,5 @@
 """Tests for experimental features API."""
 
-import pytest
-
 
 def test_get_experimental_features(client):
     """Test getting experimental features."""
@@ -51,10 +49,7 @@ def test_disable_multimodal(client):
 
 def test_update_multiple_experimental_features(client):
     """Test updating multiple experimental features at once."""
-    response = client.update_experimental_features({
-        "multimodal": True,
-        "vectorStoreSetting": True
-    })
+    response = client.update_experimental_features({"multimodal": True, "vectorStoreSetting": True})
     assert isinstance(response, dict)
     # At least one should be accepted (depending on Meilisearch version)
     assert "multimodal" in response or "vectorStoreSetting" in response

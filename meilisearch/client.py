@@ -1012,4 +1012,3 @@ class Client:
     def disable_multimodal(self) -> dict:
         """Disable multimodal experimental feature."""
         return self.update_experimental_features({"multimodal": False})
-
