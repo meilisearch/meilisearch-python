@@ -32,6 +32,18 @@ def clear_indexes(client):
 
 
 @fixture(autouse=True)
+def clear_webhooks(client):
+    """
+    Auto-clears the web hooks after each test function run.
+    Makes all the test functions independent.
+    """
+    # Deletes all the indexes in the Meilisearch instance.
+    webhooks = client.get_webhooks()
+    for webhook in webhooks.results:
+        client.delete_webhook(webhook.uuid)
+
+
+@fixture(autouse=True)
 def clear_all_tasks(client):
     """
     Auto-clears the tasks after each test function run.
