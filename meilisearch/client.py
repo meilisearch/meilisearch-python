@@ -32,6 +32,7 @@ from meilisearch.errors import (  # noqa: F401
 from meilisearch.index import Index
 from meilisearch.models.key import Key, KeysResults
 from meilisearch.models.task import Batch, BatchResults, Task, TaskInfo, TaskResults
+from meilisearch.models.webhook import Webhook, WebhooksResults
 from meilisearch.task import TaskHandler
 
 
@@ -463,6 +464,119 @@ class Client:
         """
         response = self.http.delete(f"{self.config.paths.keys}/{key_or_uid}")
 
+        return response.status_code
+
+    # WEBHOOKS ROUTES
+
+    def get_webhooks(self) -> WebhooksResults:
+        """Get all webhooks.
+
+        Returns
+        -------
+        webhooks:
+            WebhooksResults instance containing list of webhooks and pagination info.
+            https://www.meilisearch.com/docs/reference/api/webhooks
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        webhooks = self.http.get(f"{self.config.paths.webhooks}")
+        return WebhooksResults(**webhooks)
+
+    def get_webhook(self, webhook_uuid: str) -> Webhook:
+        """Get information about a specific webhook.
+
+        Parameters
+        ----------
+        webhook_uuid:
+            The uuid of the webhook to retrieve.
+
+        Returns
+        -------
+        webhook:
+            The webhook information.
+            https://www.meilisearch.com/docs/reference/api/webhooks#get-one-webhook
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        webhook = self.http.get(f"{self.config.paths.webhooks}/{webhook_uuid}")
+        return Webhook(**webhook)
+
+    def create_webhook(self, options: Mapping[str, Any]) -> Webhook:
+        """Create a new webhook.
+
+        Parameters
+        ----------
+        options:
+            The webhook configuration. Can include:
+            - url: The URL to send the webhook to
+            - headers: Dictionary of HTTP headers to include in webhook requests
+
+        Returns
+        -------
+        webhook:
+            The newly created webhook.
+            https://www.meilisearch.com/docs/reference/api/webhooks#create-a-webhook
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        webhook = self.http.post(self.config.paths.webhooks, options)
+        return Webhook(**webhook)
+
+    def update_webhook(self, webhook_uuid: str, options: Mapping[str, Any]) -> Webhook:
+        """Update an existing webhook.
+
+        Parameters
+        ----------
+        webhook_uuid:
+            The uuid of the webhook to update.
+        options:
+            The webhook fields to update. Can include:
+            - url: The URL to send the webhook to
+            - headers: Dictionary of HTTP headers to include in webhook requests
+
+        Returns
+        -------
+        webhook:
+            The updated webhook.
+            https://www.meilisearch.com/docs/reference/api/webhooks#update-a-webhook
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        webhook = self.http.patch(f"{self.config.paths.webhooks}/{webhook_uuid}", options)
+        return Webhook(**webhook)
+
+    def delete_webhook(self, webhook_uuid: str) -> int:
+        """Delete a webhook.
+
+        Parameters
+        ----------
+        webhook_uuid:
+            The uuid of the webhook to delete.
+
+        Returns
+        -------
+        status_code:
+            The Response status code. 204 signifies a successful delete.
+            https://www.meilisearch.com/docs/reference/api/webhooks#delete-a-webhook
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        response = self.http.delete(f"{self.config.paths.webhooks}/{webhook_uuid}")
         return response.status_code
 
     def get_version(self) -> Dict[str, str]:

@@ -767,3 +767,19 @@ get_batch_1: |-
   client.get_batch(BATCH_UID)
 get_similar_post_1: |-
   client.index("INDEX_NAME").get_similar_documents({"id": "TARGET_DOCUMENT_ID", "embedder": "default"})
+webhooks_get_1: |-
+  client.get_webhooks()
+webhooks_get_single_1: |-
+  client.get_webhook('WEBHOOK_UID')
+webhooks_post_1: |-
+  client.create_webhook({
+    'url': 'https://example.com/webhook',
+    'headers': {"Authorization":"", "X-Custom-Header":"test"},
+  })
+webhooks_patch_1: |-
+  client.update_webhook('WEBHOOK_UID', {
+    'url': 'https://example.com/new-webhook',
+    'headers': {"Authorization":"", "X-Custom-Header":"test"},
+  })
+webhooks_delete_1: |-
+  client.delete_webhook('WEBHOOK_UID')

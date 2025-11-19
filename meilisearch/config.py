@@ -47,6 +47,7 @@ class Config:
         localized_attributes = "localized-attributes"
         edit = "edit"
         network = "network"
+        webhooks = "webhooks"
 
     def __init__(
         self,
