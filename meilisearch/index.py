@@ -2347,3 +2347,19 @@ class Index:
         path = f"{self.config.paths.index}/{self.uid}/compact"
         task = self.http.post(path)
         return TaskInfo(**task)
+
+    def rename_index(self, new_name: str) -> TaskInfo:
+        """
+        Rename the current Meilisearch index.
+
+        :param new_name: The new UID for the index.
+        :return: TaskInfo with information about the rename operation.
+        """
+        payload = {"uid": new_name}
+
+        task = self.http.patch(
+            f"{self.config.paths.index}/{self.uid}",
+            payload,
+        )
+
+        return TaskInfo(**task)
