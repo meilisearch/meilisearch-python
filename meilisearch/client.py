@@ -531,6 +531,30 @@ class Client:
 
         return TaskInfo(**task)
 
+    def swap_indexes(self, parameters: List[Mapping[str, List[str]]]) -> TaskInfo:
+        """Swap two indexes.
+
+        Parameters
+        ----------
+        indexes:
+            List of indexes to swap ex:
+             [{"indexes": ["indexA", "indexB"]})  # default rename to false
+            {"indexes": ["indexA", "indexB"], "rename": false}
+            {"indexes": ["indexA", "indexB"], "rename": true}
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return TaskInfo(**self.http.post(self.config.paths.swap, parameters))
+
     def get_tasks(self, parameters: Optional[MutableMapping[str, Any]] = None) -> TaskResults:
         """Get all tasks.
 

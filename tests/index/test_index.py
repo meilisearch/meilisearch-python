@@ -234,3 +234,42 @@ def test_index_compact(client):
 
     assert stats_before.number_of_documents == stats_after.number_of_documents
     assert stats_after.is_indexing is False
+
+
+@pytest.mark.usefixtures("indexes_sample")
+def test_rename_index(client):
+    """Test renaming an existing index."""
+    original_uid = common.INDEX_UID
+    new_uid = f"{original_uid}_renamed"
+    index = client.index(original_uid)
+
+    # Perform the rename
+    task_info = index.update(new_uid=new_uid)
+    client.wait_for_task(task_info.task_uid)
+
+    # Verify the index now exists with the new UID
+    renamed_index = client.index(new_uid)
+    info = renamed_index.fetch_info()
+    assert info.uid == new_uid
+
+    # # Verify the old UID no longer exists
+    with pytest.raises(MeilisearchApiError):
+        client.index(original_uid).fetch_info()  # Assert old UID is gone
+
+
+@pytest.mark.usefixtures("indexes_sample")
+def test_index_update_and_rename(client):
+    """Test updating primary key and renaming an index together."""
+    original_uid = common.INDEX_UID
+    new_uid = f"{original_uid}_renamed"
+    index = client.index(original_uid)
+
+    # 1. Update the primary key
+    task_info = index.update(primary_key="objectID", new_uid=new_uid)
+    client.wait_for_task(task_info.task_uid)
+
+    # Verify the index now exists with the new UID
+    renamed_index = client.index(new_uid)
+    info = renamed_index.fetch_info()
+    assert info.uid == new_uid
+    assert renamed_index.get_primary_key() == "objectID"
