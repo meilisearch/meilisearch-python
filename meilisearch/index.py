@@ -2355,4 +2355,3 @@ class Index:
         path = f"{self.config.paths.index}/{self.uid}/compact"
         task = self.http.post(path)
         return TaskInfo(**task)
-
