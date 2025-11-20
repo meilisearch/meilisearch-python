@@ -273,3 +273,13 @@ def test_index_update_and_rename(client):
     info = renamed_index.fetch_info()
     assert info.uid == new_uid
     assert renamed_index.get_primary_key() == "objectID"
+
+
+@pytest.mark.usefixtures("indexes_sample")
+def test_index_update_without_params(client):
+    """Test updating primary key and renaming an index together."""
+    index = client.index(common.INDEX_UID)
+    with pytest.raises(ValueError) as exc:
+        index.update()
+
+    assert "primary_key" in str(exc.value) or "new_uid" in str(exc.value)

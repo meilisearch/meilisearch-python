@@ -125,6 +125,9 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
+        if primary_key is None and new_uid is None:
+            raise ValueError("You must provide either 'primary_key' or 'new_uid' to update the index.")
+
         payload = {}
         if primary_key is not None:
             payload["primaryKey"] = primary_key
