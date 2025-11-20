@@ -104,13 +104,15 @@ class Index:
 
         return TaskInfo(**task)
 
-    def update(self, primary_key: str) -> TaskInfo:
+    def update(self, primary_key: Optional[str] = None, new_uid: Optional[str] = None) -> TaskInfo:
         """Update the index primary-key.
 
         Parameters
         ----------
         primary_key:
             The primary key to use for the index.
+        new_uid : str, optional
+            The new UID to rename the index.
 
         Returns
         -------
@@ -123,7 +125,18 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        payload = {"primaryKey": primary_key}
+        if primary_key is None and new_uid is None:
+            raise ValueError(
+                "You must provide either 'primary_key' or 'new_uid' to update the index."
+            )
+
+        payload = {}
+        if primary_key is not None:
+            payload["primaryKey"] = primary_key
+
+        if new_uid is not None:
+            payload["uid"] = new_uid  # This enables renaming
+
         task = self.http.patch(f"{self.config.paths.index}/{self.uid}", payload)
 
         return TaskInfo(**task)

@@ -58,9 +58,9 @@ html_static_path = []
 # This value contains a list of modules to be mocked up.
 autodoc_mock_imports = ["camel_converter"]
 
-html_title = 'Meilisearch Python | Documentation'
+html_title = "Meilisearch Python | Documentation"
 
 # Add Fathom analytics script
 html_js_files = [
-    ("https://cdn.usefathom.com/script.js", { "data-site": "QNBPJXIV", "defer": "defer" })
+    ("https://cdn.usefathom.com/script.js", {"data-site": "QNBPJXIV", "defer": "defer"})
 ]
