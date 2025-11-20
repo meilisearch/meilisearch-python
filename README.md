@@ -41,7 +41,7 @@ To learn more about Meilisearch Python, refer to the in-depth [Meilisearch Pytho
 
 ## 🔧 Installation
 
-**Note**: Python 3.8+ is required.
+**Note**: Python 3.9+ is required.
 
 With `pip3` in command line:
 
