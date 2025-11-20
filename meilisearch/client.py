@@ -538,9 +538,9 @@ class Client:
         ----------
         indexes:
             List of indexes to swap ex:
-             [{"indexes": ["indexA", "indexB"]})  # default rename to false
-            {"indexes": ["indexA", "indexB"], "rename": false}
-            {"indexes": ["indexA", "indexB"], "rename": true}
+             1: {"indexes": ["indexA", "indexB"]}  # default rename to false
+            2: {"indexes": ["indexA", "indexB"], "rename": false}
+            3: {"indexes": ["indexA", "indexB"], "rename": true}
 
         Returns
         -------
