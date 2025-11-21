@@ -1,6 +1,7 @@
 import pytest
 
 from tests.common import REMOTE_MS_1, REMOTE_MS_2
+from tests.test_utils import disable_sharding
 
 
 @pytest.mark.usefixtures("enable_network_options")
@@ -38,3 +39,5 @@ def test_add_or_update_networks(client):
     assert len(response["remotes"]) >= 2
     assert REMOTE_MS_2 in response["remotes"]
     assert REMOTE_MS_1 in response["remotes"]
+
+    disable_sharding(client)
