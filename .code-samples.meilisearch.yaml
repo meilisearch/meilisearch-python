@@ -797,4 +797,3 @@ webhooks_patch_1: |-
   })
 webhooks_delete_1: |-
   client.delete_webhook('WEBHOOK_UID')
-
