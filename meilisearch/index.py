@@ -114,6 +114,15 @@ class Index:
         new_uid : str, optional
             The new UID to rename the index.
 
+        Renaming behavior
+        -----------------
+        When ``new_uid`` is provided, this method sends a PATCH request to rename
+        the index. After the task completes, the index exists under the new UID,
+        but this ``Index`` instance still contains the old ``self.uid``, making it
+        **stale**. Further operations with this instance will fail until a fresh
+        instance is obtained. After the rename task completes, obtain a new ``Index``
+        instance via ``client.index(new_uid)`` before making further requests.
+
         Returns
         -------
         task_info:
