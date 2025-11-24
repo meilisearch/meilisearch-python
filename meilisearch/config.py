@@ -48,6 +48,7 @@ class Config:
         edit = "edit"
         network = "network"
         experimental_features = "experimental-features"
+        webhooks = "webhooks"
 
     def __init__(
         self,
