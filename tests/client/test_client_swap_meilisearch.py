@@ -46,6 +46,20 @@ def test_swap_indexes_with_one_that_does_not_exist(client, empty_index):
     assert task.error["code"] == "index_not_found"
 
 
+def test_swap_indexes_with_one_that_does_not_exist_with_rename_as_false(client, empty_index):
+    """Tests swap indexes with one that does not exist."""
+    index = empty_index("index_A")
+    swapTask = client.swap_indexes(
+        [
+            {"indexes": [index.uid, "does_not_exist"], "rename": False},
+        ]
+    )
+    task = client.wait_for_task(swapTask.task_uid)
+
+    assert swapTask.type == "indexSwap"
+    assert task.error["code"] == "index_not_found"
+
+
 def test_swap_indexes_with_itself(client, empty_index):
     """Tests swap indexes with itself."""
     index = empty_index()
@@ -57,3 +71,21 @@ def test_swap_indexes_with_itself(client, empty_index):
                 },
             ]
         )
+
+
+def test_swap_indexes_with_one_that_does_not_exist_with_rename_as_true(client, empty_index):
+    """Tests swap indexes with one that does not exist."""
+    index = empty_index("index_B")
+    renamed_index_name = "new_index_name"
+    swapTask = client.swap_indexes(
+        [
+            {"indexes": [index.uid, renamed_index_name], "rename": True},
+        ]
+    )
+    client.wait_for_task(swapTask.task_uid)
+    assert swapTask.type == "indexSwap"
+
+    # Verify the new index UID exists
+    renamed_index = client.index(renamed_index_name)
+    info = renamed_index.fetch_info()
+    assert info.uid == renamed_index_name
