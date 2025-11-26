@@ -131,8 +131,11 @@ EMBEDDER_CONFIG = {
 
 # ---------------- Tests ----------------
 @pytest.mark.skipif(not VOYAGE_API_KEY, reason="Voyage API key not set")
-class TestMultimodalSearch:  # pylint: disable=no-member
+class TestMultimodalSearch:
     """Multi-modal search tests"""
+
+    # Class attribute populated by setup_index fixture
+    search_client: Client
 
     @pytest.fixture(autouse=True)
     def clear_indexes(self, client):
@@ -217,9 +220,7 @@ class TestMultimodalSearch:  # pylint: disable=no-member
 
         # Store for tests on the class
         # Use request.cls to ensure attributes are available on test instances
-        request.cls.client = client
-        request.cls.index = index
-        request.cls.search_client = Client(common.BASE_URL, common.MASTER_KEY)  # Search client
+        request.cls.search_client = client
 
     def test_text_query(self):
         """Test text query search"""
