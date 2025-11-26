@@ -1,6 +1,6 @@
 # pylint: disable=redefined-outer-name
-import os
 import json
+import os
 from typing import Optional
 
 import requests
