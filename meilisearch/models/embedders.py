@@ -167,10 +167,12 @@ class RestEmbedder(CamelBase):
         Template defining the data Meilisearch sends to the embedder
     document_template_max_bytes: Optional[int]
         Maximum allowed size of rendered document template (defaults to 400)
-    indexing_fragments: Optional[Dict[str, Dict[str, str]]]
-        Defines how to fragment documents for indexing (multi-modal search)
-    search_fragments: Optional[Dict[str, Dict[str, str]]]
-        Defines how to fragment search queries (multi-modal search)
+    indexing_fragments: Optional[Dict[str, Dict[str, Any]]]
+        Defines how to fragment documents for indexing (multi-modal search).
+        Fragments can contain complex nested structures (e.g., lists of objects).
+    search_fragments: Optional[Dict[str, Dict[str, Any]]]
+        Defines how to fragment search queries (multi-modal search).
+        Fragments can contain complex nested structures (e.g., lists of objects).
     request: Dict[str, Any]
         A JSON value representing the request Meilisearch makes to the remote embedder
     response: Dict[str, Any]
@@ -189,8 +191,8 @@ class RestEmbedder(CamelBase):
     dimensions: Optional[int] = None
     document_template: Optional[str] = None
     document_template_max_bytes: Optional[int] = None
-    indexing_fragments: Optional[Dict[str, Dict[str, str]]] = None
-    search_fragments: Optional[Dict[str, Dict[str, str]]] = None
+    indexing_fragments: Optional[Dict[str, Dict[str, Any]]] = None
+    search_fragments: Optional[Dict[str, Dict[str, Any]]] = None
     request: Dict[str, Any]
     response: Dict[str, Any]
     headers: Optional[Dict[str, str]] = None

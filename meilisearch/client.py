@@ -1111,22 +1111,40 @@ class Client:
         match = uuid4hex.match(uuid)
         return bool(match)
 
-    def get_experimental_features(self) -> dict:
-        """
-        Retrieve the current settings for all experimental features.
-        Returns:
-            dict: A mapping of feature names to their enabled/disabled state.
+    def get_experimental_features(self) -> Dict[str, Any]:
+        """Retrieve the current settings for all experimental features.
+
+        Returns
+        -------
+        features:
+            A dictionary mapping feature names to their enabled/disabled state.
+            For example: {"multimodal": True, "vectorStore": False}
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.http.get(self.config.paths.experimental_features)
 
-    def update_experimental_features(self, features: dict) -> dict:
-        """
-        Update one or more experimental features.
+    def update_experimental_features(self, features: Dict[str, bool]) -> Dict[str, Any]:
+        """Update one or more experimental features.
 
-        Args:
-            features (dict): A dictionary mapping feature names to booleans.
-                             For example, {"multimodal": True} to enable multimodal.
-        Returns:
-            dict: The updated experimental features settings.
+        Parameters
+        ----------
+        features:
+            A dictionary mapping feature names to booleans.
+            For example, {"multimodal": True} to enable multimodal,
+            or {"multimodal": True, "vectorStore": False} to update multiple features.
+
+        Returns
+        -------
+        features:
+            The updated experimental features settings as a dictionary.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.http.patch(self.config.paths.experimental_features, body=features)
