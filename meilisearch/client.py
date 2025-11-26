@@ -635,7 +635,7 @@ class Client:
         self,
         url: str,
         api_key: Optional[str] = None,
-        pay_load_size: Optional[str] = None,
+        payload_size: Optional[str] = None,
         indexes: Optional[Mapping[str, Any]] = None,
     ) -> TaskInfo:
         """Trigger the creation of a Meilisearch export.
@@ -649,7 +649,7 @@ class Client:
             A security key with index.create, settings.update, and documents.add permissions
              to a secured Meilisearch instance.
 
-        pay_load_size:
+        payload_size:
             The maximum size of each single data payload in a human-readable format such as "100MiB".
              Larger payloads are generally more efficient, but require significantly more powerful machines.
 
@@ -673,8 +673,8 @@ class Client:
         payload: Dict[str, Any] = {"url": url}
         if api_key is not None:
             payload["apiKey"] = api_key
-        if pay_load_size is not None:
-            payload["payloadSize"] = pay_load_size
+        if payload_size is not None:
+            payload["payloadSize"] = payload_size
         if indexes is not None:
             payload["indexes"] = indexes
 
