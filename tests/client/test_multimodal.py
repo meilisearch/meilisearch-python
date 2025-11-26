@@ -131,7 +131,7 @@ EMBEDDER_CONFIG = {
 
 # ---------------- Tests ----------------
 @pytest.mark.skipif(not VOYAGE_API_KEY, reason="Voyage API key not set")
-class TestMultimodalSearch:
+class TestMultimodalSearch:  # pylint: disable=no-member
     """Multi-modal search tests"""
 
     @pytest.fixture(autouse=True)
@@ -216,11 +216,12 @@ class TestMultimodalSearch:
         ), f"Expected {len(MOVIES)} documents, got {stats.number_of_documents}"
 
         # Store for tests on the class
+        # Use request.cls to ensure attributes are available on test instances
         request.cls.client = client
         request.cls.index = index
         request.cls.search_client = Client(common.BASE_URL, common.MASTER_KEY)  # Search client
 
-    def test_text_query(self):  # pylint: disable=no-member
+    def test_text_query(self):
         """Test text query search"""
         query = "The story follows Carol Danvers"
         response = self.search_client.index(INDEX_UID).search(
@@ -239,7 +240,7 @@ class TestMultimodalSearch:
         )
         assert response["hits"][0]["title"] == "Captain Marvel"
 
-    def test_image_query(self):  # pylint: disable=no-member
+    def test_image_query(self):
         """Test image query search"""
         # Find Dumbo in the movies list
         dumbo_movie = next(m for m in MOVIES if m["title"] == "Dumbo")
@@ -261,7 +262,7 @@ class TestMultimodalSearch:
         )
         assert response["hits"][0]["title"] == "Dumbo"
 
-    def test_text_and_image_query(self):  # pylint: disable=no-member
+    def test_text_and_image_query(self):
         """Test text and image query"""
         query = "a futuristic movie"
         master_yoda_base64 = load_image_base64("master-yoda.jpeg")
