@@ -631,6 +631,57 @@ class Client:
 
         return TaskInfo(**task)
 
+    def export(
+        self,
+        url: str,
+        api_key: Optional[str] = None,
+        pay_load_size: Optional[str] = None,
+        indexes: Optional[Mapping[str, Any]] = None,
+    ) -> TaskInfo:
+        """Trigger the creation of a Meilisearch export.
+
+        Parameters
+        ----------
+        url:
+            A string pointing to a remote Meilisearch instance, including its port if necessary.
+
+        api_key:
+            A security key with index.create, settings.update, and documents.add permissions
+             to a secured Meilisearch instance.
+
+        pay_load_size:
+            The maximum size of each single data payload in a human-readable format such as "100MiB".
+             Larger payloads are generally more efficient, but require significantly more powerful machines.
+
+        indexes:
+            A set of objects whose keys correspond to patterns matching the indexes you want to export.
+             By default, Meilisearch exports all documents across all indexes.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/export#create-an-export
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request.
+            Meilisearch error codes are described
+            here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        payload: Dict[str, Any] = {"url": url}
+        if api_key is not None:
+            payload["apiKey"] = api_key
+        if pay_load_size is not None:
+            payload["payloadSize"] = pay_load_size
+        if indexes is not None:
+            payload["indexes"] = indexes
+
+        task = self.http.post(self.config.paths.exports, body=payload)
+
+        return TaskInfo(**task)
+
     def create_snapshot(self) -> TaskInfo:
         """Trigger the creation of a Meilisearch snapshot.
 
