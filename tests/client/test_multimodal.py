@@ -19,7 +19,7 @@ EMBEDDER_NAME = "multimodal"
 # ---------------- Paths ----------------
 # datasets folder (movies.json)
 DATASETS_DIR = Path(__file__).resolve().parent.parent.parent / "datasets"
-MOVIES = json.loads((DATASETS_DIR / "movies.json").read_text())
+MOVIES = json.loads((DATASETS_DIR / "multimodal_movies.json").read_text())
 
 # fixtures folder (images)
 FIXTURES_DIR = Path(__file__).resolve().parent.parent / "fixtures"
