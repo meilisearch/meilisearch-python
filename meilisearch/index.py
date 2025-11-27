@@ -66,6 +66,7 @@ class Index:
         primary_key: Optional[str] = None,
         created_at: Optional[Union[datetime, str]] = None,
         updated_at: Optional[Union[datetime, str]] = None,
+        custom_headers: Optional[Mapping[str, str]] = None,
     ) -> None:
         """
         Parameters
@@ -78,8 +79,8 @@ class Index:
             Primary-key of the index.
         """
         self.config = config
-        self.http = HttpRequests(config)
-        self.task_handler = TaskHandler(config)
+        self.http = HttpRequests(config, custom_headers)
+        self.task_handler = TaskHandler(config, custom_headers)
         self.uid = uid
         self.primary_key = primary_key
         self.created_at = iso_to_date_time(created_at)
@@ -175,7 +176,12 @@ class Index:
         return self.fetch_info().primary_key
 
     @staticmethod
-    def create(config: Config, uid: str, options: Optional[Mapping[str, Any]] = None) -> TaskInfo:
+    def create(
+        config: Config,
+        uid: str,
+        options: Optional[Mapping[str, Any]] = None,
+        custom_headers: Optional[Mapping[str, str]] = None,
+    ) -> TaskInfo:
         """Create the index.
 
         Parameters
@@ -199,7 +205,7 @@ class Index:
         if options is None:
             options = {}
         payload = {**options, "uid": uid}
-        task = HttpRequests(config).post(config.paths.index, payload)
+        task = HttpRequests(config, custom_headers).post(config.paths.index, payload)
 
         return TaskInfo(**task)
 
