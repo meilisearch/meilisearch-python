@@ -269,9 +269,8 @@ class TestMultimodalSearch:
         master_yoda_base64 = load_image_base64("master-yoda.jpeg")
 
         response = self.search_client.index(INDEX_UID).search(
-            None,
+            query,
             {
-                "q": query,
                 "media": {
                     "textAndPoster": {
                         "text": query,
