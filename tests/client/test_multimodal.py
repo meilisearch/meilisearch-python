@@ -151,9 +151,9 @@ class TestMultimodalSearch:
                 try:
                     task = client.index(index.uid).delete()
                     client.wait_for_task(task.task_uid)
-                except (MeilisearchApiError, Exception):  # pylint: disable=broad-exception-caught
-                    # Ignore errors when deleting indexes (may not exist)
-                    pass
+                except MeilisearchApiError as exc:
+                    # Index may already have been deleted by another test run; log and continue.
+                    print(f"Warning: failed to delete index {index.uid} during cleanup: {exc}")
 
     @pytest.fixture(scope="class", autouse=True)
     def setup_index(self, request):
