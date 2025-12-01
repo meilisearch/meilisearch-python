@@ -58,3 +58,13 @@ def test_headers(api_key, custom_headers, expected):
     client = meilisearch.Client("127.0.0.1:7700", api_key=api_key, custom_headers=custom_headers)
 
     assert client.http.headers.items() >= expected.items()
+
+
+def test_index_inherits_custom_headers():
+    custom_headers = {"header_key_1": "header_value_1", "header_key_2": "header_value_2"}
+    client = meilisearch.Client("127.0.0.1:7700", api_key=None, custom_headers=custom_headers)
+
+    index = client.index("movies")
+
+    # Index-level HttpRequests instance should also include the custom headers
+    assert index.http.headers.items() >= custom_headers.items()

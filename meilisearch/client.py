@@ -74,9 +74,12 @@ class Client:
 
         self.config = Config(url, api_key, timeout=timeout, client_agents=client_agents)
 
+        # Store custom headers so they can be propagated to sub-clients (Index, TaskHandler, etc.)
+        self._custom_headers = custom_headers
+
         self.http = HttpRequests(self.config, custom_headers)
 
-        self.task_handler = TaskHandler(self.config)
+        self.task_handler = TaskHandler(self.config, custom_headers)
 
     def create_index(self, uid: str, options: Optional[Mapping[str, Any]] = None) -> TaskInfo:
         """Create an index.
@@ -99,7 +102,7 @@ class Client:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return Index.create(self.config, uid, options)
+        return Index.create(self.config, uid, options, custom_headers=self._custom_headers)
 
     def delete_index(self, uid: str) -> TaskInfo:
         """Deletes an index
@@ -153,6 +156,7 @@ class Client:
                 index["primaryKey"],
                 index["createdAt"],
                 index["updatedAt"],
+                custom_headers=self._custom_headers,
             )
             for index in response["results"]
         ]
@@ -201,7 +205,7 @@ class Client:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return Index(self.config, uid).fetch_info()
+        return Index(self.config, uid, custom_headers=self._custom_headers).fetch_info()
 
     def get_raw_index(self, uid: str) -> Dict[str, Any]:
         """Get the index as a dictionary.
@@ -239,7 +243,7 @@ class Client:
             An Index instance.
         """
         if uid is not None:
-            return Index(self.config, uid=uid)
+            return Index(self.config, uid=uid, custom_headers=self._custom_headers)
         raise ValueError("The index UID should not be None")
 
     def multi_search(
