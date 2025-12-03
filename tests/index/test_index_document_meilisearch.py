@@ -474,7 +474,7 @@ def test_delete_documents(index_with_documents):
     assert "action" in ([x.__dict__.get("genre") for x in response.results])
     response = index.delete_documents(filter="genre=action", metadata="Test metadata")
     task = index.wait_for_task(response.task_uid)
-    assert task.customMetadata=="Test metadata"
+    assert task.customMetadata == "Test metadata"
 
     response = index.get_documents()
     genres = [x.__dict__.get("genre") for x in response.results]
