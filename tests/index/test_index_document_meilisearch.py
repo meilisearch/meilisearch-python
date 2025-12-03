@@ -33,12 +33,13 @@ def test_get_documents_default(empty_index):
 def test_add_documents(empty_index, small_movies):
     """Tests adding new documents to a clean index."""
     index = empty_index()
-    response = index.add_documents(small_movies)
+    response = index.add_documents(small_movies, metadata="Test metadata")
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     update = index.wait_for_task(response.task_uid)
     assert index.get_primary_key() == "id"
     assert update.status == "succeeded"
+    assert update.customMetadata == "Test metadata"
 
 
 def test_add_documents_empty(empty_index):
@@ -63,13 +64,16 @@ def test_add_documents_in_batches(
     small_movies,
 ):
     index = empty_index()
-    response = index.add_documents_in_batches(small_movies, batch_size, primary_key)
+    response = index.add_documents_in_batches(
+        small_movies, batch_size, primary_key, metadata="Test metadata"
+    )
     assert ceil(len(small_movies) / batch_size) == len(response)
 
     for r in response:
         assert r.task_uid is not None
         update = index.wait_for_task(r.task_uid)
         assert update.status == "succeeded"
+        assert update.customMetadata == "Test metadata"
 
     assert index.get_primary_key() == expected_primary_key
 
@@ -107,12 +111,15 @@ def test_add_documents_json_custom_serializer(empty_index):
         {"id": uuid4(), "title": "Test 2", "when": datetime.now()},
     ]
     index = empty_index()
-    response = index.add_documents_json(documents, serializer=CustomEncoder)
+    response = index.add_documents_json(
+        documents, serializer=CustomEncoder, metadata="Test metadata"
+    )
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     update = index.wait_for_task(response.task_uid)
     assert index.get_primary_key() == "id"
     assert update.status == "succeeded"
+    assert update.customMetadata == "Test metadata"
 
 
 def test_add_documents_raw_custom_serializer(empty_index):
@@ -122,13 +129,17 @@ def test_add_documents_raw_custom_serializer(empty_index):
     ]
     index = empty_index()
     response = index.add_documents_raw(
-        documents, content_type="application/json", serializer=CustomEncoder
+        documents,
+        content_type="application/json",
+        serializer=CustomEncoder,
+        metadata="Test metadata",
     )
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     update = index.wait_for_task(response.task_uid)
     assert index.get_primary_key() == "id"
     assert update.status == "succeeded"
+    assert update.customMetadata == "Test metadata"
 
 
 def test_update_documents_custom_serializer(empty_index):
@@ -137,12 +148,13 @@ def test_update_documents_custom_serializer(empty_index):
         {"id": uuid4(), "title": "Test 2", "when": datetime.now()},
     ]
     index = empty_index()
-    response = index.update_documents(documents, serializer=CustomEncoder)
+    response = index.update_documents(documents, serializer=CustomEncoder, metadata="Test metadata")
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     update = index.wait_for_task(response.task_uid)
     assert index.get_primary_key() == "id"
     assert update.status == "succeeded"
+    assert update.customMetadata == "Test metadata"
 
 
 def test_update_documents_in_batches_custom_serializer(empty_index):
@@ -164,12 +176,15 @@ def test_update_documents_json_custom_serializer(empty_index):
         {"id": uuid4(), "title": "Test 2", "when": datetime.now()},
     ]
     index = empty_index()
-    response = index.update_documents_json(documents, serializer=CustomEncoder)
+    response = index.update_documents_json(
+        documents, serializer=CustomEncoder, metadata="Test metadata"
+    )
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     update = index.wait_for_task(response.task_uid)
     assert index.get_primary_key() == "id"
     assert update.status == "succeeded"
+    assert update.customMetadata == "Test metadata"
 
 
 def test_update_documents_raw_custom_serializer(empty_index):
@@ -179,13 +194,17 @@ def test_update_documents_raw_custom_serializer(empty_index):
     ]
     index = empty_index()
     response = index.update_documents_raw(
-        documents, content_type="application/json", serializer=CustomEncoder
+        documents,
+        content_type="application/json",
+        serializer=CustomEncoder,
+        metadata="Test metadata",
     )
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     update = index.wait_for_task(response.task_uid)
     assert index.get_primary_key() == "id"
     assert update.status == "succeeded"
+    assert update.customMetadata == "Test metadata"
 
 
 def test_get_document(index_with_documents):
@@ -373,11 +392,12 @@ def test_update_documents(index_with_documents, small_movies):
     doc = response.results[0]
     doc.title = "Some title"
 
-    update = index.update_documents([dict(doc)])
+    update = index.update_documents([dict(doc)], metadata="Test metadata")
 
     assert isinstance(update, TaskInfo)
     assert update.task_uid is not None
-    index.wait_for_task(update.task_uid)
+    task = index.wait_for_task(update.task_uid)
+    assert task.customMetadata == "Test metadata"
 
     response = index.get_document(doc.id)
     assert response.title == "Some title"
@@ -402,13 +422,16 @@ def test_update_documents_in_batches(
     small_movies,
 ):
     index = empty_index()
-    response = index.update_documents_in_batches(small_movies, batch_size, primary_key)
+    response = index.update_documents_in_batches(
+        small_movies, batch_size, primary_key, metadata="Test metadata"
+    )
     assert ceil(len(small_movies) / batch_size) == len(response)
 
     for r in response:
         assert r.task_uid is not None
         update = index.wait_for_task(r.task_uid)
         assert update.status == "succeeded"
+        assert update.customMetadata == "Test metadata"
 
     assert index.get_primary_key() == expected_primary_key
 
@@ -416,10 +439,12 @@ def test_update_documents_in_batches(
 def test_delete_document(index_with_documents):
     """Tests deleting a single document."""
     index = index_with_documents()
-    response = index.delete_document("500682")
+    response = index.delete_document("500682", metadata="Test metadata")
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
-    index.wait_for_task(response.task_uid)
+    task = index.wait_for_task(response.task_uid)
+    assert task.customMetadata == "Test metadata"
+
     with pytest.raises(MeilisearchApiError):
         index.get_document("500682")
 
@@ -429,10 +454,12 @@ def test_delete_documents_by_id(index_with_documents):
     with catch_warnings(record=True) as w:
         to_delete = [522681, "450465", 329996]
         index = index_with_documents()
-        response = index.delete_documents(to_delete)
+        response = index.delete_documents(to_delete, metadata="Test metadata")
         assert isinstance(response, TaskInfo)
         assert response.task_uid is not None
-        index.wait_for_task(response.task_uid)
+        task = index.wait_for_task(response.task_uid)
+        assert task.customMetadata == "Test metadata"
+
         for document in to_delete:
             with pytest.raises(MeilisearchApiError):
                 index.get_document(document)
@@ -445,8 +472,10 @@ def test_delete_documents(index_with_documents):
     index.wait_for_task(response.task_uid)
     response = index.get_documents()
     assert "action" in ([x.__dict__.get("genre") for x in response.results])
-    response = index.delete_documents(filter="genre=action")
-    index.wait_for_task(response.task_uid)
+    response = index.delete_documents(filter="genre=action", metadata="Test metadata")
+    task = index.wait_for_task(response.task_uid)
+    task.customMetadata = "Test metadata"
+
     response = index.get_documents()
     genres = [x.__dict__.get("genre") for x in response.results]
     assert "action" not in genres
@@ -456,10 +485,11 @@ def test_delete_documents(index_with_documents):
 def test_delete_all_documents(index_with_documents):
     """Tests deleting all the documents in the index."""
     index = index_with_documents()
-    response = index.delete_all_documents()
+    response = index.delete_all_documents(metadata="Test metadata")
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
-    index.wait_for_task(response.task_uid)
+    task = index.wait_for_task(response.task_uid)
+    assert task.customMetadata == "Test metadata"
     response = index.get_documents()
     assert isinstance(response.results, list)
     assert response.results == []
@@ -468,10 +498,11 @@ def test_delete_all_documents(index_with_documents):
 def test_add_documents_csv(empty_index, songs_csv):
     """Tests adding new documents to a clean index."""
     index = empty_index()
-    response = index.add_documents_csv(songs_csv)
+    response = index.add_documents_csv(songs_csv, metadata="Test metadata")
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     task = index.wait_for_task(response.task_uid)
+    assert task.customMetadata == "Test metadata"
     assert task.status == "succeeded"
     assert index.get_primary_key() == "id"
 
@@ -493,11 +524,12 @@ def test_add_documents_csv_with_delimiter(empty_index, songs_csv_custom_separato
 def test_update_documents_csv(index_with_documents, songs_csv):
     """Tests updating a single document with csv string."""
     index = index_with_documents()
-    response = index.update_documents_csv(songs_csv)
+    response = index.update_documents_csv(songs_csv, metadata="Test metadata")
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     task = index.wait_for_task(response.task_uid)
     assert task.status == "succeeded"
+    assert task.customMetadata == "Test metadata"
     assert index.get_primary_key() == "id"
 
 
@@ -518,21 +550,23 @@ def test_update_documents_csv_with_delimiter(index_with_documents, songs_csv_cus
 def test_add_documents_json(empty_index, small_movies_json_file):
     """Tests adding new documents to a clean index."""
     index = empty_index()
-    response = index.add_documents_json(small_movies_json_file)
+    response = index.add_documents_json(small_movies_json_file, metadata="Test metadata")
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     task = index.wait_for_task(response.task_uid)
     assert task.status == "succeeded"
+    assert task.customMetadata == "Test metadata"
     assert index.get_primary_key() == "id"
 
 
 def test_update_documents_json(index_with_documents, small_movies_json_file):
     """Tests updating a single document with json string."""
     index = index_with_documents()
-    response = index.update_documents_json(small_movies_json_file)
+    response = index.update_documents_json(small_movies_json_file, metadata="Test metadata")
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     task = index.wait_for_task(response.task_uid)
+    assert task.customMetadata == "Test metadata"
     assert task.status == "succeeded"
     assert index.get_primary_key() == "id"
 
@@ -540,10 +574,11 @@ def test_update_documents_json(index_with_documents, small_movies_json_file):
 def test_add_documents_ndjson(empty_index, songs_ndjson):
     """Tests adding new documents to a clean index."""
     index = empty_index()
-    response = index.add_documents_ndjson(songs_ndjson)
+    response = index.add_documents_ndjson(songs_ndjson, metadata="Test metadata")
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     task = index.wait_for_task(response.task_uid)
+    assert task.customMetadata == "Test metadata"
     assert task.status == "succeeded"
     assert index.get_primary_key() == "id"
 
@@ -551,11 +586,12 @@ def test_add_documents_ndjson(empty_index, songs_ndjson):
 def test_update_documents_ndjson(index_with_documents, songs_ndjson):
     """Tests updating a single document with ndjson string."""
     index = index_with_documents()
-    response = index.update_documents_ndjson(songs_ndjson)
+    response = index.update_documents_ndjson(songs_ndjson, metadata="Test metadata")
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     task = index.wait_for_task(response.task_uid)
     assert task.status == "succeeded"
+    assert task.customMetadata == "Test metadata"
     assert index.get_primary_key() == "id"
 
 
