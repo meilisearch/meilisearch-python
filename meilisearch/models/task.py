@@ -22,6 +22,7 @@ class Task(CamelBase):
     started_at: Optional[datetime] = None
     finished_at: Optional[datetime] = None
     network: Optional[Dict[str, Any]] = None
+    customMetadata: Optional[str] = None
 
     if is_pydantic_2():
 
