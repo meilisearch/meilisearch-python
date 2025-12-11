@@ -482,6 +482,7 @@ class Index:
         primary_key: Optional[str] = None,
         *,
         serializer: Optional[Type[JSONEncoder]] = None,
+        metadata: Optional[str] = None,
     ) -> TaskInfo:
         """Add documents to the index.
 
@@ -494,6 +495,8 @@ class Index:
         serializer (optional):
             A custom JSONEncode to handle serializing fields that the build in json.dumps
             cannot handle, for example UUID and datetime.
+        metadata (optional):
+            Custom metadata string to attach to the task.
 
         Returns
         -------
@@ -506,7 +509,7 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        url = self._build_url(primary_key)
+        url = self._build_url(primary_key, metadata=metadata)
         add_document_task = self.http.post(url, documents, serializer=serializer)
         return TaskInfo(**add_document_task)
 
@@ -517,6 +520,7 @@ class Index:
         primary_key: Optional[str] = None,
         *,
         serializer: Optional[Type[JSONEncoder]] = None,
+        metadata: Optional[str] = None,
     ) -> List[TaskInfo]:
         """Add documents to the index in batches.
 
@@ -531,6 +535,8 @@ class Index:
         serializer (optional):
             A custom JSONEncode to handle serializing fields that the build in json.dumps
             cannot handle, for example UUID and datetime.
+        metadata (optional):
+            Custom metadata string to attach to the task.
 
         Returns
         -------
@@ -548,7 +554,9 @@ class Index:
         tasks: List[TaskInfo] = []
 
         for document_batch in self._batch(documents, batch_size):
-            task = self.add_documents(document_batch, primary_key, serializer=serializer)
+            task = self.add_documents(
+                document_batch, primary_key, serializer=serializer, metadata=metadata
+            )
             tasks.append(task)
 
         return tasks
@@ -559,6 +567,7 @@ class Index:
         primary_key: Optional[str] = None,
         *,
         serializer: Optional[Type[JSONEncoder]] = None,
+        metadata: Optional[str] = None,
     ) -> TaskInfo:
         """Add documents to the index from a byte-encoded JSON string.
 
@@ -571,6 +580,8 @@ class Index:
         serializer (optional):
             A custom JSONEncode to handle serializing fields that the build in json.dumps
             cannot handle, for example UUID and datetime.
+        metadata (optional):
+            Custom metadata string to attach to the task.
 
         Returns
         -------
@@ -584,7 +595,7 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.add_documents_raw(
-            str_documents, primary_key, "application/json", serializer=serializer
+            str_documents, primary_key, "application/json", serializer=serializer, metadata=metadata
         )
 
     def add_documents_csv(
@@ -592,6 +603,7 @@ class Index:
         str_documents: bytes,
         primary_key: Optional[str] = None,
         csv_delimiter: Optional[str] = None,
+        metadata: Optional[str] = None,
     ) -> TaskInfo:
         """Add documents to the index from a byte-encoded CSV string.
 
@@ -603,6 +615,8 @@ class Index:
             The primary-key used in index. Ignored if already set up.
         csv_delimiter:
             One ASCII character used to customize the delimiter for CSV. Comma used by default.
+        metadata (optional):
+            Custom metadata string to attach to the task.
 
         Returns
         -------
@@ -615,12 +629,15 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return self.add_documents_raw(str_documents, primary_key, "text/csv", csv_delimiter)
+        return self.add_documents_raw(
+            str_documents, primary_key, "text/csv", csv_delimiter=csv_delimiter, metadata=metadata
+        )
 
     def add_documents_ndjson(
         self,
         str_documents: bytes,
         primary_key: Optional[str] = None,
+        metadata: Optional[str] = None,
     ) -> TaskInfo:
         """Add documents to the index from a byte-encoded NDJSON string.
 
@@ -630,6 +647,8 @@ class Index:
             Byte-encoded NDJSON string.
         primary_key (optional):
             The primary-key used in index. Ignored if already set up.
+        metadata (optional):
+            Custom metadata string to attach to the task.
 
         Returns
         -------
@@ -642,7 +661,9 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return self.add_documents_raw(str_documents, primary_key, "application/x-ndjson")
+        return self.add_documents_raw(
+            str_documents, primary_key, "application/x-ndjson", metadata=metadata
+        )
 
     def add_documents_raw(
         self,
@@ -652,6 +673,7 @@ class Index:
         csv_delimiter: Optional[str] = None,
         *,
         serializer: Optional[Type[JSONEncoder]] = None,
+        metadata: Optional[str] = None,
     ) -> TaskInfo:
         """Add documents to the index from a byte-encoded string.
 
@@ -669,6 +691,8 @@ class Index:
         serializer (optional):
             A custom JSONEncode to handle serializing fields that the build in json.dumps
             cannot handle, for example UUID and datetime.
+        metadata (optional):
+            Custom metadata string to attach to the task.
 
         Returns
         -------
@@ -681,7 +705,9 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        url = self._build_url(primary_key=primary_key, csv_delimiter=csv_delimiter)
+        url = self._build_url(
+            primary_key=primary_key, csv_delimiter=csv_delimiter, metadata=metadata
+        )
         response = self.http.post(url, str_documents, content_type, serializer=serializer)
         return TaskInfo(**response)
 
@@ -691,6 +717,7 @@ class Index:
         primary_key: Optional[str] = None,
         *,
         serializer: Optional[Type[JSONEncoder]] = None,
+        metadata: Optional[str] = None,
     ) -> TaskInfo:
         """Update documents in the index.
 
@@ -703,6 +730,8 @@ class Index:
         serializer (optional):
             A custom JSONEncode to handle serializing fields that the build in json.dumps
             cannot handle, for example UUID and datetime.
+        metadata (optional):
+            Custom metadata string to attach to the task.
 
         Returns
         -------
@@ -715,7 +744,7 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        url = self._build_url(primary_key)
+        url = self._build_url(primary_key, metadata=metadata)
         response = self.http.put(url, documents, serializer=serializer)
         return TaskInfo(**response)
 
@@ -723,6 +752,7 @@ class Index:
         self,
         str_documents: str,
         primary_key: Optional[str] = None,
+        metadata: Optional[str] = None,
     ) -> TaskInfo:
         """Update documents as a ndjson string in the index.
 
@@ -732,38 +762,8 @@ class Index:
             String of document from a NDJSON file.
         primary_key (optional):
             The primary-key used in index. Ignored if already set up
-
-        Returns
-        -------
-        task_info:
-            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
-
-        Raises
-        ------
-        MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
-        """
-        return self.update_documents_raw(str_documents, primary_key, "application/x-ndjson")
-
-    def update_documents_json(
-        self,
-        str_documents: str,
-        primary_key: Optional[str] = None,
-        *,
-        serializer: Optional[Type[JSONEncoder]] = None,
-    ) -> TaskInfo:
-        """Update documents as a json string in the index.
-
-        Parameters
-        ----------
-        str_documents:
-            String of document from a JSON file.
-        primary_key (optional):
-            The primary-key used in index. Ignored if already set up
-        serializer (optional):
-            A custom JSONEncode to handle serializing fields that the build in json.dumps
-            cannot handle, for example UUID and datetime.
+        metadata (optional):
+            Custom metadata string to attach to the task.
 
         Returns
         -------
@@ -777,25 +777,30 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.update_documents_raw(
-            str_documents, primary_key, "application/json", serializer=serializer
+            str_documents, primary_key, "application/x-ndjson", metadata=metadata
         )
 
-    def update_documents_csv(
+    def update_documents_json(
         self,
         str_documents: str,
         primary_key: Optional[str] = None,
-        csv_delimiter: Optional[str] = None,
+        *,
+        serializer: Optional[Type[JSONEncoder]] = None,
+        metadata: Optional[str] = None,
     ) -> TaskInfo:
-        """Update documents as a csv string in the index.
+        """Update documents as a json string in the index.
 
         Parameters
         ----------
         str_documents:
-            String of document from a CSV file.
+            String of document from a JSON file.
         primary_key (optional):
-            The primary-key used in index. Ignored if already set up.
-        csv_delimiter:
-            One ASCII character used to customize the delimiter for CSV. Comma used by default.
+            The primary-key used in index. Ignored if already set up
+        serializer (optional):
+            A custom JSONEncode to handle serializing fields that the build in json.dumps
+            cannot handle, for example UUID and datetime.
+        metadata (optional):
+            Custom metadata string to attach to the task.
 
         Returns
         -------
@@ -808,7 +813,44 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return self.update_documents_raw(str_documents, primary_key, "text/csv", csv_delimiter)
+        return self.update_documents_raw(
+            str_documents, primary_key, "application/json", serializer=serializer, metadata=metadata
+        )
+
+    def update_documents_csv(
+        self,
+        str_documents: str,
+        primary_key: Optional[str] = None,
+        csv_delimiter: Optional[str] = None,
+        metadata: Optional[str] = None,
+    ) -> TaskInfo:
+        """Update documents as a csv string in the index.
+
+        Parameters
+        ----------
+        str_documents:
+            String of document from a CSV file.
+        primary_key (optional):
+            The primary-key used in index. Ignored if already set up.
+        csv_delimiter:
+            One ASCII character used to customize the delimiter for CSV. Comma used by default.
+        metadata (optional):
+            Custom metadata string to attach to the task.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.update_documents_raw(
+            str_documents, primary_key, "text/csv", csv_delimiter=csv_delimiter, metadata=metadata
+        )
 
     def update_documents_raw(
         self,
@@ -818,6 +860,7 @@ class Index:
         csv_delimiter: Optional[str] = None,
         *,
         serializer: Optional[Type[JSONEncoder]] = None,
+        metadata: Optional[str] = None,
     ) -> TaskInfo:
         """Update documents as a string in the index.
 
@@ -835,6 +878,8 @@ class Index:
         serializer (optional):
             A custom JSONEncode to handle serializing fields that the build in json.dumps
             cannot handle, for example UUID and datetime.
+        metadata (optional):
+            Custom metadata string to attach to the task.
 
         Returns
         -------
@@ -847,7 +892,9 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        url = self._build_url(primary_key=primary_key, csv_delimiter=csv_delimiter)
+        url = self._build_url(
+            primary_key=primary_key, csv_delimiter=csv_delimiter, metadata=metadata
+        )
         response = self.http.put(url, str_documents, content_type, serializer=serializer)
         return TaskInfo(**response)
 
@@ -857,6 +904,7 @@ class Index:
         batch_size: int = 1000,
         primary_key: Optional[str] = None,
         serializer: Optional[Type[JSONEncoder]] = None,
+        metadata: Optional[str] = None,
     ) -> List[TaskInfo]:
         """Update documents to the index in batches.
 
@@ -871,6 +919,8 @@ class Index:
         serializer (optional):
             A custom JSONEncode to handle serializing fields that the build in json.dumps
             cannot handle, for example UUID and datetime.
+        metadata (optional):
+            Custom metadata string to attach to the task.
 
         Returns
         -------
@@ -888,18 +938,24 @@ class Index:
         tasks = []
 
         for document_batch in self._batch(documents, batch_size):
-            update_task = self.update_documents(document_batch, primary_key, serializer=serializer)
+            update_task = self.update_documents(
+                document_batch, primary_key, serializer=serializer, metadata=metadata
+            )
             tasks.append(update_task)
 
         return tasks
 
-    def delete_document(self, document_id: Union[str, int]) -> TaskInfo:
+    def delete_document(
+        self, document_id: Union[str, int], metadata: Optional[str] = None
+    ) -> TaskInfo:
         """Delete one document from the index.
 
         Parameters
         ----------
         document_id:
             Unique identifier of the document.
+        metadata (optional):
+            Custom metadata string to attach to the task.
 
         Returns
         -------
@@ -912,9 +968,10 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        response = self.http.delete(
-            f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}/{document_id}"
-        )
+        url = f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}/{document_id}"
+        if metadata:
+            url += f"?{parse.urlencode({'customMetadata': metadata})}"
+        response = self.http.delete(url)
         return TaskInfo(**response)
 
     @version_error_hint_message
@@ -925,6 +982,7 @@ class Index:
         filter: Optional[  # pylint: disable=redefined-builtin
             Union[str, List[Union[str, List[str]]]]
         ] = None,
+        metadata: Optional[str] = None,
     ) -> TaskInfo:
         """Delete multiple documents from the index by id or filter.
 
@@ -935,6 +993,8 @@ class Index:
             removed in a future version.
         filter:
             The filter value information.
+        metadata (optional):
+            Custom metadata string to attach to the task.
 
         Returns
         -------
@@ -952,19 +1012,30 @@ class Index:
                 "The use of ids is depreciated and will be removed in the future",
                 DeprecationWarning,
             )
+            url = f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}/delete-batch"
+            if metadata:
+                url += f"?{parse.urlencode({'customMetadata': metadata})}"
             response = self.http.post(
-                f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}/delete-batch",
+                url,
                 [str(i) for i in ids],
             )
         else:
+            url = f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}/delete"
+            if metadata:
+                url += f"?{parse.urlencode({'customMetadata': metadata})}"
             response = self.http.post(
-                f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}/delete",
+                url,
                 body={"filter": filter},
             )
         return TaskInfo(**response)
 
-    def delete_all_documents(self) -> TaskInfo:
+    def delete_all_documents(self, metadata: Optional[str] = None) -> TaskInfo:
         """Delete all documents from the index.
+
+        Parameters
+        ----------
+        metadata (optional):
+            Custom metadata string to attach to the task.
 
         Returns
         -------
@@ -977,9 +1048,10 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        response = self.http.delete(
-            f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}"
-        )
+        url = f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}"
+        if metadata:
+            url += f"?{parse.urlencode({'customMetadata': metadata})}"
+        response = self.http.delete(url)
         return TaskInfo(**response)
 
     # GENERAL SETTINGS ROUTES
@@ -2359,13 +2431,16 @@ class Index:
         self,
         primary_key: Optional[str] = None,
         csv_delimiter: Optional[str] = None,
+        metadata: Optional[str] = None,
     ) -> str:
         parameters = {}
         if primary_key:
             parameters["primaryKey"] = primary_key
         if csv_delimiter:
             parameters["csvDelimiter"] = csv_delimiter
-        if primary_key is None and csv_delimiter is None:
+        if metadata:
+            parameters["customMetadata"] = metadata
+        if not parameters:
             return f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}"
         return f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{parse.urlencode(parameters)}"
 
