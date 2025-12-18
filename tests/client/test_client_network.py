@@ -1,7 +1,7 @@
 import pytest
 
 from tests.common import REMOTE_MS_1, REMOTE_MS_2
-from tests.test_utils import disable_sharding
+from tests.test_utils import reset_network_config
 
 
 @pytest.mark.usefixtures("enable_network_options")
@@ -17,7 +17,6 @@ def test_add_or_update_networks(client):
     """Tests upsert network remote instance."""
     body = {
         "self": REMOTE_MS_1,
-        "sharding": True,
         "remotes": {
             REMOTE_MS_1: {
                 "url": "http://localhost:7700",
@@ -35,9 +34,8 @@ def test_add_or_update_networks(client):
 
     assert isinstance(response, dict)
     assert response["self"] == REMOTE_MS_1
-    assert response["sharding"] is True
     assert len(response["remotes"]) >= 2
     assert REMOTE_MS_2 in response["remotes"]
     assert REMOTE_MS_1 in response["remotes"]
 
-    disable_sharding(client)
+    reset_network_config(client)
