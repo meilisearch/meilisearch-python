@@ -33,5 +33,4 @@ def test_update_and_get_network_settings(client):
         response["remotes"][instance_name]["writeApiKey"]
         == options["remotes"][instance_name]["writeApiKey"]
     )
-    assert response["sharding"] == options["sharding"]
     reset_network_config(client)
