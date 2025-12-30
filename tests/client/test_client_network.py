@@ -44,9 +44,17 @@ def test_configure_as_leader(client):
     """Test configuring the current instance as a Leader with one follower."""
     body = {
         "remotes": {
-            REMOTE_MS_1: {"url": "http://localhost:7701", "searchApiKey": "remoteSearchKey"}
+            REMOTE_MS_1: {
+                "url": "http://localhost:7701",
+                "searchApiKey": "remoteSearchKey",
+            }
         },
         "leader": None,
     }
     response = client.add_or_update_networks(body)
+
+    assert isinstance(response, dict)
     assert REMOTE_MS_1 in response["remotes"]
+    assert response.get("leader") is None
+
+    reset_network_config(client)
