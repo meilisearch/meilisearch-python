@@ -16,7 +16,6 @@ def test_get_all_networks(client):
 def test_add_or_update_networks(client):
     """Tests upsert network remote instance."""
     body = {
-        "self": REMOTE_MS_1,
         "remotes": {
             REMOTE_MS_1: {
                 "url": "http://localhost:7700",
@@ -33,9 +32,23 @@ def test_add_or_update_networks(client):
     response = client.add_or_update_networks(body=body)
 
     assert isinstance(response, dict)
-    assert response["self"] == REMOTE_MS_1
     assert len(response["remotes"]) >= 2
     assert REMOTE_MS_2 in response["remotes"]
     assert REMOTE_MS_1 in response["remotes"]
 
     reset_network_config(client)
+
+@pytest.mark.usefixtures("enable_network_options")
+def test_configure_as_leader(client):
+    """Test configuring the current instance as a Leader with one follower."""
+    body = {
+        "remotes": {
+            REMOTE_MS_1: {
+                "url": "http://localhost:7701",
+                "searchApiKey": "remoteSearchKey"
+            }
+        },
+        "leader": None
+    }
+    response = client.add_or_update_networks(body)
+    assert REMOTE_MS_1 in response["remotes"]

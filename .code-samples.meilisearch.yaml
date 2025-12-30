@@ -3,6 +3,18 @@
 # the documentation on build
 # You can read more on https://github.com/meilisearch/documentation/tree/master/.vuepress/code-samples
 ---
+get_network_1: |-
+  client.get_all_networks()
+
+update_network_1: |-
+  client.add_or_update_networks({
+      "remotes": {
+          "http://localhost:7700": {
+              "searchApiKey": "masterKey"
+          }
+      },
+      "leader": None
+  })
 get_one_index_1: |-
   client.get_index('movies')
 list_all_indexes_1: |-
