@@ -898,7 +898,7 @@ class Client:
         return jwt_token
 
     def add_or_update_networks(self, body: Union[MutableMapping[str, Any], None]) -> Dict[str, str]:
-        """Configure the Network High Availability (Leader/Followers).
+        """Configure the network topology
 
         Parameters
         ----------
