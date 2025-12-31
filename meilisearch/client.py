@@ -904,8 +904,8 @@ class Client:
         ----------
         body:
             The network configuration dictionary. must contain either:
-            - 'remotes': A dictionary of follower instances (Star Topology).
-            - 'leader': A string URL of the leader instance.
+            - 'remotes': A dictionary of instances in the network
+            - 'leader': The leader instance (should be a key in the `remotes` dictionary)
 
         Returns
         -------
