@@ -1,5 +1,6 @@
 # pylint: disable=invalid-name
 
+import json
 from datetime import datetime
 from json import JSONEncoder
 from math import ceil
@@ -726,8 +727,6 @@ def test_update_documents_in_batches_with_skip_creation(empty_index, small_movie
 
 def test_add_documents_json_with_skip_creation(empty_index, small_movies_json_file):
     """Tests that skip_creation parameter works with add_documents_json."""
-    import json
-
     index = empty_index()
     documents = json.loads(small_movies_json_file.decode("utf-8"))
 
@@ -749,8 +748,6 @@ def test_add_documents_json_with_skip_creation(empty_index, small_movies_json_fi
 
 def test_update_documents_json_with_skip_creation(empty_index, small_movies_json_file):
     """Tests that skip_creation parameter works with update_documents_json."""
-    import json
-
     index = empty_index()
     documents = json.loads(small_movies_json_file.decode("utf-8"))
 

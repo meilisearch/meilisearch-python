@@ -42,13 +42,13 @@ add_or_replace_documents_1: |-
     'poster': 'https://image.tmdb.org/t/p/w1280/xnopI5Xtky18MPhK40cZAGAOVeV.jpg',
     'overview': 'A boy is given the ability to become an adult superhero in times of need with a single magic word.',
     'release_date': '2019-03-23'
-  }])
+  }], skip_creation=True)
 add_or_update_documents_1: |-
   client.index('movies').update_documents([{
       'id': 287947,
       'title': 'Shazam ⚡️',
       'genres': 'comedy'
-  }])
+  }], skip_creation=True)
 delete_all_documents_1: |-
   client.index('movies').delete_all_documents()
 delete_one_document_1: |-
