@@ -32,7 +32,7 @@ jobs:
       - name: Meilisearch (latest version) setup with Docker
         run: docker run -d -p 7700:7700 getmeili/meilisearch-enterprise:latest meilisearch --no-analytics --master-key=masterKey
       - name: Meilisearch (latest version) secondary server for testing setup with Docker
-        run: docker run -d -p 7701:7700 getmeili/meilisearch-enterprise:latest meilisearch2 --no-analytics --master-key=masterKey
+        run: docker run -d --name meilisearch2 -p 7701:7700 getmeili/meilisearch-enterprise:latest meilisearch --no-analytics --master-key=masterKey
       - name: Test with pytest
         run: pipenv run pytest --cov-report=xml
         env:
