@@ -9,6 +9,7 @@ from warnings import catch_warnings
 
 import pytest
 
+from meilisearch.errors import MeilisearchApiError
 from meilisearch.models.document import Document
 from meilisearch.models.task import TaskInfo
 
@@ -207,7 +208,7 @@ def test_get_document_with_fields(index_with_documents):
 
 def test_get_document_inexistent(empty_index):
     """Tests getting one inexistent document from a populated index."""
-    with pytest.raises(Exception):
+    with pytest.raises(MeilisearchApiError):
         empty_index().get_document("123")
 
 
@@ -419,7 +420,7 @@ def test_delete_document(index_with_documents):
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     index.wait_for_task(response.task_uid)
-    with pytest.raises(Exception):
+    with pytest.raises(MeilisearchApiError):
         index.get_document("500682")
 
 
@@ -433,7 +434,7 @@ def test_delete_documents_by_id(index_with_documents):
         assert response.task_uid is not None
         index.wait_for_task(response.task_uid)
         for document in to_delete:
-            with pytest.raises(Exception):
+            with pytest.raises(MeilisearchApiError):
                 index.get_document(document)
         assert "The use of ids is depreciated" in str(w[0].message)
 
@@ -581,8 +582,8 @@ def test_add_documents_with_skip_creation_true(empty_index):
     task = index.add_documents(new_documents, skip_creation=True)
     index.wait_for_task(task.task_uid)
 
-    # New document should not exist
-    with pytest.raises(Exception):
+    # Document "2" should not exist because skip_creation=True prevents creation of new documents
+    with pytest.raises(MeilisearchApiError):
         index.get_document("2")
 
     # Existing document should still be there
@@ -647,8 +648,8 @@ def test_update_documents_with_skip_creation_true(empty_index):
     task = index.update_documents(new_documents, skip_creation=True)
     index.wait_for_task(task.task_uid)
 
-    # New document should not exist
-    with pytest.raises(Exception):
+    # Document "2" should not exist because skip_creation=True prevents creation of new documents
+    with pytest.raises(MeilisearchApiError):
         index.get_document("2")
 
     # Existing document should still be there and unchanged
