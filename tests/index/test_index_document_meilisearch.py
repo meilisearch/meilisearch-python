@@ -754,14 +754,14 @@ def test_update_documents_json_with_skip_creation(empty_index, small_movies_json
     index = empty_index()
     documents = json.loads(small_movies_json_file.decode("utf-8"))
 
-    # Add first document
-    first_doc = json.dumps([documents[0]]).encode("utf-8")
-    task = index.add_documents(first_doc.decode("utf-8"))
+    # Add first document using add_documents (expects list of dicts)
+    task = index.add_documents([documents[0]])
     index.wait_for_task(task.task_uid)
 
     # Try to update with new document with skip_creation=True
-    new_doc = json.dumps([documents[1]]).encode("utf-8")
-    task = index.update_documents_json(new_doc.decode("utf-8"), skip_creation=True)
+    # update_documents_json expects a string (JSON encoded)
+    new_doc = json.dumps([documents[1]])
+    task = index.update_documents_json(new_doc, skip_creation=True)
     index.wait_for_task(task.task_uid)
 
     # Only first document should exist
@@ -774,36 +774,48 @@ def test_add_documents_csv_with_skip_creation(empty_index, songs_csv):
     """Tests that skip_creation parameter works with add_documents_csv."""
     index = empty_index()
 
-    # Add first few lines manually
-    first_line = songs_csv.split(b"\n")[0] + b"\n"
-    task = index.add_documents_csv(first_line)
+    # Add first two lines (header + first data row) manually
+    lines = songs_csv.split(b"\n")
+    first_two_lines = b"\n".join(lines[:2]) + b"\n"
+    task = index.add_documents_csv(first_two_lines)
     index.wait_for_task(task.task_uid)
+
+    # Verify first document exists
+    all_docs = index.get_documents().results
+    initial_count = len(all_docs)
+    assert initial_count == 1
 
     # Try to add more with skip_creation=True
     task = index.add_documents_csv(songs_csv, skip_creation=True)
     index.wait_for_task(task.task_uid)
 
-    # Only first document should exist
+    # Only first document should exist (no new ones created)
     all_docs = index.get_documents().results
-    assert len(all_docs) == 1
+    assert len(all_docs) == initial_count
 
 
 def test_update_documents_csv_with_skip_creation(empty_index, songs_csv):
     """Tests that skip_creation parameter works with update_documents_csv."""
     index = empty_index()
 
-    # Add first few lines manually
-    first_line = songs_csv.split(b"\n")[0] + b"\n"
-    task = index.add_documents_csv(first_line)
+    # Add first two lines (header + first data row) manually
+    lines = songs_csv.split(b"\n")
+    first_two_lines = b"\n".join(lines[:2]) + b"\n"
+    task = index.add_documents_csv(first_two_lines)
     index.wait_for_task(task.task_uid)
+
+    # Verify first document exists
+    all_docs = index.get_documents().results
+    initial_count = len(all_docs)
+    assert initial_count == 1
 
     # Try to update with more with skip_creation=True
     task = index.update_documents_csv(songs_csv.decode("utf-8"), skip_creation=True)
     index.wait_for_task(task.task_uid)
 
-    # Only first document should exist
+    # Only first document should exist (no new ones created)
     all_docs = index.get_documents().results
-    assert len(all_docs) == 1
+    assert len(all_docs) == initial_count
 
 
 def test_add_documents_ndjson_with_skip_creation(empty_index, songs_ndjson):
