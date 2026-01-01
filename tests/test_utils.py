@@ -34,5 +34,5 @@ def test_iso_to_date_time_invalid_format():
 
 
 # Refactor to use the unified API to toggle experimental features
-def disable_sharding(client):
-    client.add_or_update_networks(body={"sharding": False})
+def reset_network_config(client):
+    client.add_or_update_networks(body={"remotes": {}, "leader": None})

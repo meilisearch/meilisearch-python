@@ -74,9 +74,12 @@ class Client:
 
         self.config = Config(url, api_key, timeout=timeout, client_agents=client_agents)
 
+        # Store custom headers so they can be propagated to sub-clients (Index, TaskHandler, etc.)
+        self._custom_headers = custom_headers
+
         self.http = HttpRequests(self.config, custom_headers)
 
-        self.task_handler = TaskHandler(self.config)
+        self.task_handler = TaskHandler(self.config, custom_headers)
 
     def create_index(self, uid: str, options: Optional[Mapping[str, Any]] = None) -> TaskInfo:
         """Create an index.
@@ -99,7 +102,7 @@ class Client:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return Index.create(self.config, uid, options)
+        return Index.create(self.config, uid, options, custom_headers=self._custom_headers)
 
     def delete_index(self, uid: str) -> TaskInfo:
         """Deletes an index
@@ -153,6 +156,7 @@ class Client:
                 index["primaryKey"],
                 index["createdAt"],
                 index["updatedAt"],
+                custom_headers=self._custom_headers,
             )
             for index in response["results"]
         ]
@@ -201,7 +205,7 @@ class Client:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return Index(self.config, uid).fetch_info()
+        return Index(self.config, uid, custom_headers=self._custom_headers).fetch_info()
 
     def get_raw_index(self, uid: str) -> Dict[str, Any]:
         """Get the index as a dictionary.
@@ -239,7 +243,7 @@ class Client:
             An Index instance.
         """
         if uid is not None:
-            return Index(self.config, uid=uid)
+            return Index(self.config, uid=uid, custom_headers=self._custom_headers)
         raise ValueError("The index UID should not be None")
 
     def multi_search(
@@ -651,7 +655,10 @@ class Client:
         Parameters
         ----------
         indexes:
-            List of indexes to swap (ex: [{"indexes": ["indexA", "indexB"]}).
+            List of indexes to swap ex:
+             1: {"indexes": ["indexA", "indexB"]}  # default rename to false
+            2: {"indexes": ["indexA", "indexB"], "rename": false}
+            3: {"indexes": ["indexA", "indexB"], "rename": true}
 
         Returns
         -------
@@ -1110,3 +1117,41 @@ class Client:
         )
         match = uuid4hex.match(uuid)
         return bool(match)
+
+    def get_experimental_features(self) -> Dict[str, Any]:
+        """Retrieve the current settings for all experimental features.
+
+        Returns
+        -------
+        features:
+            A dictionary mapping feature names to their enabled/disabled state.
+            For example: {"multimodal": True, "vectorStore": False}
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.http.get(self.config.paths.experimental_features)
+
+    def update_experimental_features(self, features: Dict[str, bool]) -> Dict[str, Any]:
+        """Update one or more experimental features.
+
+        Parameters
+        ----------
+        features:
+            A dictionary mapping feature names to booleans.
+            For example, {"multimodal": True} to enable multimodal,
+            or {"multimodal": True, "vectorStore": False} to update multiple features.
+
+        Returns
+        -------
+        features:
+            The updated experimental features settings as a dictionary.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.http.patch(self.config.paths.experimental_features, body=features)

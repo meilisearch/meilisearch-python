@@ -66,6 +66,7 @@ class Index:
         primary_key: Optional[str] = None,
         created_at: Optional[Union[datetime, str]] = None,
         updated_at: Optional[Union[datetime, str]] = None,
+        custom_headers: Optional[Mapping[str, str]] = None,
     ) -> None:
         """
         Parameters
@@ -78,8 +79,8 @@ class Index:
             Primary-key of the index.
         """
         self.config = config
-        self.http = HttpRequests(config)
-        self.task_handler = TaskHandler(config)
+        self.http = HttpRequests(config, custom_headers)
+        self.task_handler = TaskHandler(config, custom_headers)
         self.uid = uid
         self.primary_key = primary_key
         self.created_at = iso_to_date_time(created_at)
@@ -104,13 +105,24 @@ class Index:
 
         return TaskInfo(**task)
 
-    def update(self, primary_key: str) -> TaskInfo:
+    def update(self, primary_key: Optional[str] = None, new_uid: Optional[str] = None) -> TaskInfo:
         """Update the index primary-key.
 
         Parameters
         ----------
         primary_key:
             The primary key to use for the index.
+        new_uid : str, optional
+            The new UID to rename the index.
+
+        Renaming behavior
+        -----------------
+        When ``new_uid`` is provided, this method sends a PATCH request to rename
+        the index. After the task completes, the index exists under the new UID,
+        but this ``Index`` instance still contains the old ``self.uid``, making it
+        **stale**. Further operations with this instance will fail until a fresh
+        instance is obtained. After the rename task completes, obtain a new ``Index``
+        instance via ``client.index(new_uid)`` before making further requests.
 
         Returns
         -------
@@ -123,7 +135,18 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        payload = {"primaryKey": primary_key}
+        if primary_key is None and new_uid is None:
+            raise ValueError(
+                "You must provide either 'primary_key' or 'new_uid' to update the index."
+            )
+
+        payload = {}
+        if primary_key is not None:
+            payload["primaryKey"] = primary_key
+
+        if new_uid is not None:
+            payload["uid"] = new_uid  # This enables renaming
+
         task = self.http.patch(f"{self.config.paths.index}/{self.uid}", payload)
 
         return TaskInfo(**task)
@@ -153,7 +176,12 @@ class Index:
         return self.fetch_info().primary_key
 
     @staticmethod
-    def create(config: Config, uid: str, options: Optional[Mapping[str, Any]] = None) -> TaskInfo:
+    def create(
+        config: Config,
+        uid: str,
+        options: Optional[Mapping[str, Any]] = None,
+        custom_headers: Optional[Mapping[str, str]] = None,
+    ) -> TaskInfo:
         """Create the index.
 
         Parameters
@@ -177,7 +205,7 @@ class Index:
         if options is None:
             options = {}
         payload = {**options, "uid": uid}
-        task = HttpRequests(config).post(config.paths.index, payload)
+        task = HttpRequests(config, custom_headers).post(config.paths.index, payload)
 
         return TaskInfo(**task)
 

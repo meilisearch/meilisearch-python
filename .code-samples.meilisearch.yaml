@@ -767,6 +767,25 @@ get_batch_1: |-
   client.get_batch(BATCH_UID)
 get_similar_post_1: |-
   client.index("INDEX_NAME").get_similar_documents({"id": "TARGET_DOCUMENT_ID", "embedder": "default"})
+search_parameter_reference_media_1: |-
+  client.index('movies_fragments').search(
+      "a futuristic space movie",
+      {
+          "media": {
+              "textAndPoster": {
+                  "text": "a futuristic space movie",
+                  "image": {
+                      "mime": "image/jpeg",
+                      "data": "BASE64_ENCODED_IMAGE_DATA"
+                  }
+              }
+          },
+          "hybrid": {
+              "embedder": "multimodal",
+              "semanticRatio": 1.0
+          },
+      }
+  )
 webhooks_get_1: |-
   client.get_webhooks()
 webhooks_get_single_1: |-

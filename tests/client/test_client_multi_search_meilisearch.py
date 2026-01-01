@@ -2,7 +2,7 @@ import pytest
 
 from meilisearch.errors import MeilisearchApiError
 from tests.common import INDEX_UID, REMOTE_MS_1, REMOTE_MS_2
-from tests.test_utils import disable_sharding
+from tests.test_utils import reset_network_config
 
 
 def test_basic_multi_search(client, empty_index):
@@ -85,7 +85,6 @@ def test_multi_search_with_network(client, index_with_documents):
     resp = client.add_or_update_networks(
         {
             "self": REMOTE_MS_1,
-            "sharding": True,
             "remotes": {
                 REMOTE_MS_1: {
                     "url": "http://ms-1235.example.meilisearch.io",
@@ -112,4 +111,4 @@ def test_multi_search_with_network(client, index_with_documents):
     assert response["hits"][0]["_federation"]["indexUid"] == INDEX_UID
     assert response["hits"][0]["_federation"]["remote"] == REMOTE_MS_1
     assert response["remoteErrors"] == {}
-    disable_sharding(client)
+    reset_network_config(client)

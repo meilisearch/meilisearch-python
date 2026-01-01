@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from time import sleep
-from typing import Any, MutableMapping, Optional
+from typing import Any, Mapping, MutableMapping, Optional
 from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
@@ -19,13 +19,13 @@ class TaskHandler:
     https://www.meilisearch.com/docs/reference/api/tasks
     """
 
-    def __init__(self, config: Config):
+    def __init__(self, config: Config, custom_headers: Optional[Mapping[str, str]] = None):
         """Parameters
         ----------
             config: Config object containing permission and location of Meilisearch.
         """
         self.config = config
-        self.http = HttpRequests(config)
+        self.http = HttpRequests(config, custom_headers)
 
     def get_batches(self, parameters: Optional[MutableMapping[str, Any]] = None) -> BatchResults:
         """Get all task batches.
