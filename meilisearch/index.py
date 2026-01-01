@@ -528,7 +528,9 @@ class Index:
         tasks: List[TaskInfo] = []
 
         for document_batch in self._batch(documents, batch_size):
-            task = self.add_documents(document_batch, primary_key, serializer=serializer, skip_creation=skip_creation)
+            task = self.add_documents(
+                document_batch, primary_key, serializer=serializer, skip_creation=skip_creation
+            )
             tasks.append(task)
 
         return tasks
@@ -568,7 +570,11 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.add_documents_raw(
-            str_documents, primary_key, "application/json", serializer=serializer, skip_creation=skip_creation
+            str_documents,
+            primary_key,
+            "application/json",
+            serializer=serializer,
+            skip_creation=skip_creation,
         )
 
     def add_documents_csv(
@@ -603,7 +609,9 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return self.add_documents_raw(str_documents, primary_key, "text/csv", csv_delimiter, skip_creation=skip_creation)
+        return self.add_documents_raw(
+            str_documents, primary_key, "text/csv", csv_delimiter, skip_creation=skip_creation
+        )
 
     def add_documents_ndjson(
         self,
@@ -634,7 +642,9 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return self.add_documents_raw(str_documents, primary_key, "application/x-ndjson", skip_creation=skip_creation)
+        return self.add_documents_raw(
+            str_documents, primary_key, "application/x-ndjson", skip_creation=skip_creation
+        )
 
     def add_documents_raw(
         self,
@@ -677,7 +687,9 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        url = self._build_url(primary_key=primary_key, csv_delimiter=csv_delimiter, skip_creation=skip_creation)
+        url = self._build_url(
+            primary_key=primary_key, csv_delimiter=csv_delimiter, skip_creation=skip_creation
+        )
         response = self.http.post(url, str_documents, content_type, serializer=serializer)
         return TaskInfo(**response)
 
@@ -748,7 +760,9 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return self.update_documents_raw(str_documents, primary_key, "application/x-ndjson", skip_creation=skip_creation)
+        return self.update_documents_raw(
+            str_documents, primary_key, "application/x-ndjson", skip_creation=skip_creation
+        )
 
     def update_documents_json(
         self,
@@ -785,7 +799,11 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.update_documents_raw(
-            str_documents, primary_key, "application/json", serializer=serializer, skip_creation=skip_creation
+            str_documents,
+            primary_key,
+            "application/json",
+            serializer=serializer,
+            skip_creation=skip_creation,
         )
 
     def update_documents_csv(
@@ -820,7 +838,9 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return self.update_documents_raw(str_documents, primary_key, "text/csv", csv_delimiter, skip_creation=skip_creation)
+        return self.update_documents_raw(
+            str_documents, primary_key, "text/csv", csv_delimiter, skip_creation=skip_creation
+        )
 
     def update_documents_raw(
         self,
@@ -863,7 +883,9 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        url = self._build_url(primary_key=primary_key, csv_delimiter=csv_delimiter, skip_creation=skip_creation)
+        url = self._build_url(
+            primary_key=primary_key, csv_delimiter=csv_delimiter, skip_creation=skip_creation
+        )
         response = self.http.put(url, str_documents, content_type, serializer=serializer)
         return TaskInfo(**response)
 
@@ -908,7 +930,9 @@ class Index:
         tasks = []
 
         for document_batch in self._batch(documents, batch_size):
-            update_task = self.update_documents(document_batch, primary_key, serializer=serializer, skip_creation=skip_creation)
+            update_task = self.update_documents(
+                document_batch, primary_key, serializer=serializer, skip_creation=skip_creation
+            )
             tasks.append(update_task)
 
         return tasks
