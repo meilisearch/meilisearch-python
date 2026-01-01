@@ -759,8 +759,9 @@ def test_update_documents_json_with_skip_creation(empty_index, small_movies_json
     index.wait_for_task(task.task_uid)
 
     # Try to update with new document with skip_creation=True
-    # update_documents_json expects a string (JSON encoded)
-    new_doc = json.dumps([documents[1]])
+    # update_documents_json accepts bytes (like the fixture) or list of dicts
+    # Create bytes like the fixture does
+    new_doc = json.dumps([documents[1]]).encode("utf-8")
     task = index.update_documents_json(new_doc, skip_creation=True)
     index.wait_for_task(task.task_uid)
 
