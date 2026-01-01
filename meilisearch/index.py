@@ -469,7 +469,7 @@ class Index:
             cannot handle, for example UUID and datetime.
         skip_creation (optional):
             If True, documents that don't exist in the index are silently ignored rather
-            than created. Default is False, preserving existing behavior.
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -510,7 +510,7 @@ class Index:
             cannot handle, for example UUID and datetime.
         skip_creation (optional):
             If True, documents that don't exist in the index are silently ignored rather
-            than created. Default is False, preserving existing behavior.
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -556,7 +556,7 @@ class Index:
             cannot handle, for example UUID and datetime.
         skip_creation (optional):
             If True, documents that don't exist in the index are silently ignored rather
-            than created. Default is False, preserving existing behavior.
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -596,7 +596,7 @@ class Index:
             One ASCII character used to customize the delimiter for CSV. Comma used by default.
         skip_creation (optional):
             If True, documents that don't exist in the index are silently ignored rather
-            than created. Default is False, preserving existing behavior.
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -629,7 +629,7 @@ class Index:
             The primary-key used in index. Ignored if already set up.
         skip_creation (optional):
             If True, documents that don't exist in the index are silently ignored rather
-            than created. Default is False, preserving existing behavior.
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -674,7 +674,7 @@ class Index:
             cannot handle, for example UUID and datetime.
         skip_creation (optional):
             If True, documents that don't exist in the index are silently ignored rather
-            than created. Default is False, preserving existing behavior.
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -714,7 +714,7 @@ class Index:
             cannot handle, for example UUID and datetime.
         skip_creation (optional):
             If True, documents that don't exist in the index are silently ignored rather
-            than created. Default is False, preserving existing behavior.
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -747,7 +747,7 @@ class Index:
             The primary-key used in index. Ignored if already set up
         skip_creation (optional):
             If True, documents that don't exist in the index are silently ignored rather
-            than created. Default is False, preserving existing behavior.
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -785,7 +785,7 @@ class Index:
             cannot handle, for example UUID and datetime.
         skip_creation (optional):
             If True, documents that don't exist in the index are silently ignored rather
-            than created. Default is False, preserving existing behavior.
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -825,7 +825,7 @@ class Index:
             One ASCII character used to customize the delimiter for CSV. Comma used by default.
         skip_creation (optional):
             If True, documents that don't exist in the index are silently ignored rather
-            than created. Default is False, preserving existing behavior.
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -870,7 +870,7 @@ class Index:
             cannot handle, for example UUID and datetime.
         skip_creation (optional):
             If True, documents that don't exist in the index are silently ignored rather
-            than created. Default is False, preserving existing behavior.
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -912,7 +912,7 @@ class Index:
             cannot handle, for example UUID and datetime.
         skip_creation (optional):
             If True, documents that don't exist in the index are silently ignored rather
-            than created. Default is False, preserving existing behavior.
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
