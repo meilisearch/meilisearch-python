@@ -25,7 +25,7 @@ services:
       - MEILI_NO_ANALYTICS=true
 
   meilisearch2:
-    image: getmeili/meilisearch:latest
+    image: getmeili/meilisearch-enterprise:latest
     container_name: meili2
     ports:
       - "7701:7700"

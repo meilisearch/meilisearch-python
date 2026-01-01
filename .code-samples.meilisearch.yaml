@@ -530,7 +530,7 @@ export_post_1: |-
   client.export(
     url='https://remote-meilisearch-instance.com',
     api_key='masterKey',
-    payload_size='50MiB',
+    payload_size='50 MiB',
     indexes={
       'movies*': {},
       'books*': {},

@@ -650,7 +650,7 @@ class Client:
              to a secured Meilisearch instance.
 
         payload_size:
-            The maximum size of each single data payload in a human-readable format such as "100MiB".
+            The maximum size of each single data payload in a human-readable format such as "100 MiB".
              Larger payloads are generally more efficient, but require significantly more powerful machines.
 
         indexes:
