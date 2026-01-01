@@ -19,6 +19,8 @@ def client():
 
 @fixture(scope="session")
 def client2():
+    if not os.getenv("MEILISEARCH_URL_2"):
+        return None
     return meilisearch.Client(common.BASE_URL_2, common.MASTER_KEY)
 
 
@@ -40,7 +42,7 @@ def clear_indexes(client, client2):
     # Yields back to the test function.
     yield
     _clear_indexes(client)
-    if os.getenv("MEILISEARCH_URL_2"):
+    if client2 is not None:
         _clear_indexes(client2)
 
 
@@ -66,7 +68,7 @@ def clear_all_tasks(client, client2):
     Makes all the test functions independent.
     """
     client.delete_tasks({"statuses": ["succeeded", "failed", "canceled"]})
-    if os.getenv("MEILISEARCH_URL_2"):
+    if client2 is not None:
         client2.delete_tasks({"statuses": ["succeeded", "failed", "canceled"]})
 
 
