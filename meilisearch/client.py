@@ -898,12 +898,14 @@ class Client:
         return jwt_token
 
     def add_or_update_networks(self, body: Union[MutableMapping[str, Any], None]) -> Dict[str, str]:
-        """Set all the Remote Networks
+        """Configure the network topology
 
         Parameters
         ----------
         body:
-            Remote networks that are allowed
+            The network configuration dictionary. must contain either:
+            - 'remotes': A dictionary of instances in the network
+            - 'leader': The leader instance (should be a key in the `remotes` dictionary)
 
         Returns
         -------
