@@ -6,13 +6,10 @@ services:
     working_dir: /home/package
     environment:
       - MEILISEARCH_URL=http://meilisearch:7700
-      - MEILISEARCH_URL_2=http://meilisearch2:7700
     depends_on:
       - meilisearch
-      - meilisearch2
     links:
       - meilisearch
-      - meilisearch2
     volumes:
       - ./:/home/package
 
@@ -20,15 +17,6 @@ services:
     image: getmeili/meilisearch-enterprise:latest
     ports:
       - "7700"
-    environment:
-      - MEILI_MASTER_KEY=masterKey
-      - MEILI_NO_ANALYTICS=true
-
-  meilisearch2:
-    image: getmeili/meilisearch-enterprise:latest
-    container_name: meili2
-    ports:
-      - "7701:7700"
     environment:
       - MEILI_MASTER_KEY=masterKey
       - MEILI_NO_ANALYTICS=true
