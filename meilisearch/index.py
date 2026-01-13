@@ -107,7 +107,7 @@ class Index:
         """
 
         url = f"{self.config.paths.index}/{self.uid}"
-        if metadata:
+        if metadata is not None:
             url += f"?{parse.urlencode({'customMetadata': metadata})}"
         task = self.http.delete(url)
 
@@ -164,7 +164,7 @@ class Index:
             payload["uid"] = new_uid  # This enables renaming
 
         url = f"{self.config.paths.index}/{self.uid}"
-        if metadata:
+        if metadata is not None:
             url += f"?{parse.urlencode({'customMetadata': metadata})}"
         task = self.http.patch(url, payload)
 
@@ -229,7 +229,7 @@ class Index:
             options = {}
         payload = {**options, "uid": uid}
         url = config.paths.index
-        if metadata:
+        if metadata is not None:
             url += f"?{parse.urlencode({'customMetadata': metadata})}"
         task = HttpRequests(config, custom_headers).post(url, payload)
 
@@ -694,6 +694,7 @@ class Index:
         self,
         str_documents: bytes,
         primary_key: Optional[str] = None,
+        *,
         skip_creation: Optional[bool] = None,
         metadata: Optional[str] = None,
     ) -> TaskInfo:
@@ -1089,7 +1090,7 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         url = f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}/{document_id}"
-        if metadata:
+        if metadata is not None:
             url += f"?{parse.urlencode({'customMetadata': metadata})}"
         response = self.http.delete(url)
         return TaskInfo(**response)
@@ -1133,7 +1134,7 @@ class Index:
                 DeprecationWarning,
             )
             url = f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}/delete-batch"
-            if metadata:
+            if metadata is not None:
                 url += f"?{parse.urlencode({'customMetadata': metadata})}"
             response = self.http.post(
                 url,
@@ -1141,7 +1142,7 @@ class Index:
             )
         else:
             url = f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}/delete"
-            if metadata:
+            if metadata is not None:
                 url += f"?{parse.urlencode({'customMetadata': metadata})}"
             response = self.http.post(
                 url,
@@ -1169,7 +1170,7 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         url = f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}"
-        if metadata:
+        if metadata is not None:
             url += f"?{parse.urlencode({'customMetadata': metadata})}"
         response = self.http.delete(url)
         return TaskInfo(**response)
@@ -1269,7 +1270,7 @@ class Index:
                     del v["documentTemplateMaxBytes"]
 
         url = f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}"
-        if metadata:
+        if metadata is not None:
             url += f"?{parse.urlencode({'customMetadata': metadata})}"
         task = self.http.patch(url, body)
 
@@ -1297,7 +1298,7 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         url = f"{self.config.paths.index}/{self.uid}/{self.config.paths.setting}"
-        if metadata:
+        if metadata is not None:
             url += f"?{parse.urlencode({'customMetadata': metadata})}"
         task = self.http.delete(url)
 
@@ -2574,7 +2575,7 @@ class Index:
             parameters["csvDelimiter"] = csv_delimiter
         if skip_creation is True:
             parameters["skipCreation"] = "true"
-        if metadata:
+        if metadata is not None:
             parameters["customMetadata"] = metadata
         if not parameters:
             return f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}"

@@ -137,7 +137,7 @@ class Client:
         """
 
         url = f"{self.config.paths.index}/{uid}"
-        if metadata:
+        if metadata is not None:
             url += f"?{parse.urlencode({'customMetadata': metadata})}"
         task = self.http.delete(url)
 

@@ -148,7 +148,7 @@ class TaskHandler:
         for param in parameters:
             if isinstance(parameters[param], (list, tuple)):
                 parameters[param] = ",".join(parameters[param])
-        if metadata:
+        if metadata is not None:
             parameters["customMetadata"] = metadata
         response = self.http.post(f"{self.config.paths.task}/cancel?{parse.urlencode(parameters)}")
         return TaskInfo(**response)
@@ -178,7 +178,7 @@ class TaskHandler:
         for param in parameters:
             if isinstance(parameters[param], (list, tuple)):
                 parameters[param] = ",".join(parameters[param])
-        if metadata:
+        if metadata is not None:
             parameters["customMetadata"] = metadata
         response = self.http.delete(f"{self.config.paths.task}?{parse.urlencode(parameters)}")
         return TaskInfo(**response)
