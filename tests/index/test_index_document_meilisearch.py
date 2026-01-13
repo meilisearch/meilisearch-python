@@ -1,5 +1,6 @@
 # pylint: disable=invalid-name
 
+import json
 from datetime import datetime
 from json import JSONEncoder
 from math import ceil
@@ -8,6 +9,7 @@ from warnings import catch_warnings
 
 import pytest
 
+from meilisearch.errors import MeilisearchApiError
 from meilisearch.models.document import Document
 from meilisearch.models.task import TaskInfo
 
@@ -206,7 +208,7 @@ def test_get_document_with_fields(index_with_documents):
 
 def test_get_document_inexistent(empty_index):
     """Tests getting one inexistent document from a populated index."""
-    with pytest.raises(Exception):
+    with pytest.raises(MeilisearchApiError):
         empty_index().get_document("123")
 
 
@@ -418,7 +420,7 @@ def test_delete_document(index_with_documents):
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     index.wait_for_task(response.task_uid)
-    with pytest.raises(Exception):
+    with pytest.raises(MeilisearchApiError):
         index.get_document("500682")
 
 
@@ -432,7 +434,7 @@ def test_delete_documents_by_id(index_with_documents):
         assert response.task_uid is not None
         index.wait_for_task(response.task_uid)
         for document in to_delete:
-            with pytest.raises(Exception):
+            with pytest.raises(MeilisearchApiError):
                 index.get_document(document)
         assert "The use of ids is depreciated" in str(w[0].message)
 
@@ -555,3 +557,279 @@ def test_update_documents_ndjson(index_with_documents, songs_ndjson):
     task = index.wait_for_task(response.task_uid)
     assert task.status == "succeeded"
     assert index.get_primary_key() == "id"
+
+
+# Tests for skip_creation parameter
+def test_add_documents_with_skip_creation_true(empty_index):
+    """Tests that skip_creation=True prevents creation of new documents."""
+    index = empty_index()
+    documents = [
+        {"id": "1", "title": "Existing Document"},
+    ]
+
+    # First add a document normally
+    task = index.add_documents(documents)
+    index.wait_for_task(task.task_uid)
+
+    # Verify document exists
+    doc = index.get_document("1")
+    assert doc.title == "Existing Document"
+
+    # Now try to add a new document with skip_creation=True - should be ignored
+    new_documents = [
+        {"id": "2", "title": "New Document"},
+    ]
+    task = index.add_documents(new_documents, skip_creation=True)
+    index.wait_for_task(task.task_uid)
+
+    # Document "2" should not exist because skip_creation=True prevents creation of new documents
+    with pytest.raises(MeilisearchApiError):
+        index.get_document("2")
+
+    # Existing document should still be there
+    doc = index.get_document("1")
+    assert doc.title == "Existing Document"
+
+
+def test_add_documents_with_skip_creation_false(empty_index):
+    """Tests that skip_creation=False allows creation of new documents (default behavior)."""
+    index = empty_index()
+    documents = [
+        {"id": "1", "title": "New Document"},
+    ]
+
+    # Add document with skip_creation=False (should work same as default)
+    task = index.add_documents(documents, skip_creation=False)
+    index.wait_for_task(task.task_uid)
+
+    # Document should exist
+    doc = index.get_document("1")
+    assert doc.title == "New Document"
+
+
+def test_add_documents_skip_creation_updates_existing(empty_index):
+    """Tests that skip_creation=True still allows updating existing documents."""
+    index = empty_index()
+    documents = [
+        {"id": "1", "title": "Original Title"},
+    ]
+
+    # Add document initially
+    task = index.add_documents(documents)
+    index.wait_for_task(task.task_uid)
+
+    # Update with skip_creation=True - should update existing document
+    updated_documents = [
+        {"id": "1", "title": "Updated Title"},
+    ]
+    task = index.add_documents(updated_documents, skip_creation=True)
+    index.wait_for_task(task.task_uid)
+
+    # Document should be updated
+    doc = index.get_document("1")
+    assert doc.title == "Updated Title"
+
+
+def test_update_documents_with_skip_creation_true(empty_index):
+    """Tests that update_documents with skip_creation=True prevents creation of new documents."""
+    index = empty_index()
+    documents = [
+        {"id": "1", "title": "Existing Document"},
+    ]
+
+    # First add a document
+    task = index.add_documents(documents)
+    index.wait_for_task(task.task_uid)
+
+    # Now try to update with a new document - should be ignored
+    new_documents = [
+        {"id": "2", "title": "New Document"},
+    ]
+    task = index.update_documents(new_documents, skip_creation=True)
+    index.wait_for_task(task.task_uid)
+
+    # Document "2" should not exist because skip_creation=True prevents creation of new documents
+    with pytest.raises(MeilisearchApiError):
+        index.get_document("2")
+
+    # Existing document should still be there and unchanged
+    doc = index.get_document("1")
+    assert doc.title == "Existing Document"
+
+
+def test_update_documents_skip_creation_updates_existing(empty_index):
+    """Tests that update_documents with skip_creation=True still updates existing documents."""
+    index = empty_index()
+    documents = [
+        {"id": "1", "title": "Original Title"},
+    ]
+
+    # Add document initially
+    task = index.add_documents(documents)
+    index.wait_for_task(task.task_uid)
+
+    # Update with skip_creation=True - should update existing document
+    updated_documents = [
+        {"id": "1", "title": "Updated Title"},
+    ]
+    task = index.update_documents(updated_documents, skip_creation=True)
+    index.wait_for_task(task.task_uid)
+
+    # Document should be updated
+    doc = index.get_document("1")
+    assert doc.title == "Updated Title"
+
+
+def test_add_documents_in_batches_with_skip_creation(empty_index, small_movies):
+    """Tests that skip_creation parameter works with add_documents_in_batches."""
+    index = empty_index()
+
+    # Add some documents first
+    initial_docs = small_movies[:5]
+    task = index.add_documents(initial_docs)
+    index.wait_for_task(task.task_uid)
+
+    # Try to add more documents with skip_creation=True
+    new_docs = small_movies[5:10]
+    task = index.add_documents_in_batches(new_docs, batch_size=2, skip_creation=True)
+    assert isinstance(task, list)
+    for t in task:
+        index.wait_for_task(t.task_uid)
+
+    # Only original documents should exist
+    all_docs = index.get_documents().results
+    existing_ids = {doc.id for doc in all_docs}
+    original_ids = {doc["id"] for doc in initial_docs}
+    assert existing_ids == original_ids
+
+
+def test_update_documents_in_batches_with_skip_creation(empty_index, small_movies):
+    """Tests that skip_creation parameter works with update_documents_in_batches."""
+    index = empty_index()
+
+    # Add some documents first
+    initial_docs = small_movies[:5]
+    task = index.add_documents(initial_docs)
+    index.wait_for_task(task.task_uid)
+
+    # Try to update with new documents with skip_creation=True
+    new_docs = small_movies[5:10]
+    task = index.update_documents_in_batches(new_docs, batch_size=2, skip_creation=True)
+    assert isinstance(task, list)
+    for t in task:
+        index.wait_for_task(t.task_uid)
+
+    # Only original documents should exist
+    all_docs = index.get_documents().results
+    existing_ids = {doc.id for doc in all_docs}
+    original_ids = {doc["id"] for doc in initial_docs}
+    assert existing_ids == original_ids
+
+
+def test_add_documents_json_with_skip_creation(empty_index, small_movies_json_file):
+    """Tests that skip_creation parameter works with add_documents_json."""
+    index = empty_index()
+    documents = json.loads(small_movies_json_file.decode("utf-8"))
+
+    # Add first document
+    first_doc = json.dumps([documents[0]]).encode("utf-8")
+    task = index.add_documents_json(first_doc)
+    index.wait_for_task(task.task_uid)
+
+    # Try to add new document with skip_creation=True
+    new_doc = json.dumps([documents[1]]).encode("utf-8")
+    task = index.add_documents_json(new_doc, skip_creation=True)
+    index.wait_for_task(task.task_uid)
+
+    # Only first document should exist
+    all_docs = index.get_documents().results
+    assert len(all_docs) == 1
+    assert all_docs[0].id == documents[0]["id"]
+
+
+def test_update_documents_json_with_skip_creation(empty_index, small_movies_json_file):
+    """Tests that skip_creation parameter works with update_documents_json."""
+    index = empty_index()
+    documents = json.loads(small_movies_json_file.decode("utf-8"))
+
+    # Add first document using add_documents (expects list of dicts)
+    task = index.add_documents([documents[0]])
+    index.wait_for_task(task.task_uid)
+
+    # Try to update with new document with skip_creation=True
+    # update_documents_json accepts bytes (like the fixture) or list of dicts
+    # Create bytes like the fixture does
+    new_doc = json.dumps([documents[1]]).encode("utf-8")
+    task = index.update_documents_json(new_doc, skip_creation=True)
+    index.wait_for_task(task.task_uid)
+
+    # Only first document should exist
+    all_docs = index.get_documents().results
+    assert len(all_docs) == 1
+    assert all_docs[0].id == documents[0]["id"]
+
+
+def test_add_documents_csv_with_skip_creation(empty_index, songs_csv):
+    """Tests that skip_creation parameter works with add_documents_csv."""
+    index = empty_index()
+
+    # Add first two lines (header + first data row) manually
+    lines = songs_csv.split(b"\n")
+    first_two_lines = b"\n".join(lines[:2]) + b"\n"
+    task = index.add_documents_csv(first_two_lines)
+    index.wait_for_task(task.task_uid)
+
+    # Verify first document exists
+    all_docs = index.get_documents().results
+    initial_count = len(all_docs)
+    assert initial_count == 1
+
+    # Try to add more with skip_creation=True
+    task = index.add_documents_csv(songs_csv, skip_creation=True)
+    index.wait_for_task(task.task_uid)
+
+    # Only first document should exist (no new ones created)
+    all_docs = index.get_documents().results
+    assert len(all_docs) == initial_count
+
+
+def test_update_documents_csv_with_skip_creation(empty_index, songs_csv):
+    """Tests that skip_creation parameter works with update_documents_csv."""
+    index = empty_index()
+
+    # Add first two lines (header + first data row) manually
+    lines = songs_csv.split(b"\n")
+    first_two_lines = b"\n".join(lines[:2]) + b"\n"
+    task = index.add_documents_csv(first_two_lines)
+    index.wait_for_task(task.task_uid)
+
+    # Verify first document exists
+    all_docs = index.get_documents().results
+    initial_count = len(all_docs)
+    assert initial_count == 1
+
+    # Try to update with more with skip_creation=True
+    task = index.update_documents_csv(songs_csv.decode("utf-8"), skip_creation=True)
+    index.wait_for_task(task.task_uid)
+
+    # Only first document should exist (no new ones created)
+    all_docs = index.get_documents().results
+    assert len(all_docs) == initial_count
+
+
+def test_add_documents_ndjson_with_skip_creation(empty_index, songs_ndjson):
+    """Tests that skip_creation parameter works with add_documents_ndjson."""
+    index = empty_index()
+
+    # Add first line
+    first_line = songs_ndjson.split(b"\n")[0] + b"\n"
+    task = index.add_documents_ndjson(first_line)
+    index.wait_for_task(task.task_uid)
+
+    # Try to add more with skip_creation=True
+    task = index.add_documents_ndjson(songs_ndjson, skip_creation=True)
+    index.wait_for_task(task.task_uid)
+
+    # Only first document should exist
+    all_docs = index.get_documents().results
+    assert len(all_docs) == 1

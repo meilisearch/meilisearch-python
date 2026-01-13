@@ -482,6 +482,7 @@ class Index:
         primary_key: Optional[str] = None,
         *,
         serializer: Optional[Type[JSONEncoder]] = None,
+        skip_creation: Optional[bool] = None,
     ) -> TaskInfo:
         """Add documents to the index.
 
@@ -494,6 +495,9 @@ class Index:
         serializer (optional):
             A custom JSONEncode to handle serializing fields that the build in json.dumps
             cannot handle, for example UUID and datetime.
+        skip_creation (optional):
+            If True, documents that don't exist in the index are silently ignored rather
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -506,7 +510,7 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        url = self._build_url(primary_key)
+        url = self._build_url(primary_key, skip_creation=skip_creation)
         add_document_task = self.http.post(url, documents, serializer=serializer)
         return TaskInfo(**add_document_task)
 
@@ -517,6 +521,7 @@ class Index:
         primary_key: Optional[str] = None,
         *,
         serializer: Optional[Type[JSONEncoder]] = None,
+        skip_creation: Optional[bool] = None,
     ) -> List[TaskInfo]:
         """Add documents to the index in batches.
 
@@ -531,6 +536,9 @@ class Index:
         serializer (optional):
             A custom JSONEncode to handle serializing fields that the build in json.dumps
             cannot handle, for example UUID and datetime.
+        skip_creation (optional):
+            If True, documents that don't exist in the index are silently ignored rather
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -548,7 +556,9 @@ class Index:
         tasks: List[TaskInfo] = []
 
         for document_batch in self._batch(documents, batch_size):
-            task = self.add_documents(document_batch, primary_key, serializer=serializer)
+            task = self.add_documents(
+                document_batch, primary_key, serializer=serializer, skip_creation=skip_creation
+            )
             tasks.append(task)
 
         return tasks
@@ -559,6 +569,7 @@ class Index:
         primary_key: Optional[str] = None,
         *,
         serializer: Optional[Type[JSONEncoder]] = None,
+        skip_creation: Optional[bool] = None,
     ) -> TaskInfo:
         """Add documents to the index from a byte-encoded JSON string.
 
@@ -571,6 +582,9 @@ class Index:
         serializer (optional):
             A custom JSONEncode to handle serializing fields that the build in json.dumps
             cannot handle, for example UUID and datetime.
+        skip_creation (optional):
+            If True, documents that don't exist in the index are silently ignored rather
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -584,7 +598,11 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.add_documents_raw(
-            str_documents, primary_key, "application/json", serializer=serializer
+            str_documents,
+            primary_key,
+            "application/json",
+            serializer=serializer,
+            skip_creation=skip_creation,
         )
 
     def add_documents_csv(
@@ -592,6 +610,7 @@ class Index:
         str_documents: bytes,
         primary_key: Optional[str] = None,
         csv_delimiter: Optional[str] = None,
+        skip_creation: Optional[bool] = None,
     ) -> TaskInfo:
         """Add documents to the index from a byte-encoded CSV string.
 
@@ -603,6 +622,9 @@ class Index:
             The primary-key used in index. Ignored if already set up.
         csv_delimiter:
             One ASCII character used to customize the delimiter for CSV. Comma used by default.
+        skip_creation (optional):
+            If True, documents that don't exist in the index are silently ignored rather
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -615,12 +637,15 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return self.add_documents_raw(str_documents, primary_key, "text/csv", csv_delimiter)
+        return self.add_documents_raw(
+            str_documents, primary_key, "text/csv", csv_delimiter, skip_creation=skip_creation
+        )
 
     def add_documents_ndjson(
         self,
         str_documents: bytes,
         primary_key: Optional[str] = None,
+        skip_creation: Optional[bool] = None,
     ) -> TaskInfo:
         """Add documents to the index from a byte-encoded NDJSON string.
 
@@ -630,6 +655,9 @@ class Index:
             Byte-encoded NDJSON string.
         primary_key (optional):
             The primary-key used in index. Ignored if already set up.
+        skip_creation (optional):
+            If True, documents that don't exist in the index are silently ignored rather
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -642,7 +670,9 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return self.add_documents_raw(str_documents, primary_key, "application/x-ndjson")
+        return self.add_documents_raw(
+            str_documents, primary_key, "application/x-ndjson", skip_creation=skip_creation
+        )
 
     def add_documents_raw(
         self,
@@ -652,6 +682,7 @@ class Index:
         csv_delimiter: Optional[str] = None,
         *,
         serializer: Optional[Type[JSONEncoder]] = None,
+        skip_creation: Optional[bool] = None,
     ) -> TaskInfo:
         """Add documents to the index from a byte-encoded string.
 
@@ -669,6 +700,9 @@ class Index:
         serializer (optional):
             A custom JSONEncode to handle serializing fields that the build in json.dumps
             cannot handle, for example UUID and datetime.
+        skip_creation (optional):
+            If True, documents that don't exist in the index are silently ignored rather
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -681,7 +715,9 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        url = self._build_url(primary_key=primary_key, csv_delimiter=csv_delimiter)
+        url = self._build_url(
+            primary_key=primary_key, csv_delimiter=csv_delimiter, skip_creation=skip_creation
+        )
         response = self.http.post(url, str_documents, content_type, serializer=serializer)
         return TaskInfo(**response)
 
@@ -691,6 +727,7 @@ class Index:
         primary_key: Optional[str] = None,
         *,
         serializer: Optional[Type[JSONEncoder]] = None,
+        skip_creation: Optional[bool] = None,
     ) -> TaskInfo:
         """Update documents in the index.
 
@@ -703,6 +740,9 @@ class Index:
         serializer (optional):
             A custom JSONEncode to handle serializing fields that the build in json.dumps
             cannot handle, for example UUID and datetime.
+        skip_creation (optional):
+            If True, documents that don't exist in the index are silently ignored rather
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -715,7 +755,7 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        url = self._build_url(primary_key)
+        url = self._build_url(primary_key, skip_creation=skip_creation)
         response = self.http.put(url, documents, serializer=serializer)
         return TaskInfo(**response)
 
@@ -723,6 +763,7 @@ class Index:
         self,
         str_documents: str,
         primary_key: Optional[str] = None,
+        skip_creation: Optional[bool] = None,
     ) -> TaskInfo:
         """Update documents as a ndjson string in the index.
 
@@ -732,38 +773,9 @@ class Index:
             String of document from a NDJSON file.
         primary_key (optional):
             The primary-key used in index. Ignored if already set up
-
-        Returns
-        -------
-        task_info:
-            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
-
-        Raises
-        ------
-        MeilisearchApiError
-            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
-        """
-        return self.update_documents_raw(str_documents, primary_key, "application/x-ndjson")
-
-    def update_documents_json(
-        self,
-        str_documents: str,
-        primary_key: Optional[str] = None,
-        *,
-        serializer: Optional[Type[JSONEncoder]] = None,
-    ) -> TaskInfo:
-        """Update documents as a json string in the index.
-
-        Parameters
-        ----------
-        str_documents:
-            String of document from a JSON file.
-        primary_key (optional):
-            The primary-key used in index. Ignored if already set up
-        serializer (optional):
-            A custom JSONEncode to handle serializing fields that the build in json.dumps
-            cannot handle, for example UUID and datetime.
+        skip_creation (optional):
+            If True, documents that don't exist in the index are silently ignored rather
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -777,25 +789,31 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         return self.update_documents_raw(
-            str_documents, primary_key, "application/json", serializer=serializer
+            str_documents, primary_key, "application/x-ndjson", skip_creation=skip_creation
         )
 
-    def update_documents_csv(
+    def update_documents_json(
         self,
         str_documents: str,
         primary_key: Optional[str] = None,
-        csv_delimiter: Optional[str] = None,
+        *,
+        serializer: Optional[Type[JSONEncoder]] = None,
+        skip_creation: Optional[bool] = None,
     ) -> TaskInfo:
-        """Update documents as a csv string in the index.
+        """Update documents as a json string in the index.
 
         Parameters
         ----------
         str_documents:
-            String of document from a CSV file.
+            String of document from a JSON file.
         primary_key (optional):
-            The primary-key used in index. Ignored if already set up.
-        csv_delimiter:
-            One ASCII character used to customize the delimiter for CSV. Comma used by default.
+            The primary-key used in index. Ignored if already set up
+        serializer (optional):
+            A custom JSONEncode to handle serializing fields that the build in json.dumps
+            cannot handle, for example UUID and datetime.
+        skip_creation (optional):
+            If True, documents that don't exist in the index are silently ignored rather
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -808,7 +826,49 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return self.update_documents_raw(str_documents, primary_key, "text/csv", csv_delimiter)
+        return self.update_documents_raw(
+            str_documents,
+            primary_key,
+            "application/json",
+            serializer=serializer,
+            skip_creation=skip_creation,
+        )
+
+    def update_documents_csv(
+        self,
+        str_documents: str,
+        primary_key: Optional[str] = None,
+        csv_delimiter: Optional[str] = None,
+        skip_creation: Optional[bool] = None,
+    ) -> TaskInfo:
+        """Update documents as a csv string in the index.
+
+        Parameters
+        ----------
+        str_documents:
+            String of document from a CSV file.
+        primary_key (optional):
+            The primary-key used in index. Ignored if already set up.
+        csv_delimiter:
+            One ASCII character used to customize the delimiter for CSV. Comma used by default.
+        skip_creation (optional):
+            If True, documents that don't exist in the index are silently ignored rather
+            than created. If False or None (default), existing behavior is preserved.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.update_documents_raw(
+            str_documents, primary_key, "text/csv", csv_delimiter, skip_creation=skip_creation
+        )
 
     def update_documents_raw(
         self,
@@ -818,6 +878,7 @@ class Index:
         csv_delimiter: Optional[str] = None,
         *,
         serializer: Optional[Type[JSONEncoder]] = None,
+        skip_creation: Optional[bool] = None,
     ) -> TaskInfo:
         """Update documents as a string in the index.
 
@@ -835,6 +896,9 @@ class Index:
         serializer (optional):
             A custom JSONEncode to handle serializing fields that the build in json.dumps
             cannot handle, for example UUID and datetime.
+        skip_creation (optional):
+            If True, documents that don't exist in the index are silently ignored rather
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -847,7 +911,9 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        url = self._build_url(primary_key=primary_key, csv_delimiter=csv_delimiter)
+        url = self._build_url(
+            primary_key=primary_key, csv_delimiter=csv_delimiter, skip_creation=skip_creation
+        )
         response = self.http.put(url, str_documents, content_type, serializer=serializer)
         return TaskInfo(**response)
 
@@ -857,6 +923,7 @@ class Index:
         batch_size: int = 1000,
         primary_key: Optional[str] = None,
         serializer: Optional[Type[JSONEncoder]] = None,
+        skip_creation: Optional[bool] = None,
     ) -> List[TaskInfo]:
         """Update documents to the index in batches.
 
@@ -871,6 +938,9 @@ class Index:
         serializer (optional):
             A custom JSONEncode to handle serializing fields that the build in json.dumps
             cannot handle, for example UUID and datetime.
+        skip_creation (optional):
+            If True, documents that don't exist in the index are silently ignored rather
+            than created. If False or None (default), existing behavior is preserved.
 
         Returns
         -------
@@ -888,7 +958,9 @@ class Index:
         tasks = []
 
         for document_batch in self._batch(documents, batch_size):
-            update_task = self.update_documents(document_batch, primary_key, serializer=serializer)
+            update_task = self.update_documents(
+                document_batch, primary_key, serializer=serializer, skip_creation=skip_creation
+            )
             tasks.append(update_task)
 
         return tasks
@@ -2359,13 +2431,16 @@ class Index:
         self,
         primary_key: Optional[str] = None,
         csv_delimiter: Optional[str] = None,
+        skip_creation: Optional[bool] = None,
     ) -> str:
         parameters = {}
         if primary_key:
             parameters["primaryKey"] = primary_key
         if csv_delimiter:
             parameters["csvDelimiter"] = csv_delimiter
-        if primary_key is None and csv_delimiter is None:
+        if skip_creation is True:
+            parameters["skipCreation"] = "true"
+        if not parameters:
             return f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}"
         return f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}?{parse.urlencode(parameters)}"
 
