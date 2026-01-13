@@ -39,7 +39,7 @@ def test_add_documents(empty_index, small_movies):
     update = index.wait_for_task(response.task_uid)
     assert index.get_primary_key() == "id"
     assert update.status == "succeeded"
-    assert update.customMetadata == "Test metadata"
+    assert update.custom_metadata == "Test metadata"
 
 
 def test_add_documents_empty(empty_index):
@@ -73,7 +73,7 @@ def test_add_documents_in_batches(
         assert r.task_uid is not None
         update = index.wait_for_task(r.task_uid)
         assert update.status == "succeeded"
-        assert update.customMetadata == "Test metadata"
+        assert update.custom_metadata == "Test metadata"
 
     assert index.get_primary_key() == expected_primary_key
 
@@ -119,7 +119,7 @@ def test_add_documents_json_custom_serializer(empty_index):
     update = index.wait_for_task(response.task_uid)
     assert index.get_primary_key() == "id"
     assert update.status == "succeeded"
-    assert update.customMetadata == "Test metadata"
+    assert update.custom_metadata == "Test metadata"
 
 
 def test_add_documents_raw_custom_serializer(empty_index):
@@ -139,7 +139,7 @@ def test_add_documents_raw_custom_serializer(empty_index):
     update = index.wait_for_task(response.task_uid)
     assert index.get_primary_key() == "id"
     assert update.status == "succeeded"
-    assert update.customMetadata == "Test metadata"
+    assert update.custom_metadata == "Test metadata"
 
 
 def test_update_documents_custom_serializer(empty_index):
@@ -154,7 +154,7 @@ def test_update_documents_custom_serializer(empty_index):
     update = index.wait_for_task(response.task_uid)
     assert index.get_primary_key() == "id"
     assert update.status == "succeeded"
-    assert update.customMetadata == "Test metadata"
+    assert update.custom_metadata == "Test metadata"
 
 
 def test_update_documents_in_batches_custom_serializer(empty_index):
@@ -184,7 +184,7 @@ def test_update_documents_json_custom_serializer(empty_index):
     update = index.wait_for_task(response.task_uid)
     assert index.get_primary_key() == "id"
     assert update.status == "succeeded"
-    assert update.customMetadata == "Test metadata"
+    assert update.custom_metadata == "Test metadata"
 
 
 def test_update_documents_raw_custom_serializer(empty_index):
@@ -204,7 +204,7 @@ def test_update_documents_raw_custom_serializer(empty_index):
     update = index.wait_for_task(response.task_uid)
     assert index.get_primary_key() == "id"
     assert update.status == "succeeded"
-    assert update.customMetadata == "Test metadata"
+    assert update.custom_metadata == "Test metadata"
 
 
 def test_get_document(index_with_documents):
@@ -397,7 +397,7 @@ def test_update_documents(index_with_documents, small_movies):
     assert isinstance(update, TaskInfo)
     assert update.task_uid is not None
     task = index.wait_for_task(update.task_uid)
-    assert task.customMetadata == "Test metadata"
+    assert task.custom_metadata == "Test metadata"
 
     response = index.get_document(doc.id)
     assert response.title == "Some title"
@@ -431,7 +431,7 @@ def test_update_documents_in_batches(
         assert r.task_uid is not None
         update = index.wait_for_task(r.task_uid)
         assert update.status == "succeeded"
-        assert update.customMetadata == "Test metadata"
+        assert update.custom_metadata == "Test metadata"
 
     assert index.get_primary_key() == expected_primary_key
 
@@ -443,7 +443,7 @@ def test_delete_document(index_with_documents):
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     task = index.wait_for_task(response.task_uid)
-    assert task.customMetadata == "Test metadata"
+    assert task.custom_metadata == "Test metadata"
 
     with pytest.raises(MeilisearchApiError):
         index.get_document("500682")
@@ -458,7 +458,7 @@ def test_delete_documents_by_id(index_with_documents):
         assert isinstance(response, TaskInfo)
         assert response.task_uid is not None
         task = index.wait_for_task(response.task_uid)
-        assert task.customMetadata == "Test metadata"
+        assert task.custom_metadata == "Test metadata"
 
         for document in to_delete:
             with pytest.raises(MeilisearchApiError):
@@ -474,7 +474,7 @@ def test_delete_documents(index_with_documents):
     assert "action" in ([x.__dict__.get("genre") for x in response.results])
     response = index.delete_documents(filter="genre=action", metadata="Test metadata")
     task = index.wait_for_task(response.task_uid)
-    assert task.customMetadata == "Test metadata"
+    assert task.custom_metadata == "Test metadata"
 
     response = index.get_documents()
     genres = [x.__dict__.get("genre") for x in response.results]
@@ -489,7 +489,7 @@ def test_delete_all_documents(index_with_documents):
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     task = index.wait_for_task(response.task_uid)
-    assert task.customMetadata == "Test metadata"
+    assert task.custom_metadata == "Test metadata"
     response = index.get_documents()
     assert isinstance(response.results, list)
     assert response.results == []
@@ -502,7 +502,7 @@ def test_add_documents_csv(empty_index, songs_csv):
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     task = index.wait_for_task(response.task_uid)
-    assert task.customMetadata == "Test metadata"
+    assert task.custom_metadata == "Test metadata"
     assert task.status == "succeeded"
     assert index.get_primary_key() == "id"
 
@@ -529,7 +529,7 @@ def test_update_documents_csv(index_with_documents, songs_csv):
     assert response.task_uid is not None
     task = index.wait_for_task(response.task_uid)
     assert task.status == "succeeded"
-    assert task.customMetadata == "Test metadata"
+    assert task.custom_metadata == "Test metadata"
     assert index.get_primary_key() == "id"
 
 
@@ -555,7 +555,7 @@ def test_add_documents_json(empty_index, small_movies_json_file):
     assert response.task_uid is not None
     task = index.wait_for_task(response.task_uid)
     assert task.status == "succeeded"
-    assert task.customMetadata == "Test metadata"
+    assert task.custom_metadata == "Test metadata"
     assert index.get_primary_key() == "id"
 
 
@@ -566,7 +566,7 @@ def test_update_documents_json(index_with_documents, small_movies_json_file):
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     task = index.wait_for_task(response.task_uid)
-    assert task.customMetadata == "Test metadata"
+    assert task.custom_metadata == "Test metadata"
     assert task.status == "succeeded"
     assert index.get_primary_key() == "id"
 
@@ -578,7 +578,7 @@ def test_add_documents_ndjson(empty_index, songs_ndjson):
     assert isinstance(response, TaskInfo)
     assert response.task_uid is not None
     task = index.wait_for_task(response.task_uid)
-    assert task.customMetadata == "Test metadata"
+    assert task.custom_metadata == "Test metadata"
     assert task.status == "succeeded"
     assert index.get_primary_key() == "id"
 
@@ -591,7 +591,7 @@ def test_update_documents_ndjson(index_with_documents, songs_ndjson):
     assert response.task_uid is not None
     task = index.wait_for_task(response.task_uid)
     assert task.status == "succeeded"
-    assert task.customMetadata == "Test metadata"
+    assert task.custom_metadata == "Test metadata"
     assert index.get_primary_key() == "id"
 
 
