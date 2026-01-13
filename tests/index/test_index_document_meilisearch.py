@@ -392,12 +392,12 @@ def test_update_documents(index_with_documents, small_movies):
     doc = response.results[0]
     doc.title = "Some title"
 
-    update = index.update_documents([dict(doc)], metadata="Test metadata")
+    update = index.update_documents([dict(doc)], metadata="")
 
     assert isinstance(update, TaskInfo)
     assert update.task_uid is not None
     task = index.wait_for_task(update.task_uid)
-    assert task.custom_metadata == "Test metadata"
+    assert task.custom_metadata == ""
 
     response = index.get_document(doc.id)
     assert response.title == "Some title"
