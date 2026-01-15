@@ -664,7 +664,7 @@ class Client:
 
         return TaskInfo(**task)
 
-    def swap_indexes(self, parameters: List[Mapping[str, List[str]]]) -> TaskInfo:
+    def swap_indexes(self, parameters: List[Mapping[str, List[str] | bool]]) -> TaskInfo:
         """Swap two indexes.
 
         Parameters
