@@ -42,7 +42,7 @@ jobs:
           pipx install pipenv
       - name: Install dependencies
         run: |
-          pipenv install --dev
+          pipenv --python $(which python) install --dev
           pipenv install sphinx
           pipenv install sphinx_rtd_theme
       - name: Build docs
