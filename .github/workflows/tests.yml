@@ -26,7 +26,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: "pipenv"
       - name: Install pipenv
-        run: pipx install pipenv
+        run: pip install pipenv
       - name: Install dependencies
         run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: Meilisearch (latest version) setup with Docker
@@ -62,7 +62,7 @@ jobs:
           python-version: 3.9
           cache: "pipenv"
       - name: Install pipenv
-        run: pipx install pipenv
+        run: pip install pipenv
       - name: Install dependencies
         run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: mypy type check
@@ -79,7 +79,7 @@ jobs:
           python-version: 3.9
           cache: "pipenv"
       - name: Install pipenv
-        run: pipx install pipenv
+        run: pip install pipenv
       - name: Install dependencies
         run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: black
@@ -96,7 +96,7 @@ jobs:
           python-version: 3.9
           cache: "pipenv"
       - name: Install pipenv
-        run: pipx install pipenv
+        run: pip install pipenv
       - name: Install dependencies
         run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: isort
