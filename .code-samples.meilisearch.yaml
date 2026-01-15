@@ -816,3 +816,4 @@ webhooks_delete_1: |-
   client.delete_webhook('WEBHOOK_UID')
 rename_an_index_1: |-
   client.index("INDEX_A").update(new_uid="INDEX_B")
+  
