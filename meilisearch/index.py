@@ -106,7 +106,7 @@ class Index:
         return TaskInfo(**task)
 
     def update(self, primary_key: Optional[str] = None, new_uid: Optional[str] = None) -> TaskInfo:
-        """Update the index primary-key.
+        """Update the index primary-key or uid.
 
         Parameters
         ----------
