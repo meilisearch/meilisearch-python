@@ -24,7 +24,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
           cache: "pipenv"
       - name: Install pipenv
-        run: pipx install pipenv
+        run: pip install pipenv
       - name: Install dependencies
         run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: Get the latest Meilisearch RC
