@@ -81,7 +81,13 @@ class Client:
 
         self.task_handler = TaskHandler(self.config, custom_headers)
 
-    def create_index(self, uid: str, options: Optional[Mapping[str, Any]] = None) -> TaskInfo:
+    def create_index(
+        self,
+        uid: str,
+        options: Optional[Mapping[str, Any]] = None,
+        *,
+        metadata: Optional[str] = None,
+    ) -> TaskInfo:
         """Create an index.
 
         Parameters
@@ -90,6 +96,8 @@ class Client:
             UID of the index.
         options (optional): dict
             Options passed during index creation (ex: primaryKey).
+        metadata (optional):
+            Custom metadata string to attach to the task.
 
         Returns
         -------
@@ -102,15 +110,19 @@ class Client:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return Index.create(self.config, uid, options, custom_headers=self._custom_headers)
+        return Index.create(
+            self.config, uid, options, custom_headers=self._custom_headers, metadata=metadata
+        )
 
-    def delete_index(self, uid: str) -> TaskInfo:
+    def delete_index(self, uid: str, *, metadata: Optional[str] = None) -> TaskInfo:
         """Deletes an index
 
         Parameters
         ----------
         uid:
             UID of the index.
+        metadata (optional):
+            Custom metadata string to attach to the task.
 
         Returns
         -------
@@ -124,7 +136,10 @@ class Client:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
 
-        task = self.http.delete(f"{self.config.paths.index}/{uid}")
+        url = f"{self.config.paths.index}/{uid}"
+        if metadata is not None:
+            url += f"?{parse.urlencode({'customMetadata': metadata})}"
+        task = self.http.delete(url)
 
         return TaskInfo(**task)
 
@@ -714,13 +729,17 @@ class Client:
         """
         return self.task_handler.get_task(uid)
 
-    def cancel_tasks(self, parameters: MutableMapping[str, Any]) -> TaskInfo:
+    def cancel_tasks(
+        self, parameters: MutableMapping[str, Any], *, metadata: Optional[str] = None
+    ) -> TaskInfo:
         """Cancel a list of enqueued or processing tasks.
 
         Parameters
         ----------
         parameters:
             parameters accepted by the cancel tasks route:https://www.meilisearch.com/docs/reference/api/tasks#cancel-tasks.
+        metadata (optional):
+            Custom metadata string to attach to the task.
 
         Returns
         -------
@@ -733,15 +752,19 @@ class Client:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return self.task_handler.cancel_tasks(parameters=parameters)
+        return self.task_handler.cancel_tasks(parameters=parameters, metadata=metadata)
 
-    def delete_tasks(self, parameters: MutableMapping[str, Any]) -> TaskInfo:
+    def delete_tasks(
+        self, parameters: MutableMapping[str, Any], *, metadata: Optional[str] = None
+    ) -> TaskInfo:
         """Delete a list of finished tasks.
 
         Parameters
         ----------
         parameters (optional):
             parameters accepted by the delete tasks route:https://www.meilisearch.com/docs/reference/api/tasks#delete-task.
+        metadata (optional):
+            Custom metadata string to attach to the task.
         Returns
         -------
         task_info:
@@ -752,7 +775,7 @@ class Client:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return self.task_handler.delete_tasks(parameters=parameters)
+        return self.task_handler.delete_tasks(parameters=parameters, metadata=metadata)
 
     def wait_for_task(
         self,

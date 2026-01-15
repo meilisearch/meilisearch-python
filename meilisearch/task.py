@@ -122,13 +122,17 @@ class TaskHandler:
         task = self.http.get(f"{self.config.paths.task}/{uid}")
         return Task(**task)
 
-    def cancel_tasks(self, parameters: MutableMapping[str, Any]) -> TaskInfo:
+    def cancel_tasks(
+        self, parameters: MutableMapping[str, Any], *, metadata: Optional[str] = None
+    ) -> TaskInfo:
         """Cancel a list of enqueued or processing tasks.
 
         Parameters
         ----------
         parameters:
             parameters accepted by the cancel tasks https://www.meilisearch.com/docs/reference/api/tasks#cancel-task.
+        metadata (optional):
+            Custom metadata string to attach to the task.
 
         Returns
         -------
@@ -144,10 +148,14 @@ class TaskHandler:
         for param in parameters:
             if isinstance(parameters[param], (list, tuple)):
                 parameters[param] = ",".join(parameters[param])
+        if metadata is not None:
+            parameters["customMetadata"] = metadata
         response = self.http.post(f"{self.config.paths.task}/cancel?{parse.urlencode(parameters)}")
         return TaskInfo(**response)
 
-    def delete_tasks(self, parameters: MutableMapping[str, Any]) -> TaskInfo:
+    def delete_tasks(
+        self, parameters: MutableMapping[str, Any], *, metadata: Optional[str] = None
+    ) -> TaskInfo:
         """Delete a list of enqueued or processing tasks.
         Parameters
         ----------
@@ -155,6 +163,8 @@ class TaskHandler:
             Config object containing permission and location of Meilisearch.
         parameters:
             parameters accepted by the delete tasks route:https://www.meilisearch.com/docs/reference/api/tasks#delete-task.
+        metadata (optional):
+            Custom metadata string to attach to the task.
         Returns
         -------
         task_info:
@@ -168,6 +178,8 @@ class TaskHandler:
         for param in parameters:
             if isinstance(parameters[param], (list, tuple)):
                 parameters[param] = ",".join(parameters[param])
+        if metadata is not None:
+            parameters["customMetadata"] = metadata
         response = self.http.delete(f"{self.config.paths.task}?{parse.urlencode(parameters)}")
         return TaskInfo(**response)
 
