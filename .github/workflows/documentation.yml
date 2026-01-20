@@ -38,8 +38,7 @@ jobs:
           python-version: "3.10"
       - name: Install pipenv
         run: |
-          pip install pipx
-          pipx install pipenv
+          pip install pipenv
       - name: Install dependencies
         run: |
           pipenv --python $(which python) install --dev
