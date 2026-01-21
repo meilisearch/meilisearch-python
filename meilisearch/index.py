@@ -2550,7 +2550,6 @@ class Index:
 
         return TaskInfo(**task)
 
-
     def get_fields(self) -> List[Dict[str, Any]]:
         """Get all fields of the index.
 
