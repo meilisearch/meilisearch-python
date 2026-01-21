@@ -2550,6 +2550,44 @@ class Index:
 
         return TaskInfo(**task)
 
+
+    def get_fields(self) -> List[Dict[str, Any]]:
+        """Get all fields of the index.
+
+        Returns detailed metadata about all fields in the index, including
+        display, search, filtering, and localization settings for each field.
+
+        https://www.meilisearch.com/docs/reference/api/indexes#get-fields
+
+        Returns
+        -------
+        fields:
+            List of dictionaries containing metadata for each field.
+            Each field entry includes:
+            - name: The field name
+            - displayed: Object with 'enabled' boolean indicating if field is displayed
+            - searchable: Object with 'enabled' boolean indicating if field is searchable
+            - sortable: Object with 'enabled' boolean indicating if field is sortable
+            - distinct: Object with 'enabled' boolean indicating if field is distinct
+            - rankingRule: Object with 'enabled' boolean and optional 'order' ('asc' or 'desc')
+              indicating if field is used in ranking rules
+            - filterable: Object with 'enabled' boolean and filter settings:
+              - sortBy: Sort order for facet values (e.g., 'alpha')
+              - facetSearch: Whether facet search is enabled
+              - equality: Whether equality filtering is enabled
+              - comparison: Whether comparison filtering is enabled
+            - localized: Object with 'locales' array of locale codes
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.http.post(
+            f"{self.config.paths.index}/{self.uid}/{self.config.paths.fields}",
+            body={},
+        )
+
     @staticmethod
     def _batch(
         documents: Sequence[Mapping[str, Any]], batch_size: int
