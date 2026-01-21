@@ -2550,13 +2550,36 @@ class Index:
 
         return TaskInfo(**task)
 
-    def get_fields(self) -> List[Dict[str, Any]]:
+    def get_fields(
+        self,
+        offset: Optional[int] = None,
+        limit: Optional[int] = None,
+        filter: Optional[MutableMapping[str, Any]] = None,
+    ) -> List[Dict[str, Any]]:
         """Get all fields of the index.
 
         Returns detailed metadata about all fields in the index, including
         display, search, filtering, and localization settings for each field.
 
         https://www.meilisearch.com/docs/reference/api/indexes#get-fields
+
+        Parameters
+        ----------
+        offset (optional):
+            Number of fields to skip. Defaults to 0.
+        limit (optional):
+            Maximum number of fields to return. Defaults to 20.
+        filter (optional):
+            Dictionary containing filter configuration. All filter properties are optional
+            and can be combined using AND logic. Available filters:
+            - attributePatterns: List of attribute patterns (supports wildcards: * for any characters)
+              Examples: ["cuisine.*", "*_id"] matches cuisine.type and all fields ending with _id
+            - displayed: Boolean - true for only displayed fields, false for only hidden fields
+            - searchable: Boolean - true for only searchable fields, false for only non-searchable fields
+            - sortable: Boolean - true for only sortable fields, false for only non-sortable fields
+            - distinct: Boolean - true for only the distinct field, false for only non-distinct fields
+            - rankingRule: Boolean - true for only fields used in ranking, false for fields not used in ranking
+            - filterable: Boolean - true for only filterable fields, false for only non-filterable fields
 
         Returns
         -------
@@ -2582,9 +2605,18 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
+        body: Dict[str, Any] = {}
+        
+        if offset is not None:
+            body["offset"] = offset
+        if limit is not None:
+            body["limit"] = limit
+        if filter is not None:
+            body["filter"] = filter
+
         return self.http.post(
             f"{self.config.paths.index}/{self.uid}/{self.config.paths.fields}",
-            body={},
+            body=body,
         )
 
     @staticmethod
