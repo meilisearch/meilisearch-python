@@ -17,14 +17,14 @@ jobs:
     name: integration-tests-against-rc
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           cache: "pipenv"
       - name: Install pipenv
-        run: pipx install pipenv
+        run: pip install pipenv
       - name: Install dependencies
         run: pipenv install --dev --python=${{ matrix.python-version }}
       - name: Get the latest Meilisearch RC
