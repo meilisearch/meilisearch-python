@@ -283,3 +283,37 @@ def test_index_update_without_params(client):
         index.update()
 
     assert "primary_key" in str(exc.value) or "new_uid" in str(exc.value)
+
+
+@pytest.mark.usefixtures("indexes_sample")
+def test_get_fields(client, small_movies):
+    """Tests getting all fields of an index via the new /fields endpoint."""
+    index = client.index(uid=common.INDEX_UID)
+    task = index.add_documents(small_movies)
+    client.wait_for_task(task.task_uid)
+
+    fields = index.get_fields()
+
+    assert isinstance(fields, list)
+    assert len(fields) > 0
+    assert "name" in fields[0]
+    assert "searchable" in fields[0]
+    assert "filterable" in fields[0]
+    assert "sortable" in fields[0]
+
+
+@pytest.mark.usefixtures("indexes_sample")
+def test_get_fields_with_configurations(client, small_movies):
+    """Tests get_fields() reflects index settings configurations."""
+    index = client.index(uid=common.INDEX_UID)
+    task = index.add_documents(small_movies)
+    client.wait_for_task(task.task_uid)
+
+    task = index.update_searchable_attributes(["title"])
+    client.wait_for_task(task.task_uid)
+
+    fields = index.get_fields()
+    title_field = next((f for f in fields if f["name"] == "title"), None)
+
+    assert title_field is not None
+    assert title_field["searchable"]["enabled"] is True
