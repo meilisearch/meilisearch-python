@@ -2554,7 +2554,7 @@ class Index:
         self,
         offset: Optional[int] = None,
         limit: Optional[int] = None,
-        filter: Optional[MutableMapping[str, Any]] = None,
+        filter: Optional[MutableMapping[str, Any]] = None,  # pylint: disable=redefined-builtin
     ) -> List[Dict[str, Any]]:
         """Get all fields of the index.
 
@@ -2606,7 +2606,7 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         body: Dict[str, Any] = {}
-
+        
         if offset is not None:
             body["offset"] = offset
         if limit is not None:
