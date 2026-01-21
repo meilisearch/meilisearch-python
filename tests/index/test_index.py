@@ -347,28 +347,28 @@ def test_get_fields_with_pagination(client, small_movies):
     # Get all fields first to know total count
     all_fields = index.get_fields()
     total_fields = len(all_fields)
-    
+
     # Test pagination with offset and limit
     page1 = index.get_fields(offset=0, limit=2)
     assert isinstance(page1, list)
     assert len(page1) <= 2
-    
+
     # If we have more than 2 fields, test second page
     if total_fields > 2:
         page2 = index.get_fields(offset=2, limit=2)
         assert isinstance(page2, list)
         assert len(page2) <= 2
-        
+
         # Verify pages don't overlap
         page1_names = {f["name"] for f in page1}
         page2_names = {f["name"] for f in page2}
         assert page1_names.isdisjoint(page2_names)
-    
+
     # Test with just limit (no offset)
     limited = index.get_fields(limit=3)
     assert isinstance(limited, list)
     assert len(limited) <= 3
-    
+
     # Test with just offset (no limit, uses default)
     offset_only = index.get_fields(offset=1)
     assert isinstance(offset_only, list)
