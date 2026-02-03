@@ -351,11 +351,14 @@ class Index:
             - filter: Filter queries by an attribute's value
             - limit: Maximum number of documents returned
             - offset: Number of documents to skip
+            - showPerformanceDetails: If true, the response includes a
+              performanceDetails object (raw data; fields may change in future API versions)
 
         Returns
         -------
         results:
-            Dictionary with hits, offset, limit, processingTime and initial query
+            Dictionary with hits, offset, limit, processingTime and initial query.
+            When showPerformanceDetails is true, may include a performanceDetails object.
 
         Raises
         ------
@@ -485,12 +488,14 @@ class Index:
         ----------
         parameters:
             parameters accepted by the get similar documents route: https://www.meilisearch.com/docs/reference/api/similar#body
-            "id" and "embedder" are required.
+            "id" and "embedder" are required. May include showPerformanceDetails to
+            request a performance trace in the response (performanceDetails, raw data).
 
         Returns
         -------
         results:
-            Dictionary with hits, offset, limit, processingTimeMs, and id
+            Dictionary with hits, offset, limit, processingTimeMs, and id.
+            When showPerformanceDetails is true, may include a performanceDetails object.
 
         Raises
         ------
