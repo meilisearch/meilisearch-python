@@ -229,12 +229,6 @@ update_displayed_attributes_1: |-
   ])
 reset_displayed_attributes_1: |-
   client.index('movies').reset_displayed_attributes()
-getting_started_typo_tolerance: |-
-  client.index('movies').update_typo_tolerance({
-    'minWordSizeForTypos': {
-      'oneTypo': 4
-    }
-  })
 get_typo_tolerance_1: |-
   client.index('books').get_typo_tolerance()
 update_typo_tolerance_1: |-
@@ -378,10 +372,6 @@ typo_tolerance_guide_4: |-
       'twoTypos': 10
     }
   })
-typo_tolerance_guide_5: |-
-  client.index('movies').update_typo_tolerance({
-    'disableOnNumbers': True
-  })
 search_parameter_guide_show_ranking_score_1: |-
   client.index('movies').search('dragon', {
     'showRankingScore': True
@@ -406,17 +396,6 @@ add_movies_json_1: |-
   json_file = open('movies.json', encoding='utf-8')
   movies = json.load(json_file)
   client.index('movies').add_documents(movies)
-landing_getting_started_1: |-
-  client = meilisearch.Client('http://localhost:7700', 'masterKey')
-
-  client.index('movies').add_documents([
-    { 'id': 1, 'title': 'Carol' },
-    { 'id': 2, 'title': 'Wonder Woman' },
-    { 'id': 3, 'title': 'Life of Pi' },
-    { 'id': 4, 'title': 'Mad Max: Fury Road' },
-    { 'id': 5, 'title': 'Moana' },
-    { 'id': 6, 'title': 'Philadelphia'}
-  ])
 getting_started_check_task_status: |-
   client.get_task(0)
 getting_started_add_documents: |-
@@ -434,77 +413,6 @@ getting_started_add_documents: |-
   client.index('movies').add_documents(movies)
 getting_started_search: |-
   client.index('movies').search('botman')
-getting_started_add_meteorites: |-
-  import json
-
-  json_file = open('meteorites.json', encoding='utf-8')
-  meteorites = json.load(json_file)
-  client.index('meteorites').add_documents(meteorites)
-getting_started_update_ranking_rules: |-
-  client.index('movies').update_ranking_rules([
-      'exactness',
-      'words',
-      'typo',
-      'proximity',
-      'attribute',
-      'sort',
-      'release_date:asc',
-      'rank:desc'
-  ])
-getting_started_update_displayed_attributes: |-
-  client.index('movies').update_displayed_attributes([
-      'title',
-      'overview',
-      'poster'
-  ])
-getting_started_update_searchable_attributes: |-
-  client.index('movies').update_searchable_attributes([
-      'title'
-  ])
-getting_started_update_stop_words: |-
-  client.index('movies').update_stop_words(['the'])
-getting_started_synonyms: |-
-  client.index('movies').update_synonyms({
-    'winnie': ['piglet'],
-    'piglet': ['winnie']
-  })
-getting_started_filtering: |-
-  client.index('meteorites').search('', {
-    'filter': 'mass < 200'
-  })
-getting_started_geo_radius: |-
-  client.index('meteorites').search('', {
-    'filter': '_geoRadius(46.9480, 7.4474, 210000)'
-  })
-getting_started_geo_point: |-
-  client.index('meteorites').search('', {
-    'sort': ['_geoPoint(48.8583701,2.2922926):asc']
-  })
-getting_started_sorting: |-
-  client.index('meteorites').search('', {
-    'filter': 'mass < 200',
-    'sort': ['mass:asc']
-  })
-getting_started_configure_settings: |-
-  client.index('meteorites').update_settings({
-    'filterableAttributes': [
-        'mass',
-        '_geo'
-    ],
-    'sortableAttributes': [
-        'mass',
-        '_geo'
-    ]
-  })
-getting_started_faceting: |-
-  client.index('movies').update_faceting_settings({
-    'maxValuesPerFacet': 2,
-    'sortFacetValuesBy': {
-      '*': 'count'
-    }
-  })
-getting_started_pagination: |-
-  client.index('movies').update_pagination_settings({'maxTotalHits': 500})
 filtering_update_settings_1: |-
   client.index('movies').update_filterable_attributes([
       'director',
@@ -594,44 +502,9 @@ primary_field_guide_add_document_primary_key: |-
     'genres': ['comedy', 'humor'],
     'price': 5.00
   }], 'reference_number')
-security_guide_search_key_1: |-
-  client = Client('http://localhost:7700', 'apiKey')
-  client.index('patient_medical_records').search()
-security_guide_update_key_1: |-
-  client = Client('http://localhost:7700', 'masterKey')
-  client.update_key(key_or_uid='74c9c733-3368-4738-bbe5-1d18a5fecb37', options={
-    'description': 'Default Search API Key'
-  })
-security_guide_create_key_1: |-
-  client = Client('http://localhost:7700', 'masterKey')
-    client.create_key(options={
-    'description': 'Search patient records key',
-    'actions': ['search'],
-    'indexes': ['patient_medical_records'],
-    'expiresAt': '2023-01-01T00:00:00Z'
-  })
-security_guide_list_keys_1: |-
-  client = Client('http://localhost:7700', 'masterKey')
-  client.get_keys()
-security_guide_delete_key_1: |-
-  client = Client('http://localhost:7700', 'masterKey')
-  client.delete_key('ac5cd97d-5a4b-4226-a868-2d0eb6d197ab')
 authorization_header_1: |-
   client = Client('http://localhost:7700', 'masterKey')
   client.get_keys()
-tenant_token_guide_generate_sdk_1: |-
-  uid = '85c3c2f9-bdd6-41f1-abd8-11fcf80e0f76';
-  api_key = 'B5KdX2MY2jV6EXfUs6scSfmC...'
-  expires_at = datetime(2025, 12, 20)
-  search_rules = {
-    'patient_medical_records': {
-      'filter': 'user_id = 1'
-    }
-  }
-  token = client.generate_tenant_token(api_key_uid=uid, search_rules=search_rules, api_key=api_key, expires_at=expires_at)
-tenant_token_guide_search_sdk_1: |-
-  front_end_client = Client('http://localhost:7700', token)
-  front_end_client.index('patient_medical_records').search('blood test')
 get_all_tasks_paginating_1: |-
   client.get_tasks({
     'limit': 2,
@@ -672,8 +545,6 @@ synonyms_guide_1: |-
     'great': ['fantastic'],
     'fantastic': ['great']
   })
-async_guide_filter_by_date_1: |-
-  client.get_tasks({'afterEnqueuedAt': '2020-10-11T11:49:53.000Z'})
 async_guide_multiple_filters_1: |-
   client.get_tasks(
     {
@@ -682,16 +553,8 @@ async_guide_multiple_filters_1: |-
         'statuses': ['processing'],
     }
   )
-async_guide_filter_by_ids_1: |-
-  client.get_tasks({'uids': ['5', '10', '13']})
 async_guide_filter_by_statuses_1: |-
   client.get_tasks({'statuses': ['failed', 'canceled']})
-async_guide_filter_by_types_1: |-
-  client.get_tasks({'types': ['dumpCreation', 'indexSwap']})
-async_guide_filter_by_index_uids_1: |-
-  client.get_tasks({'indexUids': ['movies']})
-async_guide_canceled_by_1: |-
-  client.get_tasks({'canceledBy': ['9', '15']})
 date_guide_index_1: |-
   import json
 
@@ -779,25 +642,6 @@ get_batch_1: |-
   client.get_batch(BATCH_UID)
 get_similar_post_1: |-
   client.index("INDEX_NAME").get_similar_documents({"id": "TARGET_DOCUMENT_ID", "embedder": "default"})
-search_parameter_reference_media_1: |-
-  client.index('movies_fragments').search(
-      "a futuristic space movie",
-      {
-          "media": {
-              "textAndPoster": {
-                  "text": "a futuristic space movie",
-                  "image": {
-                      "mime": "image/jpeg",
-                      "data": "BASE64_ENCODED_IMAGE_DATA"
-                  }
-              }
-          },
-          "hybrid": {
-              "embedder": "multimodal",
-              "semanticRatio": 1.0
-          },
-      }
-  )
 webhooks_get_1: |-
   client.get_webhooks()
 webhooks_get_single_1: |-
