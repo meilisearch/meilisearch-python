@@ -673,3 +673,45 @@ webhooks_delete_1: |-
   client.delete_webhook('WEBHOOK_UID')
 rename_an_index_1: |-
   client.index("INDEX_A").update(new_uid="INDEX_B")
+negative_search_1: |-
+  client.index('movies').search('-escape')
+negative_search_2: |-
+  client.index('movies').search('-"escape room"')
+search_parameter_guide_hybrid_1: |-
+  client.index('books').search('kitchen utensils', {
+    "hybrid": {
+      "semanticRatio": 0.9,
+      "embedder": 'EMBEDDER_NAME'
+    }
+  })
+search_parameter_guide_vector_1: |-
+  client.index('books').search('',{
+    "vector": [0, 1, 2],
+    "hybrid": {
+      "embedder": "EMBEDDER_NAME"
+    }
+  })
+get_experimental_features_1: |-
+  client.get_experimental_features()
+update_experimental_features_1: |-
+  client.update_experimental_features({"metrics": True})
+get_embedders_1: |-
+  client.index('INDEX_NAME').get_embedders()
+update_embedders_1: |-
+  client.index('INDEX_NAME').update_embedders({
+    "default": {
+      "source": "openAi",
+      "apiKey": "OPEN_AI_API_KEY",
+      "model": "text-embedding-3-small",
+      "documentTemplate": "A document titled '{{doc.title}}' whose description starts with {{doc.overview|truncatewords: 20}}"
+    }
+  })
+reset_embedders_1: |-
+  client.index('INDEX_NAME').reset_embedders()
+search_parameter_reference_retrieve_vectors_1: |-
+  client.index('INDEX_NAME').search('kitchen utensils', {
+    "retrieveVectors": True,
+    "hybrid": {
+      "embedder": "EMBEDDER_NAME"
+    }
+  })
