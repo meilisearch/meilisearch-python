@@ -19,6 +19,8 @@ tomli = {version = "*", markers="python_version < '3.11'"}
 wrapt = {version = "*", markers="python_version < '3.11'"}
 dill = {version = "*"}
 pytest-cov = "*"
+sphinx = "*"
+sphinx-rtd-theme = "*"
 
 [packages]
 requests = "*"
