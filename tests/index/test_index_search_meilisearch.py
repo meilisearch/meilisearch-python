@@ -502,6 +502,17 @@ def test_show_ranking_score(index_with_documents):
     assert response["hits"][0]["_rankingScore"] >= 0.9
 
 
+def test_show_performance_details(index_with_documents):
+    """Tests search with showPerformanceDetails returns performance trace when supported (Meilisearch 1.35+)."""
+    response = index_with_documents().search(
+        "dragon",
+        {"showPerformanceDetails": True},
+    )
+    assert isinstance(response, dict)
+    assert "hits" in response
+    assert isinstance(response["performanceDetails"], dict)
+
+
 def test_vector_search(index_with_documents_and_vectors):
     """Tests vector search with hybrid parameters."""
     response = index_with_documents_and_vectors().search(
@@ -618,3 +629,25 @@ def test_get_similar_documents_with_identical_vectors(empty_index):
     # Verify that doc4 is not the first result (it has a different vector)
     if "doc4" in result_ids:
         assert result_ids[0] != "doc4"
+
+
+def test_get_similar_documents_show_performance_details(empty_index):
+    """Tests get_similar_documents with showPerformanceDetails (Meilisearch 1.35+)."""
+    identical_vector = [0.5, 0.5]
+    documents = [
+        {"id": "doc1", "title": "Doc 1", "_vectors": {"default": identical_vector}},
+        {"id": "doc2", "title": "Doc 2", "_vectors": {"default": identical_vector}},
+    ]
+    index = empty_index()
+    task = index.update_embedders({"default": {"source": "userProvided", "dimensions": 2}})
+    index.wait_for_task(task.task_uid)
+    task = index.add_documents(documents)
+    index.wait_for_task(task.task_uid)
+
+    response = index.get_similar_documents(
+        {"id": "doc1", "embedder": "default", "showPerformanceDetails": True}
+    )
+    assert isinstance(response, dict)
+    assert "hits" in response
+    assert response["id"] == "doc1"
+    assert isinstance(response["performanceDetails"], dict)
