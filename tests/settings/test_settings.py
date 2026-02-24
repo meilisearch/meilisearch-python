@@ -13,7 +13,15 @@ def new_settings(new_embedders):
     }
 
 
-DEFAULT_RANKING_RULES = ["words", "typo", "proximity", "attribute", "sort", "exactness"]
+DEFAULT_RANKING_RULES = [
+    "words",
+    "typo",
+    "proximity",
+    "attributeRank",
+    "sort",
+    "wordPosition",
+    "exactness"
+]
 
 DEFAULT_TYPO_TOLERANCE = {
     "enabled": True,

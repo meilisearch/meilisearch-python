@@ -1,5 +1,13 @@
 NEW_RANKING_RULES = ["typo", "exactness"]
-DEFAULT_RANKING_RULES = ["words", "typo", "proximity", "attribute", "sort", "exactness"]
+DEFAULT_RANKING_RULES = [
+    "words",
+    "typo",
+    "proximity",
+    "attributeRank",
+    "sort",
+    "wordPosition",
+    "exactness"
+]
 
 
 def test_get_ranking_rules_default(empty_index):
