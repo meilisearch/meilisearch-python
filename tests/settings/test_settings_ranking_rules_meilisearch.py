@@ -6,7 +6,7 @@ DEFAULT_RANKING_RULES = [
     "attributeRank",
     "sort",
     "wordPosition",
-    "exactness"
+    "exactness",
 ]
 
 

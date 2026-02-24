@@ -20,7 +20,7 @@ DEFAULT_RANKING_RULES = [
     "attributeRank",
     "sort",
     "wordPosition",
-    "exactness"
+    "exactness",
 ]
 
 DEFAULT_TYPO_TOLERANCE = {
