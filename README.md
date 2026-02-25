@@ -258,7 +258,7 @@ async def main():
 asyncio.run(main())
 ```
 
-For more details, refer to the [meilisearch-python-sdk documentation](https://meilisearch-python-sdk.readthedocs.io/).
+For more details, refer to the [meilisearch-python-sdk documentation](https://meilisearch-python-sdk.paulsanders.dev/).
 
 ## 💡 Learn more
 
