@@ -240,7 +240,7 @@ This package guarantees compatibility with [version v1.2 and above of Meilisearc
 
 ## ⚡ Async usage
 
-This SDK (`meilisearch`) is synchronous. If your project requires async/await support, the community-maintained [meilisearch-python-sdk](https://github.com/sanders41/meilisearch-python-sdk) provides a full-featured async (and sync) client with the same API surface:
+This SDK (`meilisearch`) is synchronous. If your project requires async/await support, the community-maintained [meilisearch-python-sdk](https://github.com/sanders41/meilisearch-python-sdk) provides a full-featured async (and sync) client with a similar API surface:
 
 ```bash
 pip install meilisearch-python-sdk
