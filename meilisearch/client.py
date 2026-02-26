@@ -273,8 +273,11 @@ class Client:
             https://www.meilisearch.com/docs/reference/api/search#search-in-an-index
             It can also include remote options in federationOptions for each query
             https://www.meilisearch.com/docs/reference/api/network
+            Each query may include showPerformanceDetails to request a performance
+            trace in the response (results[].performanceDetails, returned as raw data).
         federation: (optional):
-            Dictionary containing offset and limit
+            Dictionary containing offset, limit, and optionally showPerformanceDetails
+            for federated search (top-level performanceDetails in the response).
             https://www.meilisearch.com/docs/reference/api/multi_search
 
         Returns
