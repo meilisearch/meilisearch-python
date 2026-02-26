@@ -83,12 +83,10 @@ class HttpRequests:
             raise MeilisearchCommunicationError(str(err)) from err
         except requests.exceptions.InvalidSchema as err:
             if "://" not in self.config.url:
-                raise MeilisearchCommunicationError(
-                    f"""
+                raise MeilisearchCommunicationError(f"""
                     Invalid URL {self.config.url}, no scheme/protocol supplied.
                     Did you mean https://{self.config.url}?
-                    """
-                ) from err
+                    """) from err
 
             raise MeilisearchCommunicationError(str(err)) from err
 
@@ -203,12 +201,10 @@ class HttpRequests:
             raise MeilisearchApiError(str(err), response) from err
         except requests.exceptions.InvalidSchema as err:
             if "://" not in self.config.url:
-                raise MeilisearchCommunicationError(
-                    f"""
+                raise MeilisearchCommunicationError(f"""
                     Invalid URL {self.config.url}, no scheme/protocol supplied.
                     Did you mean https://{self.config.url}?
-                    """
-                ) from err
+                    """) from err
 
             raise MeilisearchCommunicationError(str(err)) from err
 
