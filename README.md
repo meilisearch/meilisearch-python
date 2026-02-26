@@ -32,6 +32,7 @@
 - [🔧 Installation](#-installation)
 - [🚀 Getting started](#-getting-started)
 - [🤖 Compatibility with Meilisearch](#-compatibility-with-meilisearch)
+- [⚡ Async usage](#-async-usage)
 - [💡 Learn more](#-learn-more)
 - [⚙️ Contributing](#️-contributing)
 
@@ -236,6 +237,28 @@ index.search(
 ## 🤖 Compatibility with Meilisearch
 
 This package guarantees compatibility with [version v1.2 and above of Meilisearch](https://github.com/meilisearch/meilisearch/releases/latest), but some features may not be present. Please check the [issues](https://github.com/meilisearch/meilisearch-python/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+label%3Aenhancement) for more info.
+
+## ⚡ Async usage
+
+This SDK (`meilisearch`) is synchronous. If your project requires async/await support, the community-maintained [meilisearch-python-sdk](https://github.com/sanders41/meilisearch-python-sdk) provides a full-featured async (and sync) client with a similar API surface:
+
+```bash
+pip install meilisearch-python-sdk
+```
+
+```python
+import asyncio
+from meilisearch_python_sdk import AsyncClient
+
+async def main():
+    async with AsyncClient("http://127.0.0.1:7700", "masterKey") as client:
+        index = client.index("movies")
+        await index.search("wonder woman")
+
+asyncio.run(main())
+```
+
+For more details, refer to the [meilisearch-python-sdk documentation](https://meilisearch-python-sdk.paulsanders.dev/).
 
 ## 💡 Learn more
 
