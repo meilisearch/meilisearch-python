@@ -434,6 +434,16 @@ faceted_search_1: |-
   })
 post_dump_1: |-
   client.create_dump()
+export_post_1: |-
+  client.export(
+    url='https://remote-meilisearch-instance.com',
+    api_key='masterKey',
+    payload_size='50 MiB',
+    indexes={
+      'movies*': {},
+      'books*': {},
+    },
+  )
 phrase_search_1: |-
   client.index('movies').search('"african american" horror')
 sorting_guide_update_sortable_attributes_1: |-

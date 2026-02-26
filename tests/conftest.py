@@ -1,5 +1,6 @@
 # pylint: disable=redefined-outer-name
 import json
+import os
 from typing import Optional
 
 import requests
@@ -16,19 +17,33 @@ def client():
     return meilisearch.Client(common.BASE_URL, common.MASTER_KEY)
 
 
+@fixture(scope="session")
+def client2():
+    if not os.getenv("MEILISEARCH_URL_2"):
+        return None
+    return meilisearch.Client(common.BASE_URL_2, common.MASTER_KEY)
+
+
+def _clear_indexes(meilisearch_client):
+    """Deletes all the indexes in the Meilisearch instance."""
+
+    indexes = meilisearch_client.get_indexes()
+    for index in indexes["results"]:
+        task = meilisearch_client.index(index.uid).delete()
+        meilisearch_client.wait_for_task(task.task_uid)
+
+
 @fixture(autouse=True)
-def clear_indexes(client):
+def clear_indexes(client, client2):
     """
     Auto-clears the indexes after each test function run.
     Makes all the test functions independent.
     """
     # Yields back to the test function.
     yield
-    # Deletes all the indexes in the Meilisearch instance.
-    indexes = client.get_indexes()
-    for index in indexes["results"]:
-        task = client.index(index.uid).delete()
-        client.wait_for_task(task.task_uid)
+    _clear_indexes(client)
+    if client2 is not None:
+        _clear_indexes(client2)
 
 
 @fixture(autouse=True)
@@ -47,12 +62,14 @@ def clear_webhooks(client):
 
 
 @fixture(autouse=True)
-def clear_all_tasks(client):
+def clear_all_tasks(client, client2):
     """
     Auto-clears the tasks after each test function run.
     Makes all the test functions independent.
     """
     client.delete_tasks({"statuses": ["succeeded", "failed", "canceled"]})
+    if client2 is not None:
+        client2.delete_tasks({"statuses": ["succeeded", "failed", "canceled"]})
 
 
 @fixture(scope="function")
@@ -254,14 +271,26 @@ def enable_vector_search():
     requests.patch(
         f"{common.BASE_URL}/experimental-features",
         headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
-        json={"vectorStore": True},
+        json={"vectorStoreSetting": True},
+        timeout=10,
+    )
+    requests.patch(
+        f"{common.BASE_URL_2}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"vectorStoreSetting": True},
         timeout=10,
     )
     yield
     requests.patch(
         f"{common.BASE_URL}/experimental-features",
         headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
-        json={"vectorStore": False},
+        json={"vectorStoreSetting": False},
+        timeout=10,
+    )
+    requests.patch(
+        f"{common.BASE_URL_2}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"vectorStoreSetting": False},
         timeout=10,
     )
 
