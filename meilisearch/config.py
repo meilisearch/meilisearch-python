@@ -45,6 +45,7 @@ class Config:
         prefix_search = "prefix-search"
         proximity_precision = "proximity-precision"
         localized_attributes = "localized-attributes"
+        fields = "fields"
         edit = "edit"
         network = "network"
         experimental_features = "experimental-features"
