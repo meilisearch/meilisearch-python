@@ -291,68 +291,6 @@ filtering_guide_nested_1: |-
   client.index('movie_ratings').search('thriller', {
     'filter': 'rating.users >= 90'
   })
-search_parameter_guide_query_1: |-
-  client.index('movies').search('shifu')
-search_parameter_guide_offset_1: |-
-  client.index('movies').search('shifu', {
-    'offset': 1
-  })
-search_parameter_guide_limit_1: |-
-  client.index('movies').search('shifu', {
-    'limit': 2
-  })
-search_parameter_guide_retrieve_1: |-
-  client.index('movies').search('shifu', {
-    'attributesToRetrieve': ['overview', 'title']
-  })
-search_parameter_guide_crop_1: |-
-  client.index('movies').search('shifu', {
-    'attributesToCrop': ['overview'],
-    'cropLength': 5
-  })
-search_parameter_guide_crop_marker_1: |-
-  client.index('movies').search('shifu', {
-    'attributesToCrop': ['overview'],
-    'cropMarker': '[…]'
-  })
-search_parameter_guide_matching_strategy_1: |-
-  client.index('movies').search('big fat liar', {
-    'matchingStrategy': 'last'
-  })
-search_parameter_guide_matching_strategy_2: |-
-  client.index('movies').search('big fat liar', {
-    'matchingStrategy': 'all'
-  })
-search_parameter_guide_matching_strategy_3: |-
-  client.index('movies').search('big fat liar', {
-    'matchingStrategy': 'frequency'
-  })
-search_parameter_guide_highlight_1: |-
-  client.index('movies').search('winter feast', {
-    'attributesToHighlight': ['overview']
-  })
-search_parameter_guide_highlight_tag_1: |-
-  client.index('movies').search('winter feast', {
-    'attributesToHighlight': ['overview'],
-    'highlightPreTag': '<span class="highlight">',
-    'highlightPostTag': '</span>'
-  })
-search_parameter_guide_show_matches_position_1: |-
-  client.index('movies').search('winter feast', {
-    'showMatchesPosition': True
-  })
-search_parameter_guide_hitsperpage_1: |-
-  client.index('movies').search('', {'hitsPerPage': 15})
-search_parameter_guide_page_1: |-
-  client.index('movies').search('', {'page': 2})
-search_parameter_guide_sort_1: |-
-  client.index('books').search('science fiction', {
-    'sort': ['price:asc']
-  })
-search_parameter_guide_facet_stats_1: |-
-  client.index('movie_ratings').search('Batman', {
-    'facets': ['genres', 'rating']
-  })
 typo_tolerance_guide_1: |-
   client.index('movies').update_typo_tolerance({
     'enabled': False
@@ -372,20 +310,10 @@ typo_tolerance_guide_4: |-
       'twoTypos': 10
     }
   })
-search_parameter_guide_show_ranking_score_1: |-
-  client.index('movies').search('dragon', {
-    'showRankingScore': True
-  })
 search_parameter_guide_show_ranking_score_details_1: |-
   client.index('movies').search('dragon', {
     'showRankingScoreDetails': True
   })
-search_parameter_guide_attributes_to_search_on_1: |-
-  client.index('movies').search('adventure', {
-    'attributesToSearchOn': ['overview']
-  })
-search_parameter_reference_distinct_1: |-
-  client.index('INDEX_NAME').search('QUERY_TERMS', { distinct: 'ATTRIBUTE_A' })
 distinct_attribute_guide_filterable_1: |-
   client.index('products').update_filterable_attributes(['product_id', 'sku', 'url'])
 distinct_attribute_guide_distinct_parameter_1: |-
@@ -418,10 +346,6 @@ filtering_update_settings_1: |-
       'director',
       'genres',
   ])
-faceted_search_walkthrough_filter_1: |-
-  client.index('movies').search('thriller', {
-    'filter': [['genres = Horror', 'genres = Mystery'], 'director = "Jordan Peele"']
-  })
 faceted_search_update_settings_1: |-
   client.index('movie_ratings').update_filterable_attributes([
     'genres',
@@ -434,8 +358,6 @@ faceted_search_1: |-
   })
 post_dump_1: |-
   client.create_dump()
-phrase_search_1: |-
-  client.index('movies').search('"african american" horror')
 sorting_guide_update_sortable_attributes_1: |-
   client.index('books').update_sortable_attributes([
     'author',
@@ -632,10 +554,6 @@ update_proximity_precision_settings_1: |-
   client.index('books').update_proximity_precision(ProximityPrecision.BY_ATTRIBUTE)
 reset_proximity_precision_settings_1: |-
   client.index('books').reset_proximity_precision()
-search_parameter_reference_ranking_score_threshold_1: |-
-  client.index('INDEX_NAME').search('badman', { 'rankingScoreThreshold': 0.2 })
-search_parameter_reference_locales_1: |-
-  client.index('INDEX_NAME').search('進撃の巨人', { 'locales': ['jpn'] })
 get_localized_attribute_settings_1: |-
   client.index('INDEX_NAME').get_localized_attributes()
 update_localized_attribute_settings_1: |-
@@ -644,11 +562,6 @@ update_localized_attribute_settings_1: |-
   ])
 reset_localized_attribute_settings_1: |-
   client.index('INDEX_NAME').reset_localized_attributes()
-multi_search_federated_1: |-
-  client.multi_search(
-    [{"indexUid": "movies", "q": "batman"}, {"indexUid": "comics", "q": "batman"}],
-    {}
-  )
 get_all_batches_1: |-
   client.get_batches()
 get_batch_1: |-
@@ -673,10 +586,6 @@ webhooks_delete_1: |-
   client.delete_webhook('WEBHOOK_UID')
 rename_an_index_1: |-
   client.index("INDEX_A").update(new_uid="INDEX_B")
-negative_search_1: |-
-  client.index('movies').search('-escape')
-negative_search_2: |-
-  client.index('movies').search('-"escape room"')
 search_parameter_guide_hybrid_1: |-
   client.index('books').search('kitchen utensils', {
     "hybrid": {
