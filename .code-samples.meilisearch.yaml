@@ -586,13 +586,6 @@ webhooks_delete_1: |-
   client.delete_webhook('WEBHOOK_UID')
 rename_an_index_1: |-
   client.index("INDEX_A").update(new_uid="INDEX_B")
-search_parameter_guide_hybrid_1: |-
-  client.index('books').search('kitchen utensils', {
-    "hybrid": {
-      "semanticRatio": 0.9,
-      "embedder": 'EMBEDDER_NAME'
-    }
-  })
 search_parameter_guide_vector_1: |-
   client.index('books').search('',{
     "vector": [0, 1, 2],
@@ -617,10 +610,3 @@ update_embedders_1: |-
   })
 reset_embedders_1: |-
   client.index('INDEX_NAME').reset_embedders()
-search_parameter_reference_retrieve_vectors_1: |-
-  client.index('INDEX_NAME').search('kitchen utensils', {
-    "retrieveVectors": True,
-    "hybrid": {
-      "embedder": "EMBEDDER_NAME"
-    }
-  })
