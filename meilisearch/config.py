@@ -49,7 +49,7 @@ class Config:
         network = "network"
         experimental_features = "experimental-features"
         webhooks = "webhooks"
-        exports = "export"
+        export = "export"
 
     def __init__(
         self,

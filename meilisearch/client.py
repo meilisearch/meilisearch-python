@@ -693,7 +693,7 @@ class Client:
         if indexes is not None:
             payload["indexes"] = indexes
 
-        task = self.http.post(self.config.paths.exports, body=payload)
+        task = self.http.post(self.config.paths.export, body=payload)
 
         return TaskInfo(**task)
 
