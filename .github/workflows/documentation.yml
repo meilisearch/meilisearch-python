@@ -38,13 +38,10 @@ jobs:
           python-version: "3.10"
       - name: Install pipenv
         run: |
-          pip install pipx
-          pipx install pipenv
+          pip install pipenv
       - name: Install dependencies
         run: |
-          pipenv install --dev
-          pipenv install sphinx
-          pipenv install sphinx_rtd_theme
+          pipenv --python $(which python) install --dev
       - name: Build docs
         run: |
           pipenv run sphinx-apidoc -f -o docs meilisearch/
