@@ -20,3 +20,14 @@ class DocumentsResults:
         self.offset: int = resp["offset"]
         self.limit: int = resp["limit"]
         self.total: int = resp["total"]
+
+
+class FieldsResults:
+    """Response object for get_fields containing pagination metadata and field list."""
+
+    def __init__(self, resp: Dict[str, Any]) -> None:
+        self.results: List[Dict[str, Any]] = resp["results"]
+        self.offset: int = resp["offset"]
+        self.limit: int = resp["limit"]
+        self.total: int = resp["total"]
+

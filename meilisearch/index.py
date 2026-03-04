@@ -23,7 +23,7 @@ from meilisearch._httprequests import HttpRequests
 from meilisearch._utils import iso_to_date_time
 from meilisearch.config import Config
 from meilisearch.errors import version_error_hint_message
-from meilisearch.models.document import Document, DocumentsResults
+from meilisearch.models.document import Document, DocumentsResults, FieldsResults
 from meilisearch.models.embedders import (
     CompositeEmbedder,
     Embedders,
@@ -2560,7 +2560,7 @@ class Index:
         offset: Optional[int] = None,
         limit: Optional[int] = None,
         filter: Optional[MutableMapping[str, Any]] = None,  # pylint: disable=redefined-builtin
-    ) -> List[Dict[str, Any]]:
+    ) -> FieldsResults:
         """Get all fields of the index.
 
         Returns detailed metadata about all fields in the index, including
@@ -2588,22 +2588,12 @@ class Index:
 
         Returns
         -------
-        fields:
-            List of dictionaries containing metadata for each field.
-            Each field entry includes:
-            - name: The field name
-            - displayed: Object with 'enabled' boolean indicating if field is displayed
-            - searchable: Object with 'enabled' boolean indicating if field is searchable
-            - sortable: Object with 'enabled' boolean indicating if field is sortable
-            - distinct: Object with 'enabled' boolean indicating if field is distinct
-            - rankingRule: Object with 'enabled' boolean and optional 'order' ('asc' or 'desc')
-              indicating if field is used in ranking rules
-            - filterable: Object with 'enabled' boolean and filter settings:
-              - sortBy: Sort order for facet values (e.g., 'alpha')
-              - facetSearch: Whether facet search is enabled
-              - equality: Whether equality filtering is enabled
-              - comparison: Whether comparison filtering is enabled
-            - localized: Object with 'locales' array of locale codes
+        FieldsResults:
+            Object containing:
+            - results: List of field metadata dictionaries
+            - offset: Number of fields skipped
+            - limit: Maximum fields returned
+            - total: Total number of fields in the index
 
         Raises
         ------
@@ -2618,10 +2608,12 @@ class Index:
         if filter is not None:
             body["filter"] = filter
 
-        return self.http.post(
+        response = self.http.post(
             f"{self.config.paths.index}/{self.uid}/{self.config.paths.fields}",
             body=body,
         )
+
+        return FieldsResults(response)
 
     @staticmethod
     def _batch(
