@@ -30,4 +30,3 @@ class FieldsResults:
         self.offset: int = resp["offset"]
         self.limit: int = resp["limit"]
         self.total: int = resp["total"]
-
