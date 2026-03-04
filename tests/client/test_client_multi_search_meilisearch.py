@@ -30,6 +30,16 @@ def test_multi_search_one_index(client, empty_index):
     assert response["results"][0]["limit"] == 20
 
 
+def test_multi_search_show_performance_details(client, empty_index):
+    """Tests multi-search with showPerformanceDetails (Meilisearch 1.35+)."""
+    empty_index("indexA")
+    response = client.multi_search(
+        [{"indexUid": "indexA", "q": "", "showPerformanceDetails": True}]
+    )
+    assert response["results"][0]["indexUid"] == "indexA"
+    assert isinstance(response["results"][0]["performanceDetails"], dict)
+
+
 def test_multi_search_on_no_index(client):
     """Tests multi-search on a non existing index."""
     with pytest.raises(MeilisearchApiError):
