@@ -283,3 +283,99 @@ def test_index_update_without_params(client):
         index.update()
 
     assert "primary_key" in str(exc.value) or "new_uid" in str(exc.value)
+
+
+@pytest.mark.usefixtures("indexes_sample")
+def test_get_fields(client, small_movies):
+    """Tests getting all fields of an index via the new /fields endpoint."""
+    index = client.index(uid=common.INDEX_UID)
+    task = index.add_documents(small_movies)
+    client.wait_for_task(task.task_uid)
+
+    fields = index.get_fields()
+
+    assert hasattr(fields, "results")
+    assert hasattr(fields, "offset")
+    assert hasattr(fields, "limit")
+    assert hasattr(fields, "total")
+    assert isinstance(fields.results, list)
+    assert len(fields.results) > 0
+    assert "name" in fields.results[0]
+    assert "searchable" in fields.results[0]
+    assert "filterable" in fields.results[0]
+    assert "sortable" in fields.results[0]
+
+
+@pytest.mark.usefixtures("indexes_sample")
+def test_get_fields_with_configurations(client, small_movies):
+    """Tests get_fields() reflects index settings configurations."""
+    index = client.index(uid=common.INDEX_UID)
+    task = index.add_documents(small_movies)
+    client.wait_for_task(task.task_uid)
+
+    task = index.update_searchable_attributes(["title"])
+    client.wait_for_task(task.task_uid)
+
+    fields = index.get_fields()
+    title_field = next((f for f in fields.results if f["name"] == "title"), None)
+
+    assert title_field is not None
+    assert title_field["searchable"]["enabled"] is True
+
+
+@pytest.mark.usefixtures("indexes_sample")
+def test_get_fields_with_filter(client, small_movies):
+    """Tests get_fields() with filter parameters."""
+    index = client.index(uid=common.INDEX_UID)
+    task = index.add_documents(small_movies)
+    client.wait_for_task(task.task_uid)
+
+    task = index.update_searchable_attributes(["title"])
+    client.wait_for_task(task.task_uid)
+
+    # Filter only searchable fields
+    searchable_fields = index.get_fields(filter={"searchable": True})
+
+    assert isinstance(searchable_fields.results, list)
+    assert len(searchable_fields.results) > 0
+    assert all(field["searchable"]["enabled"] is True for field in searchable_fields.results)
+
+
+@pytest.mark.usefixtures("indexes_sample")
+def test_get_fields_with_pagination(client, small_movies):
+    """Tests get_fields() with pagination parameters."""
+    index = client.index(uid=common.INDEX_UID)
+    task = index.add_documents(small_movies)
+    client.wait_for_task(task.task_uid)
+
+    # Get all fields first to know total count
+    all_fields = index.get_fields()
+    total_fields = all_fields.total
+
+    # Test pagination with offset and limit
+    page1 = index.get_fields(offset=0, limit=2)
+    assert isinstance(page1.results, list)
+    assert len(page1.results) <= 2
+    assert page1.offset == 0
+    assert page1.limit == 2
+
+    # If we have more than 2 fields, test second page
+    if total_fields > 2:
+        page2 = index.get_fields(offset=2, limit=2)
+        assert isinstance(page2.results, list)
+        assert len(page2.results) <= 2
+        assert page2.offset == 2
+
+        # Verify pages don't overlap
+        page1_names = {f["name"] for f in page1.results}
+        page2_names = {f["name"] for f in page2.results}
+        assert page1_names.isdisjoint(page2_names)
+
+    # Test with just limit (no offset)
+    limited = index.get_fields(limit=3)
+    assert isinstance(limited.results, list)
+    assert len(limited.results) <= 3
+
+    # Test with just offset (no limit, uses default)
+    offset_only = index.get_fields(offset=1)
+    assert isinstance(offset_only.results, list)
