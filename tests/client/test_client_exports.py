@@ -16,7 +16,7 @@ def test_export_creation(
 ):  # pylint: disable=unused-argument
     """Tests the creation of a Meilisearch export."""
     index = index_with_documents()
-    export_task = client.export(common.BASE_URL_2, api_key=common.MEILISEARCH_KEY)
+    export_task = client.export(common.BASE_URL_2, api_key=common.MASTER_KEY)
     task_result = client.wait_for_task(export_task.task_uid)
     assert task_result.status == "succeeded"
 
@@ -33,7 +33,7 @@ def test_export_creation_with_index_filter(
     index = index_with_documents()
 
     indexes = {index.uid: {"filter": None}}
-    export_task = client.export(common.BASE_URL_2, api_key=common.MEILISEARCH_KEY, indexes=indexes)
+    export_task = client.export(common.BASE_URL_2, api_key=common.MASTER_KEY, indexes=indexes)
     task_result = client.wait_for_task(export_task.task_uid)
     assert task_result.status == "succeeded"
 

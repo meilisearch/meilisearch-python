@@ -1,1 +1,1 @@
-from .common import BASE_URL, MEILISEARCH_KEY
+from .common import BASE_URL, MASTER_KEY

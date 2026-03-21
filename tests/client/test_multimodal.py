@@ -158,7 +158,7 @@ class TestMultimodalSearch:
     @pytest.fixture(scope="class", autouse=True)
     def setup_index(self, request):
         """Setup index with embedder configuration."""
-        client = Client(common.BASE_URL, common.MEILISEARCH_KEY)
+        client = Client(common.BASE_URL, common.MASTER_KEY)
 
         # Enable multimodal experimental feature
         client.update_experimental_features({"multimodal": True})
@@ -187,7 +187,7 @@ class TestMultimodalSearch:
         response = requests.patch(
             f"{common.BASE_URL}/indexes/{INDEX_UID}/settings",
             headers={
-                "Authorization": f"Bearer {common.MEILISEARCH_KEY}",
+                "Authorization": f"Bearer {common.MASTER_KEY}",
                 "Content-Type": "application/json",
             },
             json=settings_payload,

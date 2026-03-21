@@ -1,6 +1,6 @@
 import os
 
-MEILISEARCH_KEY = "masterKey"
+MASTER_KEY = "masterKey"
 BASE_URL = os.getenv("MEILISEARCH_URL", "http://127.0.0.1:7700")
 BASE_URL_2 = os.getenv("MEILISEARCH_URL_2")
 
