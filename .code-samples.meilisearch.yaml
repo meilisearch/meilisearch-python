@@ -10,7 +10,7 @@ update_network_1: |-
   client.add_or_update_networks({
       "remotes": {
           "MEILISEARCH_URL": {
-              "searchApiKey": "masterKey"
+              "searchApiKey": "MEILISEARCH_KEY"
           }
       },
       "leader": None
@@ -361,7 +361,7 @@ post_dump_1: |-
 export_post_1: |-
   client.export(
     url='https://remote-meilisearch-instance.com',
-    api_key='masterKey',
+    api_key='MEILISEARCH_KEY',
     payload_size='50 MiB',
     indexes={
       'movies*': {},
@@ -437,7 +437,7 @@ primary_field_guide_add_document_primary_key: |-
     'price': 5.00
   }], 'reference_number')
 authorization_header_1: |-
-  client = Client('MEILISEARCH_URL', 'masterKey')
+  client = Client('MEILISEARCH_URL', 'MEILISEARCH_KEY')
   client.get_keys()
 tenant_token_guide_generate_sdk_1: |-
   uid = '85c3c2f9-bdd6-41f1-abd8-11fcf80e0f76';
