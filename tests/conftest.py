@@ -14,14 +14,14 @@ from tests import common
 
 @fixture(scope="session")
 def client():
-    return meilisearch.Client(common.BASE_URL, common.MASTER_KEY)
+    return meilisearch.Client(common.BASE_URL, common.MEILISEARCH_KEY)
 
 
 @fixture(scope="session")
 def client2():
     if not os.getenv("MEILISEARCH_URL_2"):
         return None
-    return meilisearch.Client(common.BASE_URL_2, common.MASTER_KEY)
+    return meilisearch.Client(common.BASE_URL_2, common.MEILISEARCH_KEY)
 
 
 def _clear_indexes(meilisearch_client):
@@ -270,26 +270,26 @@ def get_private_key(client):
 def enable_vector_search():
     requests.patch(
         f"{common.BASE_URL}/experimental-features",
-        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        headers={"Authorization": f"Bearer {common.MEILISEARCH_KEY}"},
         json={"vectorStoreSetting": True},
         timeout=10,
     )
     requests.patch(
         f"{common.BASE_URL_2}/experimental-features",
-        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        headers={"Authorization": f"Bearer {common.MEILISEARCH_KEY}"},
         json={"vectorStoreSetting": True},
         timeout=10,
     )
     yield
     requests.patch(
         f"{common.BASE_URL}/experimental-features",
-        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        headers={"Authorization": f"Bearer {common.MEILISEARCH_KEY}"},
         json={"vectorStoreSetting": False},
         timeout=10,
     )
     requests.patch(
         f"{common.BASE_URL_2}/experimental-features",
-        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        headers={"Authorization": f"Bearer {common.MEILISEARCH_KEY}"},
         json={"vectorStoreSetting": False},
         timeout=10,
     )
@@ -299,14 +299,14 @@ def enable_vector_search():
 def enable_edit_documents_by_function():
     requests.patch(
         f"{common.BASE_URL}/experimental-features",
-        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        headers={"Authorization": f"Bearer {common.MEILISEARCH_KEY}"},
         json={"editDocumentsByFunction": True},
         timeout=10,
     )
     yield
     requests.patch(
         f"{common.BASE_URL}/experimental-features",
-        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        headers={"Authorization": f"Bearer {common.MEILISEARCH_KEY}"},
         json={"editDocumentsByFunction": False},
         timeout=10,
     )
@@ -324,14 +324,14 @@ def new_embedders():
 def enable_composite_embedders():
     requests.patch(
         f"{common.BASE_URL}/experimental-features",
-        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        headers={"Authorization": f"Bearer {common.MEILISEARCH_KEY}"},
         json={"compositeEmbedders": True},
         timeout=10,
     )
     yield
     requests.patch(
         f"{common.BASE_URL}/experimental-features",
-        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        headers={"Authorization": f"Bearer {common.MEILISEARCH_KEY}"},
         json={"compositeEmbedders": False},
         timeout=10,
     )
@@ -341,14 +341,14 @@ def enable_composite_embedders():
 def enable_network_options():
     requests.patch(
         f"{common.BASE_URL}/experimental-features",
-        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        headers={"Authorization": f"Bearer {common.MEILISEARCH_KEY}"},
         json={"network": True},
         timeout=10,
     )
     yield
     requests.patch(
         f"{common.BASE_URL}/experimental-features",
-        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        headers={"Authorization": f"Bearer {common.MEILISEARCH_KEY}"},
         json={"network": False},
         timeout=10,
     )

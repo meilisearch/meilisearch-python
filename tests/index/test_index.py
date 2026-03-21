@@ -7,7 +7,7 @@ import pytest
 from meilisearch.client import Client
 from meilisearch.errors import MeilisearchApiError
 from meilisearch.index import Index
-from tests import BASE_URL, MASTER_KEY, common
+from tests import BASE_URL, MEILISEARCH_KEY, common
 
 
 def test_create_index(empty_index):
@@ -206,7 +206,7 @@ def test_delete_index_by_client(client):
 @pytest.mark.usefixtures("indexes_sample")
 def test_delete(client):
     assert client.get_index(uid=common.INDEX_UID)
-    deleted = Client(BASE_URL, MASTER_KEY).index(common.INDEX_UID).delete()
+    deleted = Client(BASE_URL, MEILISEARCH_KEY).index(common.INDEX_UID).delete()
     client.wait_for_task(deleted.task_uid)
     with pytest.raises(MeilisearchApiError):
         client.get_index(uid=common.INDEX_UID)
@@ -215,7 +215,7 @@ def test_delete(client):
 @pytest.mark.usefixtures("indexes_sample")
 def test_delete_index(client):
     assert client.get_index(uid=common.INDEX_UID)
-    deleted = Client(BASE_URL, MASTER_KEY).delete_index(uid=common.INDEX_UID)
+    deleted = Client(BASE_URL, MEILISEARCH_KEY).delete_index(uid=common.INDEX_UID)
     client.wait_for_task(deleted.task_uid)
     with pytest.raises(MeilisearchApiError):
         client.get_index(uid=common.INDEX_UID)

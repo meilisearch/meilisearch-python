@@ -7,7 +7,7 @@ import requests
 
 import meilisearch
 from meilisearch.errors import MeilisearchApiError, version_error_hint_message
-from tests import BASE_URL, MASTER_KEY
+from tests import BASE_URL, MEILISEARCH_KEY
 
 
 def test_meilisearch_api_error_no_master_key():
@@ -17,7 +17,7 @@ def test_meilisearch_api_error_no_master_key():
 
 
 def test_meilisearch_api_error_wrong_master_key():
-    client = meilisearch.Client(BASE_URL, MASTER_KEY + "123")
+    client = meilisearch.Client(BASE_URL, MEILISEARCH_KEY + "123")
     with pytest.raises(MeilisearchApiError):
         client.create_index("some_index")
 
@@ -31,7 +31,7 @@ def test_meilisearch_api_error_no_code(mock_post):
     mock_post.return_value = mock_response
 
     with pytest.raises(MeilisearchApiError):
-        client = meilisearch.Client(BASE_URL, MASTER_KEY + "123")
+        client = meilisearch.Client(BASE_URL, MEILISEARCH_KEY + "123")
         client.create_index("some_index")
 
 
