@@ -80,6 +80,16 @@ def test_get_task(client):
     assert "started_at" in task_dict
 
 
+def test_get_task_documents(client, empty_index, small_movies):
+    """Tests getting the documents for a task."""
+    index = empty_index()
+    task = index.add_documents(small_movies)
+    client.wait_for_task(task.task_uid)
+    task_documents = client.get_task_documents(task.task_uid)
+
+    assert isinstance(task_documents["results"], list)
+
+
 def test_get_task_inexistent(client):
     """Tests getting a task that does not exists."""
     with pytest.raises(Exception):

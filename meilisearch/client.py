@@ -783,6 +783,30 @@ class Client:
         """
         return self.task_handler.get_task(uid)
 
+    def get_task_documents(
+        self, uid: int, parameters: Optional[MutableMapping[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """Get one task documents.
+
+        Parameters
+        ----------
+        uid:
+            Identifier of the task.
+        parameters (optional):
+            parameters accepted by the get task documents route: https://www.meilisearch.com/docs/reference/api/tasks#get-task-documents.
+
+        Returns
+        -------
+        task_documents:
+            Dict containing results, total, limit and offset for the documents linked to the task.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.task_handler.get_task_documents(uid, parameters)
+
     def cancel_tasks(
         self, parameters: MutableMapping[str, Any], *, metadata: Optional[str] = None
     ) -> TaskInfo:
