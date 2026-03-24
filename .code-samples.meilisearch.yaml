@@ -83,6 +83,8 @@ get_all_tasks_1: |-
   client.get_tasks()
 get_task_1: |-
   client.get_task(1)
+get_task_documents_1: |-
+  client.get_task_documents(1)
 delete_tasks_1: |-
   client.delete_tasks({'uids': ['1', '2']})
 cancel_tasks_1: |-

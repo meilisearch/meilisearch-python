@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from time import sleep
-from typing import Any, Mapping, MutableMapping, Optional
+from typing import Any, Dict, Mapping, MutableMapping, Optional
 from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
@@ -121,6 +121,35 @@ class TaskHandler:
         """
         task = self.http.get(f"{self.config.paths.task}/{uid}")
         return Task(**task)
+
+    def get_task_documents(
+        self, uid: int, parameters: Optional[MutableMapping[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """Get one task documents.
+
+        Parameters
+        ----------
+        uid:
+            Identifier of the task.
+        parameters (optional):
+            parameters accepted by the get task documents route: https://www.meilisearch.com/docs/reference/api/tasks#get-task-documents.
+
+        Returns
+        -------
+        task_documents:
+            Dict containing results, total, limit and offset for the documents linked to the task.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        if parameters is None:
+            parameters = {}
+        for param in parameters:
+            if isinstance(parameters[param], (list, tuple)):
+                parameters[param] = ",".join(parameters[param])
+        return self.http.get(f"{self.config.paths.task}/{uid}/documents?{parse.urlencode(parameters)}")
 
     def cancel_tasks(
         self, parameters: MutableMapping[str, Any], *, metadata: Optional[str] = None
