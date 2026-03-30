@@ -35,12 +35,13 @@ jobs:
       - name: Install Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.10"
+          python-version: "3.9"
+          cache: "pipenv"
       - name: Install pipenv
         run: pip install pipenv
       - name: Install dependencies
         run: |
-          pipenv --python $(which python) install --dev
+          pipenv install --dev --python=3.9 --deploy
       - name: Build docs
         run: |
           pipenv run sphinx-apidoc -f -o docs meilisearch/

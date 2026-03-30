@@ -28,7 +28,7 @@ jobs:
       - name: Install pipenv
         run: pip install pipenv
       - name: Install dependencies
-        run: pipenv install --dev --python=${{ matrix.python-version }}
+        run: pipenv install --dev --python=${{ matrix.python-version }} --deploy
       - name: Meilisearch (latest version) setup with Docker
         run: docker run -d -p 7700:7700 getmeili/meilisearch-enterprise:latest meilisearch --no-analytics --master-key=masterKey
       - name: Test with pytest
@@ -47,7 +47,7 @@ jobs:
       - name: Install pipenv
         run: pip install pipenv
       - name: Install dependencies
-        run: pipenv install --dev --python=${{ matrix.python-version }}
+        run: pipenv install --dev --python=3.9 --deploy
       - name: Linter with pylint
         run: pipenv run pylint meilisearch tests
 
@@ -64,7 +64,7 @@ jobs:
       - name: Install pipenv
         run: pip install pipenv
       - name: Install dependencies
-        run: pipenv install --dev --python=${{ matrix.python-version }}
+        run: pipenv install --dev --python=3.9 --deploy
       - name: mypy type check
         run: pipenv run mypy meilisearch
 
@@ -81,7 +81,7 @@ jobs:
       - name: Install pipenv
         run: pip install pipenv
       - name: Install dependencies
-        run: pipenv install --dev --python=${{ matrix.python-version }}
+        run: pipenv install --dev --python=3.9 --deploy
       - name: black
         run: pipenv run black meilisearch tests --check
 
@@ -98,7 +98,7 @@ jobs:
       - name: Install pipenv
         run: pip install pipenv
       - name: Install dependencies
-        run: pipenv install --dev --python=${{ matrix.python-version }}
+        run: pipenv install --dev --python=3.9 --deploy
       - name: isort
         run: pipenv run isort meilisearch tests --check-only
 
