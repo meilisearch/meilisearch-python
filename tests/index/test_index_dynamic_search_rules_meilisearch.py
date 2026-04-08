@@ -20,24 +20,28 @@ def test_list_dynamic_search_rules(test_index):
 
 def test_get_dynamic_search_rule(test_index):
     """Test getting a single dynamic search rule"""
-    # Create a rule first
     rule_uid = "test-rule-1"
     rule_body = {
-        "condition": "query = 'new'",
-        "matchCondition": "all",
+        "conditions": [
+            {
+                "scope": ["title"],
+                "operator": "contains",
+                "value": "new"
+            }
+        ],
         "actions": [
             {
                 "action": "promote",
                 "documentIds": ["1"],
+                "matchCondition": "all",
                 "position": 1
             }
         ]
     }
-    
+
     create_response = test_index.upsert_dynamic_search_rule(rule_uid, rule_body)
     test_index.wait_for_task(create_response.task_uid)
-    
-    # Now retrieve it
+
     response = test_index.get_dynamic_search_rule(rule_uid)
     assert isinstance(response, dict)
     assert response.get("uid") == rule_uid
@@ -47,23 +51,28 @@ def test_upsert_dynamic_search_rule(test_index):
     """Test creating or updating a dynamic search rule"""
     rule_uid = "test-rule-2"
     rule_body = {
-        "condition": "query = 'hello'",
-        "matchCondition": "all",
+        "conditions": [
+            {
+                "scope": ["title"],
+                "operator": "contains",
+                "value": "hello"
+            }
+        ],
         "actions": [
             {
                 "action": "promote",
                 "documentIds": ["2"],
+                "matchCondition": "all",
                 "position": 1
             }
         ]
     }
-    
+
     response = test_index.upsert_dynamic_search_rule(rule_uid, rule_body)
     assert response.task_uid is not None
-    
+
     test_index.wait_for_task(response.task_uid)
-    
-    # Verify it was created
+
     retrieved = test_index.get_dynamic_search_rule(rule_uid)
     assert retrieved.get("uid") == rule_uid
 
@@ -72,27 +81,30 @@ def test_delete_dynamic_search_rule(test_index):
     """Test deleting a dynamic search rule"""
     rule_uid = "test-rule-3"
     rule_body = {
-        "condition": "query = 'delete-me'",
-        "matchCondition": "all",
+        "conditions": [
+            {
+                "scope": ["title"],
+                "operator": "contains",
+                "value": "delete-me"
+            }
+        ],
         "actions": [
             {
                 "action": "promote",
                 "documentIds": ["3"],
+                "matchCondition": "all",
                 "position": 1
             }
         ]
     }
-    
-    # Create rule
+
     create_response = test_index.upsert_dynamic_search_rule(rule_uid, rule_body)
     test_index.wait_for_task(create_response.task_uid)
-    
-    # Delete it
+
     delete_response = test_index.delete_dynamic_search_rule(rule_uid)
     assert delete_response.task_uid is not None
-    
+
     test_index.wait_for_task(delete_response.task_uid)
-    
-    # Verify it's deleted - should raise error or return empty
+
     with pytest.raises(MeilisearchApiError):
         test_index.get_dynamic_search_rule(rule_uid)
