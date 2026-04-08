@@ -631,16 +631,20 @@ get_dynamic_search_rule_1: |-
 
 patch_dynamic_search_rule_1: |-
   client.index('movies').upsert_dynamic_search_rule('promote-new', {
-    'condition': "query = 'new'",
-    'match_condition': 'all',
+    'conditions': [
+      {
+        'scope': ['title'],
+        'operator': 'contains',
+        'value': 'new'
+      }
+    ],
     'actions': [
       {
         'action': 'promote',
-        'document_ids': ['1', '2'],
-        'position': 1
+        'documentIds': ['1', '2'],
+        'matchCondition': 'all'
       }
     ]
   })
-
 delete_dynamic_search_rule_1: |-
   client.index('movies').delete_dynamic_search_rule('promote-new')

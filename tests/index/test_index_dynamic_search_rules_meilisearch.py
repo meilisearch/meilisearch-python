@@ -1,4 +1,5 @@
 import pytest
+from meilisearch.errors import MeilisearchApiError
 
 
 @pytest.fixture
@@ -12,7 +13,9 @@ def test_list_dynamic_search_rules(test_index):
     """Test listing dynamic search rules"""
     response = test_index.list_dynamic_search_rules()
     assert isinstance(response, dict)
-    assert "results" in response or "results" not in response  # May be empty
+    assert "results" in response or "meta" in response
+    if "results" in response:
+        assert isinstance(response["results"], list)
 
 
 def test_get_dynamic_search_rule(test_index):
@@ -91,9 +94,5 @@ def test_delete_dynamic_search_rule(test_index):
     test_index.wait_for_task(delete_response.task_uid)
     
     # Verify it's deleted - should raise error or return empty
-    try:
+    with pytest.raises(MeilisearchApiError):
         test_index.get_dynamic_search_rule(rule_uid)
-        assert False, "Rule should have been deleted"
-    except Exception:
-        # Expected - rule doesn't exist
-        pass

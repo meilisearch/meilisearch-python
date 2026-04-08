@@ -1384,7 +1384,7 @@ class Index:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         task = self.http.patch(
-            f"{self.config.paths.index}/{self.uid}/{self.config.paths.dynamic_search_rules}/{uid}",
+            f"{self.config.paths.dynamic_search_rules}/{uid}",
             body,
         )
 
