@@ -51,6 +51,7 @@ class Config:
         experimental_features = "experimental-features"
         webhooks = "webhooks"
         export = "export"
+        dynamic_search_rules = "dynamic-search-rules"
 
     def __init__(
         self,
