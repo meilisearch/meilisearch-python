@@ -24,11 +24,11 @@ def test_get_dynamic_search_rule(test_index):
     rule_uid = "test-rule-1"
     rule_body = {
         "condition": "query = 'new'",
-        "match_condition": "all",
+        "matchCondition": "all",
         "actions": [
             {
                 "action": "promote",
-                "document_ids": ["1"],
+                "documentIds": ["1"],
                 "position": 1
             }
         ]
@@ -48,11 +48,11 @@ def test_upsert_dynamic_search_rule(test_index):
     rule_uid = "test-rule-2"
     rule_body = {
         "condition": "query = 'hello'",
-        "match_condition": "all",
+        "matchCondition": "all",
         "actions": [
             {
                 "action": "promote",
-                "document_ids": ["2"],
+                "documentIds": ["2"],
                 "position": 1
             }
         ]
@@ -73,11 +73,11 @@ def test_delete_dynamic_search_rule(test_index):
     rule_uid = "test-rule-3"
     rule_body = {
         "condition": "query = 'delete-me'",
-        "match_condition": "all",
+        "matchCondition": "all",
         "actions": [
             {
                 "action": "promote",
-                "document_ids": ["3"],
+                "documentIds": ["3"],
                 "position": 1
             }
         ]
