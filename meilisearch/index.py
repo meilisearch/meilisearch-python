@@ -1309,6 +1309,112 @@ class Index:
 
         return TaskInfo(**task)
 
+
+    # DYNAMIC SEARCH RULES SUB-ROUTES
+
+    def list_dynamic_search_rules(
+        self, parameters: Optional[MutableMapping[str, Any]] = None
+    ) -> Dict[str, Any]:
+        """List all dynamic search rules of the index.
+
+        Parameters
+        ----------
+        parameters (optional):
+            parameters accepted by the list dynamic search rules route, including pagination and filtering options.
+
+        Returns
+        -------
+        rules: dict
+            Dictionary containing the list of dynamic search rules and pagination info.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        if parameters is None:
+            parameters = {}
+
+        return self.http.post(
+            f"{self.config.paths.index}/{self.uid}/{self.config.paths.dynamic_search_rules}/fetch",
+            body=parameters,
+        )
+
+    def get_dynamic_search_rule(self, uid: str) -> Dict[str, Any]:
+        """Get a single dynamic search rule by uid.
+
+        Parameters
+        ----------
+        uid: str
+            Unique identifier of the dynamic search rule.
+
+        Returns
+        -------
+        rule: dict
+            Dictionary containing the dynamic search rule data.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.http.get(
+            f"{self.config.paths.index}/{self.uid}/{self.config.paths.dynamic_search_rules}/{uid}"
+        )
+
+    def upsert_dynamic_search_rule(self, uid: str, body: Dict[str, Any]) -> TaskInfo:
+        """Create or update a dynamic search rule.
+
+        Parameters
+        ----------
+        uid: str
+            Unique identifier of the dynamic search rule.
+        body: dict
+            Dictionary containing the dynamic search rule configuration.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.patch(
+            f"{self.config.paths.index}/{self.uid}/{self.config.paths.dynamic_search_rules}/{uid}",
+            body,
+        )
+
+        return TaskInfo(**task)
+
+    def delete_dynamic_search_rule(self, uid: str) -> TaskInfo:
+        """Delete a dynamic search rule by uid.
+
+        Parameters
+        ----------
+        uid: str
+            Unique identifier of the dynamic search rule to delete.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.delete(
+            f"{self.config.paths.index}/{self.uid}/{self.config.paths.dynamic_search_rules}/{uid}"
+        )
+
+        return TaskInfo(**task)
+
     # RANKING RULES SUB-ROUTES
 
     def get_ranking_rules(self) -> List[str]:

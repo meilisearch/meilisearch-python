@@ -610,3 +610,29 @@ update_embedders_1: |-
   })
 reset_embedders_1: |-
   client.index('INDEX_NAME').reset_embedders()
+
+list_dynamic_search_rules_1: |-
+  client.index('movies').list_dynamic_search_rules()
+
+get_dynamic_search_rule_1: |-
+  client.index('movies').get_dynamic_search_rule('promote-new')
+
+patch_dynamic_search_rule_1: |-
+  client.index('movies').upsert_dynamic_search_rule('promote-new', {
+    'conditions': [
+      {
+        'scope': ['title'],
+        'operator': 'contains',
+        'value': 'new'
+      }
+    ],
+    'actions': [
+      {
+        'action': 'promote',
+        'documentIds': ['1', '2'],
+        'matchCondition': 'all'
+      }
+    ]
+  })
+delete_dynamic_search_rule_1: |-
+  client.index('movies').delete_dynamic_search_rule('promote-new')
