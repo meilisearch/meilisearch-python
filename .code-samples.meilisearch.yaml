@@ -262,12 +262,6 @@ get_version_1: |-
   client.get_version()
 distinct_attribute_guide_1: |-
   client.index('jackets').update_distinct_attribute('product_id')
-field_properties_guide_searchable_1: |-
-  client.index('movies').update_searchable_attributes([
-      'title',
-      'overview',
-      'genres'
-  ])
 field_properties_guide_displayed_1: |-
   client.index('movies').update_displayed_attributes([
       'title',
@@ -309,10 +303,6 @@ typo_tolerance_guide_4: |-
       'oneTypo': 4,
       'twoTypos': 10
     }
-  })
-search_parameter_guide_show_ranking_score_details_1: |-
-  client.index('movies').search('dragon', {
-    'showRankingScoreDetails': True
   })
 distinct_attribute_guide_filterable_1: |-
   client.index('products').update_filterable_attributes(['product_id', 'sku', 'url'])
@@ -596,8 +586,6 @@ webhooks_patch_1: |-
   })
 webhooks_delete_1: |-
   client.delete_webhook('WEBHOOK_UID')
-rename_an_index_1: |-
-  client.index("INDEX_A").update(new_uid="INDEX_B")
 search_parameter_guide_vector_1: |-
   client.index('books').search('',{
     "vector": [0, 1, 2],
