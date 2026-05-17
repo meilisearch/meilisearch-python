@@ -56,7 +56,7 @@ class Index:
     Indexes routes wrapper.
 
     Index class gives access to all indexes routes and child routes (inherited).
-    https://www.meilisearch.com/docs/reference/api/indexes
+    https://www.meilisearch.com/docs/reference/api/indexes/list-all-indexes
     """
 
     def __init__(
@@ -98,7 +98,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -144,7 +144,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -218,7 +218,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -241,7 +241,7 @@ class Index:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the get tasks route: https://www.meilisearch.com/docs/reference/api/tasks#get-tasks.
+            parameters accepted by the get tasks route: https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-tasks.
 
         Returns
         -------
@@ -317,7 +317,7 @@ class Index:
         """Get stats of the index.
 
         Get information about the number of documents, field frequencies, ...
-        https://www.meilisearch.com/docs/reference/api/stats
+        https://www.meilisearch.com/docs/reference/api/stats/get-stats-of-all-indexes
 
         Returns
         -------
@@ -336,7 +336,7 @@ class Index:
     def search(self, query: str, opt_params: Optional[Mapping[str, Any]] = None) -> Dict[str, Any]:
         """Search in the index.
 
-        https://www.meilisearch.com/docs/reference/api/search
+        https://www.meilisearch.com/docs/reference/api/search/search-with-post
 
         Parameters
         ----------
@@ -418,7 +418,7 @@ class Index:
         document_id:
             Unique identifier of the document.
         parameters (optional):
-            parameters accepted by the get document route: https://www.meilisearch.com/docs/reference/api/documents#get-one-document
+            parameters accepted by the get document route: https://www.meilisearch.com/docs/reference/api/documents/list-documents-with-get#get-one-document
 
         Returns
         -------
@@ -449,7 +449,7 @@ class Index:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the get documents route: https://www.meilisearch.com/docs/reference/api/documents#get-documents
+            parameters accepted by the get documents route: https://www.meilisearch.com/docs/reference/api/documents/list-documents-with-get#get-documents
             Note: The filter parameter is only available in Meilisearch >= 1.2.0.
 
         Returns
@@ -487,7 +487,7 @@ class Index:
         Parameters
         ----------
         parameters:
-            parameters accepted by the get similar documents route: https://www.meilisearch.com/docs/reference/api/similar#body
+            parameters accepted by the get similar documents route: https://www.meilisearch.com/docs/reference/api/similar-documents/get-similar-documents-with-post#body
             "id" and "embedder" are required. May include showPerformanceDetails to
             request a performance trace in the response (performanceDetails, raw data).
 
@@ -537,7 +537,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -581,7 +581,7 @@ class Index:
         -------
         tasks_info:
             List of TaskInfo instances containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -634,7 +634,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -679,7 +679,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -721,7 +721,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -773,7 +773,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -819,7 +819,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -856,7 +856,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -901,7 +901,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -946,7 +946,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -999,7 +999,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1048,7 +1048,7 @@ class Index:
         -------
         tasks_info:
             List of TaskInfo instances containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1087,7 +1087,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1126,7 +1126,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1167,7 +1167,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1185,7 +1185,7 @@ class Index:
     def get_settings(self) -> Dict[str, Any]:
         """Get settings of the index.
 
-        https://www.meilisearch.com/docs/reference/api/settings
+        https://www.meilisearch.com/docs/reference/api/settings/list-all-settings
 
         Returns
         -------
@@ -1226,7 +1226,7 @@ class Index:
     ) -> TaskInfo:
         """Update settings of the index.
 
-        https://www.meilisearch.com/docs/reference/api/settings#update-settings
+        https://www.meilisearch.com/docs/reference/api/settings/list-all-settings#update-settings
 
         Parameters
         ----------
@@ -1253,7 +1253,7 @@ class Index:
             - 'localizedAttributes': Settings for localized attributes
 
             More information:
-            https://www.meilisearch.com/docs/reference/api/settings#update-settings
+            https://www.meilisearch.com/docs/reference/api/settings/list-all-settings#update-settings
         metadata (optional):
             Custom metadata string to attach to the task.
 
@@ -1261,7 +1261,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1284,7 +1284,7 @@ class Index:
     def reset_settings(self, *, metadata: Optional[str] = None) -> TaskInfo:
         """Reset settings of the index to default values.
 
-        https://www.meilisearch.com/docs/reference/api/settings#reset-settings
+        https://www.meilisearch.com/docs/reference/api/settings/list-all-settings#reset-settings
 
         Parameters
         ----------
@@ -1295,7 +1295,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1338,7 +1338,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1356,7 +1356,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1398,7 +1398,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1416,7 +1416,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1458,7 +1458,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1476,7 +1476,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1518,7 +1518,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1536,7 +1536,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1578,7 +1578,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1596,7 +1596,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1638,7 +1638,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1656,7 +1656,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1698,7 +1698,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1716,7 +1716,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1758,7 +1758,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1776,7 +1776,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1820,7 +1820,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1838,7 +1838,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1875,13 +1875,13 @@ class Index:
         ----------
         body: dict
             Dictionary containing the pagination settings.
-            https://www.meilisearch.com/docs/reference/api/settings#update-pagination-settings
+            https://www.meilisearch.com/docs/reference/api/settings/list-all-settings#update-pagination-settings
 
         Returns
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1901,7 +1901,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1939,7 +1939,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -1957,7 +1957,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks
         """
         task = self.http.delete(self.__settings_url_for(self.config.paths.facet_search))
 
@@ -1987,13 +1987,13 @@ class Index:
         ----------
         body: dict
             Dictionary containing the faceting settings.
-            https://www.meilisearch.com/docs/reference/api/settings#update-pagination-settings
+            https://www.meilisearch.com/docs/reference/api/settings/list-all-settings#update-pagination-settings
 
         Returns
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -2011,7 +2011,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -2051,7 +2051,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -2069,7 +2069,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -2126,7 +2126,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -2149,7 +2149,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -2167,7 +2167,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -2187,7 +2187,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -2259,7 +2259,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -2302,7 +2302,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -2344,7 +2344,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -2362,7 +2362,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -2406,7 +2406,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks
         """
         task = self.http.put(self.__settings_url_for(self.config.paths.prefix_search), body)
 
@@ -2419,7 +2419,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks
         """
         task = self.http.delete(
             self.__settings_url_for(self.config.paths.prefix_search),
@@ -2457,7 +2457,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -2475,7 +2475,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -2524,7 +2524,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -2542,7 +2542,7 @@ class Index:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -2566,7 +2566,7 @@ class Index:
         Returns detailed metadata about all fields in the index, including
         display, search, filtering, and localization settings for each field.
 
-        https://www.meilisearch.com/docs/reference/api/indexes#get-fields
+        https://www.meilisearch.com/docs/reference/api/indexes/list-all-indexes#get-fields
 
         Parameters
         ----------

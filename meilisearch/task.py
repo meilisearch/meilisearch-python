@@ -16,7 +16,7 @@ class TaskHandler:
     A class covering the Meilisearch Task API
 
     The task class gives access to all task routes and gives information about the progress of asynchronous operations.
-    https://www.meilisearch.com/docs/reference/api/tasks
+    https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks
     """
 
     def __init__(self, config: Config, custom_headers: Optional[Mapping[str, str]] = None):
@@ -33,7 +33,7 @@ class TaskHandler:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the get batches route: https://www.meilisearch.com/docs/reference/api/batches#get-batches.
+            parameters accepted by the get batches route: https://www.meilisearch.com/docs/reference/api/async-task-management/list-batches#get-batches.
 
         Returns
         -------
@@ -80,7 +80,7 @@ class TaskHandler:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the get tasks route: https://www.meilisearch.com/docs/reference/api/tasks#get-tasks.
+            parameters accepted by the get tasks route: https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-tasks.
 
         Returns
         -------
@@ -130,7 +130,7 @@ class TaskHandler:
         Parameters
         ----------
         parameters:
-            parameters accepted by the cancel tasks https://www.meilisearch.com/docs/reference/api/tasks#cancel-task.
+            parameters accepted by the cancel tasks https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#cancel-task.
         metadata (optional):
             Custom metadata string to attach to the task.
 
@@ -138,7 +138,7 @@ class TaskHandler:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -162,14 +162,14 @@ class TaskHandler:
         config:
             Config object containing permission and location of Meilisearch.
         parameters:
-            parameters accepted by the delete tasks route:https://www.meilisearch.com/docs/reference/api/tasks#delete-task.
+            parameters accepted by the delete tasks route:https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#delete-task.
         metadata (optional):
             Custom metadata string to attach to the task.
         Returns
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
         Raises
         ------
         MeilisearchApiError

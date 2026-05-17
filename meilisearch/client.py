@@ -103,7 +103,7 @@ class Client:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -128,7 +128,7 @@ class Client:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -149,7 +149,7 @@ class Client:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the get indexes route: https://www.meilisearch.com/docs/reference/api/indexes#list-all-indexes
+            parameters accepted by the get indexes route: https://www.meilisearch.com/docs/reference/api/indexes/list-all-indexes#list-all-indexes
 
         Returns
         -------
@@ -185,7 +185,7 @@ class Client:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the get indexes route: https://www.meilisearch.com/docs/reference/api/indexes#list-all-indexes
+            parameters accepted by the get indexes route: https://www.meilisearch.com/docs/reference/api/indexes/list-all-indexes#list-all-indexes
 
         Returns
         -------
@@ -270,15 +270,15 @@ class Client:
         ----------
         queries:
             List of dictionaries containing the specified indexes and their search queries
-            https://www.meilisearch.com/docs/reference/api/search#search-in-an-index
+            https://www.meilisearch.com/docs/reference/api/search/search-with-post#search-in-an-index
             It can also include remote options in federationOptions for each query
-            https://www.meilisearch.com/docs/reference/api/network
+            https://www.meilisearch.com/docs/reference/api/experimental-features/network-control
             Each query may include showPerformanceDetails to request a performance
             trace in the response (results[].performanceDetails, returned as raw data).
         federation: (optional):
             Dictionary containing offset, limit, and optionally showPerformanceDetails
             for federated search (top-level performanceDetails in the response).
-            https://www.meilisearch.com/docs/reference/api/multi_search
+            https://www.meilisearch.com/docs/reference/api/multi-search/perform-a-multi-search
 
         Returns
         -------
@@ -310,7 +310,7 @@ class Client:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -326,7 +326,7 @@ class Client:
         """Get all stats of Meilisearch
 
         Get information about database size and all indexes
-        https://www.meilisearch.com/docs/reference/api/stats
+        https://www.meilisearch.com/docs/reference/api/stats/get-stats-of-all-indexes
 
         Returns
         -------
@@ -375,7 +375,7 @@ class Client:
         -------
         key:
             The API key.
-            https://www.meilisearch.com/docs/reference/api/keys#get-key
+            https://www.meilisearch.com/docs/reference/api/keys/list-api-keys#get-key
 
         Raises
         ------
@@ -392,13 +392,13 @@ class Client:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the get keys route: https://www.meilisearch.com/docs/reference/api/keys#get-all-keys
+            parameters accepted by the get keys route: https://www.meilisearch.com/docs/reference/api/keys/list-api-keys#get-all-keys
 
         Returns
         -------
         keys:
             API keys.
-            https://www.meilisearch.com/docs/reference/api/keys#get-keys
+            https://www.meilisearch.com/docs/reference/api/keys/list-api-keys#get-keys
 
         Raises
         ------
@@ -427,7 +427,7 @@ class Client:
         -------
         key:
             The new API key.
-            https://www.meilisearch.com/docs/reference/api/keys#get-keys
+            https://www.meilisearch.com/docs/reference/api/keys/list-api-keys#get-keys
 
         Raises
         ------
@@ -453,7 +453,7 @@ class Client:
         -------
         key:
             The updated API key.
-            https://www.meilisearch.com/docs/reference/api/keys#get-keys
+            https://www.meilisearch.com/docs/reference/api/keys/list-api-keys#get-keys
 
         Raises
         ------
@@ -477,7 +477,7 @@ class Client:
         -------
         keys:
             The Response status code. 204 signifies a successful delete.
-            https://www.meilisearch.com/docs/reference/api/keys#get-keys
+            https://www.meilisearch.com/docs/reference/api/keys/list-api-keys#get-keys
 
         Raises
         ------
@@ -497,7 +497,7 @@ class Client:
         -------
         webhooks:
             WebhooksResults instance containing list of webhooks and pagination info.
-            https://www.meilisearch.com/docs/reference/api/webhooks
+            https://www.meilisearch.com/docs/reference/api/webhooks/list-webhooks
 
         Raises
         ------
@@ -519,7 +519,7 @@ class Client:
         -------
         webhook:
             The webhook information.
-            https://www.meilisearch.com/docs/reference/api/webhooks#get-one-webhook
+            https://www.meilisearch.com/docs/reference/api/webhooks/list-webhooks#get-one-webhook
 
         Raises
         ------
@@ -543,7 +543,7 @@ class Client:
         -------
         webhook:
             The newly created webhook.
-            https://www.meilisearch.com/docs/reference/api/webhooks#create-a-webhook
+            https://www.meilisearch.com/docs/reference/api/webhooks/list-webhooks#create-a-webhook
 
         Raises
         ------
@@ -569,7 +569,7 @@ class Client:
         -------
         webhook:
             The updated webhook.
-            https://www.meilisearch.com/docs/reference/api/webhooks#update-a-webhook
+            https://www.meilisearch.com/docs/reference/api/webhooks/list-webhooks#update-a-webhook
 
         Raises
         ------
@@ -591,7 +591,7 @@ class Client:
         -------
         status_code:
             The Response status code. 204 signifies a successful delete.
-            https://www.meilisearch.com/docs/reference/api/webhooks#delete-a-webhook
+            https://www.meilisearch.com/docs/reference/api/webhooks/list-webhooks#delete-a-webhook
 
         Raises
         ------
@@ -638,7 +638,7 @@ class Client:
         -------
         Dump:
             Information about the dump.
-            https://www.meilisearch.com/docs/reference/api/dump#create-a-dump
+            https://www.meilisearch.com/docs/reference/api/backups/create-dump#create-a-dump
 
         Raises
         ------
@@ -679,7 +679,7 @@ class Client:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/export#create-an-export
+            https://www.meilisearch.com/docs/reference/api/export/export-to-a-remote-meilisearch#create-an-export
 
         Raises
         ------
@@ -707,7 +707,7 @@ class Client:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -733,7 +733,7 @@ class Client:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -748,7 +748,7 @@ class Client:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the get tasks route: https://www.meilisearch.com/docs/reference/api/tasks#get-tasks.
+            parameters accepted by the get tasks route: https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-tasks.
 
         Returns
         -------
@@ -791,7 +791,7 @@ class Client:
         Parameters
         ----------
         parameters:
-            parameters accepted by the cancel tasks route:https://www.meilisearch.com/docs/reference/api/tasks#cancel-tasks.
+            parameters accepted by the cancel tasks route:https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#cancel-tasks.
         metadata (optional):
             Custom metadata string to attach to the task.
 
@@ -799,7 +799,7 @@ class Client:
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
 
         Raises
         ------
@@ -816,14 +816,14 @@ class Client:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the delete tasks route:https://www.meilisearch.com/docs/reference/api/tasks#delete-task.
+            parameters accepted by the delete tasks route:https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#delete-task.
         metadata (optional):
             Custom metadata string to attach to the task.
         Returns
         -------
         task_info:
             TaskInfo instance containing information about a task to track the progress of an asynchronous process.
-            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+            https://www.meilisearch.com/docs/reference/api/async-task-management/list-tasks#get-one-task
         Raises
         ------
         MeilisearchApiError
@@ -866,7 +866,7 @@ class Client:
         Parameters
         ----------
         parameters (optional):
-            parameters accepted by the get batches route: https://www.meilisearch.com/docs/reference/api/batches#get-batches.
+            parameters accepted by the get batches route: https://www.meilisearch.com/docs/reference/api/async-task-management/list-batches#get-batches.
 
         Returns
         -------
@@ -988,7 +988,7 @@ class Client:
         -------
         remote networks:
             Remote Networks containing information about the networks allowed/present.
-            https://www.meilisearch.com/docs/reference/api/network
+            https://www.meilisearch.com/docs/reference/api/experimental-features/network-control
 
         Raises
         ------
