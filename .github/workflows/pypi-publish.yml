@@ -34,4 +34,4 @@ jobs:
           TWINE_PASSWORD: "pypi-${{ secrets.PYPI_API_TOKEN }}"
         run: |
           uv build
-          uvx twine upload dist/*
+          uvx twine@6.2.0 upload dist/*
