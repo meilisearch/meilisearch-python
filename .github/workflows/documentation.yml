@@ -25,36 +25,44 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      PYTHONUNBUFFERED: 1
+      UV_PYTHON: "3.9"
+      UV_LOCKED: 1
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           lfs: true
+
       - name: Setup Github Pages
         uses: actions/configure-pages@v5
+
       - name: Install Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.9"
-          cache: "pipenv"
-      - name: Install pipenv
-        run: pip install pipenv
-      - name: Install dependencies
-        run: |
-          pipenv install --dev --python=3.9 --deploy
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
+        with:
+          version: "0.11.16"
+
       - name: Build docs
         run: |
-          pipenv run sphinx-apidoc -f -o docs meilisearch/
-          pipenv run sphinx-build docs ./docs/_build/html/
+          uv run --only-group docs sphinx-apidoc -f -o docs meilisearch/
+          uv run --only-group docs sphinx-build docs ./docs/_build/html/
         # CNAME file is required for GitHub pages custom domain
       - name: Create CNAME file
         run: |
           echo "$CUSTOM_DOMAIN" > ./docs/_build/html/CNAME
           echo "Created CNAME in ./docs/_build/html/: $CUSTOM_DOMAIN"
+
       - name: Upload artifacts
         uses: actions/upload-pages-artifact@v3
         with:
           path: "./docs/_build/html"
+
   deploy:
     needs: build
     environment:
