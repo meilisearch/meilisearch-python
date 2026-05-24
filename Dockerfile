@@ -9,4 +9,4 @@ RUN apt-get update -y
 COPY --from=ghcr.io/astral-sh/uv:0.11.16 /uv /uvx /bin/
 
 # Install dependencies
-RUN uv sync --frozen
+RUN uv sync --frozen --no-install-project
