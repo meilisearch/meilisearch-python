@@ -44,13 +44,13 @@ You can set up your local environment natively or using `docker`, check out the 
 
 Example of running all the checks with docker:
 ```bash
-docker-compose run --rm package bash -c "pipenv install --dev && pipenv run mypy meilisearch && pipenv run pylint meilisearch tests && pipenv run pytest tests"
+docker-compose run --rm package bash -c "uv run mypy meilisearch && uv run pylint meilisearch tests && uv run pytest tests"
 ```
 
 To install dependencies:
 
 ```bash
-pipenv install --dev
+uv sync
 ```
 
 ### Tests and Linter <!-- omit in toc -->
@@ -62,15 +62,15 @@ Your PR also needs to be formatted using black and isort.
 # Tests
 curl -L https://install.meilisearch.com | sh # download Meilisearch
 ./meilisearch --master-key=masterKey --no-analytics # run Meilisearch
-pipenv run pytest tests
+uv run pytest tests
 # MyPy
-pipenv run mypy meilisearch
+uv run mypy meilisearch
 # Linter
-pipenv run pylint meilisearch tests
+uv run pylint meilisearch tests
 # Black
-pipenv run black meilisearch tests
+uv run black meilisearch tests
 # Isort
-pipenv run isort meilisearch tests
+uv run isort meilisearch tests
 ```
 
 Optionally tox can be used to run test on all supported version of Python, mypy, and linting.
@@ -78,7 +78,7 @@ Optionally tox can be used to run test on all supported version of Python, mypy,
 ```bash
 docker pull getmeili/meilisearch:latest # Fetch the latest version of Meilisearch image from Docker Hub
 docker run -p 7700:7700 getmeili/meilisearch:latest meilisearch --master-key=masterKey --no-analytics
-pipenv run tox
+uv run tox
 ```
 
 To check if your `yaml` files are correctly formatted, you need to [install yamllint](https://yamllint.readthedocs.io/en/stable/quickstart.html#installing-yamllint) and then run `yamllint .`

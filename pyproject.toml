@@ -1,19 +1,13 @@
-[build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "meilisearch"
 description = "The python client for Meilisearch API."
-license = { text = "MIT" }
+authors = [{ name = "Clémentine", email = "clementine@meilisearch.com" }]
 requires-python = ">=3.9"
-authors = [
-  { name = "Clémentine", email = "clementine@meilisearch.com" },
-]
+license = { text = "MIT" }
 keywords = [
-  "search",
-  "python",
-  "meilisearch",
+    "search",
+    "python",
+    "meilisearch",
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
@@ -29,7 +23,44 @@ dependencies = [
     "requests",
     "camel-converter[pydantic]",
 ]
-dynamic = ['version']
+dynamic = ["version"]
+
+[project.urls]
+Meilisearch_Documentation = "https://www.meilisearch.com/docs"
+Documentation = "https://meilisearch.github.io/meilisearch-python/"
+Homepage = "https://github.com/meilisearch/meilisearch-python"
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[dependency-groups]
+dev = [
+    "tomli ; python_version < '3.11'",
+]
+
+test = [
+    "pytest>=8.4.2",
+    "pytest-cov>=7.1.0",
+    "tox>=4.30.3",
+]
+
+lint = [
+    "mypy>=1.19.1",
+    "pylint>=v3.3.9",
+    "black>=25.11.0",
+    "isort>=6.1.0",
+    "types-requests",
+]
+
+docs = [
+    "sphinx>=7.4.7",
+    "sphinx-rtd-theme>=3.1.0",
+]
+
+[tool.uv]
+fork-strategy = "fewest"
+default-groups = [ "dev", "test", "lint"]
 
 [tool.setuptools.dynamic]
 version = {attr = "meilisearch.version.__version__"}
@@ -40,11 +71,6 @@ exclude = ["docs*", "tests*"]
 
 [tool.setuptools.package-data]
 meilisearch = ["py.typed"]
-
-[project.urls]
-Meilisearch_Documentation = "https://www.meilisearch.com/docs"
-Documentation = "https://meilisearch.github.io/meilisearch-python/"
-Homepage = "https://github.com/meilisearch/meilisearch-python"
 
 [tool.black]
 line-length = 100
@@ -79,8 +105,6 @@ disallow_untyped_defs = true
 [[tool.mypy.overrides]]
 module = ["tests.*"]
 disallow_untyped_defs = false
-
-[tool.pylint]
 [tool.pylint.MASTER]
 load-plugins = [
     'pylint.extensions.bad_builtin',

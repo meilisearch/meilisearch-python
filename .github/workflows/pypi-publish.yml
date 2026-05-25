@@ -8,25 +8,30 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      PYTHONUNBUFFERED: 1
+      UV_PYTHON: "3.9"
     steps:
       - uses: actions/checkout@v6
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.9"
-          cache: "pipenv"
+
       - name: Check release validity
         run: sh .github/scripts/check-release.sh
-      - name: Install pipenv
-        run: pip install pipenv
-      - name: Install dependencies
-        run: |
-          pipenv install
-          pipenv run pip3 install build setuptools wheel twine
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
+        with:
+          version: "0.11.16"
+          enable-cache: false
+
       - name: Build and publish
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: "pypi-${{ secrets.PYPI_API_TOKEN }}"
         run: |
-          pipenv run python3 -m build
-          pipenv run twine upload dist/*
+          uv build
+          uvx twine@6.2.0 upload dist/*

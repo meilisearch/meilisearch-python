@@ -16,20 +16,28 @@ jobs:
         python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
     name: integration-tests-against-rc
     runs-on: ubuntu-latest
+    env:
+      PYTHONUNBUFFERED: 1
+      UV_PYTHON: ${{ matrix.python-version }}
+      UV_LOCKED: 1
     steps:
       - uses: actions/checkout@v6
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: "pipenv"
-      - name: Install pipenv
-        run: pip install pipenv
-      - name: Install dependencies
-        run: pipenv install --dev --python=${{ matrix.python-version }} --deploy
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
+        with:
+          version: "0.11.16"
+
       - name: Get the latest Meilisearch RC
         run: echo "MEILISEARCH_VERSION=$(curl https://raw.githubusercontent.com/meilisearch/integration-guides/main/scripts/get-latest-meilisearch-rc.sh | bash)" >> $GITHUB_ENV
+
       - name: Meilisearch (${{ env.MEILISEARCH_VERSION }}) setup with Docker
         run: docker run -d -p 7700:7700 getmeili/meilisearch-enterprise:${{ env.MEILISEARCH_VERSION }} meilisearch --master-key=masterKey --no-analytics
+
       - name: Test with pytest
-        run: pipenv run pytest
+        run: uv run pytest
