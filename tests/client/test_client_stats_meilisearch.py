@@ -46,6 +46,9 @@ def test_get_all_stats_with_size_format(client):
     assert isinstance(response, dict)
     assert isinstance(response["databaseSize"], str)
     assert HUMAN_SIZE_PATTERN.match(response["databaseSize"])
+    assert any(
+        "internalDatabaseSizes" in index_stats for index_stats in response["indexes"].values()
+    )
     for index_stats in response["indexes"].values():
         if "internalDatabaseSizes" in index_stats:
             assert all(
