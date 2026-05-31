@@ -255,7 +255,7 @@ reset_sortable_attributes_1: |-
 get_index_stats_1: |-
   client.index('movies').get_stats(show_internal_database_sizes=True, size_format='human')
 get_indexes_stats_1: |-
-  client.get_all_stats()
+  client.get_all_stats(show_internal_database_sizes=True, size_format='human')
 get_health_1: |-
   client.health()
 get_version_1: |-
