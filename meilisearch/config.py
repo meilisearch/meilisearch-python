@@ -50,6 +50,7 @@ class Config:
         network = "network"
         experimental_features = "experimental-features"
         webhooks = "webhooks"
+        dynamic_search_rules = "dynamic-search-rules"
         export = "export"
 
     def __init__(
