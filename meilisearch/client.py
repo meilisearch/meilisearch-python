@@ -30,10 +30,10 @@ from meilisearch.errors import (  # noqa: F401
     MeilisearchError,
 )
 from meilisearch.index import Index
+from meilisearch.models.dynamic_search_rule import DynamicSearchRule, DynamicSearchRuleResults
 from meilisearch.models.key import Key, KeysResults
 from meilisearch.models.task import Batch, BatchResults, Task, TaskInfo, TaskResults
 from meilisearch.models.webhook import Webhook, WebhooksResults
-from meilisearch.models.dynamic_search_rule import DynamicSearchRule, DynamicSearchRuleResults
 from meilisearch.task import TaskHandler
 
 
@@ -601,9 +601,9 @@ class Client:
         """
         response = self.http.delete(f"{self.config.paths.webhooks}/{webhook_uuid}")
         return response.status_code
-    
+
     # DYNAMIC SEARCH RULES ROUTES
-    
+
     def get_dynamic_search_rules(self) -> DynamicSearchRuleResults:
         """Get all dynamic search rules.
 
@@ -675,7 +675,6 @@ class Client:
         rule = self.http.patch(f"{self.config.paths.dynamic_search_rules}/{uid}", options)
         return DynamicSearchRule(**rule)
 
-
     def delete_dynamic_search_rule(self, uid: str) -> int:
         """Delete a dynamic search rule.
 
@@ -699,7 +698,6 @@ class Client:
         """
         response = self.http.delete(f"{self.config.paths.dynamic_search_rules}/{uid}")
         return response.status_code
-
 
     def get_version(self) -> Dict[str, str]:
         """Get version Meilisearch

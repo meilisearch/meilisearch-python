@@ -4,6 +4,8 @@ import pytest
 
 from meilisearch.errors import MeilisearchApiError
 
+pytestmark = pytest.mark.usefixtures("enable_dynamic_search_rules")
+
 
 def test_get_dynamic_search_rules_empty(client):
     """Test getting dynamic search rules when none exist."""
@@ -19,13 +21,11 @@ def test_create_or_update_dynamic_search_rule(client):
         "description": "Test rule for promotion",
         "priority": 10,
         "active": True,
-        "conditions": [
-            {"scope": "query", "isEmpty": True}
-        ],
+        "conditions": [{"scope": "query", "isEmpty": True}],
         "actions": [
             {
                 "selector": {"indexUid": "movies", "id": "123"},
-                "action": {"type": "pin", "position": 1}
+                "action": {"type": "pin", "position": 1},
             }
         ],
     }
@@ -68,13 +68,11 @@ def test_update_dynamic_search_rule(client):
         "description": "Original description",
         "priority": 10,
         "active": True,
-        "conditions": [
-            {"scope": "query", "isEmpty": True}
-        ],
+        "conditions": [{"scope": "query", "isEmpty": True}],
         "actions": [
             {
                 "selector": {"indexUid": "movies", "id": "123"},
-                "action": {"type": "pin", "position": 1}
+                "action": {"type": "pin", "position": 1},
             }
         ],
     }
