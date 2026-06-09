@@ -354,3 +354,20 @@ def enable_network_options():
         json={"network": False},
         timeout=10,
     )
+
+
+@fixture
+def enable_dynamic_search_rules():
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"dynamicSearchRules": True},
+        timeout=10,
+    )
+    yield
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"dynamicSearchRules": False},
+        timeout=10,
+    )
