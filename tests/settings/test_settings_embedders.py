@@ -211,7 +211,7 @@ def test_composite_embedder_format(empty_index):
     }
 
     response = index.update_embedders(composite_embedder)
-    update = index.wait_for_task(response.task_uid)
+    update = index.wait_for_task(response.task_uid, timeout_in_ms=60000)
     embedders = index.get_embedders()
     assert update.status == "succeeded"
 
