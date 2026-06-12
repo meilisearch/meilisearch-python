@@ -12,22 +12,31 @@ env:
   NEW_BRANCH: update-version-${{ github.event.inputs.new_version }}
   GH_TOKEN: ${{ secrets.MEILI_BOT_GH_PAT }}
 
+permissions:
+  contents: read
+
 jobs:
   update-version:
     name: Update version in version.py
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout the repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
+        with:
+          persist-credentials: false
+
       - name: Update version.py file
         run: |
           raw_new_version=$(echo $NEW_VERSION | cut -d 'v' -f 2)
           new_string="__version__ = \"$raw_new_version\""
           sed -i "s/^__version__ = .*/$new_string/" meilisearch/version.py
+
       - name: Commit and push the changes to the ${{ env.NEW_BRANCH }} branch
-        uses: EndBug/add-and-commit@v9
+        uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321  # v10.0.0
         with:
           message: "Update version for the next release (${{ env.NEW_VERSION }}) in version.py"
           new_branch: ${{ env.NEW_BRANCH }}
+
       - name: Create the PR pointing to ${{ github.ref_name }}
         run: |
           gh pr create \

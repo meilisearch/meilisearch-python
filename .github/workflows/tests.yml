@@ -7,6 +7,9 @@ on:
       - main
   merge_group:
 
+permissions:
+  contents: read
+
 jobs:
   integration_tests:
     # Will not run if the event is a PR to bump-meilisearch-v* (so a pre-release PR)
@@ -23,17 +26,20 @@ jobs:
       UV_PYTHON: ${{ matrix.python-version }}
       UV_LOCKED: 1
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout the repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
+        with:
+          persist-credentials: false
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
         with:
           python-version: ${{ matrix.python-version }}
 
       - name: Install uv
-        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
         with:
-          version: "0.11.16"
+          version: "0.11.21"
 
       - name: Meilisearch (latest version) setup with Docker
         run: docker run -d -p 7700:7700 getmeili/meilisearch-enterprise:latest meilisearch --no-analytics --master-key=masterKey
@@ -49,17 +55,20 @@ jobs:
       UV_PYTHON: "3.9"
       UV_LOCKED: 1
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout the repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
+        with:
+          persist-credentials: false
 
       - name: Set up Python 3.9
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
         with:
           python-version: "3.9"
 
       - name: Install uv
-        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
         with:
-          version: "0.11.16"
+          version: "0.11.21"
 
       - name: Linter with pylint
         run: uv run pylint meilisearch tests
@@ -72,17 +81,20 @@ jobs:
       UV_PYTHON: "3.9"
       UV_LOCKED: 1
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout the repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
+        with:
+          persist-credentials: false
 
       - name: Set up Python 3.9
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
         with:
           python-version: 3.9
 
       - name: Install uv
-        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
         with:
-          version: "0.11.16"
+          version: "0.11.21"
 
       - name: mypy type check
         run: uv run mypy meilisearch
@@ -95,17 +107,20 @@ jobs:
       UV_PYTHON: "3.9"
       UV_LOCKED: 1
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout the repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
+        with:
+          persist-credentials: false
 
       - name: Set up Python 3.9
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
         with:
           python-version: 3.9
 
       - name: Install uv
-        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
         with:
-          version: "0.11.16"
+          version: "0.11.21"
 
       - name: black
         run: uv run black meilisearch tests --check
@@ -118,17 +133,20 @@ jobs:
       UV_PYTHON: "3.9"
       UV_LOCKED: 1
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout the repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
+        with:
+          persist-credentials: false
 
       - name: Set up Python 3.9
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
         with:
           python-version: 3.9
 
       - name: Install uv
-        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
         with:
-          version: "0.11.16"
+          version: "0.11.21"
 
       - name: isort
         run: uv run isort meilisearch tests --check-only
@@ -137,8 +155,11 @@ jobs:
     name: Yaml linting check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - name: Checkout the repository
+        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
+        with:
+          persist-credentials: false
       - name: Yaml lint check
-        uses: ibiqlik/action-yamllint@v3
+        uses: ibiqlik/action-yamllint@2576378a8e339169678f9939646ee3ee325e845c  # v3.1.1
         with:
           config_file: .yamllint.yml
