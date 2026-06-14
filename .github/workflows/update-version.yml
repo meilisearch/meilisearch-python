@@ -33,6 +33,8 @@ jobs:
 
       - name: Commit and push the changes to the ${{ env.NEW_BRANCH }} branch
         uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321  # v10.0.0
+        env:
+          GITHUB_TOKEN: ${{ env.GH_TOKEN }}
         with:
           message: "Update version for the next release (${{ env.NEW_VERSION }}) in version.py"
           new_branch: ${{ env.NEW_BRANCH }}
