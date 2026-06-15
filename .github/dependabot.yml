@@ -7,6 +7,8 @@ updates:
     labels:
       - 'dependencies'
     rebase-strategy: disabled
+    cooldown:
+      default-days: 7
 
   - package-ecosystem: pip
     directory: "/"
@@ -17,3 +19,5 @@ updates:
     labels:
       - dependencies
     rebase-strategy: disabled
+    cooldown:
+      default-days: 7
