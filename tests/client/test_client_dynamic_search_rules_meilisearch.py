@@ -28,7 +28,9 @@ def test_get_dynamic_search_rules_with_parameters(client):
     rules = client.get_dynamic_search_rules({"limit": 1})
     assert len(rules.results) == 1
 
-    # Test with offset
+    # Verify total count before testing offset
+    all_rules = client.get_dynamic_search_rules()
+    assert len(all_rules.results) == 3, "Offset test requires exactly 3 rules"
     rules = client.get_dynamic_search_rules({"offset": 1})
     assert len(rules.results) == 2
 
