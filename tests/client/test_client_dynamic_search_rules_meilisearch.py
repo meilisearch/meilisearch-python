@@ -15,6 +15,32 @@ def test_get_dynamic_search_rules_empty(client):
     assert len(rules.results) == 0
 
 
+def test_get_dynamic_search_rules_with_parameters(client):
+    """Test getting dynamic search rules with offset, limit, and filter parameters."""
+    # Create a few rules to paginate/filter
+    for i in range(3):
+        client.create_or_update_dynamic_search_rule(
+            f"test-rule-{i}",
+            {"description": f"Rule {i}", "active": i != 2},
+        )
+
+    # Test with limit
+    rules = client.get_dynamic_search_rules({"limit": 1})
+    assert len(rules.results) == 1
+
+    # Test with offset
+    rules = client.get_dynamic_search_rules({"offset": 1})
+    assert len(rules.results) == 2
+
+    # Test with filter on active status
+    rules = client.get_dynamic_search_rules({"filter": {"active": True}})
+    assert all(r.active is True for r in rules.results)
+
+    # Clean up
+    for i in range(3):
+        client.delete_dynamic_search_rule(f"test-rule-{i}")
+
+
 def test_create_or_update_dynamic_search_rule(client):
     """Test creating a dynamic search rule."""
     rule_data = {

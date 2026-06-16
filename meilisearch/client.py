@@ -604,8 +604,17 @@ class Client:
 
     # DYNAMIC SEARCH RULES ROUTES
 
-    def get_dynamic_search_rules(self) -> DynamicSearchRuleResults:
+    def get_dynamic_search_rules(
+        self, parameters: Optional[Mapping[str, Any]] = None
+    ) -> DynamicSearchRuleResults:
         """Get all dynamic search rules.
+
+        Parameters
+        ----------
+        parameters (optional):
+            Parameters accepted by the list dynamic search rules route:
+            https://www.meilisearch.com/docs/reference/api/dynamic-search-rules/list-dynamic-search-rules
+            Accepts offset, limit, and filter in the request body.
 
         Returns
         -------
@@ -620,7 +629,9 @@ class Client:
             Meilisearch error codes are described here:
             https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        rules = self.http.post(self.config.paths.dynamic_search_rules, {})
+        if parameters is None:
+            parameters = {}
+        rules = self.http.post(self.config.paths.dynamic_search_rules, parameters)
         return DynamicSearchRuleResults(**rules)
 
     def get_dynamic_search_rule(self, uid: str) -> DynamicSearchRule:
