@@ -21,7 +21,17 @@ def test_get_dynamic_search_rules_with_parameters(client):
     for i in range(3):
         client.create_or_update_dynamic_search_rule(
             f"test-rule-{i}",
-            {"description": f"Rule {i}", "active": i != 2},
+            {
+                "description": f"Rule {i}",
+                "active": i != 2,
+                "conditions": [{"scope": "query", "isEmpty": True}],
+                "actions": [
+                    {
+                        "selector": {"indexUid": "movies", "id": str(i)},
+                        "action": {"type": "pin", "position": i + 1},
+                    }
+                ],
+            },
         )
 
     # Test with limit
@@ -72,6 +82,13 @@ def test_get_dynamic_search_rule(client):
     rule_data = {
         "description": "Test rule",
         "active": True,
+        "conditions": [{"scope": "query", "isEmpty": True}],
+        "actions": [
+            {
+                "selector": {"indexUid": "movies", "id": "123"},
+                "action": {"type": "pin", "position": 1},
+            }
+        ],
     }
 
     created_rule = client.create_or_update_dynamic_search_rule("test-rule", rule_data)
@@ -126,6 +143,13 @@ def test_delete_dynamic_search_rule(client):
     rule_data = {
         "description": "Rule to delete",
         "active": True,
+        "conditions": [{"scope": "query", "isEmpty": True}],
+        "actions": [
+            {
+                "selector": {"indexUid": "movies", "id": "123"},
+                "action": {"type": "pin", "position": 1},
+            }
+        ],
     }
 
     created_rule = client.create_or_update_dynamic_search_rule("test-rule", rule_data)
