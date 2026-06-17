@@ -48,10 +48,6 @@ def test_get_dynamic_search_rules_with_parameters(client):
     rules = client.get_dynamic_search_rules({"filter": {"active": True}})
     assert all(r.active is True for r in rules.results)
 
-    # Clean up
-    for i in range(3):
-        client.delete_dynamic_search_rule(f"test-rule-{i}")
-
 
 def test_create_or_update_dynamic_search_rule(client):
     """Test creating a dynamic search rule."""

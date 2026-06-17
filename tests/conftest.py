@@ -62,6 +62,21 @@ def clear_webhooks(client):
 
 
 @fixture(autouse=True)
+def clear_dynamic_search_rules(client):
+    """
+    Auto-clears the dynamic search rules after each test function run.
+    Makes all the test functions independent.
+    """
+    # Yields back to the test function.
+
+    yield
+    # Deletes all the dynamic search rules in the Meilisearch instance.
+    rules = client.get_dynamic_search_rules()
+    for rule in rules.results:
+        client.delete_dynamic_search_rule(rule.uid)
+
+
+@fixture(autouse=True)
 def clear_all_tasks(client, client2):
     """
     Auto-clears the tasks after each test function run.
