@@ -214,9 +214,9 @@ class TestMultimodalSearch:
 
         # Verify index is ready by checking stats
         stats = index.get_stats()
-        assert stats.number_of_documents == len(
-            MOVIES
-        ), f"Expected {len(MOVIES)} documents, got {stats.number_of_documents}"
+        assert stats.number_of_documents == len(MOVIES), (
+            f"Expected {len(MOVIES)} documents, got {stats.number_of_documents}"
+        )
 
         # Store for tests on the class
         # Use request.cls to ensure attributes are available on test instances
