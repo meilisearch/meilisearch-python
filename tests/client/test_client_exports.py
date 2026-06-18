@@ -11,9 +11,7 @@ pytestmark = pytest.mark.skipif(
 )
 
 
-def test_export_creation(
-    client, client2, index_with_documents, enable_vector_search
-):  # pylint: disable=unused-argument
+def test_export_creation(client, client2, index_with_documents, enable_vector_search):  # pylint: disable=unused-argument
     """Tests the creation of a Meilisearch export."""
     index = index_with_documents()
     export_task = client.export(common.BASE_URL_2, api_key=common.MASTER_KEY)

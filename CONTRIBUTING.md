@@ -56,7 +56,7 @@ uv sync
 ### Tests and Linter <!-- omit in toc -->
 
 Each PR should pass the tests, mypy type checking, and the linter to be accepted.
-Your PR also needs to be formatted using black and isort.
+Your PR also needs to be formatted using ruff and have its imports sorted using isort.
 
 ```bash
 # Tests
@@ -67,8 +67,8 @@ uv run pytest tests
 uv run mypy meilisearch
 # Linter
 uv run pylint meilisearch tests
-# Black
-uv run black meilisearch tests
+# Format
+uv run ruff format .
 # Isort
 uv run isort meilisearch tests
 ```
