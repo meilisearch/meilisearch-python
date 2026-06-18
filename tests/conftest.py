@@ -61,11 +61,12 @@ def clear_webhooks(client):
         client.delete_webhook(webhook.uuid)
 
 
-@fixture(autouse=True)
+@fixture
 def clear_dynamic_search_rules(client):
     """
-    Auto-clears the dynamic search rules after each test function run.
-    Makes all the test functions independent.
+    Clears the dynamic search rules after each test function run.
+    Must be explicitly used alongside enable_dynamic_search_rules,
+    since the dynamic search rules feature requires experimental feature toggle.
     """
     # Yields back to the test function.
 

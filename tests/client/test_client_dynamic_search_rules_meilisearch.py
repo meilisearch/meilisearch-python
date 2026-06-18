@@ -4,7 +4,7 @@ import pytest
 
 from meilisearch.errors import MeilisearchApiError
 
-pytestmark = pytest.mark.usefixtures("enable_dynamic_search_rules")
+pytestmark = pytest.mark.usefixtures("enable_dynamic_search_rules", "clear_dynamic_search_rules")
 
 
 def test_get_dynamic_search_rules_empty(client):
