@@ -13,17 +13,17 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PYTHONUNBUFFERED: 1
-      UV_PYTHON: "3.9"
+      PYTHON_VERSION: "3.10"
     steps:
       - name: Checkout the repository
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
         with:
           persist-credentials: false
 
-      - name: Set up Python ${{ env.UV_PYTHON }}
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
         with:
-          python-version: ${{ env.UV_PYTHON }}
+          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Check release validity
         run: sh .github/scripts/check-release.sh
@@ -32,6 +32,7 @@ jobs:
         uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
         with:
           version: "0.11.21"
+          python-version: ${{ env.PYTHON_VERSION }}
           enable-cache: false
 
       - name: Build and publish

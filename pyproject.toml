@@ -2,7 +2,7 @@
 name = "meilisearch"
 description = "The python client for Meilisearch API."
 authors = [{ name = "Clémentine", email = "clementine@meilisearch.com" }]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = { text = "MIT" }
 keywords = [
     "search",
@@ -11,7 +11,6 @@ keywords = [
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -50,7 +49,6 @@ lint = [
     "pylint>=v3.3.9",
     "ruff>=0.15.17",
     "isort>=6.1.0",
-    "types-requests",
 ]
 
 docs = [
