@@ -48,7 +48,7 @@ test = [
 lint = [
     "mypy>=1.19.1",
     "pylint>=v3.3.9",
-    "black>=25.11.0",
+    "ruff>=0.15.17",
     "isort>=6.1.0",
     "types-requests",
 ]
@@ -72,27 +72,8 @@ exclude = ["docs*", "tests*"]
 [tool.setuptools.package-data]
 meilisearch = ["py.typed"]
 
-[tool.black]
+[tool.ruff]
 line-length = 100
-target-version = ['py39']
-include = '\.pyi?$'
-extend-exclude = '''
-/(
-    \.egg
-  | \.git
-  | \.hg
-  | \.mypy_cache
-  | \.nox
-  | \.tox
-  | \.venv
-  | \venv
-  | _build
-  | buck-out
-  | build
-  | dist
-  | setup.py
-)/
-'''
 
 [tool.isort]
 profile = "black"

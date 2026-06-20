@@ -11,6 +11,8 @@ from meilisearch.errors import MeilisearchApiError
 from meilisearch.models.embedders import OpenAiEmbedder, UserProvidedEmbedder
 from tests import common
 
+TEST_TASK_TIMEOUT_MS = 30_000
+
 
 @fixture(scope="session")
 def client():
@@ -30,7 +32,7 @@ def _clear_indexes(meilisearch_client):
     indexes = meilisearch_client.get_indexes()
     for index in indexes["results"]:
         task = meilisearch_client.index(index.uid).delete()
-        meilisearch_client.wait_for_task(task.task_uid)
+        meilisearch_client.wait_for_task(task.task_uid, timeout_in_ms=TEST_TASK_TIMEOUT_MS)
 
 
 @fixture(autouse=True)
@@ -143,7 +145,7 @@ def empty_index(client, index_uid: Optional[str] = None):
 
     def index_maker(index_uid=index_uid):
         task = client.create_index(uid=index_uid)
-        client.wait_for_task(task.task_uid)
+        client.wait_for_task(task.task_uid, timeout_in_ms=TEST_TASK_TIMEOUT_MS)
         return client.get_index(uid=index_uid)
 
     return index_maker

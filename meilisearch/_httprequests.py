@@ -49,6 +49,8 @@ class HttpRequests:
     ) -> Any:
         if content_type:
             self.headers["Content-Type"] = content_type
+        else:
+            self.headers.pop("Content-Type", None)
         try:
             request_path = self.config.url + "/" + path
             if http_method.__name__ == "get":
@@ -69,7 +71,9 @@ class HttpRequests:
                 data = (
                     json.dumps(body, cls=serializer)
                     if isinstance(body, bool) or serialize_body
-                    else "" if body == "" else "null"
+                    else ""
+                    if body == ""
+                    else "null"
                 )
 
                 request = http_method(
@@ -162,6 +166,8 @@ class HttpRequests:
         """
         if content_type:
             self.headers["Content-Type"] = content_type
+        else:
+            self.headers.pop("Content-Type", None)
         try:
             request_path = self.config.url + "/" + path
 
@@ -178,7 +184,9 @@ class HttpRequests:
                 data = (
                     json.dumps(body, cls=serializer)
                     if isinstance(body, bool) or serialize_body
-                    else "" if body == "" else "null"
+                    else ""
+                    if body == ""
+                    else "null"
                 )
 
                 response = requests.post(

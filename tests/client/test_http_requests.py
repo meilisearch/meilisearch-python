@@ -1,3 +1,5 @@
+import requests
+
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
 from meilisearch.version import qualified_version
@@ -28,3 +30,16 @@ def test_get_headers_with_multiple_user_agent():
         http.headers["User-Agent"]
         == qualified_version() + ";Meilisearch Package1 (v1.1.1);Meilisearch Package2 (v2.2.2)"
     )
+
+
+def test_reset_content_type_header():
+    """Tests that the content type header is reset when no content type is provided."""
+    config = Config(BASE_URL, MASTER_KEY, timeout=None)
+    http = HttpRequests(config=config)
+
+    http.headers["Content-Type"] = "application/json"
+    assert http.headers["Content-Type"] == "application/json"
+
+    http.send_request(http_method=requests.get, path="health")
+
+    assert "Content-Type" not in http.headers
