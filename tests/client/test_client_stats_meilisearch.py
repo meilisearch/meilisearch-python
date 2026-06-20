@@ -26,7 +26,9 @@ def test_get_all_stats_with_internal_database_sizes(client):
     response = client.get_all_stats(show_internal_database_sizes=True)
     assert isinstance(response, dict)
     assert isinstance(response["databaseSize"], int)
-    assert any("internalDatabaseSizes" in index_stats for index_stats in response["indexes"].values())
+    assert any(
+        "internalDatabaseSizes" in index_stats for index_stats in response["indexes"].values()
+    )
     for index_stats in response["indexes"].values():
         if "internalDatabaseSizes" in index_stats:
             assert isinstance(index_stats["internalDatabaseSizes"], dict)
@@ -67,4 +69,6 @@ def test_get_all_stats_with_all_params(client):
     assert isinstance(response, dict)
     assert isinstance(response["databaseSize"], str)
     assert "indexes" in response
-    assert any("internalDatabaseSizes" in index_stats for index_stats in response["indexes"].values())
+    assert any(
+        "internalDatabaseSizes" in index_stats for index_stats in response["indexes"].values()
+    )
