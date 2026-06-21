@@ -348,6 +348,8 @@ class Index:
             - hybrid: Dict with 'semanticRatio' and 'embedder' fields for hybrid search
             - vector: Array of numbers for vector search
             - retrieveVectors: Boolean to include vector data in search results
+            - personalize: Dict with a 'userContext' string to personalize the
+              results (experimental; requires Meilisearch >= v1.47)
             - filter: Filter queries by an attribute's value
             - limit: Maximum number of documents returned
             - offset: Number of documents to skip
