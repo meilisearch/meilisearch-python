@@ -333,7 +333,12 @@ class Index:
         return IndexStats(**stats)
 
     @version_error_hint_message
-    def search(self, query: str, opt_params: Optional[Mapping[str, Any]] = None) -> Dict[str, Any]:
+    def search(
+        self,
+        query: str,
+        opt_params: Optional[Mapping[str, Any]] = None,
+        personalize: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
         """Search in the index.
 
         https://www.meilisearch.com/docs/reference/api/search
@@ -348,13 +353,14 @@ class Index:
             - hybrid: Dict with 'semanticRatio' and 'embedder' fields for hybrid search
             - vector: Array of numbers for vector search
             - retrieveVectors: Boolean to include vector data in search results
-            - personalize: Dict with a 'userContext' string to personalize the
-              results (experimental; requires Meilisearch >= v1.47)
             - filter: Filter queries by an attribute's value
             - limit: Maximum number of documents returned
             - offset: Number of documents to skip
             - showPerformanceDetails: If true, the response includes a
               performanceDetails object (raw data; fields may change in future API versions)
+        personalize (optional):
+            Dict with a 'userContext' string to personalize the search results
+            (experimental; requires Meilisearch >= v1.47).
 
         Returns
         -------
@@ -371,6 +377,8 @@ class Index:
             opt_params = {}
 
         body = {"q": query, **opt_params}
+        if personalize is not None:
+            body["personalize"] = personalize
 
         return self.http.post(
             f"{self.config.paths.index}/{self.uid}/{self.config.paths.search}",
