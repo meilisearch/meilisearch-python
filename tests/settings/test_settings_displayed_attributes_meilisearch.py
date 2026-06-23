@@ -1,5 +1,3 @@
-# pylint: disable=invalid-name
-
 DISPLAYED_ATTRIBUTES = ["id", "release_date", "title", "poster", "overview", "genre"]
 
 

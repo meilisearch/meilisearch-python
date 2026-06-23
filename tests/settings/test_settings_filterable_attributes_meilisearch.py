@@ -1,5 +1,3 @@
-# pylint: disable=invalid-name
-
 FILTERABLE_ATTRIBUTES = ["title", "release_date"]
 
 

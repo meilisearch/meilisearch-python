@@ -1,5 +1,3 @@
-# pylint: disable=invalid-name
-
 from unittest.mock import patch
 
 import pytest
@@ -55,7 +53,7 @@ def test_create_chat_completion_basic_stream(client):
         assert len(chunks) == 2
         assert chunks[0]["choices"][0]["delta"]["content"] == "Hello"
         assert chunks[1]["choices"][0]["delta"]["content"] == " world"
-        assert mock_resp._closed  # pylint: disable=protected-access
+        assert mock_resp._closed
 
 
 def test_create_chat_completion_stream_false_raises_error(client):

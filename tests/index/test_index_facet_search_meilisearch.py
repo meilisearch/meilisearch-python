@@ -1,6 +1,3 @@
-# pylint: disable=invalid-name
-
-
 def test_basic_facet_search(index_with_documents_and_facets):
     """Tests facet search with a simple query."""
     response = index_with_documents_and_facets().facet_search("genre", "cartoon")

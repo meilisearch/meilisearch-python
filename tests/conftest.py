@@ -1,7 +1,5 @@
-# pylint: disable=redefined-outer-name
 import json
 import os
-from typing import Optional
 
 import requests
 from pytest import fixture
@@ -140,7 +138,7 @@ def nested_movies():
 
 
 @fixture(scope="function")
-def empty_index(client, index_uid: Optional[str] = None):
+def empty_index(client, index_uid: str | None = None):
     index_uid = index_uid if index_uid else common.INDEX_UID
 
     def index_maker(index_uid=index_uid):

@@ -1,15 +1,11 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Callable
 from functools import wraps
-from typing import TYPE_CHECKING, Any, Callable, TypeVar
+from typing import Any, TypeVar
 
 from requests import Response
-
-if TYPE_CHECKING:  # pragma: no cover
-    from meilisearch.client import Client
-    from meilisearch.index import Index
-    from meilisearch.task import TaskHandler
 
 T = TypeVar("T")
 

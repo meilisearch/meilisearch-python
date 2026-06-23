@@ -1,5 +1,3 @@
-# pylint: disable=too-many-public-methods
-
 from __future__ import annotations
 
 import base64
@@ -8,17 +6,9 @@ import hashlib
 import hmac
 import json
 import re
+from collections.abc import Iterator, Mapping, MutableMapping, Sequence
 from typing import (
     Any,
-    Dict,
-    Iterator,
-    List,
-    Mapping,
-    MutableMapping,
-    Optional,
-    Sequence,
-    Tuple,
-    Union,
 )
 from urllib import parse
 
@@ -44,16 +34,13 @@ class Client:
     Meilisearch and its permissions.
     """
 
-    # Import aliases to satisfy pylint (used in docstrings)
-    MeilisearchApiError = MeilisearchApiError
-
     def __init__(
         self,
         url: str,
-        api_key: Optional[str] = None,
-        timeout: Optional[int] = None,
-        client_agents: Optional[Tuple[str, ...]] = None,
-        custom_headers: Optional[Mapping[str, str]] = None,
+        api_key: str | None = None,
+        timeout: int | None = None,
+        client_agents: tuple[str, ...] | None = None,
+        custom_headers: Mapping[str, str] | None = None,
     ) -> None:
         """
         Parameters
@@ -84,9 +71,9 @@ class Client:
     def create_index(
         self,
         uid: str,
-        options: Optional[Mapping[str, Any]] = None,
+        options: Mapping[str, Any] | None = None,
         *,
-        metadata: Optional[str] = None,
+        metadata: str | None = None,
     ) -> TaskInfo:
         """Create an index.
 
@@ -114,7 +101,7 @@ class Client:
             self.config, uid, options, custom_headers=self._custom_headers, metadata=metadata
         )
 
-    def delete_index(self, uid: str, *, metadata: Optional[str] = None) -> TaskInfo:
+    def delete_index(self, uid: str, *, metadata: str | None = None) -> TaskInfo:
         """Deletes an index
 
         Parameters
@@ -143,7 +130,7 @@ class Client:
 
         return TaskInfo(**task)
 
-    def get_indexes(self, parameters: Optional[Mapping[str, Any]] = None) -> Dict[str, List[Index]]:
+    def get_indexes(self, parameters: Mapping[str, Any] | None = None) -> dict[str, list[Index]]:
         """Get all indexes.
 
         Parameters
@@ -177,9 +164,7 @@ class Client:
         ]
         return response
 
-    def get_raw_indexes(
-        self, parameters: Optional[Mapping[str, Any]] = None
-    ) -> List[Dict[str, Any]]:
+    def get_raw_indexes(self, parameters: Mapping[str, Any] | None = None) -> list[dict[str, Any]]:
         """Get all indexes in dictionary format.
 
         Parameters
@@ -222,7 +207,7 @@ class Client:
         """
         return Index(self.config, uid, custom_headers=self._custom_headers).fetch_info()
 
-    def get_raw_index(self, uid: str) -> Dict[str, Any]:
+    def get_raw_index(self, uid: str) -> dict[str, Any]:
         """Get the index as a dictionary.
         This index should already exist.
 
@@ -262,8 +247,8 @@ class Client:
         raise ValueError("The index UID should not be None")
 
     def multi_search(
-        self, queries: Sequence[Mapping[str, Any]], federation: Optional[Dict[str, Any]] = None
-    ) -> Dict[str, List[Dict[str, Any]]]:
+        self, queries: Sequence[Mapping[str, Any]], federation: dict[str, Any] | None = None
+    ) -> dict[str, list[dict[str, Any]]]:
         """Multi-index search.
 
         Parameters
@@ -296,8 +281,8 @@ class Client:
         )
 
     def update_documents_by_function(
-        self, index_uid: str, queries: Dict[str, List[Dict[str, Any]]]
-    ) -> Dict[str, Any]:
+        self, index_uid: str, queries: dict[str, list[dict[str, Any]]]
+    ) -> dict[str, Any]:
         """Update Documents by function
         Parameters
         ----------
@@ -322,7 +307,7 @@ class Client:
             body=dict(queries),
         )
 
-    def get_all_stats(self) -> Dict[str, Any]:
+    def get_all_stats(self) -> dict[str, Any]:
         """Get all stats of Meilisearch
 
         Get information about database size and all indexes
@@ -340,7 +325,7 @@ class Client:
         """
         return self.http.get(self.config.paths.stat)
 
-    def health(self) -> Dict[str, str]:
+    def health(self) -> dict[str, str]:
         """Get health of the Meilisearch server.
 
         Returns
@@ -386,7 +371,7 @@ class Client:
 
         return Key(**key)
 
-    def get_keys(self, parameters: Optional[Mapping[str, Any]] = None) -> KeysResults:
+    def get_keys(self, parameters: Mapping[str, Any] | None = None) -> KeysResults:
         """Gets the Meilisearch API keys.
 
         Parameters
@@ -601,7 +586,7 @@ class Client:
         response = self.http.delete(f"{self.config.paths.webhooks}/{webhook_uuid}")
         return response.status_code
 
-    def get_version(self) -> Dict[str, str]:
+    def get_version(self) -> dict[str, str]:
         """Get version Meilisearch
 
         Returns
@@ -616,7 +601,7 @@ class Client:
         """
         return self.http.get(self.config.paths.version)
 
-    def version(self) -> Dict[str, str]:
+    def version(self) -> dict[str, str]:
         """Alias for get_version
 
         Returns
@@ -652,9 +637,9 @@ class Client:
     def export(
         self,
         url: str,
-        api_key: Optional[str] = None,
-        payload_size: Optional[str] = None,
-        indexes: Optional[Mapping[str, Any]] = None,
+        api_key: str | None = None,
+        payload_size: str | None = None,
+        indexes: Mapping[str, Any] | None = None,
     ) -> TaskInfo:
         """Trigger the creation of a Meilisearch export.
 
@@ -688,7 +673,7 @@ class Client:
             Meilisearch error codes are described
             here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        payload: Dict[str, Any] = {"url": url}
+        payload: dict[str, Any] = {"url": url}
         if api_key is not None:
             payload["apiKey"] = api_key
         if payload_size is not None:
@@ -718,7 +703,7 @@ class Client:
 
         return TaskInfo(**task)
 
-    def swap_indexes(self, parameters: List[Mapping[str, List[str] | bool]]) -> TaskInfo:
+    def swap_indexes(self, parameters: list[Mapping[str, list[str] | bool]]) -> TaskInfo:
         """Swap two indexes.
 
         Parameters
@@ -742,7 +727,7 @@ class Client:
         """
         return TaskInfo(**self.http.post(self.config.paths.swap, parameters))
 
-    def get_tasks(self, parameters: Optional[MutableMapping[str, Any]] = None) -> TaskResults:
+    def get_tasks(self, parameters: MutableMapping[str, Any] | None = None) -> TaskResults:
         """Get all tasks.
 
         Parameters
@@ -784,7 +769,7 @@ class Client:
         return self.task_handler.get_task(uid)
 
     def cancel_tasks(
-        self, parameters: MutableMapping[str, Any], *, metadata: Optional[str] = None
+        self, parameters: MutableMapping[str, Any], *, metadata: str | None = None
     ) -> TaskInfo:
         """Cancel a list of enqueued or processing tasks.
 
@@ -809,7 +794,7 @@ class Client:
         return self.task_handler.cancel_tasks(parameters=parameters, metadata=metadata)
 
     def delete_tasks(
-        self, parameters: MutableMapping[str, Any], *, metadata: Optional[str] = None
+        self, parameters: MutableMapping[str, Any], *, metadata: str | None = None
     ) -> TaskInfo:
         """Delete a list of finished tasks.
 
@@ -860,7 +845,7 @@ class Client:
         """
         return self.task_handler.wait_for_task(uid, timeout_in_ms, interval_in_ms)
 
-    def get_batches(self, parameters: Optional[MutableMapping[str, Any]] = None) -> BatchResults:
+    def get_batches(self, parameters: MutableMapping[str, Any] | None = None) -> BatchResults:
         """Get all batches.
 
         Parameters
@@ -903,10 +888,10 @@ class Client:
     def generate_tenant_token(
         self,
         api_key_uid: str,
-        search_rules: Union[Mapping[str, Any], Sequence[str]],
+        search_rules: Mapping[str, Any] | Sequence[str],
         *,
-        expires_at: Optional[datetime.datetime] = None,
-        api_key: Optional[str] = None,
+        expires_at: datetime.datetime | None = None,
+        api_key: str | None = None,
     ) -> str:
         """Generate a JWT token for the use of multitenancy.
 
@@ -974,7 +959,7 @@ class Client:
 
         return jwt_token
 
-    def add_or_update_networks(self, body: Union[MutableMapping[str, Any], None]) -> Dict[str, str]:
+    def add_or_update_networks(self, body: MutableMapping[str, Any] | None) -> dict[str, str]:
         """Configure the network topology
 
         Parameters
@@ -998,7 +983,7 @@ class Client:
 
         return self.http.patch(path=f"{self.config.paths.network}", body=body)
 
-    def get_all_networks(self) -> Dict[str, str]:
+    def get_all_networks(self) -> dict[str, str]:
         """Fetches all the remote-networks present
 
         Returns
@@ -1016,10 +1001,10 @@ class Client:
     def create_chat_completion(
         self,
         workspace_uid: str,
-        messages: List[Dict[str, str]],
+        messages: list[dict[str, str]],
         model: str = "gpt-3.5-turbo",
         stream: bool = True,
-    ) -> Iterator[Dict[str, Any]]:
+    ) -> Iterator[dict[str, Any]]:
         """Streams a chat completion from the Meilisearch chat API.
 
         Parameters
@@ -1091,9 +1076,9 @@ class Client:
     def get_chat_workspaces(
         self,
         *,
-        offset: Optional[int] = None,
-        limit: Optional[int] = None,
-    ) -> Dict[str, Any]:
+        offset: int | None = None,
+        limit: int | None = None,
+    ) -> dict[str, Any]:
         """Get all chat workspaces.
 
         Parameters
@@ -1121,7 +1106,7 @@ class Client:
         path = "chats" + ("?" + parse.urlencode(params) if params else "")
         return self.http.get(path)
 
-    def get_chat_workspace_settings(self, workspace_uid: str) -> Dict[str, Any]:
+    def get_chat_workspace_settings(self, workspace_uid: str) -> dict[str, Any]:
         """Get the settings for a specific chat workspace.
 
         Parameters
@@ -1151,7 +1136,7 @@ class Client:
 
     def update_chat_workspace_settings(
         self, workspace_uid: str, settings: Mapping[str, Any]
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Update the settings for a specific chat workspace.
 
         Parameters
@@ -1197,7 +1182,7 @@ class Client:
         match = uuid4hex.match(uuid)
         return bool(match)
 
-    def get_experimental_features(self) -> Dict[str, Any]:
+    def get_experimental_features(self) -> dict[str, Any]:
         """Retrieve the current settings for all experimental features.
 
         Returns
@@ -1213,7 +1198,7 @@ class Client:
         """
         return self.http.get(self.config.paths.experimental_features)
 
-    def update_experimental_features(self, features: Dict[str, bool]) -> Dict[str, Any]:
+    def update_experimental_features(self, features: dict[str, bool]) -> dict[str, Any]:
         """Update one or more experimental features.
 
         Parameters

@@ -31,14 +31,13 @@ def test_get_key(client, test_key):
 
 def test_get_key_inexistent(client):
     """Tests getting a key that does not exists."""
-    with pytest.raises(Exception):
+    with pytest.raises(MeilisearchApiError):
         client.get_key("No existing key")
 
 
 def test_create_keys_default(client, test_key_info):
     """Tests the creation of a key with no optional argument."""
     key = client.create_key(test_key_info)
-    print(key)
     assert key.key is not None
     assert key.name is not None
     assert key.expires_at is None
@@ -52,7 +51,6 @@ def test_create_keys_default(client, test_key_info):
 def test_create_keys_without_desc(client, test_nondescript_key_info):
     """Tests the creation of a key with no optional argument."""
     key = client.create_key(test_nondescript_key_info)
-    print(key)
 
     assert key.name == "keyWithoutDescription"
     assert key.description is None
