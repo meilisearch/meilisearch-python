@@ -9,7 +9,7 @@ def test_basic_search(index_with_documents):
     assert isinstance(response, dict)
     assert response["hits"][0]["id"] == "166428"
     assert response["estimatedTotalHits"] is not None
-    assert "hitsPerPage" != response
+    assert "hitsPerPage" not in response
 
 
 def test_basic_search_with_empty_params(index_with_documents):
@@ -443,7 +443,7 @@ def test_custom_search_params_with_pagination_parameters(index_with_documents):
     assert response["page"] == 1
     assert response["totalPages"] is not None
     assert response["totalHits"] is not None
-    assert "estimatedTotalHits" != response
+    assert "estimatedTotalHits" not in response
 
 
 def test_custom_search_params_with_pagination_parameters_at_zero(index_with_documents):
@@ -456,7 +456,7 @@ def test_custom_search_params_with_pagination_parameters_at_zero(index_with_docu
     assert response["page"] == 0
     assert response["totalPages"] is not None
     assert response["totalHits"] is not None
-    assert "estimatedTotalHits" != response
+    assert "estimatedTotalHits" not in response
 
 
 def test_attributes_to_search_on_search(index_with_documents):
