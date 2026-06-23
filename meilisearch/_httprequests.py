@@ -220,6 +220,32 @@ class HttpRequests:
 
             raise MeilisearchCommunicationError(str(err)) from err
 
+    def get_stream(self, path: str) -> requests.Response:
+        """Send a GET request with streaming enabled.
+
+        Returns the raw response object for streaming consumption.
+        """
+        try:
+            request_path = self.config.url + "/" + path
+            response = requests.get(
+                request_path,
+                timeout=self.config.timeout,
+                headers=self.headers,
+                stream=True,
+            )
+
+            if not response.ok:
+                response.raise_for_status()
+
+            return response
+
+        except requests.exceptions.Timeout as err:
+            raise MeilisearchTimeoutError(str(err)) from err
+        except requests.exceptions.ConnectionError as err:
+            raise MeilisearchCommunicationError(str(err)) from err
+        except requests.exceptions.HTTPError as err:
+            raise MeilisearchApiError(str(err), response) from err
+
     @staticmethod
     def __to_json(request: requests.Response) -> Any:
         if request.content == b"":

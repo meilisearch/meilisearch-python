@@ -783,6 +783,29 @@ class Client:
         """
         return self.task_handler.get_task(uid)
 
+    def get_task_documents(self, uid: int) -> List[Dict[str, Any]]:
+        """Get the documents added or updated by a task.
+
+        This is an experimental feature; the ``getTaskDocumentsRoute`` experimental
+        feature must be enabled on the Meilisearch instance.
+
+        Parameters
+        ----------
+        uid:
+            Identifier of the task.
+
+        Returns
+        -------
+        documents:
+            List of the documents associated with the task.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.task_handler.get_task_documents(uid)
+
     def cancel_tasks(
         self, parameters: MutableMapping[str, Any], *, metadata: Optional[str] = None
     ) -> TaskInfo:

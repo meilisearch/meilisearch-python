@@ -2,10 +2,11 @@ from __future__ import annotations
 
 from datetime import datetime
 from time import sleep
-from typing import Any, Mapping, MutableMapping, Optional
+from typing import Any, Dict, List, Mapping, MutableMapping, Optional
 from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
+from meilisearch._utils import parse_task_documents
 from meilisearch.config import Config
 from meilisearch.errors import MeilisearchTimeoutError
 from meilisearch.models.task import Batch, BatchResults, Task, TaskInfo, TaskResults
@@ -121,6 +122,30 @@ class TaskHandler:
         """
         task = self.http.get(f"{self.config.paths.task}/{uid}")
         return Task(**task)
+
+    def get_task_documents(self, uid: int) -> List[Dict[str, Any]]:
+        """Get the documents added or updated by a task.
+
+        This is an experimental feature; the ``getTaskDocumentsRoute`` experimental
+        feature must be enabled on the Meilisearch instance.
+
+        Parameters
+        ----------
+        uid:
+            Identifier of the task.
+
+        Returns
+        -------
+        documents:
+            List of the documents associated with the task.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        response = self.http.get_stream(f"{self.config.paths.task}/{uid}/documents")
+        return parse_task_documents(response.text)
 
     def cancel_tasks(
         self, parameters: MutableMapping[str, Any], *, metadata: Optional[str] = None

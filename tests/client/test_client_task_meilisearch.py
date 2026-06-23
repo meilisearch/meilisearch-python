@@ -1,5 +1,7 @@
 # pylint: disable=invalid-name
 
+from unittest.mock import MagicMock, patch
+
 import pytest
 
 from meilisearch.models.task import TaskInfo
@@ -189,3 +191,16 @@ def test_get_batch(client):
     uid = batches.results[0].uid
     batch = client.get_batch(uid)
     assert batch.uid == uid
+
+
+def test_get_task_documents_calls_endpoint_and_parses(client):
+    """get_task_documents hits /tasks/{uid}/documents and parses the payload."""
+    fake_response = MagicMock()
+    fake_response.text = '{"id": 1}\n{"id": 2}'
+    with patch.object(
+        client.task_handler.http, "get_stream", return_value=fake_response
+    ) as mock_get:
+        documents = client.get_task_documents(42)
+
+    mock_get.assert_called_once_with("tasks/42/documents")
+    assert documents == [{"id": 1}, {"id": 2}]
