@@ -35,11 +35,14 @@ class MeilisearchApiError(MeilisearchError):
         self.type = None
 
         if request.text:
-            json_data = json.loads(request.text)
-            self.message = json_data.get("message")
-            self.code = json_data.get("code")
-            self.link = json_data.get("link")
-            self.type = json_data.get("type")
+            try:
+                json_data = json.loads(request.text)
+                self.message = json_data.get("message") or request.text
+                self.code = json_data.get("code")
+                self.link = json_data.get("link")
+                self.type = json_data.get("type")
+            except json.JSONDecodeError:
+                self.message = request.text
         else:
             self.message = error
         super().__init__(self.message)
