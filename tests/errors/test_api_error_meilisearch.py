@@ -55,6 +55,26 @@ def test_meilisearch_api_error_falls_back_to_raw_message_for_non_json_response(m
     assert exc.value.type is None
 
 
+@patch("requests.post")
+def test_meilisearch_api_error_falls_back_to_raw_message_for_non_object_json_response(mock_post):
+    """Uses raw response text when parsed JSON is not an object."""
+    mock_post.configure_mock(__name__="post")
+    mock_response = requests.models.Response()
+    mock_response.status_code = 502
+    mock_response._content = b'["Bad Gateway"]'  # pylint: disable=protected-access
+    mock_post.return_value = mock_response
+
+    with pytest.raises(MeilisearchApiError) as exc:
+        client = meilisearch.Client(BASE_URL, MASTER_KEY + "123")
+        client.create_index("some_index")
+
+    assert exc.value.status_code == 502
+    assert exc.value.message == '["Bad Gateway"]'
+    assert exc.value.code is None
+    assert exc.value.link is None
+    assert exc.value.type is None
+
+
 def test_version_error_hint_message():
     mock_response = requests.models.Response()
     mock_response.status_code = 408
