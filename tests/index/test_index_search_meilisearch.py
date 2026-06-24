@@ -1,6 +1,7 @@
 # pylint: disable=invalid-name
 
 from collections import Counter
+from unittest.mock import patch
 
 import pytest
 
@@ -12,6 +13,17 @@ def test_basic_search(index_with_documents):
     assert response["hits"][0]["id"] == "166428"
     assert response["estimatedTotalHits"] is not None
     assert "hitsPerPage" is not response
+
+
+def test_search_serializes_personalize(client):
+    """The `personalize` parameter must be forwarded in the search request body."""
+    index = client.index("books")
+    with patch.object(index.http, "post", return_value={"hits": []}) as mock_post:
+        index.search("prince", personalize={"userContext": "user-123"})
+
+    _, kwargs = mock_post.call_args
+    assert kwargs["body"]["q"] == "prince"
+    assert kwargs["body"]["personalize"] == {"userContext": "user-123"}
 
 
 def test_basic_search_with_empty_params(index_with_documents):
