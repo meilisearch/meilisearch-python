@@ -30,6 +30,7 @@ from meilisearch.errors import (  # noqa: F401
     MeilisearchError,
 )
 from meilisearch.index import Index
+from meilisearch.models.dynamic_search_rule import DynamicSearchRule, DynamicSearchRuleResults
 from meilisearch.models.key import Key, KeysResults
 from meilisearch.models.task import Batch, BatchResults, Task, TaskInfo, TaskResults
 from meilisearch.models.webhook import Webhook, WebhooksResults
@@ -599,6 +600,114 @@ class Client:
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
         response = self.http.delete(f"{self.config.paths.webhooks}/{webhook_uuid}")
+        return response.status_code
+
+    # DYNAMIC SEARCH RULES ROUTES
+
+    def get_dynamic_search_rules(
+        self, parameters: Optional[Mapping[str, Any]] = None
+    ) -> DynamicSearchRuleResults:
+        """Get all dynamic search rules.
+
+        Parameters
+        ----------
+        parameters (optional):
+            Parameters accepted by the list dynamic search rules route:
+            https://www.meilisearch.com/docs/reference/api/dynamic-search-rules/list-dynamic-search-rules
+            Accepts offset, limit, and filter in the request body.
+
+        Returns
+        -------
+        rules:
+            DynamicSearchRuleResults instance containing list of rules and pagination info.
+            https://www.meilisearch.com/docs/reference/api/dynamic-search-rules/list-dynamic-search-rules
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request.
+            Meilisearch error codes are described here:
+            https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        if parameters is None:
+            parameters = {}
+        rules = self.http.post(self.config.paths.dynamic_search_rules, parameters)
+        return DynamicSearchRuleResults(**rules)
+
+    def get_dynamic_search_rule(self, uid: str) -> DynamicSearchRule:
+        """Get information about a specific dynamic search rule.
+
+        Parameters
+        ----------
+        uid:
+            The uid of the dynamic search rule to retrieve.
+
+        Returns
+        -------
+        rule:
+            The dynamic search rule information.
+            https://www.meilisearch.com/docs/reference/api/dynamic-search-rules/get-a-dynamic-search-rule
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request.
+            Meilisearch error codes are described here:
+            https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        rule = self.http.get(f"{self.config.paths.dynamic_search_rules}/{uid}")
+        return DynamicSearchRule(**rule)
+
+    def create_or_update_dynamic_search_rule(
+        self, uid: str, options: Mapping[str, Any]
+    ) -> DynamicSearchRule:
+        """Create or update a dynamic search rule.
+
+        Parameters
+        ----------
+        uid:
+            The uid of the dynamic search rule to create or update.
+        options:
+            The dynamic search rule fields to create or update.
+
+        Returns
+        -------
+        rule:
+            The created or updated dynamic search rule.
+            https://www.meilisearch.com/docs/reference/api/dynamic-search-rules/create-or-update-a-dynamic-search-rule
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request.
+            Meilisearch error codes are described here:
+            https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        rule = self.http.patch(f"{self.config.paths.dynamic_search_rules}/{uid}", options)
+        return DynamicSearchRule(**rule)
+
+    def delete_dynamic_search_rule(self, uid: str) -> int:
+        """Delete a dynamic search rule.
+
+        Parameters
+        ----------
+        uid:
+            The uid of the dynamic search rule to delete.
+
+        Returns
+        -------
+        status_code:
+            The Response status code. 204 signifies a successful delete.
+            https://www.meilisearch.com/docs/reference/api/dynamic-search-rules/delete-a-dynamic-search-rule
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request.
+            Meilisearch error codes are described here:
+            https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        response = self.http.delete(f"{self.config.paths.dynamic_search_rules}/{uid}")
         return response.status_code
 
     def get_version(self) -> Dict[str, str]:
