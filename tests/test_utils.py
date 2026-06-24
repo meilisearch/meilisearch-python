@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 
 import pytest
 
-from meilisearch._utils import is_pydantic_2, iso_to_date_time
+from meilisearch._utils import is_pydantic_2, iso_to_date_time, parse_task_documents
 
 
 def test_is_pydantic_2():
@@ -31,6 +31,21 @@ def test_iso_to_date_time(iso_date, expected):
 def test_iso_to_date_time_invalid_format():
     with pytest.raises(ValueError):
         iso_to_date_time("2023-07-13T23:37:20Z")
+
+
+@pytest.mark.parametrize(
+    "raw, expected",
+    [
+        ('[{"id": 1}, {"id": 2}]', [{"id": 1}, {"id": 2}]),  # JSON array
+        ('{"id": 1}', [{"id": 1}]),  # single JSON object
+        ('{"id": 1}\n{"id": 2}', [{"id": 1}, {"id": 2}]),  # NDJSON
+        ('{"id": 1}{"id": 2}', [{"id": 1}, {"id": 2}]),  # concatenated, no separator
+        ("", []),  # empty
+        ("   \n  ", []),  # whitespace only
+    ],
+)
+def test_parse_task_documents(raw, expected):
+    assert parse_task_documents(raw) == expected
 
 
 # Refactor to use the unified API to toggle experimental features
