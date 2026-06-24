@@ -87,10 +87,10 @@ jobs:
       - name: Run linter
         uses: astral-sh/ruff-action@0ce1b0bf8b818ef400413f810f8a11cdbda0034b  # v4.0.0
         with:
-          args: "check"
+          args: "check --output-format=full"
 
       - name: Run formatter
-        run: ruff format --check
+        run: ruff format --check --output-format=full
 
   yaml-lint:
     name: Yaml linting check
