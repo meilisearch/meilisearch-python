@@ -1,5 +1,3 @@
-# pylint: disable=invalid-name
-
 SORTABLE_ATTRIBUTES = ["title", "release_date"]
 
 

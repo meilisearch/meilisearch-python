@@ -1,6 +1,7 @@
 import base64
 import json
 import os
+import warnings
 from pathlib import Path
 
 import pytest
@@ -153,7 +154,10 @@ class TestMultimodalSearch:
                     client.wait_for_task(task.task_uid)
                 except MeilisearchApiError as exc:
                     # Index may already have been deleted by another test run; log and continue.
-                    print(f"Warning: failed to delete index {index.uid} during cleanup: {exc}")
+                    warnings.warn(
+                        f"failed to delete index {index.uid} during cleanup: {exc}",
+                        stacklevel=2,
+                    )
 
     @pytest.fixture(scope="class", autouse=True)
     def setup_index(self, request):

@@ -1,19 +1,20 @@
 from __future__ import annotations
 
+from collections.abc import Iterator
 from enum import Enum
-from typing import Any, Dict, Iterator, List, Optional
+from typing import Any
 
 from camel_converter.pydantic_base import CamelBase
 from pydantic import ConfigDict, field_validator
 
 
 class FieldDistribution:
-    __dict: Dict
+    __dict: dict
 
-    def __init__(self, dist: Dict[str, int]) -> None:
+    def __init__(self, dist: dict[str, int]) -> None:
         self.__dict = dist
-        for key in dist:
-            setattr(self, key, dist[key])
+        for key, value in dist.items():
+            setattr(self, key, value)
 
     def __getattr__(self, attr: str) -> str:
         if attr in self.__dict.keys():
@@ -42,7 +43,7 @@ class IndexStats(CamelBase):
 
 class Faceting(CamelBase):
     max_values_per_facet: int
-    sort_facet_values_by: Optional[Dict[str, str]] = None
+    sort_facet_values_by: dict[str, str] | None = None
 
 
 class Pagination(CamelBase):
@@ -50,16 +51,16 @@ class Pagination(CamelBase):
 
 
 class MinWordSizeForTypos(CamelBase):
-    one_typo: Optional[int] = None
-    two_typos: Optional[int] = None
+    one_typo: int | None = None
+    two_typos: int | None = None
 
 
 class TypoTolerance(CamelBase):
     enabled: bool = True
     disable_on_numbers: bool = False
-    disable_on_attributes: Optional[List[str]] = None
-    disable_on_words: Optional[List[str]] = None
-    min_word_size_for_typos: Optional[MinWordSizeForTypos] = None
+    disable_on_attributes: list[str] | None = None
+    disable_on_words: list[str] | None = None
+    min_word_size_for_typos: MinWordSizeForTypos | None = None
 
 
 class PrefixSearch(str, Enum):
@@ -85,5 +86,5 @@ class EmbedderDistribution(CamelBase):
 
 
 class LocalizedAttributes(CamelBase):
-    attribute_patterns: List[str]
-    locales: List[str]
+    attribute_patterns: list[str]
+    locales: list[str]

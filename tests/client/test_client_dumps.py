@@ -1,6 +1,3 @@
-# pylint: disable=invalid-name
-
-
 def test_dump_creation(client, index_with_documents):
     """Tests the creation of a Meilisearch dump."""
     index_with_documents("indexUID-dump-creation")

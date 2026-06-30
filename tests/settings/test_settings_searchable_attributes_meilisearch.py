@@ -1,5 +1,3 @@
-# pylint: disable=invalid-name
-
 NEW_SEARCHABLE_ATTRIBUTES = ["something", "random"]
 
 
