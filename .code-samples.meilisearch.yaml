@@ -611,6 +611,8 @@ update_embedders_1: |-
 reset_embedders_1: |-
   client.index('INDEX_NAME').reset_embedders()
 post_render_template_1: |-
+  client.update_experimental_features({"renderRoute": True})
+
   client.render_template(
     template={
       'kind': 'inlineDocumentTemplate',
