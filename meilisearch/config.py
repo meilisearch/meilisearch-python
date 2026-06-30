@@ -49,6 +49,7 @@ class Config:
         experimental_features = "experimental-features"
         webhooks = "webhooks"
         export = "export"
+        render_template = "render-template"
 
     def __init__(
         self,

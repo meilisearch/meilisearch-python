@@ -352,3 +352,20 @@ def enable_network_options():
         json={"network": False},
         timeout=10,
     )
+
+
+@fixture
+def enable_render_route():
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"renderRoute": True},
+        timeout=10,
+    )
+    yield
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"renderRoute": False},
+        timeout=10,
+    )
