@@ -280,6 +280,45 @@ class Client:
             body={"queries": queries, "federation": federation},
         )
 
+    def render_template(
+        self,
+        template: Mapping[str, Any],
+        input: Mapping[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """Render a template against an input document.
+
+        This is an experimental route. Enable the ``renderRoute`` feature on your
+        Meilisearch instance before calling it, for example
+        ``client.update_experimental_features({"renderRoute": True})``.
+
+        https://www.meilisearch.com/docs/reference/api/template
+
+        Parameters
+        ----------
+        template:
+            Dictionary describing the template or fragment to render, for example
+            {"kind": "inlineDocumentTemplate", "inline": "Rendered on {{doc.id}}"}.
+        input (optional):
+            Dictionary describing what to render the template with, for example
+            {"kind": "inlineDocument", "inline": {"id": "this document"}}. When omitted
+            the route returns the unrendered template and ``rendered`` is null.
+
+        Returns
+        -------
+        rendered:
+            Dictionary with the unrendered ``template`` and the ``rendered`` result.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        body: dict[str, Any] = {"template": template}
+        if input is not None:
+            body["input"] = input
+
+        return self.http.post(self.config.paths.render_template, body=body)
+
     def update_documents_by_function(
         self, index_uid: str, queries: dict[str, list[dict[str, Any]]]
     ) -> dict[str, Any]:
