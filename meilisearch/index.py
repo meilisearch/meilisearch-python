@@ -1715,6 +1715,64 @@ class Index:
 
         return TaskInfo(**task)
 
+    def get_foreign_keys(self) -> list[dict[str, str]]:
+        """Get foreign keys of the index.
+
+        Returns
+        -------
+        settings:
+            List containing the foreign keys of the index
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.http.get(self.__settings_url_for(self.config.paths.foreign_keys))
+
+    def update_foreign_keys(self, body: list[dict[str, str]] | None) -> TaskInfo:
+        """Update foreign keys of the index.
+
+        Parameters
+        ----------
+        body:
+            List containing the foreign keys, each a dict with 'foreignIndexUid' and 'fieldName'.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.put(self.__settings_url_for(self.config.paths.foreign_keys), body)
+
+        return TaskInfo(**task)
+
+    def reset_foreign_keys(self) -> TaskInfo:
+        """Reset foreign keys of the index to default values.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.delete(
+            self.__settings_url_for(self.config.paths.foreign_keys),
+        )
+
+        return TaskInfo(**task)
+
     # SORTABLE ATTRIBUTES SUB-ROUTES
 
     def get_sortable_attributes(self) -> list[str]:
