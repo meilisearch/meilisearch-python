@@ -1237,6 +1237,7 @@ class Index:
             - 'searchCutoffMs': Maximum search time in milliseconds
             - 'proximityPrecision': Precision for proximity ranking
             - 'localizedAttributes': Settings for localized attributes
+            - 'foreignKeys': List of foreign key relationships to other indexes
 
             More information:
             https://www.meilisearch.com/docs/reference/api/settings#update-settings

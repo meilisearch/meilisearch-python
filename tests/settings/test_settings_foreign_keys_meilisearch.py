@@ -13,7 +13,9 @@ def test_update_foreign_keys(empty_index, enable_foreign_keys):
     """Tests updating the foreign keys."""
     index = empty_index()
     response = index.update_foreign_keys(FOREIGN_KEYS)
-    index.wait_for_task(response.task_uid)
+    update = index.wait_for_task(response.task_uid)
+    assert update.status == "succeeded"
+
     get_keys = index.get_foreign_keys()
     assert len(get_keys) == len(FOREIGN_KEYS)
     for key in FOREIGN_KEYS:
