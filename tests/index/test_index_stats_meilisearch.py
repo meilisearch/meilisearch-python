@@ -15,3 +15,11 @@ def test_get_stats_default(index_with_documents):
     assert response.number_of_documents == 31
     assert hasattr(response.field_distribution, "genre")
     assert response.field_distribution.genre == 11
+
+
+def test_get_stats_internal_database_sizes(index_with_documents):
+    """Tests exposing internal database sizes."""
+    response = index_with_documents().get_stats(show_internal_database_sizes=True)
+    assert isinstance(response, IndexStats)
+    assert isinstance(response.internal_database_sizes, dict)
+    assert response.internal_database_sizes

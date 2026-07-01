@@ -304,11 +304,24 @@ class Index:
         """
         return self.task_handler.wait_for_task(uid, timeout_in_ms, interval_in_ms)
 
-    def get_stats(self) -> IndexStats:
+    def get_stats(
+        self,
+        show_internal_database_sizes: bool = False,
+        size_format: str | None = None,
+    ) -> IndexStats:
         """Get stats of the index.
 
         Get information about the number of documents, field frequencies, ...
         https://www.meilisearch.com/docs/reference/api/stats
+
+        Parameters
+        ----------
+        show_internal_database_sizes (optional):
+            When True, the returned stats also contain an ``internal_database_sizes``
+            dictionary of internal database names and their current size.
+        size_format (optional):
+            "human" to return database sizes as strings with a unit (MiB, GiB, ...),
+            or "raw" (the default) to return them as byte counts.
 
         Returns
         -------
@@ -320,7 +333,15 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        stats = self.http.get(f"{self.config.paths.index}/{self.uid}/{self.config.paths.stat}")
+        parameters: dict[str, str] = {}
+        if show_internal_database_sizes:
+            parameters["showInternalDatabaseSizes"] = "true"
+        if size_format is not None:
+            parameters["sizeFormat"] = size_format
+        url = f"{self.config.paths.index}/{self.uid}/{self.config.paths.stat}"
+        if parameters:
+            url += f"?{parse.urlencode(parameters)}"
+        stats = self.http.get(url)
         return IndexStats(**stats)
 
     @version_error_hint_message

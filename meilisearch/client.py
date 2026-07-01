@@ -346,11 +346,24 @@ class Client:
             body=dict(queries),
         )
 
-    def get_all_stats(self) -> dict[str, Any]:
+    def get_all_stats(
+        self,
+        show_internal_database_sizes: bool = False,
+        size_format: str | None = None,
+    ) -> dict[str, Any]:
         """Get all stats of Meilisearch
 
         Get information about database size and all indexes
         https://www.meilisearch.com/docs/reference/api/stats
+
+        Parameters
+        ----------
+        show_internal_database_sizes (optional):
+            When True, each index stat object also contains an ``internalDatabaseSizes``
+            dictionary of internal database names and their current size.
+        size_format (optional):
+            "human" to return database sizes as strings with a unit (MiB, GiB, ...),
+            or "raw" (the default) to return them as byte counts.
 
         Returns
         -------
@@ -362,7 +375,15 @@ class Client:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return self.http.get(self.config.paths.stat)
+        parameters: dict[str, str] = {}
+        if show_internal_database_sizes:
+            parameters["showInternalDatabaseSizes"] = "true"
+        if size_format is not None:
+            parameters["sizeFormat"] = size_format
+        url = self.config.paths.stat
+        if parameters:
+            url += f"?{parse.urlencode(parameters)}"
+        return self.http.get(url)
 
     def health(self) -> dict[str, str]:
         """Get health of the Meilisearch server.
