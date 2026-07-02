@@ -2,10 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Generator, Mapping, MutableMapping, Sequence
 from datetime import datetime
-from typing import (
-    TYPE_CHECKING,
-    Any,
-)
+from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 from urllib import parse
 from warnings import warn
 
@@ -15,26 +12,16 @@ from meilisearch._httprequests import HttpRequests
 from meilisearch._utils import iso_to_date_time
 from meilisearch.config import Config
 from meilisearch.errors import version_error_hint_message
-from meilisearch.models.document import Document, DocumentsResults, FieldsResults
-from meilisearch.models.embedders import (
-    CompositeEmbedder,
-    Embedders,
-    EmbedderType,
-    HuggingFaceEmbedder,
-    OllamaEmbedder,
-    OpenAiEmbedder,
-    RestEmbedder,
-    UserProvidedEmbedder,
-)
-from meilisearch.models.index import (
-    Faceting,
-    IndexStats,
-    LocalizedAttributes,
-    Pagination,
-    PrefixSearch,
-    ProximityPrecision,
-    TypoTolerance,
-)
+from meilisearch.models.document import (Document, DocumentsResults,
+                                         FieldsResults)
+from meilisearch.models.embedders import (CompositeEmbedder, Embedders,
+                                          EmbedderType, HuggingFaceEmbedder,
+                                          OllamaEmbedder, OpenAiEmbedder,
+                                          RestEmbedder, UserProvidedEmbedder)
+from meilisearch.models.index import (Faceting, IndexStats,
+                                      LocalizedAttributes, Pagination,
+                                      PrefixSearch, ProximityPrecision,
+                                      SizeFormat, TypoTolerance)
 from meilisearch.models.task import Task, TaskInfo, TaskResults
 from meilisearch.task import TaskHandler
 
@@ -304,11 +291,25 @@ class Index:
         """
         return self.task_handler.wait_for_task(uid, timeout_in_ms, interval_in_ms)
 
-    def get_stats(self) -> IndexStats:
+    def get_stats(
+        self,
+        *,
+        show_internal_database_sizes: Optional[bool] = None,
+        size_format: Optional[Union[SizeFormat, str]] = None,
+    ) -> IndexStats:
         """Get stats of the index.
 
         Get information about the number of documents, field frequencies, ...
         https://www.meilisearch.com/docs/reference/api/stats
+
+        Parameters
+        ----------
+        show_internal_database_sizes (optional):
+            When true, the response contains an additional internalDatabaseSizes key
+            with the size of each internal database. Defaults to false.
+        size_format (optional):
+            When set to "human", database sizes are returned as strings with units (e.g. "1.5 GiB").
+            When set to "raw" or omitted, sizes are returned as numbers in bytes.
 
         Returns
         -------
@@ -320,7 +321,18 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        stats = self.http.get(f"{self.config.paths.index}/{self.uid}/{self.config.paths.stat}")
+        params: Dict[str, Any] = {}
+        if show_internal_database_sizes is not None:
+            params["showInternalDatabaseSizes"] = str(show_internal_database_sizes).lower()
+        if size_format is not None:
+            params["sizeFormat"] = (
+                size_format.value if isinstance(size_format, SizeFormat) else size_format
+            )
+
+        path = f"{self.config.paths.index}/{self.uid}/{self.config.paths.stat}"
+        if params:
+            path = f"{path}?{parse.urlencode(params)}"
+        stats = self.http.get(path)
         return IndexStats(**stats)
 
     @version_error_hint_message

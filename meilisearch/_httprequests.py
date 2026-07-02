@@ -8,11 +8,9 @@ from typing import Any
 import requests
 
 from meilisearch.config import Config
-from meilisearch.errors import (
-    MeilisearchApiError,
-    MeilisearchCommunicationError,
-    MeilisearchTimeoutError,
-)
+from meilisearch.errors import (MeilisearchApiError,
+                                MeilisearchCommunicationError,
+                                MeilisearchTimeoutError)
 from meilisearch.models.index import PrefixSearch, ProximityPrecision
 from meilisearch.version import qualified_version
 

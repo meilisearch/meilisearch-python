@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Iterator
 from enum import Enum
-from typing import Any
+from typing import Any, Dict, Optional
 
 from camel_converter.pydantic_base import CamelBase
 from pydantic import ConfigDict, field_validator
@@ -25,12 +25,18 @@ class FieldDistribution:
         return iter(self.__dict__.items())
 
 
+class SizeFormat(str, Enum):
+    RAW = "raw"
+    HUMAN = "human"
+
+
 class IndexStats(CamelBase):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     number_of_documents: int
     is_indexing: bool
     field_distribution: FieldDistribution
+    internal_database_sizes: Optional[Dict[str, Any]] = None
 
     @field_validator("field_distribution", mode="before")
     @classmethod
