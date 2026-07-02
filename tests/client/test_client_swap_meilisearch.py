@@ -1,5 +1,3 @@
-# pylint: disable=invalid-name
-
 import pytest
 
 from meilisearch.errors import MeilisearchApiError

@@ -1,5 +1,3 @@
-# pylint: disable=invalid-name
-
 import json
 from datetime import datetime
 from json import JSONEncoder
@@ -297,7 +295,7 @@ def test_get_documents_sort_fields(index_with_documents):
     # prepare expected order
     sorted_docs = sorted(documents, key=lambda d: (-d["rating"], d["release_date"]))
 
-    for resp_doc, expected_doc in zip(response.results, sorted_docs):
+    for resp_doc, expected_doc in zip(response.results, sorted_docs, strict=True):
         assert resp_doc.id == expected_doc["id"]
         assert resp_doc.rating == expected_doc["rating"]
         assert resp_doc.release_date == expected_doc["release_date"]
@@ -334,7 +332,7 @@ def test_get_documents_sort_formats(index_with_documents, sort_param):
 
     sorted_docs = sorted(documents, key=lambda d: (-d["rating"], d["release_date"]))
 
-    for resp_doc, expected_doc in zip(response.results, sorted_docs):
+    for resp_doc, expected_doc in zip(response.results, sorted_docs, strict=True):
         assert resp_doc.id == expected_doc["id"]
         assert resp_doc.rating == expected_doc["rating"]
         assert resp_doc.release_date == expected_doc["release_date"]

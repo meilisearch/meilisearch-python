@@ -1,4 +1,3 @@
-# pylint: disable=redefined-outer-name
 import pytest
 
 from meilisearch.models.embedders import OpenAiEmbedder, UserProvidedEmbedder
@@ -39,9 +38,9 @@ def test_get_settings_default(empty_index):
     response = empty_index().get_settings()
     for rule in DEFAULT_RANKING_RULES:
         assert rule in response["rankingRules"]
-    for typo in DEFAULT_TYPO_TOLERANCE:  # pylint: disable=consider-using-dict-items
+    for typo, value in DEFAULT_TYPO_TOLERANCE.items():
         assert typo in response["typoTolerance"]
-        assert DEFAULT_TYPO_TOLERANCE[typo] == response["typoTolerance"][typo]
+        assert value == response["typoTolerance"][typo]
     assert response["distinctAttribute"] is None
     assert response["searchableAttributes"] == ["*"]
     assert response["displayedAttributes"] == ["*"]
@@ -92,9 +91,9 @@ def test_reset_settings(new_settings, empty_index):
     response = index.get_settings()
     for rule in DEFAULT_RANKING_RULES:
         assert rule in response["rankingRules"]
-    for typo in DEFAULT_TYPO_TOLERANCE:  # pylint: disable=consider-using-dict-items
+    for typo, value in DEFAULT_TYPO_TOLERANCE.items():
         assert typo in response["typoTolerance"]
-        assert DEFAULT_TYPO_TOLERANCE[typo] == response["typoTolerance"][typo]
+        assert value == response["typoTolerance"][typo]
     assert response["distinctAttribute"] is None
     assert response["displayedAttributes"] == ["*"]
     assert response["searchableAttributes"] == ["*"]

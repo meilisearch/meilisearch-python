@@ -1,7 +1,6 @@
-# pylint: disable=invalid-name
-
 import pytest
 
+from meilisearch.errors import MeilisearchApiError
 from meilisearch.models.task import Task, TaskResults
 from tests import common
 
@@ -70,5 +69,5 @@ def test_get_task(client):
 
 def test_get_task_inexistent(empty_index):
     """Tests getting a task of an inexistent operation."""
-    with pytest.raises(Exception):
+    with pytest.raises(MeilisearchApiError):
         empty_index().get_task("abc")

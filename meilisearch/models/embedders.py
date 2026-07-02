@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Dict, Optional, Union
+from typing import Any
 
 from camel_converter.pydantic_base import CamelBase
 
@@ -65,14 +65,14 @@ class OpenAiEmbedder(CamelBase):
     """
 
     source: str = "openAi"
-    url: Optional[str] = None
-    api_key: Optional[str] = None
-    model: Optional[str] = None  # Defaults to text-embedding-3-small
-    dimensions: Optional[int] = None  # Uses the model default
-    document_template: Optional[str] = None
-    document_template_max_bytes: Optional[int] = None  # Default to 400
-    distribution: Optional[Distribution] = None
-    binary_quantized: Optional[bool] = None
+    url: str | None = None
+    api_key: str | None = None
+    model: str | None = None  # Defaults to text-embedding-3-small
+    dimensions: int | None = None  # Uses the model default
+    document_template: str | None = None
+    document_template_max_bytes: int | None = None  # Default to 400
+    distribution: Distribution | None = None
+    binary_quantized: bool | None = None
 
 
 class HuggingFaceEmbedder(CamelBase):
@@ -103,15 +103,15 @@ class HuggingFaceEmbedder(CamelBase):
     """
 
     source: str = "huggingFace"
-    url: Optional[str] = None
-    model: Optional[str] = None  # Defaults to BAAI/bge-base-en-v1.5
-    dimensions: Optional[int] = None
-    revision: Optional[str] = None
-    document_template: Optional[str] = None
-    document_template_max_bytes: Optional[int] = None  # Default to 400
-    distribution: Optional[Distribution] = None
-    binary_quantized: Optional[bool] = None
-    pooling: Optional[PoolingType] = PoolingType.USE_MODEL
+    url: str | None = None
+    model: str | None = None  # Defaults to BAAI/bge-base-en-v1.5
+    dimensions: int | None = None
+    revision: str | None = None
+    document_template: str | None = None
+    document_template_max_bytes: int | None = None  # Default to 400
+    distribution: Distribution | None = None
+    binary_quantized: bool | None = None
+    pooling: PoolingType | None = PoolingType.USE_MODEL
 
 
 class OllamaEmbedder(CamelBase):
@@ -140,14 +140,14 @@ class OllamaEmbedder(CamelBase):
     """
 
     source: str = "ollama"
-    url: Optional[str] = None
-    api_key: Optional[str] = None
-    model: Optional[str] = None
-    dimensions: Optional[int] = None
-    document_template: Optional[str] = None
-    document_template_max_bytes: Optional[int] = None
-    distribution: Optional[Distribution] = None
-    binary_quantized: Optional[bool] = None
+    url: str | None = None
+    api_key: str | None = None
+    model: str | None = None
+    dimensions: int | None = None
+    document_template: str | None = None
+    document_template_max_bytes: int | None = None
+    distribution: Distribution | None = None
+    binary_quantized: bool | None = None
 
 
 class RestEmbedder(CamelBase):
@@ -186,18 +186,18 @@ class RestEmbedder(CamelBase):
     """
 
     source: str = "rest"
-    url: Optional[str] = None
-    api_key: Optional[str] = None
-    dimensions: Optional[int] = None
-    document_template: Optional[str] = None
-    document_template_max_bytes: Optional[int] = None
-    indexing_fragments: Optional[Dict[str, Dict[str, Any]]] = None
-    search_fragments: Optional[Dict[str, Dict[str, Any]]] = None
-    request: Dict[str, Any]
-    response: Dict[str, Any]
-    headers: Optional[Dict[str, str]] = None
-    distribution: Optional[Distribution] = None
-    binary_quantized: Optional[bool] = None
+    url: str | None = None
+    api_key: str | None = None
+    dimensions: int | None = None
+    document_template: str | None = None
+    document_template_max_bytes: int | None = None
+    indexing_fragments: dict[str, dict[str, Any]] | None = None
+    search_fragments: dict[str, dict[str, Any]] | None = None
+    request: dict[str, Any]
+    response: dict[str, Any]
+    headers: dict[str, str] | None = None
+    distribution: Distribution | None = None
+    binary_quantized: bool | None = None
 
 
 class UserProvidedEmbedder(CamelBase):
@@ -217,8 +217,8 @@ class UserProvidedEmbedder(CamelBase):
 
     source: str = "userProvided"
     dimensions: int
-    distribution: Optional[Distribution] = None
-    binary_quantized: Optional[bool] = None
+    distribution: Distribution | None = None
+    binary_quantized: bool | None = None
 
 
 class CompositeEmbedder(CamelBase):
@@ -244,31 +244,23 @@ class CompositeEmbedder(CamelBase):
     ]"""
 
     source: str = "composite"
-    search_embedder: Union[
-        OpenAiEmbedder,
-        HuggingFaceEmbedder,
-        OllamaEmbedder,
-        RestEmbedder,
-        UserProvidedEmbedder,
-    ]
-    indexing_embedder: Union[
-        OpenAiEmbedder,
-        HuggingFaceEmbedder,
-        OllamaEmbedder,
-        RestEmbedder,
-        UserProvidedEmbedder,
-    ]
+    search_embedder: (
+        OpenAiEmbedder | HuggingFaceEmbedder | OllamaEmbedder | RestEmbedder | UserProvidedEmbedder
+    )
+    indexing_embedder: (
+        OpenAiEmbedder | HuggingFaceEmbedder | OllamaEmbedder | RestEmbedder | UserProvidedEmbedder
+    )
 
 
 # Type alias for the embedder union type
-EmbedderType = Union[
-    OpenAiEmbedder,
-    HuggingFaceEmbedder,
-    OllamaEmbedder,
-    RestEmbedder,
-    UserProvidedEmbedder,
-    CompositeEmbedder,
-]
+EmbedderType = (
+    OpenAiEmbedder
+    | HuggingFaceEmbedder
+    | OllamaEmbedder
+    | RestEmbedder
+    | UserProvidedEmbedder
+    | CompositeEmbedder
+)
 
 
 class Embedders(CamelBase):
@@ -280,4 +272,4 @@ class Embedders(CamelBase):
         Dictionary of embedder configurations, where keys are embedder names
     """
 
-    embedders: Dict[str, EmbedderType]
+    embedders: dict[str, EmbedderType]

@@ -1,6 +1,3 @@
-# pylint: disable=invalid-name
-
-
 def test_snapshot_creation(client, index_with_documents):
     """Tests the creation of a Meilisearch snapshot."""
     index_with_documents("indexUID-snapshot-creation")

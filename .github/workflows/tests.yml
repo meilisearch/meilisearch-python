@@ -18,12 +18,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
     name: integration-tests
     runs-on: ubuntu-latest
     env:
       PYTHONUNBUFFERED: 1
-      UV_PYTHON: ${{ matrix.python-version }}
+      PYTHON_VERSION: ${{ matrix.python-version }}
       UV_LOCKED: 1
     steps:
       - name: Checkout the repository
@@ -31,15 +31,16 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Install uv
         uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
         with:
           version: "0.11.21"
+          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Meilisearch (latest version) setup with Docker
         run: docker run -d -p 7700:7700 getmeili/meilisearch-enterprise:latest meilisearch --no-analytics --master-key=masterKey
@@ -47,38 +48,12 @@ jobs:
       - name: Test with pytest
         run: uv run pytest --cov-report=xml
 
-  pylint:
-    name: pylint
-    runs-on: ubuntu-latest
-    env:
-      PYTHONUNBUFFERED: 1
-      UV_PYTHON: "3.9"
-      UV_LOCKED: 1
-    steps:
-      - name: Checkout the repository
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
-        with:
-          persist-credentials: false
-
-      - name: Set up Python 3.9
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
-        with:
-          python-version: "3.9"
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
-        with:
-          version: "0.11.21"
-
-      - name: Linter with pylint
-        run: uv run pylint meilisearch tests
-
   mypy:
     name: mypy
     runs-on: ubuntu-latest
     env:
       PYTHONUNBUFFERED: 1
-      UV_PYTHON: "3.9"
+      PYTHON_VERSION: "3.10"
       UV_LOCKED: 1
     steps:
       - name: Checkout the repository
@@ -86,15 +61,16 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Set up Python 3.9
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
         with:
-          python-version: 3.9
+          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Install uv
         uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
         with:
           version: "0.11.21"
+          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: mypy type check
         run: uv run mypy meilisearch
@@ -108,36 +84,13 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: ruff format
+      - name: Run linter
         uses: astral-sh/ruff-action@0ce1b0bf8b818ef400413f810f8a11cdbda0034b  # v4.0.0
         with:
-          args: "format --check"
+          args: "check --output-format=full"
 
-  isort:
-    name: isort
-    runs-on: ubuntu-latest
-    env:
-      PYTHONUNBUFFERED: 1
-      UV_PYTHON: "3.9"
-      UV_LOCKED: 1
-    steps:
-      - name: Checkout the repository
-        uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6.0.3
-        with:
-          persist-credentials: false
-
-      - name: Set up Python 3.9
-        uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
-        with:
-          python-version: 3.9
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
-        with:
-          version: "0.11.21"
-
-      - name: isort
-        run: uv run isort meilisearch tests --check-only
+      - name: Run formatter
+        run: ruff format --check --output-format=full
 
   yaml-lint:
     name: Yaml linting check

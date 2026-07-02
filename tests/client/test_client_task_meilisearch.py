@@ -1,7 +1,6 @@
-# pylint: disable=invalid-name
-
 import pytest
 
+from meilisearch.errors import MeilisearchApiError
 from meilisearch.models.task import TaskInfo
 from tests import common
 
@@ -82,7 +81,7 @@ def test_get_task(client):
 
 def test_get_task_inexistent(client):
     """Tests getting a task that does not exists."""
-    with pytest.raises(Exception):
+    with pytest.raises(MeilisearchApiError):
         client.get_task("abc")
 
 
@@ -131,7 +130,7 @@ def test_delete_tasks_by_uid(client, empty_index, small_movies):
     task_addition = index.add_documents(small_movies)
     task_deleted = client.delete_tasks({"uids": task_addition.task_uid})
     client.wait_for_task(task_deleted.task_uid)
-    with pytest.raises(Exception):
+    with pytest.raises(MeilisearchApiError):
         client.get_task(task_addition.task_uid)
     task = client.get_task(task_deleted.task_uid)
 

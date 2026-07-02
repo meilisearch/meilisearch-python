@@ -1,11 +1,9 @@
-from typing import List
-
 from meilisearch.models.index import LocalizedAttributes
 
 NEW_LOCALIZED_ATTRIBUTES = [{"attributePatterns": ["title"], "locales": ["eng"]}]
 
 
-def unpack_loc_attrs_response(response: List[LocalizedAttributes]):
+def unpack_loc_attrs_response(response: list[LocalizedAttributes]):
     return [loc_attrs.model_dump(by_alias=True) for loc_attrs in response]
 
 

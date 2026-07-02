@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PYTHONUNBUFFERED: 1
-      UV_PYTHON: "3.9"
+      PYTHON_VERSION: "3.10"
       UV_LOCKED: 1
     steps:
       - name: Checkout the repository
@@ -37,15 +37,16 @@ jobs:
       - name: Setup Github Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d  # v6.0.0
 
-      - name: Install Python ${{ env.UV_PYTHON }}
+      - name: Install Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405  # v6.2.0
         with:
-          python-version: ${{ env.UV_PYTHON }}
+          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Install uv
         uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
         with:
           version: "0.11.21"
+          python-version: ${{ env.PYTHON_VERSION }}
           enable-cache: false
 
       - name: Build docs

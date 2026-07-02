@@ -2,7 +2,7 @@
 name = "meilisearch"
 description = "The python client for Meilisearch API."
 authors = [{ name = "Clémentine", email = "clementine@meilisearch.com" }]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = { text = "MIT" }
 keywords = [
     "search",
@@ -11,7 +11,6 @@ keywords = [
 ]
 classifiers = [
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -47,10 +46,7 @@ test = [
 
 lint = [
     "mypy>=1.19.1",
-    "pylint>=v3.3.9",
     "ruff>=0.15.17",
-    "isort>=6.1.0",
-    "types-requests",
 ]
 
 docs = [
@@ -75,10 +71,43 @@ meilisearch = ["py.typed"]
 [tool.ruff]
 line-length = 100
 
-[tool.isort]
-profile = "black"
-line_length = 100
-src_paths = ["meilisearch", "tests"]
+[tool.ruff.lint]
+select = [
+  "E",      # pycodestyle errors
+  "W",      # pycodestyle warnings
+  "F",      # pyflakes
+  "B",      # flake8-bugbear
+  "I",      # isort
+  "UP",     # pyupgrade
+  "PL",     # pylint
+  "T201",   # flake8-print: disallow `print`
+  "T203",   # flake8-print: disallow `pprint`
+  "RUF022", # Ruff: unsorted `__all__`
+  "RUF023", # Ruff: unsorted `__slots__`
+]
+ignore = [
+  # Recommended ignores by ruff when using the formatter
+  "E501",
+  "W191",
+  "E111",
+  "E114",
+  "E117",
+  "D206",
+  "D300",
+  "Q000",
+  "Q001",
+  "Q002",
+  "Q003",
+  "COM812",
+  "COM819",
+  "ISC001",
+  "ISC002",
+]
+
+[tool.ruff.lint.pylint]
+max-args = 10
+max-public-methods = 25
+allow-magic-value-types = ["int", "float", "str", "bytes"]
 
 [tool.mypy]
 disallow_untyped_defs = true
@@ -86,47 +115,6 @@ disallow_untyped_defs = true
 [[tool.mypy.overrides]]
 module = ["tests.*"]
 disallow_untyped_defs = false
-[tool.pylint.MASTER]
-load-plugins = [
-    'pylint.extensions.bad_builtin',
-]
-
-[tool.pylint.'DEPRECATED_BUILTINS']
-bad-functions=[
-  "map",
-  "filter",
-  "input"
-]
-
-[tool.pylint.'BASIC']
-const-rgx = "(([A-Z_][A-Z0-9_]*)|(__.*__))$"
-attr-rgx = "[a-z_][a-z0-9_]{2,}$"
-module-rgx = "(([a-z_][a-z0-9_]*)|([A-Z][a-zA-Z0-9]+))$"
-method-rgx = "[a-z_][a-z0-9_]{2,}$"
-
-[tool.pylint.'DESIGN']
-max-args = 10
-max-public-methods = 25
-
-[tool.pylint.'FORMAT']
-max-module-lines=2000
-
-[tool.pylint.'MESSAGES CONTROL']
-disable=[
-  "attribute-defined-outside-init",
-  "duplicate-code",
-  "missing-docstring",
-  "too-few-public-methods",
-  "line-too-long",
-  "too-many-positional-arguments",
-]
-enable=[
-  "use-symbolic-message-instead",
-  "fixme",
-]
-
-[tool.pylint.'REPORTS']
-reports=false
 
 [tool.pytest.ini_options]
 minversion = "6.0"
