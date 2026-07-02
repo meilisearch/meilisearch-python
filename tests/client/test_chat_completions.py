@@ -3,7 +3,8 @@ from unittest.mock import patch
 import pytest
 import requests
 
-from meilisearch.errors import MeilisearchApiError, MeilisearchCommunicationError
+from meilisearch.errors import (MeilisearchApiError,
+                                MeilisearchCommunicationError)
 
 
 class MockStreamingResponse:

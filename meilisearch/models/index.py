@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Iterator
 from enum import Enum
-from typing import Any
+from typing import Any, Dict, Optional
 
 from camel_converter.pydantic_base import CamelBase
 from pydantic import ConfigDict, field_validator

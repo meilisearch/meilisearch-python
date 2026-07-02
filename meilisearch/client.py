@@ -7,22 +7,18 @@ import hmac
 import json
 import re
 from collections.abc import Iterator, Mapping, MutableMapping, Sequence
-from typing import (
-    Any,
-)
+from typing import Any, Dict, Optional, Union
 from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
-from meilisearch.errors import (  # noqa: F401
-    MeilisearchApiError,
-    MeilisearchCommunicationError,
-    MeilisearchError,
-)
+from meilisearch.errors import MeilisearchApiError  # noqa: F401
+from meilisearch.errors import MeilisearchCommunicationError, MeilisearchError
 from meilisearch.index import Index
 from meilisearch.models.index import SizeFormat
 from meilisearch.models.key import Key, KeysResults
-from meilisearch.models.task import Batch, BatchResults, Task, TaskInfo, TaskResults
+from meilisearch.models.task import (Batch, BatchResults, Task, TaskInfo,
+                                     TaskResults)
 from meilisearch.models.webhook import Webhook, WebhooksResults
 from meilisearch.task import TaskHandler
 

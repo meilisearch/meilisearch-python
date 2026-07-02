@@ -4,7 +4,8 @@ import pytest
 import requests
 
 import meilisearch
-from meilisearch.errors import MeilisearchCommunicationError, MeilisearchTimeoutError
+from meilisearch.errors import (MeilisearchCommunicationError,
+                                MeilisearchTimeoutError)
 from tests import BASE_URL, MASTER_KEY
 
 

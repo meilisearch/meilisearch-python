@@ -2,10 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Generator, Mapping, MutableMapping, Sequence
 from datetime import datetime
-from typing import (
-    TYPE_CHECKING,
-    Any,
-)
+from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 from urllib import parse
 from warnings import warn
 
@@ -15,27 +12,16 @@ from meilisearch._httprequests import HttpRequests
 from meilisearch._utils import iso_to_date_time
 from meilisearch.config import Config
 from meilisearch.errors import version_error_hint_message
-from meilisearch.models.document import Document, DocumentsResults, FieldsResults
-from meilisearch.models.embedders import (
-    CompositeEmbedder,
-    Embedders,
-    EmbedderType,
-    HuggingFaceEmbedder,
-    OllamaEmbedder,
-    OpenAiEmbedder,
-    RestEmbedder,
-    UserProvidedEmbedder,
-)
-from meilisearch.models.index import (
-    Faceting,
-    IndexStats,
-    LocalizedAttributes,
-    Pagination,
-    PrefixSearch,
-    ProximityPrecision,
-    SizeFormat,
-    TypoTolerance,
-)
+from meilisearch.models.document import (Document, DocumentsResults,
+                                         FieldsResults)
+from meilisearch.models.embedders import (CompositeEmbedder, Embedders,
+                                          EmbedderType, HuggingFaceEmbedder,
+                                          OllamaEmbedder, OpenAiEmbedder,
+                                          RestEmbedder, UserProvidedEmbedder)
+from meilisearch.models.index import (Faceting, IndexStats,
+                                      LocalizedAttributes, Pagination,
+                                      PrefixSearch, ProximityPrecision,
+                                      SizeFormat, TypoTolerance)
 from meilisearch.models.task import Task, TaskInfo, TaskResults
 from meilisearch.task import TaskHandler
 
