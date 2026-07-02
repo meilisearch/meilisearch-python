@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 import pydantic
 from camel_converter.pydantic_base import CamelBase
@@ -11,24 +11,24 @@ from meilisearch._utils import is_pydantic_2, iso_to_date_time
 
 class Task(CamelBase):
     uid: int
-    index_uid: Union[str, None] = None
+    index_uid: str | None = None
     status: str
     type: str
-    details: Union[Dict[str, Any], None] = None
-    error: Union[Dict[str, Any], None] = None
-    canceled_by: Union[int, None] = None
-    duration: Optional[str] = None
+    details: dict[str, Any] | None = None
+    error: dict[str, Any] | None = None
+    canceled_by: int | None = None
+    duration: str | None = None
     enqueued_at: datetime
-    started_at: Optional[datetime] = None
-    finished_at: Optional[datetime] = None
-    network: Optional[Dict[str, Any]] = None
-    custom_metadata: Optional[str] = None
+    started_at: datetime | None = None
+    finished_at: datetime | None = None
+    network: dict[str, Any] | None = None
+    custom_metadata: str | None = None
 
     if is_pydantic_2():
 
         @pydantic.field_validator("enqueued_at", mode="before")  # type: ignore[attr-defined]
         @classmethod
-        def validate_enqueued_at(cls, v: str) -> datetime:  # pylint: disable=invalid-name
+        def validate_enqueued_at(cls, v: str) -> datetime:
             converted = iso_to_date_time(v)
 
             if not converted:  # pragma: no cover
@@ -37,23 +37,19 @@ class Task(CamelBase):
 
         @pydantic.field_validator("started_at", mode="before")  # type: ignore[attr-defined]
         @classmethod
-        def validate_started_at(  # pylint: disable=invalid-name
-            cls, v: str
-        ) -> Union[datetime, None]:
+        def validate_started_at(cls, v: str) -> datetime | None:
             return iso_to_date_time(v)
 
         @pydantic.field_validator("finished_at", mode="before")  # type: ignore[attr-defined]
         @classmethod
-        def validate_finished_at(  # pylint: disable=invalid-name
-            cls, v: str
-        ) -> Union[datetime, None]:
+        def validate_finished_at(cls, v: str) -> datetime | None:
             return iso_to_date_time(v)
 
     else:  # pragma: no cover
 
         @pydantic.validator("enqueued_at", pre=True)
         @classmethod
-        def validate_enqueued_at(cls, v: str) -> datetime:  # pylint: disable=invalid-name
+        def validate_enqueued_at(cls, v: str) -> datetime:
             converted = iso_to_date_time(v)
 
             if not converted:
@@ -63,22 +59,18 @@ class Task(CamelBase):
 
         @pydantic.validator("started_at", pre=True)
         @classmethod
-        def validate_started_at(  # pylint: disable=invalid-name
-            cls, v: str
-        ) -> Union[datetime, None]:
+        def validate_started_at(cls, v: str) -> datetime | None:
             return iso_to_date_time(v)
 
         @pydantic.validator("finished_at", pre=True)
         @classmethod
-        def validate_finished_at(  # pylint: disable=invalid-name
-            cls, v: str
-        ) -> Union[datetime, None]:
+        def validate_finished_at(cls, v: str) -> datetime | None:
             return iso_to_date_time(v)
 
 
 class TaskInfo(CamelBase):
     task_uid: int
-    index_uid: Union[str, None]
+    index_uid: str | None
     status: str
     type: str
     enqueued_at: datetime
@@ -87,7 +79,7 @@ class TaskInfo(CamelBase):
 
         @pydantic.field_validator("enqueued_at", mode="before")  # type: ignore[attr-defined]
         @classmethod
-        def validate_enqueued_at(cls, v: str) -> datetime:  # pylint: disable=invalid-name
+        def validate_enqueued_at(cls, v: str) -> datetime:
             converted = iso_to_date_time(v)
 
             if not converted:  # pragma: no cover
@@ -99,7 +91,7 @@ class TaskInfo(CamelBase):
 
         @pydantic.validator("enqueued_at", pre=True)
         @classmethod
-        def validate_enqueued_at(cls, v: str) -> datetime:  # pylint: disable=invalid-name
+        def validate_enqueued_at(cls, v: str) -> datetime:
             converted = iso_to_date_time(v)
 
             if not converted:
@@ -109,51 +101,51 @@ class TaskInfo(CamelBase):
 
 
 class TaskResults(CamelBase):
-    results: List[Task]
+    results: list[Task]
     limit: int
     total: int
-    from_: Optional[int]
-    next_: Optional[int]
+    from_: int | None
+    next_: int | None
 
 
 class Batch(CamelBase):
     uid: int
-    details: Optional[Dict[str, Any]] = None
-    stats: Optional[Dict[str, Union[int, Dict[str, Any]]]] = None
-    duration: Optional[str] = None
-    started_at: Optional[datetime] = None
-    finished_at: Optional[datetime] = None
-    progress: Optional[Dict[str, Union[float, List[Dict[str, Any]]]]] = None
+    details: dict[str, Any] | None = None
+    stats: dict[str, int | dict[str, Any]] | None = None
+    duration: str | None = None
+    started_at: datetime | None = None
+    finished_at: datetime | None = None
+    progress: dict[str, float | list[dict[str, Any]]] | None = None
 
     if is_pydantic_2():
 
         @pydantic.field_validator("started_at", mode="before")  # type: ignore[attr-defined]
         @classmethod
-        def validate_started_at(cls, v: str) -> Optional[datetime]:  # pylint: disable=invalid-name
+        def validate_started_at(cls, v: str) -> datetime | None:
             return iso_to_date_time(v)
 
         @pydantic.field_validator("finished_at", mode="before")  # type: ignore[attr-defined]
         @classmethod
-        def validate_finished_at(cls, v: str) -> Optional[datetime]:  # pylint: disable=invalid-name
+        def validate_finished_at(cls, v: str) -> datetime | None:
             return iso_to_date_time(v)
 
     else:  # pragma: no cover
 
         @pydantic.validator("started_at", pre=True)
         @classmethod
-        def validate_started_at(cls, v: str) -> Optional[datetime]:  # pylint: disable=invalid-name
+        def validate_started_at(cls, v: str) -> datetime | None:
             return iso_to_date_time(v)
 
         @pydantic.validator("finished_at", pre=True)
         @classmethod
-        def validate_finished_at(cls, v: str) -> Optional[datetime]:  # pylint: disable=invalid-name
+        def validate_finished_at(cls, v: str) -> datetime | None:
             return iso_to_date_time(v)
 
 
 class BatchResults(CamelBase):
-    results: List[Batch]
+    results: list[Batch]
     total: int
     limit: int
     from_: int
     # None means last page
-    next_: Optional[int]
+    next_: int | None

@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional, Tuple
-
 
 class Config:
     """
@@ -51,13 +49,14 @@ class Config:
         experimental_features = "experimental-features"
         webhooks = "webhooks"
         export = "export"
+        render_template = "render-template"
 
     def __init__(
         self,
         url: str,
-        api_key: Optional[str] = None,
-        timeout: Optional[int] = None,
-        client_agents: Optional[Tuple[str, ...]] = None,
+        api_key: str | None = None,
+        timeout: int | None = None,
+        client_agents: tuple[str, ...] | None = None,
     ) -> None:
         """
         Parameters

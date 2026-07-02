@@ -1,6 +1,3 @@
-# pylint: disable=unnecessary-dunder-call
-
-
 import pytest
 
 from meilisearch.models.document import Document
