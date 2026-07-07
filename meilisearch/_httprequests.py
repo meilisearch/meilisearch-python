@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 import json
+from collections.abc import Callable, Mapping, Sequence
 from functools import lru_cache
-from typing import Any, Callable, List, Mapping, Optional, Sequence, Tuple, Type, Union
+from typing import Any
 
 import requests
 
@@ -17,7 +18,7 @@ from meilisearch.version import qualified_version
 
 
 class HttpRequests:
-    def __init__(self, config: Config, custom_headers: Optional[Mapping[str, str]] = None) -> None:
+    def __init__(self, config: Config, custom_headers: Mapping[str, str] | None = None) -> None:
         self.config = config
         self.headers = {
             "Authorization": f"Bearer {self.config.api_key}",
@@ -31,24 +32,23 @@ class HttpRequests:
         self,
         http_method: Callable,
         path: str,
-        body: Optional[
-            Union[
-                Mapping[str, Any],
-                Sequence[Mapping[str, Any]],
-                List[str],
-                bool,
-                bytes,
-                str,
-                int,
-                ProximityPrecision,
-            ]
-        ] = None,
-        content_type: Optional[str] = None,
+        body: Mapping[str, Any]
+        | Sequence[Mapping[str, Any]]
+        | list[str]
+        | bool
+        | bytes
+        | str
+        | int
+        | ProximityPrecision
+        | None = None,
+        content_type: str | None = None,
         *,
-        serializer: Optional[Type[json.JSONEncoder]] = None,
+        serializer: type[json.JSONEncoder] | None = None,
     ) -> Any:
         if content_type:
             self.headers["Content-Type"] = content_type
+        else:
+            self.headers.pop("Content-Type", None)
         try:
             request_path = self.config.url + "/" + path
             if http_method.__name__ == "get":
@@ -69,7 +69,9 @@ class HttpRequests:
                 data = (
                     json.dumps(body, cls=serializer)
                     if isinstance(body, bool) or serialize_body
-                    else "" if body == "" else "null"
+                    else ""
+                    if body == ""
+                    else "null"
                 )
 
                 request = http_method(
@@ -98,63 +100,69 @@ class HttpRequests:
     def post(
         self,
         path: str,
-        body: Optional[
-            Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str], bytes, str]
-        ] = None,
-        content_type: Optional[str] = "application/json",
+        body: Mapping[str, Any]
+        | Sequence[Mapping[str, Any]]
+        | list[str]
+        | bytes
+        | str
+        | None = None,
+        content_type: str | None = "application/json",
         *,
-        serializer: Optional[Type[json.JSONEncoder]] = None,
+        serializer: type[json.JSONEncoder] | None = None,
     ) -> Any:
         return self.send_request(requests.post, path, body, content_type, serializer=serializer)
 
     def patch(
         self,
         path: str,
-        body: Optional[
-            Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str], bytes, str]
-        ] = None,
-        content_type: Optional[str] = "application/json",
+        body: Mapping[str, Any]
+        | Sequence[Mapping[str, Any]]
+        | list[str]
+        | bytes
+        | str
+        | None = None,
+        content_type: str | None = "application/json",
     ) -> Any:
         return self.send_request(requests.patch, path, body, content_type)
 
     def put(
         self,
         path: str,
-        body: Optional[
-            Union[
-                Mapping[str, Any],
-                Sequence[Mapping[str, Any]],
-                List[str],
-                bool,
-                bytes,
-                str,
-                int,
-                PrefixSearch,
-                ProximityPrecision,
-            ]
-        ] = None,
-        content_type: Optional[str] = "application/json",
+        body: Mapping[str, Any]
+        | Sequence[Mapping[str, Any]]
+        | list[str]
+        | bool
+        | bytes
+        | str
+        | int
+        | PrefixSearch
+        | ProximityPrecision
+        | None = None,
+        content_type: str | None = "application/json",
         *,
-        serializer: Optional[Type[json.JSONEncoder]] = None,
+        serializer: type[json.JSONEncoder] | None = None,
     ) -> Any:
         return self.send_request(requests.put, path, body, content_type, serializer=serializer)
 
     def delete(
         self,
         path: str,
-        body: Optional[Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str]]] = None,
+        body: Mapping[str, Any] | Sequence[Mapping[str, Any]] | list[str] | None = None,
     ) -> Any:
         return self.send_request(requests.delete, path, body)
 
     def post_stream(
         self,
         path: str,
-        body: Optional[
-            Union[Mapping[str, Any], Sequence[Mapping[str, Any]], List[str], bytes, str]
-        ] = None,
-        content_type: Optional[str] = "application/json",
+        body: Mapping[str, Any]
+        | Sequence[Mapping[str, Any]]
+        | list[str]
+        | bytes
+        | str
+        | None = None,
+        content_type: str | None = "application/json",
         *,
-        serializer: Optional[Type[json.JSONEncoder]] = None,
+        serializer: type[json.JSONEncoder] | None = None,
     ) -> requests.Response:
         """Send a POST request with streaming enabled.
 
@@ -162,6 +170,8 @@ class HttpRequests:
         """
         if content_type:
             self.headers["Content-Type"] = content_type
+        else:
+            self.headers.pop("Content-Type", None)
         try:
             request_path = self.config.url + "/" + path
 
@@ -178,7 +188,9 @@ class HttpRequests:
                 data = (
                     json.dumps(body, cls=serializer)
                     if isinstance(body, bool) or serialize_body
-                    else "" if body == "" else "null"
+                    else ""
+                    if body == ""
+                    else "null"
                 )
 
                 response = requests.post(
@@ -228,7 +240,7 @@ class HttpRequests:
 
 
 @lru_cache(maxsize=1)
-def _build_user_agent(client_agents: Optional[Tuple[str, ...]] = None) -> str:
+def _build_user_agent(client_agents: tuple[str, ...] | None = None) -> str:
     user_agent = qualified_version()
     if not client_agents:
         return user_agent

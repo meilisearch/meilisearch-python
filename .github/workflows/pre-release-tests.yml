@@ -8,36 +8,43 @@ on:
   pull_request:
     branches: bump-meilisearch-v*
 
+permissions:
+  contents: read
+
 jobs:
   integration_tests:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
     name: integration-tests-against-rc
     runs-on: ubuntu-latest
     env:
       PYTHONUNBUFFERED: 1
-      UV_PYTHON: ${{ matrix.python-version }}
+      PYTHON_VERSION: ${{ matrix.python-version }}
       UV_LOCKED: 1
     steps:
-      - uses: actions/checkout@v6
-
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
+      - name: Checkout the repository
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
         with:
-          python-version: ${{ matrix.python-version }}
+          persist-credentials: false
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1  # v6.3.0
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Install uv
-        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b  # v8.1.0
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39  # v8.2.0
         with:
-          version: "0.11.16"
+          version: "0.11.21"
+          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Get the latest Meilisearch RC
         run: echo "MEILISEARCH_VERSION=$(curl https://raw.githubusercontent.com/meilisearch/integration-guides/main/scripts/get-latest-meilisearch-rc.sh | bash)" >> $GITHUB_ENV
 
       - name: Meilisearch (${{ env.MEILISEARCH_VERSION }}) setup with Docker
-        run: docker run -d -p 7700:7700 getmeili/meilisearch-enterprise:${{ env.MEILISEARCH_VERSION }} meilisearch --master-key=masterKey --no-analytics
+        run: docker run -d -p 7700:7700 getmeili/meilisearch-enterprise:${MEILISEARCH_VERSION} meilisearch --master-key=masterKey --no-analytics
 
       - name: Test with pytest
         run: uv run pytest

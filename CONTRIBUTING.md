@@ -44,7 +44,7 @@ You can set up your local environment natively or using `docker`, check out the 
 
 Example of running all the checks with docker:
 ```bash
-docker-compose run --rm package bash -c "uv run mypy meilisearch && uv run pylint meilisearch tests && uv run pytest tests"
+docker-compose run --rm package bash -c "uv run mypy meilisearch && uv run ruff check && uv run ruff format --check && uv run pytest tests"
 ```
 
 To install dependencies:
@@ -55,22 +55,22 @@ uv sync
 
 ### Tests and Linter <!-- omit in toc -->
 
-Each PR should pass the tests, mypy type checking, and the linter to be accepted.
-Your PR also needs to be formatted using black and isort.
+Each PR should pass the tests, mypy type checking, linting, and formatting before it can be accepted.
 
 ```bash
 # Tests
 curl -L https://install.meilisearch.com | sh # download Meilisearch
 ./meilisearch --master-key=masterKey --no-analytics # run Meilisearch
 uv run pytest tests
+
 # MyPy
 uv run mypy meilisearch
+
 # Linter
-uv run pylint meilisearch tests
-# Black
-uv run black meilisearch tests
-# Isort
-uv run isort meilisearch tests
+uv run ruff check --fix .
+
+# Formatter
+uv run ruff format .
 ```
 
 Optionally tox can be used to run test on all supported version of Python, mypy, and linting.

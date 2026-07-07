@@ -1,18 +1,10 @@
 from __future__ import annotations
 
+from collections.abc import Generator, Mapping, MutableMapping, Sequence
 from datetime import datetime
 from typing import (
     TYPE_CHECKING,
     Any,
-    Dict,
-    Generator,
-    List,
-    Mapping,
-    MutableMapping,
-    Optional,
-    Sequence,
-    Type,
-    Union,
 )
 from urllib import parse
 from warnings import warn
@@ -50,7 +42,6 @@ if TYPE_CHECKING:
     from json import JSONEncoder
 
 
-# pylint: disable=too-many-public-methods, too-many-lines
 class Index:
     """
     Indexes routes wrapper.
@@ -63,10 +54,10 @@ class Index:
         self,
         config: Config,
         uid: str,
-        primary_key: Optional[str] = None,
-        created_at: Optional[Union[datetime, str]] = None,
-        updated_at: Optional[Union[datetime, str]] = None,
-        custom_headers: Optional[Mapping[str, str]] = None,
+        primary_key: str | None = None,
+        created_at: datetime | str | None = None,
+        updated_at: datetime | str | None = None,
+        custom_headers: Mapping[str, str] | None = None,
     ) -> None:
         """
         Parameters
@@ -86,7 +77,7 @@ class Index:
         self.created_at = iso_to_date_time(created_at)
         self.updated_at = iso_to_date_time(updated_at)
 
-    def delete(self, *, metadata: Optional[str] = None) -> TaskInfo:
+    def delete(self, *, metadata: str | None = None) -> TaskInfo:
         """Delete the index.
 
         Parameters
@@ -115,10 +106,10 @@ class Index:
 
     def update(
         self,
-        primary_key: Optional[str] = None,
-        new_uid: Optional[str] = None,
+        primary_key: str | None = None,
+        new_uid: str | None = None,
         *,
-        metadata: Optional[str] = None,
+        metadata: str | None = None,
     ) -> TaskInfo:
         """Update the index primary-key.
 
@@ -198,10 +189,10 @@ class Index:
     def create(
         config: Config,
         uid: str,
-        options: Optional[Mapping[str, Any]] = None,
-        custom_headers: Optional[Mapping[str, str]] = None,
+        options: Mapping[str, Any] | None = None,
+        custom_headers: Mapping[str, str] | None = None,
         *,
-        metadata: Optional[str] = None,
+        metadata: str | None = None,
     ) -> TaskInfo:
         """Create the index.
 
@@ -235,7 +226,7 @@ class Index:
 
         return TaskInfo(**task)
 
-    def get_tasks(self, parameters: Optional[MutableMapping[str, Any]] = None) -> TaskResults:
+    def get_tasks(self, parameters: MutableMapping[str, Any] | None = None) -> TaskResults:
         """Get all tasks of a specific index from the last one.
 
         Parameters
@@ -333,7 +324,7 @@ class Index:
         return IndexStats(**stats)
 
     @version_error_hint_message
-    def search(self, query: str, opt_params: Optional[Mapping[str, Any]] = None) -> Dict[str, Any]:
+    def search(self, query: str, opt_params: Mapping[str, Any] | None = None) -> dict[str, Any]:
         """Search in the index.
 
         https://www.meilisearch.com/docs/reference/api/search
@@ -379,9 +370,9 @@ class Index:
     def facet_search(
         self,
         facet_name: str,
-        facet_query: Optional[str] = None,
-        opt_params: Optional[Mapping[str, Any]] = None,
-    ) -> Dict[str, Any]:
+        facet_query: str | None = None,
+        opt_params: Mapping[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """
         Perform a facet search based on the given facet query and facet name.
 
@@ -409,7 +400,7 @@ class Index:
         )
 
     def get_document(
-        self, document_id: Union[str, int], parameters: Optional[MutableMapping[str, Any]] = None
+        self, document_id: str | int, parameters: MutableMapping[str, Any] | None = None
     ) -> Document:
         """Get one document with given document identifier.
 
@@ -441,9 +432,7 @@ class Index:
         return Document(document)
 
     @version_error_hint_message
-    def get_documents(
-        self, parameters: Optional[MutableMapping[str, Any]] = None
-    ) -> DocumentsResults:
+    def get_documents(self, parameters: MutableMapping[str, Any] | None = None) -> DocumentsResults:
         """Get a set of documents from the index.
 
         Parameters
@@ -481,7 +470,7 @@ class Index:
         )
         return DocumentsResults(response)
 
-    def get_similar_documents(self, parameters: Mapping[str, Any]) -> Dict[str, Any]:
+    def get_similar_documents(self, parameters: Mapping[str, Any]) -> dict[str, Any]:
         """Get the documents similar to a document.
 
         Parameters
@@ -510,11 +499,11 @@ class Index:
     def add_documents(
         self,
         documents: Sequence[Mapping[str, Any]],
-        primary_key: Optional[str] = None,
+        primary_key: str | None = None,
         *,
-        serializer: Optional[Type[JSONEncoder]] = None,
-        skip_creation: Optional[bool] = None,
-        metadata: Optional[str] = None,
+        serializer: type[JSONEncoder] | None = None,
+        skip_creation: bool | None = None,
+        metadata: str | None = None,
     ) -> TaskInfo:
         """Add documents to the index.
 
@@ -552,12 +541,12 @@ class Index:
         self,
         documents: Sequence[Mapping[str, Any]],
         batch_size: int = 1000,
-        primary_key: Optional[str] = None,
+        primary_key: str | None = None,
         *,
-        serializer: Optional[Type[JSONEncoder]] = None,
-        skip_creation: Optional[bool] = None,
-        metadata: Optional[str] = None,
-    ) -> List[TaskInfo]:
+        serializer: type[JSONEncoder] | None = None,
+        skip_creation: bool | None = None,
+        metadata: str | None = None,
+    ) -> list[TaskInfo]:
         """Add documents to the index in batches.
 
         Parameters
@@ -590,7 +579,7 @@ class Index:
             Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
 
-        tasks: List[TaskInfo] = []
+        tasks: list[TaskInfo] = []
 
         for document_batch in self._batch(documents, batch_size):
             task = self.add_documents(
@@ -607,11 +596,11 @@ class Index:
     def add_documents_json(
         self,
         str_documents: bytes,
-        primary_key: Optional[str] = None,
+        primary_key: str | None = None,
         *,
-        serializer: Optional[Type[JSONEncoder]] = None,
-        skip_creation: Optional[bool] = None,
-        metadata: Optional[str] = None,
+        serializer: type[JSONEncoder] | None = None,
+        skip_creation: bool | None = None,
+        metadata: str | None = None,
     ) -> TaskInfo:
         """Add documents to the index from a byte-encoded JSON string.
 
@@ -653,11 +642,11 @@ class Index:
     def add_documents_csv(
         self,
         str_documents: bytes,
-        primary_key: Optional[str] = None,
-        csv_delimiter: Optional[str] = None,
+        primary_key: str | None = None,
+        csv_delimiter: str | None = None,
         *,
-        skip_creation: Optional[bool] = None,
-        metadata: Optional[str] = None,
+        skip_creation: bool | None = None,
+        metadata: str | None = None,
     ) -> TaskInfo:
         """Add documents to the index from a byte-encoded CSV string.
 
@@ -698,10 +687,10 @@ class Index:
     def add_documents_ndjson(
         self,
         str_documents: bytes,
-        primary_key: Optional[str] = None,
+        primary_key: str | None = None,
         *,
-        skip_creation: Optional[bool] = None,
-        metadata: Optional[str] = None,
+        skip_creation: bool | None = None,
+        metadata: str | None = None,
     ) -> TaskInfo:
         """Add documents to the index from a byte-encoded NDJSON string.
 
@@ -739,13 +728,13 @@ class Index:
     def add_documents_raw(
         self,
         str_documents: bytes,
-        primary_key: Optional[str] = None,
-        content_type: Optional[str] = None,
-        csv_delimiter: Optional[str] = None,
+        primary_key: str | None = None,
+        content_type: str | None = None,
+        csv_delimiter: str | None = None,
         *,
-        serializer: Optional[Type[JSONEncoder]] = None,
-        skip_creation: Optional[bool] = None,
-        metadata: Optional[str] = None,
+        serializer: type[JSONEncoder] | None = None,
+        skip_creation: bool | None = None,
+        metadata: str | None = None,
     ) -> TaskInfo:
         """Add documents to the index from a byte-encoded string.
 
@@ -792,11 +781,11 @@ class Index:
     def update_documents(
         self,
         documents: Sequence[Mapping[str, Any]],
-        primary_key: Optional[str] = None,
+        primary_key: str | None = None,
         *,
-        serializer: Optional[Type[JSONEncoder]] = None,
-        skip_creation: Optional[bool] = None,
-        metadata: Optional[str] = None,
+        serializer: type[JSONEncoder] | None = None,
+        skip_creation: bool | None = None,
+        metadata: str | None = None,
     ) -> TaskInfo:
         """Update documents in the index.
 
@@ -833,10 +822,10 @@ class Index:
     def update_documents_ndjson(
         self,
         str_documents: str,
-        primary_key: Optional[str] = None,
+        primary_key: str | None = None,
         *,
-        skip_creation: Optional[bool] = None,
-        metadata: Optional[str] = None,
+        skip_creation: bool | None = None,
+        metadata: str | None = None,
     ) -> TaskInfo:
         """Update documents as a ndjson string in the index.
 
@@ -874,11 +863,11 @@ class Index:
     def update_documents_json(
         self,
         str_documents: str,
-        primary_key: Optional[str] = None,
+        primary_key: str | None = None,
         *,
-        serializer: Optional[Type[JSONEncoder]] = None,
-        skip_creation: Optional[bool] = None,
-        metadata: Optional[str] = None,
+        serializer: type[JSONEncoder] | None = None,
+        skip_creation: bool | None = None,
+        metadata: str | None = None,
     ) -> TaskInfo:
         """Update documents as a json string in the index.
 
@@ -920,11 +909,11 @@ class Index:
     def update_documents_csv(
         self,
         str_documents: str,
-        primary_key: Optional[str] = None,
-        csv_delimiter: Optional[str] = None,
+        primary_key: str | None = None,
+        csv_delimiter: str | None = None,
         *,
-        skip_creation: Optional[bool] = None,
-        metadata: Optional[str] = None,
+        skip_creation: bool | None = None,
+        metadata: str | None = None,
     ) -> TaskInfo:
         """Update documents as a csv string in the index.
 
@@ -965,13 +954,13 @@ class Index:
     def update_documents_raw(
         self,
         str_documents: str,
-        primary_key: Optional[str] = None,
-        content_type: Optional[str] = None,
-        csv_delimiter: Optional[str] = None,
+        primary_key: str | None = None,
+        content_type: str | None = None,
+        csv_delimiter: str | None = None,
         *,
-        serializer: Optional[Type[JSONEncoder]] = None,
-        skip_creation: Optional[bool] = None,
-        metadata: Optional[str] = None,
+        serializer: type[JSONEncoder] | None = None,
+        skip_creation: bool | None = None,
+        metadata: str | None = None,
     ) -> TaskInfo:
         """Update documents as a string in the index.
 
@@ -1019,12 +1008,12 @@ class Index:
         self,
         documents: Sequence[Mapping[str, Any]],
         batch_size: int = 1000,
-        primary_key: Optional[str] = None,
+        primary_key: str | None = None,
         *,
-        serializer: Optional[Type[JSONEncoder]] = None,
-        skip_creation: Optional[bool] = None,
-        metadata: Optional[str] = None,
-    ) -> List[TaskInfo]:
+        serializer: type[JSONEncoder] | None = None,
+        skip_creation: bool | None = None,
+        metadata: str | None = None,
+    ) -> list[TaskInfo]:
         """Update documents to the index in batches.
 
         Parameters
@@ -1071,9 +1060,7 @@ class Index:
 
         return tasks
 
-    def delete_document(
-        self, document_id: Union[str, int], *, metadata: Optional[str] = None
-    ) -> TaskInfo:
+    def delete_document(self, document_id: str | int, *, metadata: str | None = None) -> TaskInfo:
         """Delete one document from the index.
 
         Parameters
@@ -1103,12 +1090,10 @@ class Index:
     @version_error_hint_message
     def delete_documents(
         self,
-        ids: Optional[List[Union[str, int]]] = None,
+        ids: list[str | int] | None = None,
         *,
-        filter: Optional[  # pylint: disable=redefined-builtin
-            Union[str, List[Union[str, List[str]]]]
-        ] = None,
-        metadata: Optional[str] = None,
+        filter: str | list[str | list[str]] | None = None,
+        metadata: str | None = None,
     ) -> TaskInfo:
         """Delete multiple documents from the index by id or filter.
 
@@ -1137,6 +1122,7 @@ class Index:
             warn(
                 "The use of ids is depreciated and will be removed in the future",
                 DeprecationWarning,
+                stacklevel=2,
             )
             url = f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}/delete-batch"
             if metadata is not None:
@@ -1155,7 +1141,7 @@ class Index:
             )
         return TaskInfo(**response)
 
-    def delete_all_documents(self, *, metadata: Optional[str] = None) -> TaskInfo:
+    def delete_all_documents(self, *, metadata: str | None = None) -> TaskInfo:
         """Delete all documents from the index.
 
         Parameters
@@ -1182,7 +1168,7 @@ class Index:
 
     # GENERAL SETTINGS ROUTES
 
-    def get_settings(self) -> Dict[str, Any]:
+    def get_settings(self) -> dict[str, Any]:
         """Get settings of the index.
 
         https://www.meilisearch.com/docs/reference/api/settings
@@ -1222,7 +1208,7 @@ class Index:
         return settings
 
     def update_settings(
-        self, body: MutableMapping[str, Any], *, metadata: Optional[str] = None
+        self, body: MutableMapping[str, Any], *, metadata: str | None = None
     ) -> TaskInfo:
         """Update settings of the index.
 
@@ -1251,6 +1237,7 @@ class Index:
             - 'searchCutoffMs': Maximum search time in milliseconds
             - 'proximityPrecision': Precision for proximity ranking
             - 'localizedAttributes': Settings for localized attributes
+            - 'foreignKeys': List of foreign key relationships to other indexes
 
             More information:
             https://www.meilisearch.com/docs/reference/api/settings#update-settings
@@ -1281,7 +1268,7 @@ class Index:
 
         return TaskInfo(**task)
 
-    def reset_settings(self, *, metadata: Optional[str] = None) -> TaskInfo:
+    def reset_settings(self, *, metadata: str | None = None) -> TaskInfo:
         """Reset settings of the index to default values.
 
         https://www.meilisearch.com/docs/reference/api/settings#reset-settings
@@ -1311,7 +1298,7 @@ class Index:
 
     # RANKING RULES SUB-ROUTES
 
-    def get_ranking_rules(self) -> List[str]:
+    def get_ranking_rules(self) -> list[str]:
         """Get ranking rules of the index.
 
         Returns
@@ -1326,7 +1313,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.ranking_rules))
 
-    def update_ranking_rules(self, body: Union[List[str], None]) -> TaskInfo:
+    def update_ranking_rules(self, body: list[str] | None) -> TaskInfo:
         """Update ranking rules of the index.
 
         Parameters
@@ -1371,7 +1358,7 @@ class Index:
 
     # DISTINCT ATTRIBUTE SUB-ROUTES
 
-    def get_distinct_attribute(self) -> Optional[str]:
+    def get_distinct_attribute(self) -> str | None:
         """Get distinct attribute of the index.
 
         Returns
@@ -1431,7 +1418,7 @@ class Index:
 
     # SEARCHABLE ATTRIBUTES SUB-ROUTES
 
-    def get_searchable_attributes(self) -> List[str]:
+    def get_searchable_attributes(self) -> list[str]:
         """Get searchable attributes of the index.
 
         Returns
@@ -1446,7 +1433,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.searchable_attributes))
 
-    def update_searchable_attributes(self, body: Union[List[str], None]) -> TaskInfo:
+    def update_searchable_attributes(self, body: list[str] | None) -> TaskInfo:
         """Update searchable attributes of the index.
 
         Parameters
@@ -1491,7 +1478,7 @@ class Index:
 
     # DISPLAYED ATTRIBUTES SUB-ROUTES
 
-    def get_displayed_attributes(self) -> List[str]:
+    def get_displayed_attributes(self) -> list[str]:
         """Get displayed attributes of the index.
 
         Returns
@@ -1506,7 +1493,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.displayed_attributes))
 
-    def update_displayed_attributes(self, body: Union[List[str], None]) -> TaskInfo:
+    def update_displayed_attributes(self, body: list[str] | None) -> TaskInfo:
         """Update displayed attributes of the index.
 
         Parameters
@@ -1551,7 +1538,7 @@ class Index:
 
     # STOP WORDS SUB-ROUTES
 
-    def get_stop_words(self) -> List[str]:
+    def get_stop_words(self) -> list[str]:
         """Get stop words of the index.
 
         Returns
@@ -1566,7 +1553,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.stop_words))
 
-    def update_stop_words(self, body: Union[List[str], None]) -> TaskInfo:
+    def update_stop_words(self, body: list[str] | None) -> TaskInfo:
         """Update stop words of the index.
 
         Parameters
@@ -1611,7 +1598,7 @@ class Index:
 
     # SYNONYMS SUB-ROUTES
 
-    def get_synonyms(self) -> Dict[str, List[str]]:
+    def get_synonyms(self) -> dict[str, list[str]]:
         """Get synonyms of the index.
 
         Returns
@@ -1626,7 +1613,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.synonyms))
 
-    def update_synonyms(self, body: Union[Dict[str, List[str]], None]) -> TaskInfo:
+    def update_synonyms(self, body: dict[str, list[str]] | None) -> TaskInfo:
         """Update synonyms of the index.
 
         Parameters
@@ -1671,7 +1658,7 @@ class Index:
 
     # FILTERABLE ATTRIBUTES SUB-ROUTES
 
-    def get_filterable_attributes(self) -> List[str]:
+    def get_filterable_attributes(self) -> list[str]:
         """Get filterable attributes of the index.
 
         Returns
@@ -1686,7 +1673,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.filterable_attributes))
 
-    def update_filterable_attributes(self, body: Union[List[str], None]) -> TaskInfo:
+    def update_filterable_attributes(self, body: list[str] | None) -> TaskInfo:
         """Update filterable attributes of the index.
 
         Parameters
@@ -1729,9 +1716,67 @@ class Index:
 
         return TaskInfo(**task)
 
+    def get_foreign_keys(self) -> list[dict[str, str]]:
+        """Get foreign keys of the index.
+
+        Returns
+        -------
+        settings:
+            List containing the foreign keys of the index
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.http.get(self.__settings_url_for(self.config.paths.foreign_keys))
+
+    def update_foreign_keys(self, body: list[dict[str, str]] | None) -> TaskInfo:
+        """Update foreign keys of the index.
+
+        Parameters
+        ----------
+        body:
+            List containing the foreign keys, each a dict with 'foreignIndexUid' and 'fieldName'.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.put(self.__settings_url_for(self.config.paths.foreign_keys), body)
+
+        return TaskInfo(**task)
+
+    def reset_foreign_keys(self) -> TaskInfo:
+        """Reset foreign keys of the index to default values.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.delete(
+            self.__settings_url_for(self.config.paths.foreign_keys),
+        )
+
+        return TaskInfo(**task)
+
     # SORTABLE ATTRIBUTES SUB-ROUTES
 
-    def get_sortable_attributes(self) -> List[str]:
+    def get_sortable_attributes(self) -> list[str]:
         """Get sortable attributes of the index.
 
         Returns
@@ -1746,7 +1791,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.sortable_attributes))
 
-    def update_sortable_attributes(self, body: Union[List[str], None]) -> TaskInfo:
+    def update_sortable_attributes(self, body: list[str] | None) -> TaskInfo:
         """Update sortable attributes of the index.
 
         Parameters
@@ -1808,7 +1853,7 @@ class Index:
 
         return TypoTolerance(**typo_tolerance)
 
-    def update_typo_tolerance(self, body: Union[Mapping[str, Any], None]) -> TaskInfo:
+    def update_typo_tolerance(self, body: Mapping[str, Any] | None) -> TaskInfo:
         """Update typo tolerance of the index.
 
         Parameters
@@ -1868,7 +1913,7 @@ class Index:
 
         return Pagination(**pagination)
 
-    def update_pagination_settings(self, body: Union[Dict[str, Any], None]) -> TaskInfo:
+    def update_pagination_settings(self, body: dict[str, Any] | None) -> TaskInfo:
         """Update the pagination settings of the index.
 
         Parameters
@@ -1927,7 +1972,7 @@ class Index:
 
         return self.http.get(self.__settings_url_for(self.config.paths.facet_search))
 
-    def update_facet_search_settings(self, body: Union[bool, None]) -> TaskInfo:
+    def update_facet_search_settings(self, body: bool | None) -> TaskInfo:
         """Update the facet search settings of the index.
 
         Parameters
@@ -1980,7 +2025,7 @@ class Index:
 
         return Faceting(**faceting)
 
-    def update_faceting_settings(self, body: Union[Mapping[str, Any], None]) -> TaskInfo:
+    def update_faceting_settings(self, body: Mapping[str, Any] | None) -> TaskInfo:
         """Update the faceting settings of the index.
 
         Parameters
@@ -2024,7 +2069,7 @@ class Index:
 
     # USER DICTIONARY SUB-ROUTES
 
-    def get_dictionary(self) -> List[str]:
+    def get_dictionary(self) -> list[str]:
         """Get the dictionary entries of the index.
 
         Returns
@@ -2039,7 +2084,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.dictionary))
 
-    def update_dictionary(self, body: Union[List[str], None]) -> TaskInfo:
+    def update_dictionary(self, body: list[str] | None) -> TaskInfo:
         """Update the dictionary of the index.
 
         Parameters
@@ -2084,7 +2129,7 @@ class Index:
 
     # TEXT SEPARATOR SUB-ROUTES
 
-    def get_separator_tokens(self) -> List[str]:
+    def get_separator_tokens(self) -> list[str]:
         """Get the additional text separator tokens set on this index.
 
         Returns
@@ -2099,7 +2144,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.separator_tokens))
 
-    def get_non_separator_tokens(self) -> List[str]:
+    def get_non_separator_tokens(self) -> list[str]:
         """Get the list of disabled text separator tokens on this index.
 
         Returns
@@ -2114,7 +2159,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.non_separator_tokens))
 
-    def update_separator_tokens(self, body: Union[List[str], None]) -> TaskInfo:
+    def update_separator_tokens(self, body: list[str] | None) -> TaskInfo:
         """Update the additional separator tokens of the index.
 
         Parameters
@@ -2137,7 +2182,7 @@ class Index:
 
         return TaskInfo(**task)
 
-    def update_non_separator_tokens(self, body: Union[List[str], None]) -> TaskInfo:
+    def update_non_separator_tokens(self, body: list[str] | None) -> TaskInfo:
         """Update the disabled separator tokens of the index.
 
         Parameters
@@ -2244,7 +2289,7 @@ class Index:
 
         return Embedders(embedders=embedders)
 
-    def update_embedders(self, body: Union[MutableMapping[str, Any], None]) -> TaskInfo:
+    def update_embedders(self, body: MutableMapping[str, Any] | None) -> TaskInfo:
         """Update embedders of the index.
 
         Updates the embedder configuration for the index. The embedder configuration
@@ -2332,7 +2377,7 @@ class Index:
         """
         return self.http.get(self.__settings_url_for(self.config.paths.search_cutoff_ms))
 
-    def update_search_cutoff_ms(self, body: Union[int, None]) -> TaskInfo:
+    def update_search_cutoff_ms(self, body: int | None) -> TaskInfo:
         """Update the search cutoff in ms of the index.
 
         Parameters
@@ -2394,7 +2439,7 @@ class Index:
 
         return PrefixSearch[to_snake(prefix_search).upper()]
 
-    def update_prefix_search(self, body: Union[PrefixSearch, None]) -> TaskInfo:
+    def update_prefix_search(self, body: PrefixSearch | None) -> TaskInfo:
         """Update the prefix search settings of the index.
 
         Parameters
@@ -2445,7 +2490,7 @@ class Index:
         response = self.http.get(self.__settings_url_for(self.config.paths.proximity_precision))
         return ProximityPrecision[to_snake(response).upper()]
 
-    def update_proximity_precision(self, body: Union[ProximityPrecision, None]) -> TaskInfo:
+    def update_proximity_precision(self, body: ProximityPrecision | None) -> TaskInfo:
         """Update the proximity_precision of the index.
 
         Parameters
@@ -2490,7 +2535,7 @@ class Index:
 
     # LOCALIZED ATTRIBUTES SETTINGS
 
-    def get_localized_attributes(self) -> Union[List[LocalizedAttributes], None]:
+    def get_localized_attributes(self) -> list[LocalizedAttributes] | None:
         """Get the localized_attributes of the index.
 
         Returns
@@ -2510,9 +2555,7 @@ class Index:
 
         return [LocalizedAttributes(**attrs) for attrs in response]
 
-    def update_localized_attributes(
-        self, body: Union[List[Mapping[str, List[str]]], None]
-    ) -> TaskInfo:
+    def update_localized_attributes(self, body: list[Mapping[str, list[str]]] | None) -> TaskInfo:
         """Update the localized_attributes of the index.
 
         Parameters
@@ -2557,9 +2600,9 @@ class Index:
 
     def get_fields(
         self,
-        offset: Optional[int] = None,
-        limit: Optional[int] = None,
-        filter: Optional[MutableMapping[str, Any]] = None,  # pylint: disable=redefined-builtin
+        offset: int | None = None,
+        limit: int | None = None,
+        filter: MutableMapping[str, Any] | None = None,
     ) -> FieldsResults:
         """Get all fields of the index.
 
@@ -2600,7 +2643,7 @@ class Index:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        body: Dict[str, Any] = {}
+        body: dict[str, Any] = {}
         if offset is not None:
             body["offset"] = offset
         if limit is not None:
@@ -2628,10 +2671,10 @@ class Index:
 
     def _build_url(
         self,
-        primary_key: Optional[str] = None,
-        csv_delimiter: Optional[str] = None,
-        skip_creation: Optional[bool] = None,
-        metadata: Optional[str] = None,
+        primary_key: str | None = None,
+        csv_delimiter: str | None = None,
+        skip_creation: bool | None = None,
+        metadata: str | None = None,
     ) -> str:
         parameters = {}
         if primary_key:

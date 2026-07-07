@@ -1,5 +1,3 @@
-# pylint: disable=invalid-name
-
 from datetime import datetime
 
 import pytest
@@ -92,7 +90,7 @@ def test_index_with_any_uid(client):
 
 
 def test_index_with_none_uid(client):
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         client.index(None)
 
 
@@ -108,13 +106,13 @@ def test_get_index_with_valid_uid(client):
 
 def test_get_index_with_none_uid(client):
     """Test raising an exception if the index UID is None."""
-    with pytest.raises(Exception):
+    with pytest.raises(MeilisearchApiError):
         client.get_index(uid=None)
 
 
 def test_get_index_with_wrong_uid(client):
     """Tests get_index with an non-existing index."""
-    with pytest.raises(Exception):
+    with pytest.raises(MeilisearchApiError):
         client.get_index(uid="wrongUID")
 
 
@@ -126,12 +124,12 @@ def test_get_raw_index_with_valid_uid(client):
 
 
 def test_get_raw_index_with_none_uid(client):
-    with pytest.raises(Exception):
+    with pytest.raises(MeilisearchApiError):
         client.get_raw_index(uid=None)
 
 
 def test_get_raw_index_with_wrong_uid(client):
-    with pytest.raises(Exception):
+    with pytest.raises(MeilisearchApiError):
         client.get_raw_index(uid="wrongUID")
 
 
@@ -188,17 +186,17 @@ def test_delete_index_by_client(client):
     response = client.index(uid=common.INDEX_UID).delete()
     assert response.status == "enqueued"
     client.wait_for_task(response.task_uid)
-    with pytest.raises(Exception):
+    with pytest.raises(MeilisearchApiError):
         client.get_index(uid=common.INDEX_UID)
     response = client.index(uid=common.INDEX_UID2).delete()
     assert response.status == "enqueued"
     client.wait_for_task(response.task_uid)
-    with pytest.raises(Exception):
+    with pytest.raises(MeilisearchApiError):
         client.get_index(uid=common.INDEX_UID2)
     response = client.index(uid=common.INDEX_UID3).delete()
     assert response.status == "enqueued"
     client.wait_for_task(response.task_uid)
-    with pytest.raises(Exception):
+    with pytest.raises(MeilisearchApiError):
         client.get_index(uid=common.INDEX_UID3)
     assert len(client.get_indexes()["results"]) == 0
 

@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from collections.abc import Mapping, MutableMapping
 from datetime import datetime
 from time import sleep
-from typing import Any, Mapping, MutableMapping, Optional
+from typing import Any
 from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
@@ -19,7 +20,7 @@ class TaskHandler:
     https://www.meilisearch.com/docs/reference/api/tasks
     """
 
-    def __init__(self, config: Config, custom_headers: Optional[Mapping[str, str]] = None):
+    def __init__(self, config: Config, custom_headers: Mapping[str, str] | None = None):
         """Parameters
         ----------
             config: Config object containing permission and location of Meilisearch.
@@ -27,7 +28,7 @@ class TaskHandler:
         self.config = config
         self.http = HttpRequests(config, custom_headers)
 
-    def get_batches(self, parameters: Optional[MutableMapping[str, Any]] = None) -> BatchResults:
+    def get_batches(self, parameters: MutableMapping[str, Any] | None = None) -> BatchResults:
         """Get all task batches.
 
         Parameters
@@ -74,7 +75,7 @@ class TaskHandler:
         batch = self.http.get(f"{self.config.paths.batch}/{uid}")
         return Batch(**batch)
 
-    def get_tasks(self, parameters: Optional[MutableMapping[str, Any]] = None) -> TaskResults:
+    def get_tasks(self, parameters: MutableMapping[str, Any] | None = None) -> TaskResults:
         """Get all tasks.
 
         Parameters
@@ -123,7 +124,7 @@ class TaskHandler:
         return Task(**task)
 
     def cancel_tasks(
-        self, parameters: MutableMapping[str, Any], *, metadata: Optional[str] = None
+        self, parameters: MutableMapping[str, Any], *, metadata: str | None = None
     ) -> TaskInfo:
         """Cancel a list of enqueued or processing tasks.
 
@@ -154,7 +155,7 @@ class TaskHandler:
         return TaskInfo(**response)
 
     def delete_tasks(
-        self, parameters: MutableMapping[str, Any], *, metadata: Optional[str] = None
+        self, parameters: MutableMapping[str, Any], *, metadata: str | None = None
     ) -> TaskInfo:
         """Delete a list of enqueued or processing tasks.
         Parameters

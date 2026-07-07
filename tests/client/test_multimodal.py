@@ -1,6 +1,7 @@
 import base64
 import json
 import os
+import warnings
 from pathlib import Path
 
 import pytest
@@ -153,7 +154,10 @@ class TestMultimodalSearch:
                     client.wait_for_task(task.task_uid)
                 except MeilisearchApiError as exc:
                     # Index may already have been deleted by another test run; log and continue.
-                    print(f"Warning: failed to delete index {index.uid} during cleanup: {exc}")
+                    warnings.warn(
+                        f"failed to delete index {index.uid} during cleanup: {exc}",
+                        stacklevel=2,
+                    )
 
     @pytest.fixture(scope="class", autouse=True)
     def setup_index(self, request):
@@ -214,9 +218,9 @@ class TestMultimodalSearch:
 
         # Verify index is ready by checking stats
         stats = index.get_stats()
-        assert stats.number_of_documents == len(
-            MOVIES
-        ), f"Expected {len(MOVIES)} documents, got {stats.number_of_documents}"
+        assert stats.number_of_documents == len(MOVIES), (
+            f"Expected {len(MOVIES)} documents, got {stats.number_of_documents}"
+        )
 
         # Store for tests on the class
         # Use request.cls to ensure attributes are available on test instances

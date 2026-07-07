@@ -1,5 +1,3 @@
-# pylint: disable=invalid-name
-
 import datetime
 from copy import deepcopy
 
@@ -89,7 +87,7 @@ def test_generate_tenant_token_with_empty_search_rules_in_list(get_private_key):
     """Tests create a tenant token without search rules."""
     client = meilisearch.Client(BASE_URL, get_private_key.key)
 
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         client.generate_tenant_token(api_key_uid=get_private_key.uid, search_rules=[""])
 
 
@@ -97,7 +95,7 @@ def test_generate_tenant_token_without_search_rules_in_list(get_private_key):
     """Tests create a tenant token without search rules."""
     client = meilisearch.Client(BASE_URL, get_private_key.key)
 
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         client.generate_tenant_token(api_key_uid=get_private_key.uid, search_rules=[])
 
 
@@ -105,7 +103,7 @@ def test_generate_tenant_token_without_search_rules_in_dict(get_private_key):
     """Tests create a tenant token without search rules."""
     client = meilisearch.Client(BASE_URL, get_private_key.key)
 
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         client.generate_tenant_token(api_key_uid=get_private_key.uid, search_rules={})
 
 
@@ -113,7 +111,7 @@ def test_generate_tenant_token_with_empty_search_rules_in_dict(get_private_key):
     """Tests create a tenant token without search rules."""
     client = meilisearch.Client(BASE_URL, get_private_key.key)
 
-    with pytest.raises(Exception):
+    with pytest.raises(TypeError):
         client.generate_tenant_token(api_key_uid=get_private_key.uid, search_rules={""})
 
 
@@ -123,7 +121,7 @@ def test_generate_tenant_token_with_bad_expires_at(client, get_private_key):
 
     yesterday = datetime.datetime.now(tz=datetime.timezone.utc) + datetime.timedelta(days=-1)
 
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         client.generate_tenant_token(
             api_key_uid=get_private_key.uid, search_rules=["*"], expires_at=yesterday
         )
@@ -133,13 +131,13 @@ def test_generate_tenant_token_with_no_api_key(client):
     """Tests create a tenant token with no api key."""
     client = meilisearch.Client(BASE_URL)
 
-    with pytest.raises(Exception):
-        client.generate_tenant_token(search_rules=["*"])  # pylint: disable=no-value-for-parameter
+    with pytest.raises(TypeError):
+        client.generate_tenant_token(search_rules=["*"])
 
 
 def test_generate_tenant_token_with_no_uid(client, get_private_key):
     """Tests create a tenant token with no uid."""
     client = meilisearch.Client(BASE_URL, get_private_key.key)
 
-    with pytest.raises(Exception):
+    with pytest.raises(ValueError):
         client.generate_tenant_token(api_key_uid=None, search_rules=["*"])

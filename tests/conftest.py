@@ -1,7 +1,5 @@
-# pylint: disable=redefined-outer-name
 import json
 import os
-from typing import Optional
 
 import requests
 from pytest import fixture
@@ -10,6 +8,8 @@ import meilisearch
 from meilisearch.errors import MeilisearchApiError
 from meilisearch.models.embedders import OpenAiEmbedder, UserProvidedEmbedder
 from tests import common
+
+TEST_TASK_TIMEOUT_MS = 30_000
 
 
 @fixture(scope="session")
@@ -30,7 +30,7 @@ def _clear_indexes(meilisearch_client):
     indexes = meilisearch_client.get_indexes()
     for index in indexes["results"]:
         task = meilisearch_client.index(index.uid).delete()
-        meilisearch_client.wait_for_task(task.task_uid)
+        meilisearch_client.wait_for_task(task.task_uid, timeout_in_ms=TEST_TASK_TIMEOUT_MS)
 
 
 @fixture(autouse=True)
@@ -154,12 +154,12 @@ def nested_movies():
 
 
 @fixture(scope="function")
-def empty_index(client, index_uid: Optional[str] = None):
+def empty_index(client, index_uid: str | None = None):
     index_uid = index_uid if index_uid else common.INDEX_UID
 
     def index_maker(index_uid=index_uid):
         task = client.create_index(uid=index_uid)
-        client.wait_for_task(task.task_uid)
+        client.wait_for_task(task.task_uid, timeout_in_ms=TEST_TASK_TIMEOUT_MS)
         return client.get_index(uid=index_uid)
 
     return index_maker
@@ -383,5 +383,39 @@ def enable_dynamic_search_rules():
         f"{common.BASE_URL}/experimental-features",
         headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
         json={"dynamicSearchRules": False},
+        timeout=10,
+    )
+
+
+@fixture
+def enable_render_route():
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"renderRoute": True},
+        timeout=10,
+    )
+    yield
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"renderRoute": False},
+        timeout=10,
+    )
+
+
+@fixture
+def enable_foreign_keys():
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"foreignKeys": True},
+        timeout=10,
+    )
+    yield
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers={"Authorization": f"Bearer {common.MASTER_KEY}"},
+        json={"foreignKeys": False},
         timeout=10,
     )

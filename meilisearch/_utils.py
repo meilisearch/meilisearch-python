@@ -1,6 +1,5 @@
 from datetime import datetime
 from functools import lru_cache
-from typing import Union
 
 import pydantic
 
@@ -20,7 +19,7 @@ def is_pydantic_2() -> bool:
         return False
 
 
-def iso_to_date_time(iso_date: Union[datetime, str, None]) -> Union[datetime, None]:
+def iso_to_date_time(iso_date: datetime | str | None) -> datetime | None:
     """Handle conversion of iso string to datetime.
 
     The microseconds from Meilisearch are sometimes too long for python to convert so this

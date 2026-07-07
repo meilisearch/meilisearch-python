@@ -1,5 +1,3 @@
-# pylint: disable=redefined-outer-name
-
 import pytest
 
 from meilisearch.models.embedders import (
@@ -211,7 +209,7 @@ def test_composite_embedder_format(empty_index):
     }
 
     response = index.update_embedders(composite_embedder)
-    update = index.wait_for_task(response.task_uid)
+    update = index.wait_for_task(response.task_uid, timeout_in_ms=60000)
     embedders = index.get_embedders()
     assert update.status == "succeeded"
 
@@ -223,12 +221,6 @@ def test_composite_embedder_format(empty_index):
     assert isinstance(embedders.embedders["composite"].indexing_embedder, HuggingFaceEmbedder)
 
     # ensure search_embedder has no document_template
-    assert getattr(embedders.embedders["composite"].search_embedder, "document_template") is None
-    assert (
-        getattr(
-            embedders.embedders["composite"].search_embedder,
-            "document_template_max_bytes",
-        )
-        is None
-    )
-    assert getattr(embedders.embedders["composite"].indexing_embedder, "document_template")
+    assert embedders.embedders["composite"].search_embedder.document_template is None
+    assert embedders.embedders["composite"].search_embedder.document_template_max_bytes is None
+    assert embedders.embedders["composite"].indexing_embedder.document_template

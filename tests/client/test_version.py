@@ -1,5 +1,3 @@
-# pylint: disable=invalid-name
-
 import re
 
 from meilisearch.version import __version__, qualified_version

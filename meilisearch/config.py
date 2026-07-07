@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Optional, Tuple
-
 
 class Config:
     """
@@ -30,6 +28,7 @@ class Config:
         synonyms = "synonyms"
         accept_new_fields = "accept-new-fields"
         filterable_attributes = "filterable-attributes"
+        foreign_keys = "foreign-keys"
         sortable_attributes = "sortable-attributes"
         typo_tolerance = "typo-tolerance"
         dumps = "dumps"
@@ -52,13 +51,14 @@ class Config:
         webhooks = "webhooks"
         dynamic_search_rules = "dynamic-search-rules"
         export = "export"
+        render_template = "render-template"
 
     def __init__(
         self,
         url: str,
-        api_key: Optional[str] = None,
-        timeout: Optional[int] = None,
-        client_agents: Optional[Tuple[str, ...]] = None,
+        api_key: str | None = None,
+        timeout: int | None = None,
+        client_agents: tuple[str, ...] | None = None,
     ) -> None:
         """
         Parameters
