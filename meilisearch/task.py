@@ -9,8 +9,7 @@ from urllib import parse
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
 from meilisearch.errors import MeilisearchTimeoutError
-from meilisearch.models.task import (Batch, BatchResults, Task, TaskInfo,
-                                     TaskResults)
+from meilisearch.models.task import Batch, BatchResults, Task, TaskInfo, TaskResults
 
 
 class TaskHandler:

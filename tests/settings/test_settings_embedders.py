@@ -1,8 +1,12 @@
 import pytest
 
-from meilisearch.models.embedders import (CompositeEmbedder,
-                                          HuggingFaceEmbedder, OpenAiEmbedder,
-                                          PoolingType, UserProvidedEmbedder)
+from meilisearch.models.embedders import (
+    CompositeEmbedder,
+    HuggingFaceEmbedder,
+    OpenAiEmbedder,
+    PoolingType,
+    UserProvidedEmbedder,
+)
 
 
 def test_get_default_embedders(empty_index):

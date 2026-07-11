@@ -7,18 +7,20 @@ import hmac
 import json
 import re
 from collections.abc import Iterator, Mapping, MutableMapping, Sequence
-from typing import Any, Dict, Optional, Union
+from typing import Any
 from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
-from meilisearch.errors import MeilisearchApiError  # noqa: F401
-from meilisearch.errors import MeilisearchCommunicationError, MeilisearchError
+from meilisearch.errors import (
+    MeilisearchApiError,  # noqa: F401
+    MeilisearchCommunicationError,
+    MeilisearchError,
+)
 from meilisearch.index import Index
 from meilisearch.models.index import SizeFormat
 from meilisearch.models.key import Key, KeysResults
-from meilisearch.models.task import (Batch, BatchResults, Task, TaskInfo,
-                                     TaskResults)
+from meilisearch.models.task import Batch, BatchResults, Task, TaskInfo, TaskResults
 from meilisearch.models.webhook import Webhook, WebhooksResults
 from meilisearch.task import TaskHandler
 
@@ -346,9 +348,9 @@ class Client:
     def get_all_stats(
         self,
         *,
-        show_internal_database_sizes: Optional[bool] = None,
-        size_format: Optional[Union[SizeFormat, str]] = None,
-    ) -> Dict[str, Any]:
+        show_internal_database_sizes: bool | None = None,
+        size_format: SizeFormat | str | None = None,
+    ) -> dict[str, Any]:
         """Get all stats of Meilisearch
 
         Get information about database size and all indexes
@@ -373,7 +375,7 @@ class Client:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        params: Dict[str, Any] = {}
+        params: dict[str, Any] = {}
         if show_internal_database_sizes is not None:
             params["showInternalDatabaseSizes"] = str(show_internal_database_sizes).lower()
         if size_format is not None:

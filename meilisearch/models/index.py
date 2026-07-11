@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections.abc import Iterator
 from enum import Enum
-from typing import Any, Dict, Optional
+from typing import Any
 
 from camel_converter.pydantic_base import CamelBase
 from pydantic import ConfigDict, field_validator
@@ -36,7 +36,7 @@ class IndexStats(CamelBase):
     number_of_documents: int
     is_indexing: bool
     field_distribution: FieldDistribution
-    internal_database_sizes: Optional[Dict[str, Any]] = None
+    internal_database_sizes: dict[str, Any] | None = None
 
     @field_validator("field_distribution", mode="before")
     @classmethod
