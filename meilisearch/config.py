@@ -28,6 +28,7 @@ class Config:
         synonyms = "synonyms"
         accept_new_fields = "accept-new-fields"
         filterable_attributes = "filterable-attributes"
+        foreign_keys = "foreign-keys"
         sortable_attributes = "sortable-attributes"
         typo_tolerance = "typo-tolerance"
         dumps = "dumps"

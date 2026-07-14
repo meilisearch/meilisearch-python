@@ -13,7 +13,6 @@ from urllib import parse
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
 from meilisearch.errors import (
-    MeilisearchApiError,  # noqa: F401
     MeilisearchCommunicationError,
     MeilisearchError,
 )

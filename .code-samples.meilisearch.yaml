@@ -208,6 +208,21 @@ update_filterable_attributes_1: |-
   ])
 reset_filterable_attributes_1: |-
   client.index('movies').reset_filterable_attributes()
+get_foreign_keys_setting_1: |-
+  client.index('books').get_foreign_keys()
+update_foreign_keys_setting_1: |-
+  client.index('books').update_foreign_keys([
+    {
+      'foreignIndexUid': 'authors',
+      'fieldName': 'author'
+    },
+    {
+      'foreignIndexUid': 'authors',
+      'fieldName': 'related_authors'
+    }
+  ])
+reset_foreign_keys_setting_1: |-
+  client.index('books').reset_foreign_keys()
 get_searchable_attributes_1: |-
   client.index('movies').get_searchable_attributes()
 update_searchable_attributes_1: |-
