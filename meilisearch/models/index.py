@@ -25,12 +25,18 @@ class FieldDistribution:
         return iter(self.__dict__.items())
 
 
+class SizeFormat(str, Enum):
+    RAW = "raw"
+    HUMAN = "human"
+
+
 class IndexStats(CamelBase):
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
     number_of_documents: int
     is_indexing: bool
     field_distribution: FieldDistribution
+    internal_database_sizes: dict[str, Any] | None = None
 
     @field_validator("field_distribution", mode="before")
     @classmethod

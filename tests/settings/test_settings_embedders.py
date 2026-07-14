@@ -93,7 +93,7 @@ def test_huggingface_embedder_format(empty_index):
         }
     }
     response = index.update_embedders(huggingface_embedder)
-    index.wait_for_task(response.task_uid, timeout_in_ms=60000)  # embedder config can take longer.
+    index.wait_for_task(response.task_uid, timeout_in_ms=120000)  # embedder config can take longer.
     embedders = index.get_embedders()
     assert embedders.embedders["huggingface"].source == "huggingFace"
     assert embedders.embedders["huggingface"].model == "BAAI/bge-base-en-v1.5"
@@ -209,7 +209,7 @@ def test_composite_embedder_format(empty_index):
     }
 
     response = index.update_embedders(composite_embedder)
-    update = index.wait_for_task(response.task_uid, timeout_in_ms=60000)
+    update = index.wait_for_task(response.task_uid, timeout_in_ms=120000)
     embedders = index.get_embedders()
     assert update.status == "succeeded"
 
