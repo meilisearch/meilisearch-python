@@ -48,6 +48,7 @@ class Config:
         edit = "edit"
         network = "network"
         experimental_features = "experimental-features"
+        dynamic_search_rules = "dynamic-search-rules"
         webhooks = "webhooks"
         export = "export"
         render_template = "render-template"

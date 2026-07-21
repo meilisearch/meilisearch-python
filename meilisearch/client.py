@@ -19,6 +19,7 @@ from meilisearch.errors import (
 from meilisearch.index import Index
 from meilisearch.models.index import SizeFormat
 from meilisearch.models.key import Key, KeysResults
+from meilisearch.models.search_rule import SearchRule, SearchRulesResults
 from meilisearch.models.task import Batch, BatchResults, Task, TaskInfo, TaskResults
 from meilisearch.models.webhook import Webhook, WebhooksResults
 from meilisearch.task import TaskHandler
@@ -647,6 +648,117 @@ class Client:
         """
         response = self.http.delete(f"{self.config.paths.webhooks}/{webhook_uuid}")
         return response.status_code
+
+    # DYNAMIC SEARCH RULES ROUTES
+
+    def get_dynamic_search_rules(
+        self, parameters: Mapping[str, Any] | None = None
+    ) -> SearchRulesResults:
+        """Get dynamic search rules with optional pagination and filtering.
+
+        Parameters
+        ----------
+        parameters (optional):
+            Pagination and filter parameters accepted by the list dynamic search rules route.
+
+        Returns
+        -------
+        search_rules:
+            SearchRulesResults containing the matching rules and pagination information.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process the request.
+        """
+        if parameters is None:
+            parameters = {}
+
+        search_rules = self.http.post(self.config.paths.dynamic_search_rules, parameters)
+        return SearchRulesResults(**search_rules)
+
+    def get_dynamic_search_rule(self, uid: str) -> SearchRule:
+        """Get a dynamic search rule by UID.
+
+        Parameters
+        ----------
+        uid:
+            UID of the dynamic search rule.
+
+        Returns
+        -------
+        search_rule:
+            The requested dynamic search rule.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process the request.
+        """
+        search_rule = self.http.get(f"{self.config.paths.dynamic_search_rules}/{uid}")
+        return SearchRule(**search_rule)
+
+    def update_dynamic_search_rule(
+        self,
+        uid: str,
+        options: Mapping[str, Any],
+        *,
+        metadata: str | None = None,
+    ) -> TaskInfo:
+        """Update a dynamic search rule, or create it when it doesn't exist.
+
+        Parameters
+        ----------
+        uid:
+            UID of the dynamic search rule.
+        options:
+            Fields to update on the dynamic search rule.
+        metadata (optional):
+            Custom metadata string to attach to the task.
+
+        Returns
+        -------
+        task_info:
+            Information about the enqueued update task.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process the request.
+        """
+        url = f"{self.config.paths.dynamic_search_rules}/{uid}"
+        if metadata is not None:
+            url += f"?{parse.urlencode({'customMetadata': metadata})}"
+
+        task = self.http.patch(url, options)
+        return TaskInfo(**task)
+
+    def delete_dynamic_search_rule(self, uid: str, *, metadata: str | None = None) -> TaskInfo:
+        """Delete a dynamic search rule.
+
+        Parameters
+        ----------
+        uid:
+            UID of the dynamic search rule.
+        metadata (optional):
+            Custom metadata string to attach to the task.
+
+        Returns
+        -------
+        task_info:
+            Information about the enqueued deletion task.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process the request.
+        """
+        url = f"{self.config.paths.dynamic_search_rules}/{uid}"
+        if metadata is not None:
+            url += f"?{parse.urlencode({'customMetadata': metadata})}"
+
+        task = self.http.delete(url)
+        return TaskInfo(**task)
 
     def get_version(self) -> dict[str, str]:
         """Get version Meilisearch
