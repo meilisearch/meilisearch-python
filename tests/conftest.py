@@ -386,3 +386,30 @@ def enable_foreign_keys():
         json={"foreignKeys": False},
         timeout=10,
     )
+
+
+@fixture
+def enable_dynamic_search_rules(client):
+    headers = {"Authorization": f"Bearer {common.MASTER_KEY}"}
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers=headers,
+        json={"dynamicSearchRules": True},
+        timeout=10,
+    )
+    yield
+
+    response = requests.delete(
+        f"{common.BASE_URL}/dynamic-search-rules",
+        headers=headers,
+        timeout=10,
+    )
+    if response.status_code == 202:
+        client.wait_for_task(response.json()["taskUid"], timeout_in_ms=TEST_TASK_TIMEOUT_MS)
+
+    requests.patch(
+        f"{common.BASE_URL}/experimental-features",
+        headers=headers,
+        json={"dynamicSearchRules": False},
+        timeout=10,
+    )
