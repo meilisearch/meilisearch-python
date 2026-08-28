@@ -63,22 +63,22 @@ pip3 install meilisearch
 ```python
 import meilisearch
 
-client = meilisearch.Client('http://127.0.0.1:7700', 'masterKey')
+client = meilisearch.Client("http://127.0.0.1:7700", "masterKey")
 
 # An index is where the documents are stored.
-index = client.index('movies')
+index = client.index("movies")
 
 documents = [
-      { 'id': 1, 'title': 'Carol', 'genres': ['Romance', 'Drama'] },
-      { 'id': 2, 'title': 'Wonder Woman', 'genres': ['Action', 'Adventure'] },
-      { 'id': 3, 'title': 'Life of Pi', 'genres': ['Adventure', 'Drama'] },
-      { 'id': 4, 'title': 'Mad Max: Fury Road', 'genres': ['Adventure', 'Science Fiction'] },
-      { 'id': 5, 'title': 'Moana', 'genres': ['Fantasy', 'Action']},
-      { 'id': 6, 'title': 'Philadelphia', 'genres': ['Drama'] },
+    {"id": 1, "title": "Carol", "genres": ["Romance", "Drama"]},
+    {"id": 2, "title": "Wonder Woman", "genres": ["Action", "Adventure"]},
+    {"id": 3, "title": "Life of Pi", "genres": ["Adventure", "Drama"]},
+    {"id": 4, "title": "Mad Max: Fury Road", "genres": ["Adventure", "Science Fiction"]},
+    {"id": 5, "title": "Moana", "genres": ["Fantasy", "Action"]},
+    {"id": 6, "title": "Philadelphia", "genres": ["Drama"]},
 ]
 
 # If the index 'movies' does not exist, Meilisearch creates it when you first add the documents.
-index.add_documents(documents) # => { "uid": 0 }
+index.add_documents(documents)  # => { "uid": 0 }
 ```
 
 With the task `uid`, you can check the status (`enqueued`, `canceled`, `processing`, `succeeded` or `failed`) of your documents addition using the [task](https://www.meilisearch.com/docs/reference/api/tasks#get-tasks).
@@ -87,7 +87,7 @@ With the task `uid`, you can check the status (`enqueued`, `canceled`, `processi
 
 ```python
 # Meilisearch is typo-tolerant:
-index.search('caorl')
+index.search("caorl")
 ```
 
 Output:
@@ -114,10 +114,10 @@ All the supported options are described in the [search parameters](https://www.m
 
 ```python
 index.search(
-  'phil',
-  {
-    'attributesToHighlight': ['*'],
-  }
+    "phil",
+    {
+        "attributesToHighlight": ["*"],
+    },
 )
 ```
 
@@ -149,12 +149,7 @@ Hybrid search combines traditional keyword search with semantic search for more 
 
 ```python
 # Using hybrid search with the search method
-index.search(
-  'action movie',
-  {
-    "hybrid": {"semanticRatio": 0.5, "embedder": "default"}
-  }
-)
+index.search("action movie", {"hybrid": {"semanticRatio": 0.5, "embedder": "default"}})
 ```
 
 The `semanticRatio` parameter (between 0 and 1) controls the balance between keyword search and semantic search:
@@ -169,10 +164,7 @@ The `embedder` parameter specifies which configured embedder to use for the sema
 If you want to enable filtering, you must add your attributes to the `filterableAttributes` index setting.
 
 ```py
-index.update_filterable_attributes([
-  'id',
-  'genres'
-])
+index.update_filterable_attributes(["id", "genres"])
 ```
 
 #### Custom Serializer for documents <!-- omit in toc -->
@@ -209,12 +201,7 @@ Note that Meilisearch will rebuild your index whenever you update `filterableAtt
 Then, you can perform the search:
 
 ```py
-index.search(
-  'wonder',
-  {
-    'filter': ['id > 1 AND genres = Action']
-  }
-)
+index.search("wonder", {"filter": ["id > 1 AND genres = Action"]})
 ```
 
 ```json
@@ -250,10 +237,12 @@ pip install meilisearch-python-sdk
 import asyncio
 from meilisearch_python_sdk import AsyncClient
 
+
 async def main():
     async with AsyncClient("http://127.0.0.1:7700", "masterKey") as client:
         index = client.index("movies")
         await index.search("wonder woman")
+
 
 asyncio.run(main())
 ```

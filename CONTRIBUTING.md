@@ -91,7 +91,7 @@ Import `pdb` in your file and use it:
 import pdb
 
 ...
-pdb.set_trace() # create a break point
+pdb.set_trace()  # create a break point
 ...
 ```
 

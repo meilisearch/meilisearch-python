@@ -19,6 +19,10 @@ def test_get_stats_default(index_with_documents):
     assert response.number_of_documents == 31
     assert hasattr(response.field_distribution, "genre")
     assert response.field_distribution.genre == 11
+    assert isinstance(response.index_size, int)
+    assert isinstance(response.used_index_size, int)
+    assert response.index_size > 0
+    assert response.used_index_size > 0
 
 
 def test_get_stats_with_internal_database_sizes(index_with_documents):
@@ -43,6 +47,10 @@ def test_get_stats_with_size_format(index_with_documents):
         isinstance(value, str) and HUMAN_SIZE_PATTERN.match(value)
         for value in response.internal_database_sizes.values()
     )
+    assert isinstance(response.index_size, str)
+    assert isinstance(response.used_index_size, str)
+    assert HUMAN_SIZE_PATTERN.match(response.index_size)
+    assert HUMAN_SIZE_PATTERN.match(response.used_index_size)
 
 
 def test_get_stats_with_all_params(index_with_documents):

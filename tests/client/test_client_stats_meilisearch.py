@@ -18,6 +18,8 @@ def test_get_all_stats(client):
     assert "indexes" in response
     assert "indexUID" in response["indexes"]
     assert "indexUID2" in response["indexes"]
+    assert "indexSize" in response["indexes"]["indexUID"]
+    assert "usedIndexSize" in response["indexes"]["indexUID"]
 
 
 @pytest.mark.usefixtures("indexes_sample")
@@ -57,6 +59,12 @@ def test_get_all_stats_with_size_format(client):
                 isinstance(value, str) and HUMAN_SIZE_PATTERN.match(value)
                 for value in index_stats["internalDatabaseSizes"].values()
             )
+    index_stats = response["indexes"]["indexUID"]
+    assert "indexSize" in index_stats and "usedIndexSize" in index_stats
+    assert isinstance(index_stats["indexSize"], str)
+    assert isinstance(index_stats["usedIndexSize"], str)
+    assert HUMAN_SIZE_PATTERN.match(index_stats["indexSize"])
+    assert HUMAN_SIZE_PATTERN.match(index_stats["usedIndexSize"])
 
 
 @pytest.mark.usefixtures("indexes_sample")

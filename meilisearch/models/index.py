@@ -37,6 +37,8 @@ class IndexStats(CamelBase):
     is_indexing: bool
     field_distribution: FieldDistribution
     internal_database_sizes: dict[str, Any] | None = None
+    index_size: int | str | None = None
+    used_index_size: int | str | None = None
 
     @field_validator("field_distribution", mode="before")
     @classmethod
