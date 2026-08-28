@@ -1,6 +1,7 @@
 """Tests for dynamic search rule endpoints."""
 
 from copy import deepcopy
+from datetime import datetime
 
 import pytest
 
@@ -38,6 +39,7 @@ def test_get_dynamic_search_rules_with_pagination_and_filters(client):
 
     all_rules = client.get_dynamic_search_rules()
     assert all_rules.total == 2
+    assert all(isinstance(rule.last_updated_at, datetime) for rule in all_rules.results)
 
     first_page = client.get_dynamic_search_rules({"offset": 0, "limit": 1})
     assert first_page.offset == 0
@@ -61,6 +63,7 @@ def test_get_dynamic_search_rule(client):
     assert rule.description == RULE_OPTIONS["description"]
     assert rule.precedence == RULE_OPTIONS["precedence"]
     assert rule.actions == RULE_OPTIONS["actions"]
+    assert isinstance(rule.last_updated_at, datetime)
 
 
 def test_update_dynamic_search_rule_creates_rule_and_returns_task(client):
@@ -93,6 +96,23 @@ def test_update_dynamic_search_rule_updates_rule_and_returns_task(client):
     assert updated_rule.description == "Black Friday and Cyber Monday"
     assert updated_rule.precedence == 5
     assert updated_rule.actions == RULE_OPTIONS["actions"]
+
+
+def test_update_dynamic_search_rule_with_filter_condition(client):
+    options = deepcopy(RULE_OPTIONS)
+    options["conditions"] = {
+        "filter": {
+            "values": {
+                "color": "red",
+                "category": "shirt",
+            }
+        }
+    }
+
+    _upsert_and_wait(client, "filtered-products", options)
+
+    rule = client.get_dynamic_search_rule("filtered-products")
+    assert rule.conditions == options["conditions"]
 
 
 def test_delete_dynamic_search_rule_returns_task(client):
