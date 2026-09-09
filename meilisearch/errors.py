@@ -3,9 +3,12 @@ from __future__ import annotations
 import json
 from collections.abc import Callable
 from functools import wraps
-from typing import Any, TypeVar
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from requests import Response
+
+if TYPE_CHECKING:
+    from meilisearch.models.task import Task
 
 T = TypeVar("T")
 
@@ -65,6 +68,20 @@ class MeilisearchTimeoutError(MeilisearchError):
 
     def __str__(self) -> str:  # pragma: no cover
         return f"MeilisearchTimeoutError, {self.message}"
+
+
+class MeilisearchTaskFailedError(MeilisearchError):
+    """Raised when a task reaches the ``failed`` status and raising is enabled."""
+
+    def __init__(self, task: "Task") -> None:
+        self.task = task
+        self.uid = task.uid
+        self.error = task.error
+        message = (task.error or {}).get("message") or f"Task {task.uid} failed"
+        super().__init__(message)
+
+    def __str__(self) -> str:  # pragma: no cover
+        return f"MeilisearchTaskFailedError. {self.message}"
 
 
 def version_error_hint_message(func: Callable[..., T]) -> Callable[..., T]:
