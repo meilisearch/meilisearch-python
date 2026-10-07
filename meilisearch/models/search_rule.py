@@ -11,7 +11,7 @@ class SearchRule(CamelBase):
     precedence: int | None = None
     active: bool
     conditions: dict[str, Any]
-    actions: list[dict[str, Any]]
+    actions: dict[str, list[dict[str, Any]]]
 
 
 class SearchRulesResults(CamelBase):

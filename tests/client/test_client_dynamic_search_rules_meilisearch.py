@@ -14,12 +14,11 @@ RULE_OPTIONS = {
     "precedence": 10,
     "active": True,
     "conditions": {"query": {"words": "black friday"}},
-    "actions": [
-        {
-            "selector": {"indexUid": "products", "id": "123"},
-            "action": {"type": "pin", "position": 1},
-        }
-    ],
+    "actions": {
+        "pin": [
+            {"id": "123", "position": 1, "indexUid": "products"},
+        ],
+    },
 }
 
 
