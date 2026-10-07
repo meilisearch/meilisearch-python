@@ -628,12 +628,11 @@ patch_dynamic_search_rule_1: |-
         'end': '2025-11-28T23:59:59Z'
       }
     },
-    'actions': [
-      {
-        'selector': {'indexUid': 'products', 'id': '123'},
-        'action': {'type': 'pin', 'position': 1}
-      }
-    ]
+    'actions': {
+      'pin': [
+        {'indexUid': 'products', 'id': '123', 'position': 1}
+      ]
+    }
   })
 delete_dynamic_search_rule_1: |-
   client.delete_dynamic_search_rule('black-friday')
