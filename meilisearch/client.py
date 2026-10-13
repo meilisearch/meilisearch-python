@@ -1,1 +1,1 @@
-$(cat /tmp/meili/client.py)
+PLACEHOLDER_WILL_BE_REPLACED
