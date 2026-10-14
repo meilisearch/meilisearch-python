@@ -259,6 +259,10 @@ class Client:
             https://www.meilisearch.com/docs/reference/api/network
             Each query may include showPerformanceDetails to request a performance
             trace in the response (results[].performanceDetails, returned as raw data).
+            Each query may include inlineRule to preview a dynamic search rule
+            (Meilisearch Enterprise, dynamicSearchRules). Create the client with
+            custom_headers={"Meili-Include-Metadata": "true"} to include
+            metadata.inlineRuleConditionOutcomes on queries that send inlineRule.
         federation: (optional):
             Dictionary containing offset, limit, and optionally showPerformanceDetails
             for federated search (top-level performanceDetails in the response).
