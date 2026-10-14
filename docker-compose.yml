@@ -1,6 +1,9 @@
 services:
   package:
-    build: .
+    build:
+      context: .
+      dockerfile: docker/python.Dockerfile
+    image: meilisearch-python-dev
     tty: true
     stdin_open: true
     working_dir: /home/package
@@ -8,15 +11,19 @@ services:
       - MEILISEARCH_URL=http://meilisearch:7700
     depends_on:
       - meilisearch
-    links:
-      - meilisearch
     volumes:
       - ./:/home/package
+      # Hide the host virtualenv. Native wheels stay in this volume.
+      - package_venv:/home/package/.venv
 
   meilisearch:
-    image: getmeili/meilisearch-enterprise:latest
+    image: getmeili/meilisearch-enterprise:v1.55
     ports:
-      - "7700"
+      - "7700:7700"
     environment:
       - MEILI_MASTER_KEY=masterKey
       - MEILI_NO_ANALYTICS=true
+      - MEILI_EXPERIMENTAL_ALLOWED_IP_NETWORKS=any
+
+volumes:
+  package_venv:
