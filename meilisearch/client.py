@@ -999,6 +999,8 @@ class Client:
         uid: int,
         timeout_in_ms: int = 5000,
         interval_in_ms: int = 50,
+        *,
+        raise_on_failure: bool = False,
     ) -> Task:
         """Wait until Meilisearch processes a task until it fails or succeeds.
 
@@ -1010,6 +1012,9 @@ class Client:
             Time the method should wait before raising a MeilisearchTimeoutError
         interval_in_ms (optional):
             Time interval the method should wait (sleep) between requests
+        raise_on_failure (optional):
+            If True, raise a MeilisearchTaskFailedError when the task reaches the
+            ``failed`` status. Defaults to False.
 
         Returns
         -------
@@ -1020,8 +1025,16 @@ class Client:
         ------
         MeilisearchTimeoutError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        MeilisearchTaskFailedError
+            Raised when ``raise_on_failure`` is True and the task reaches the
+            ``failed`` status. The exception retains the failed Task and its error mapping.
         """
-        return self.task_handler.wait_for_task(uid, timeout_in_ms, interval_in_ms)
+        return self.task_handler.wait_for_task(
+            uid,
+            timeout_in_ms,
+            interval_in_ms,
+            raise_on_failure=raise_on_failure,
+        )
 
     def get_batches(self, parameters: MutableMapping[str, Any] | None = None) -> BatchResults:
         """Get all batches.
