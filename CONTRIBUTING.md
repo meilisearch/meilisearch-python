@@ -44,7 +44,7 @@ You can set up your local environment natively or using `docker`, check out the 
 
 Example of running all the checks with docker:
 ```bash
-docker-compose run --rm package bash -c "uv run mypy meilisearch && uv run ruff check && uv run ruff format --check && uv run pytest tests"
+docker compose run --rm package bash -c "uv sync && uv run mypy meilisearch && uv run ruff check && uv run ruff format --check && uv run pytest tests"
 ```
 
 To install dependencies:
