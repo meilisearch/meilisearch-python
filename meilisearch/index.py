@@ -367,12 +367,19 @@ class Index:
             - offset: Number of documents to skip
             - showPerformanceDetails: If true, the response includes a
               performanceDetails object (raw data; fields may change in future API versions)
+            - inlineRule: Dynamic search rule applied only to this query.
+              Requires Meilisearch Enterprise and the dynamicSearchRules
+              experimental feature. Create the client with
+              custom_headers={"Meili-Include-Metadata": "true"} to include
+              metadata.inlineRuleConditionOutcomes in the response.
 
         Returns
         -------
         results:
             Dictionary with hits, offset, limit, processingTime and initial query.
             When showPerformanceDetails is true, may include a performanceDetails object.
+            When Meili-Include-Metadata is true, may include metadata, with
+            inlineRuleConditionOutcomes when the query sends inlineRule.
 
         Raises
         ------
