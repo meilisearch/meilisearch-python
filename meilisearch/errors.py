@@ -73,7 +73,7 @@ class MeilisearchTimeoutError(MeilisearchError):
 class MeilisearchTaskFailedError(MeilisearchError):
     """Raised when a task reaches the ``failed`` status and raising is enabled."""
 
-    def __init__(self, task: "Task") -> None:
+    def __init__(self, task: Task) -> None:
         self.task = task
         self.uid = task.uid
         self.error = task.error

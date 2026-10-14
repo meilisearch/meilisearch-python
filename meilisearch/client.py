@@ -1025,14 +1025,12 @@ class Client:
             Raised when ``raise_on_failure`` is True and the task reaches the
             ``failed`` status. The exception retains the failed Task and its error mapping.
         """
-        if raise_on_failure:
-            return self.task_handler.wait_for_task(
-                uid,
-                timeout_in_ms,
-                interval_in_ms,
-                raise_on_failure=True,
-            )
-        return self.task_handler.wait_for_task(uid, timeout_in_ms, interval_in_ms)
+        return self.task_handler.wait_for_task(
+            uid,
+            timeout_in_ms,
+            interval_in_ms,
+            raise_on_failure=raise_on_failure,
+        )
 
     def get_batches(self, parameters: MutableMapping[str, Any] | None = None) -> BatchResults:
         """Get all batches.

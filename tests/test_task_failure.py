@@ -4,6 +4,7 @@ from unittest.mock import Mock
 
 import pytest
 
+import meilisearch.task as task_module
 from meilisearch.client import Client
 from meilisearch.errors import MeilisearchTaskFailedError, MeilisearchTimeoutError
 from meilisearch.index import Index
@@ -77,6 +78,13 @@ def test_wait_for_task_succeeded_with_raise_enabled_returns_task():
     assert handler.wait_for_task(task.uid, interval_in_ms=0, raise_on_failure=True) is task
 
 
+def test_wait_for_task_canceled_with_raise_enabled_returns_task():
+    task = make_task("canceled")
+    handler = handler_with_tasks(task)
+
+    assert handler.wait_for_task(task.uid, interval_in_ms=0, raise_on_failure=True) is task
+
+
 def test_wait_for_task_timeout_is_unchanged():
     handler = handler_with_tasks()
 
@@ -87,8 +95,6 @@ def test_wait_for_task_timeout_is_unchanged():
 
 
 def test_wait_for_task_polls_until_failed_then_raises(monkeypatch):
-    import meilisearch.task as task_module
-
     monkeypatch.setattr(task_module, "sleep", lambda _: None)
     processing = make_task("processing")
     failed = make_task("failed", {"code": "invalid"})
@@ -106,18 +112,16 @@ def test_client_wait_for_task_forwards_raise_on_failure():
 
     client.wait_for_task(42, 5000, 50, raise_on_failure=True)
 
-    client.task_handler.wait_for_task.assert_called_once_with(
-        42, 5000, 50, raise_on_failure=True
-    )
+    client.task_handler.wait_for_task.assert_called_once_with(42, 5000, 50, raise_on_failure=True)
 
 
-def test_client_wait_for_task_preserves_legacy_default_forwarding():
+def test_client_wait_for_task_forwards_default_raise_on_failure():
     client = Client.__new__(Client)
     client.task_handler = Mock()
 
     client.wait_for_task(42, 5000, 50)
 
-    client.task_handler.wait_for_task.assert_called_once_with(42, 5000, 50)
+    client.task_handler.wait_for_task.assert_called_once_with(42, 5000, 50, raise_on_failure=False)
 
 
 def test_index_wait_for_task_forwards_raise_on_failure():
@@ -126,15 +130,13 @@ def test_index_wait_for_task_forwards_raise_on_failure():
 
     index.wait_for_task(42, 5000, 50, raise_on_failure=True)
 
-    index.task_handler.wait_for_task.assert_called_once_with(
-        42, 5000, 50, raise_on_failure=True
-    )
+    index.task_handler.wait_for_task.assert_called_once_with(42, 5000, 50, raise_on_failure=True)
 
 
-def test_index_wait_for_task_preserves_legacy_default_forwarding():
+def test_index_wait_for_task_forwards_default_raise_on_failure():
     index = Index.__new__(Index)
     index.task_handler = Mock()
 
     index.wait_for_task(42, 5000, 50)
 
-    index.task_handler.wait_for_task.assert_called_once_with(42, 5000, 50)
+    index.task_handler.wait_for_task.assert_called_once_with(42, 5000, 50, raise_on_failure=False)
