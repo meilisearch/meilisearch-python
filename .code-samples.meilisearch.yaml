@@ -565,6 +565,17 @@ update_prefix_search_settings_1: |-
   client.index('books').update_prefix_search(PrefixSearch.DISABLED)
 reset_prefix_search_settings_1: |-
   client.index('books').reset_prefix_search()
+get_chat_settings_1: |-
+  client.index('books').get_chat_settings()
+update_chat_settings_1: |-
+  client.index('books').update_chat_settings({
+    'description': 'A collection of books with titles, authors and genres',
+    'documentTemplate': 'A book titled {{ doc.title }} by {{ doc.author }}',
+    'documentTemplateMaxBytes': 400,
+    'searchParameters': {'limit': 5}
+  })
+reset_chat_settings_1: |-
+  client.index('books').reset_chat_settings()
 get_proximity_precision_settings_1: |-
   client.index('books').get_proximity_precision()
 update_proximity_precision_settings_1: |-
