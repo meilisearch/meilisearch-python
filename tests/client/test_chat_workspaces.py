@@ -49,8 +49,8 @@ def test_delete_chat_workspace(client, chat_workspace):
     "method",
     ["get_chat_workspace", "delete_chat_workspace", "reset_chat_workspace_settings"],
 )
-@pytest.mark.parametrize("uid", ["", "a/b", "a\\b"])
+@pytest.mark.parametrize("uid", ["", "a/b", "a\\b", "a?b", "a#b"])
 def test_chat_workspace_methods_reject_invalid_uid(client, method, uid):
-    """Test that an empty uid or one with path separators is rejected before any request."""
+    """Test that an empty uid or one with path separators or URL delimiters is rejected before any request."""
     with pytest.raises(ValueError):
         getattr(client, method)(uid)
