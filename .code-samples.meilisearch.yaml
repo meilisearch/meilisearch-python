@@ -568,6 +568,7 @@ reset_prefix_search_settings_1: |-
 get_chat_settings_1: |-
   client.index('books').get_chat_settings()
 update_chat_settings_1: |-
+  client.update_experimental_features({'chatCompletions': True})
   client.index('books').update_chat_settings({
     'description': 'A collection of books with titles, authors and genres',
     'documentTemplate': 'A book titled {{ doc.title }} by {{ doc.author }}',
