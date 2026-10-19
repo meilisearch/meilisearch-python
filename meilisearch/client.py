@@ -1378,7 +1378,7 @@ class Client:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         ValueError
-            If workspace_uid is empty or contains path separators.
+            If workspace_uid is empty or contains path separators or URL delimiters (? or #).
         """
         self._validate_chat_workspace_uid(workspace_uid)
 
@@ -1397,7 +1397,7 @@ class Client:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         ValueError
-            If workspace_uid is empty or contains path separators.
+            If workspace_uid is empty or contains path separators or URL delimiters (? or #).
         """
         self._validate_chat_workspace_uid(workspace_uid)
 
@@ -1421,7 +1421,7 @@ class Client:
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         ValueError
-            If workspace_uid is empty or contains path separators.
+            If workspace_uid is empty or contains path separators or URL delimiters (? or #).
         """
         self._validate_chat_workspace_uid(workspace_uid)
 
@@ -1433,6 +1433,8 @@ class Client:
             raise ValueError("workspace_uid is required and cannot be empty")
         if "/" in workspace_uid or "\\" in workspace_uid:
             raise ValueError("Invalid workspace_uid: must not contain path separators")
+        if "?" in workspace_uid or "#" in workspace_uid:
+            raise ValueError("Invalid workspace_uid: must not contain URL delimiters")
 
     @staticmethod
     def _base64url_encode(data: bytes) -> str:
