@@ -1360,6 +1360,82 @@ class Client:
 
         return self.http.patch(f"chats/{workspace_uid}/settings", body=settings)
 
+    def get_chat_workspace(self, workspace_uid: str) -> dict[str, Any]:
+        """Get a chat workspace.
+
+        Parameters
+        ----------
+        workspace_uid:
+            Unique identifier of the chat workspace.
+
+        Returns
+        -------
+        workspace:
+            Dictionary containing the workspace uid.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        ValueError
+            If workspace_uid is empty or contains path separators or URL delimiters (? or #).
+        """
+        self._validate_chat_workspace_uid(workspace_uid)
+
+        return self.http.get(f"chats/{workspace_uid}")
+
+    def delete_chat_workspace(self, workspace_uid: str) -> None:
+        """Delete a chat workspace and its settings.
+
+        Parameters
+        ----------
+        workspace_uid:
+            Unique identifier of the chat workspace.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        ValueError
+            If workspace_uid is empty or contains path separators or URL delimiters (? or #).
+        """
+        self._validate_chat_workspace_uid(workspace_uid)
+
+        self.http.delete(f"chats/{workspace_uid}")
+
+    def reset_chat_workspace_settings(self, workspace_uid: str) -> dict[str, Any]:
+        """Reset the settings of a chat workspace to their default values.
+
+        Parameters
+        ----------
+        workspace_uid:
+            Unique identifier of the chat workspace.
+
+        Returns
+        -------
+        settings:
+            Dictionary containing the default workspace settings.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        ValueError
+            If workspace_uid is empty or contains path separators or URL delimiters (? or #).
+        """
+        self._validate_chat_workspace_uid(workspace_uid)
+
+        return self.http.delete(f"chats/{workspace_uid}/settings")
+
+    @staticmethod
+    def _validate_chat_workspace_uid(workspace_uid: str) -> None:
+        if not workspace_uid:
+            raise ValueError("workspace_uid is required and cannot be empty")
+        if "/" in workspace_uid or "\\" in workspace_uid:
+            raise ValueError("Invalid workspace_uid: must not contain path separators")
+        if "?" in workspace_uid or "#" in workspace_uid:
+            raise ValueError("Invalid workspace_uid: must not contain URL delimiters")
+
     @staticmethod
     def _base64url_encode(data: bytes) -> str:
         return base64.urlsafe_b64encode(data).decode("utf-8").replace("=", "")
