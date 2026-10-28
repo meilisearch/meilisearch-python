@@ -8,6 +8,7 @@ class SearchRule(CamelBase):
 
     uid: str
     description: str | None = None
+    last_updated_at: str | None = None
     precedence: int | None = None
     active: bool
     conditions: dict[str, Any]

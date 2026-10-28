@@ -1,6 +1,8 @@
 """Tests for dynamic search rule endpoints."""
 
+import re
 from copy import deepcopy
+from datetime import datetime
 
 import pytest
 
@@ -21,6 +23,19 @@ RULE_OPTIONS = {
     },
 }
 
+FILTER_RULE_OPTIONS = {
+    **RULE_OPTIONS,
+    "conditions": {
+        "query": {"words": "red shirts"},
+        "filter": {
+            "values": {
+                "color": "red",
+                "category": "shirt",
+            }
+        },
+    },
+}
+
 
 def _upsert_and_wait(client, uid, options):
     task = client.update_dynamic_search_rule(uid, options)
@@ -37,6 +52,7 @@ def test_get_dynamic_search_rules_with_pagination_and_filters(client):
 
     all_rules = client.get_dynamic_search_rules()
     assert all_rules.total == 2
+    assert all(isinstance(rule.last_updated_at, str) for rule in all_rules.results)
 
     first_page = client.get_dynamic_search_rules({"offset": 0, "limit": 1})
     assert first_page.offset == 0
@@ -60,6 +76,21 @@ def test_get_dynamic_search_rule(client):
     assert rule.description == RULE_OPTIONS["description"]
     assert rule.precedence == RULE_OPTIONS["precedence"]
     assert rule.actions == RULE_OPTIONS["actions"]
+
+
+def test_update_dynamic_search_rule_with_filter_condition(client):
+    _upsert_and_wait(client, "red-shirts", FILTER_RULE_OPTIONS)
+
+    rule = client.get_dynamic_search_rule("red-shirts")
+
+    assert rule.conditions == FILTER_RULE_OPTIONS["conditions"]
+    assert isinstance(rule.last_updated_at, str)
+    timestamp = re.sub(
+        r"(\.\d{6})\d+(?=Z|[+-]\d{2}:\d{2}$)",
+        r"\1",
+        rule.last_updated_at,
+    )
+    assert datetime.fromisoformat(timestamp.replace("Z", "+00:00")).tzinfo is not None
 
 
 def test_update_dynamic_search_rule_creates_rule_and_returns_task(client):
