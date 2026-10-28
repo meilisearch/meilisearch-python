@@ -1,5 +1,6 @@
 """Tests for dynamic search rule endpoints."""
 
+import re
 from copy import deepcopy
 from datetime import datetime
 
@@ -84,7 +85,12 @@ def test_update_dynamic_search_rule_with_filter_condition(client):
 
     assert rule.conditions == FILTER_RULE_OPTIONS["conditions"]
     assert isinstance(rule.last_updated_at, str)
-    assert datetime.fromisoformat(rule.last_updated_at.replace("Z", "+00:00")).tzinfo is not None
+    timestamp = re.sub(
+        r"(\.\d{6})\d+(?=Z|[+-]\d{2}:\d{2}$)",
+        r"\1",
+        rule.last_updated_at,
+    )
+    assert datetime.fromisoformat(timestamp.replace("Z", "+00:00")).tzinfo is not None
 
 
 def test_update_dynamic_search_rule_creates_rule_and_returns_task(client):
