@@ -46,7 +46,7 @@ def test_create_chat_completion_basic_stream(client):
         # Verify the HTTP call was made correctly
         mock_post.assert_called_once_with(
             "chats/my-assistant/chat/completions",
-            body={"model": "gpt-3.5-turbo", "messages": messages, "stream": True},
+            body={"model": "gpt-5.6-terra", "messages": messages, "stream": True},
         )
 
         # Verify the chunks are parsed correctly

@@ -1193,7 +1193,7 @@ class Client:
         self,
         workspace_uid: str,
         messages: list[dict[str, str]],
-        model: str = "gpt-3.5-turbo",
+        model: str = "gpt-5.6-terra",
         stream: bool = True,
     ) -> Iterator[dict[str, Any]]:
         """Streams a chat completion from the Meilisearch chat API.
