@@ -71,6 +71,12 @@ delete_documents_by_filter_1: |-
   client.index('movies').delete_documents(filter='genres=action OR genres=adventure')
 search_post_1: |-
   client.index('movies').search('American ninja')
+personalization_search_1: |-
+  client.index('movies').search('how to train your dragon', {
+      'personalize': {
+          'userContext': 'The user prefers compact mechanical keyboards from Keychron or Logitech, with a mid-range budget and quiet keys for remote work.'
+      }
+  })
 multi_search_1: |-
   client.multi_search(
     [
