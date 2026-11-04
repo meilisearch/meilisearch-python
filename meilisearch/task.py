@@ -9,6 +9,7 @@ from urllib import parse
 from meilisearch._httprequests import HttpRequests
 from meilisearch.config import Config
 from meilisearch.errors import MeilisearchTaskFailedError, MeilisearchTimeoutError
+from meilisearch.models.document import DocumentsResults
 from meilisearch.models.task import Batch, BatchResults, Task, TaskInfo, TaskResults
 
 
@@ -122,6 +123,40 @@ class TaskHandler:
         """
         task = self.http.get(f"{self.config.paths.task}/{uid}")
         return Task(**task)
+
+    def get_task_documents(
+        self, uid: int, parameters: MutableMapping[str, Any] | None = None
+    ) -> DocumentsResults:
+        """Get the documents processed by one task.
+
+        https://www.meilisearch.com/docs/reference/api/async-task-management/get-tasks-documents
+
+        Parameters
+        ----------
+        uid:
+            Identifier of the task.
+        parameters (optional):
+            Dictionary of query parameters to paginate the results
+            (``limit``, ``offset``, ``fields``).
+
+        Returns
+        -------
+        documents:
+            DocumentsResults instance containing the list of documents and
+            pagination metadata (``offset``, ``limit``, ``total``).
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        if parameters is None:
+            parameters = {}
+        path = f"{self.config.paths.task}/{uid}/documents"
+        if parameters:
+            path = f"{path}?{parse.urlencode(parameters)}"
+        resp = self.http.get(path)
+        return DocumentsResults(resp)
 
     def cancel_tasks(
         self, parameters: MutableMapping[str, Any], *, metadata: str | None = None
