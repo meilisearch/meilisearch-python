@@ -39,16 +39,25 @@ def test_delete_faceting_settings(empty_index):
         ("*", "alpha", 17, {"max_values_per_facet": 17, "sort_facet_values_by": {"*": "alpha"}}),
         ("*", "count", 41, {"max_values_per_facet": 41, "sort_facet_values_by": {"*": "count"}}),
         (
-            "movies",
-            "alpha",
+            "*",
+            "sampledCount",
             42,
-            {"max_values_per_facet": 42, "sort_facet_values_by": {"*": "alpha", "movies": "alpha"}},
+            {"max_values_per_facet": 42, "sort_facet_values_by": {"*": "sampledCount"}},
         ),
         (
             "movies",
             "alpha",
             73,
             {"max_values_per_facet": 73, "sort_facet_values_by": {"*": "alpha", "movies": "alpha"}},
+        ),
+        (
+            "genres",
+            "sampledCount",
+            97,
+            {
+                "max_values_per_facet": 97,
+                "sort_facet_values_by": {"*": "alpha", "genres": "sampledCount"},
+            },
         ),
     ],
 )
@@ -69,7 +78,10 @@ def test_update_faceting_sort_facet_values(
 def test_reset_faceting(empty_index):
     index = empty_index()
     response = index.update_faceting_settings(
-        {"maxValuesPerFacet": 17, "sortFacetValuesBy": {"*": "count"}}
+        {
+            "maxValuesPerFacet": 17,
+            "sortFacetValuesBy": {"*": "sampledCount", "genres": "sampledCount"},
+        }
     )
     index.wait_for_task(response.task_uid)
     response = index.reset_faceting_settings()

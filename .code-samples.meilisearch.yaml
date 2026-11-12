@@ -485,8 +485,8 @@ update_faceting_settings_1: |-
   params = {
     'maxValuesPerFacet': 2,
     'sortFacetValuesBy': {
-        '*': 'count',
-        'genres': 'count'
+        '*': 'alpha',
+        'genres': 'sampledCount'
       }
   }
   client.index('books').update_faceting_settings(params)
