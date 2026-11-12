@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 
 import pytest
 
-from meilisearch._utils import is_pydantic_2, iso_to_date_time
+from meilisearch._utils import is_pydantic_2, iso_to_date_time, split_sort_string
 
 
 def test_is_pydantic_2():
@@ -31,6 +31,22 @@ def test_iso_to_date_time(iso_date, expected):
 def test_iso_to_date_time_invalid_format():
     with pytest.raises(ValueError):
         iso_to_date_time("2023-07-13T23:37:20Z")
+
+
+@pytest.mark.parametrize(
+    "sort, expected",
+    [
+        ("rating:desc, release_date:asc", ["rating:desc", "release_date:asc"]),
+        ("_geoPoint(48.8561,2.2978):asc", ["_geoPoint(48.8561,2.2978):asc"]),
+        (
+            "_geoPoint(48.8561,2.2978):asc, rating:desc",
+            ["_geoPoint(48.8561,2.2978):asc", "rating:desc"],
+        ),
+        ("", []),
+    ],
+)
+def test_split_sort_string(sort, expected):
+    assert split_sort_string(sort) == expected
 
 
 # Refactor to use the unified API to toggle experimental features

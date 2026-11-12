@@ -9,7 +9,7 @@ from warnings import warn
 from camel_converter import to_snake
 
 from meilisearch._httprequests import HttpRequests
-from meilisearch._utils import iso_to_date_time
+from meilisearch._utils import iso_to_date_time, split_sort_string
 from meilisearch.config import Config
 from meilisearch.errors import version_error_hint_message
 from meilisearch.models.document import Document, DocumentsResults, FieldsResults
@@ -505,7 +505,7 @@ class Index:
         # convert comma-separated sort string to list
         sort = parameters.get("sort")
         if isinstance(sort, str):
-            parameters["sort"] = [s.strip() for s in sort.split(",") if s.strip()]
+            parameters["sort"] = split_sort_string(sort)
 
         response = self.http.post(
             f"{self.config.paths.index}/{self.uid}/{self.config.paths.document}/fetch",

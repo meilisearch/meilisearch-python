@@ -338,6 +338,25 @@ def test_get_documents_sort_formats(index_with_documents, sort_param):
         assert resp_doc.release_date == expected_doc["release_date"]
 
 
+def test_get_documents_sort_string_keeps_geo_point_arguments(empty_index):
+    """A _geoPoint sort passed as a comma-separated string must stay one term."""
+    index = empty_index()
+
+    task = index.update_settings({"sortableAttributes": ["_geo"]})
+    index.wait_for_task(task.task_uid)
+
+    documents = [
+        {"id": 1, "_geo": {"lat": 48.8561, "lng": 2.2978}},
+        {"id": 2, "_geo": {"lat": 45.7640, "lng": 4.8357}},
+    ]
+    task = index.add_documents(documents)
+    index.wait_for_task(task.task_uid)
+
+    response = index.get_documents({"sort": "_geoPoint(48.8561,2.2978):asc"})
+
+    assert [doc.id for doc in response.results] == [1, 2]
+
+
 def test_get_documents_filter(index_with_documents):
     index = index_with_documents()
     response = index.update_filterable_attributes(["genre"])

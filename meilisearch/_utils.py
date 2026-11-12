@@ -40,3 +40,26 @@ def iso_to_date_time(iso_date: datetime | str | None) -> datetime | None:
         reduce = len(split[1]) - 6
         reduced = f"{split[0]}.{split[1][:-reduce]}Z"
         return datetime.strptime(reduced, "%Y-%m-%dT%H:%M:%S.%fZ")
+
+
+def split_sort_string(sort: str) -> list[str]:
+    """Split a comma-separated sort string into its individual sort expressions.
+
+    Commas inside parentheses belong to the expression, as in
+    ``_geoPoint(48.8561,2.2978):asc``, so only top level commas separate terms.
+    """
+    terms: list[str] = []
+    current: list[str] = []
+    depth = 0
+    for char in sort:
+        if char == "(":
+            depth += 1
+        elif char == ")":
+            depth = max(depth - 1, 0)
+        if char == "," and depth == 0:
+            terms.append("".join(current))
+            current = []
+            continue
+        current.append(char)
+    terms.append("".join(current))
+    return [term.strip() for term in terms if term.strip()]
