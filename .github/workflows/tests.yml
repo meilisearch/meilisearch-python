@@ -73,7 +73,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
 
       - name: mypy type check
-        run: uv run mypy meilisearch
+        run: uv run mypy meilisearch tests/types
 
   ruff:
     name: ruff

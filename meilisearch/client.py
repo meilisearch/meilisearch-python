@@ -7,7 +7,7 @@ import hmac
 import json
 import re
 from collections.abc import Iterator, Mapping, MutableMapping, Sequence
-from typing import Any
+from typing import Any, TypedDict
 from urllib import parse
 
 from meilisearch._httprequests import HttpRequests
@@ -23,6 +23,20 @@ from meilisearch.models.search_rule import SearchRule, SearchRulesResults
 from meilisearch.models.task import Batch, BatchResults, Task, TaskInfo, TaskResults
 from meilisearch.models.webhook import Webhook, WebhooksResults
 from meilisearch.task import TaskHandler
+
+
+class _IndexPagination(TypedDict):
+    limit: int
+    offset: int
+    total: int
+
+
+class IndexesResults(_IndexPagination):
+    results: list[Index]
+
+
+class RawIndexesResults(_IndexPagination):
+    results: list[dict[str, Any]]
 
 
 class Client:
@@ -129,7 +143,7 @@ class Client:
 
         return TaskInfo(**task)
 
-    def get_indexes(self, parameters: Mapping[str, Any] | None = None) -> dict[str, list[Index]]:
+    def get_indexes(self, parameters: Mapping[str, Any] | None = None) -> IndexesResults:
         """Get all indexes.
 
         Parameters
@@ -140,7 +154,7 @@ class Client:
         Returns
         -------
         indexes:
-            Dictionary with limit, offset, total and results a list of Index instances.
+            Dictionary with limit, offset, total and a list of Index instances in results.
 
         Raises
         ------
@@ -163,7 +177,7 @@ class Client:
         ]
         return response
 
-    def get_raw_indexes(self, parameters: Mapping[str, Any] | None = None) -> list[dict[str, Any]]:
+    def get_raw_indexes(self, parameters: Mapping[str, Any] | None = None) -> RawIndexesResults:
         """Get all indexes in dictionary format.
 
         Parameters
@@ -174,7 +188,7 @@ class Client:
         Returns
         -------
         indexes:
-            Dictionary with limit, offset, total and results a list of indexes in dictionary format. (e.g [{ 'uid': 'movies' 'primaryKey': 'objectID' }])
+            Dictionary with limit, offset, total and a list of raw index dictionaries in results.
 
         Raises
         ------
