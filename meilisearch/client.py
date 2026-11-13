@@ -960,6 +960,32 @@ class Client:
         """
         return self.task_handler.get_task(uid)
 
+    def get_task_documents(self, uid: int) -> list[dict[str, Any]]:
+        """Get the documents processed by one task.
+
+        The endpoint returns the task's documents as newline-delimited JSON
+        (``application/x-ndjson``), so each non-empty line is decoded as one
+        document.
+
+        https://www.meilisearch.com/docs/reference/api/async-task-management/get-tasks-documents
+
+        Parameters
+        ----------
+        uid:
+            Identifier of the task.
+
+        Returns
+        -------
+        documents:
+            List of documents processed by the task.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.task_handler.get_task_documents(uid)
+
     def cancel_tasks(
         self, parameters: MutableMapping[str, Any], *, metadata: str | None = None
     ) -> TaskInfo:

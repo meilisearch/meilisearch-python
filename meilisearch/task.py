@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from collections.abc import Mapping, MutableMapping
 from datetime import datetime
 from time import sleep
@@ -122,6 +123,34 @@ class TaskHandler:
         """
         task = self.http.get(f"{self.config.paths.task}/{uid}")
         return Task(**task)
+
+    def get_task_documents(self, uid: int) -> list[dict[str, Any]]:
+        """Get the documents processed by one task.
+
+        The endpoint returns the task's documents as newline-delimited JSON
+        (``application/x-ndjson``), so each non-empty line is decoded as one
+        document.
+
+        https://www.meilisearch.com/docs/reference/api/async-task-management/get-tasks-documents
+
+        Parameters
+        ----------
+        uid:
+            Identifier of the task.
+
+        Returns
+        -------
+        documents:
+            List of documents processed by the task.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        path = f"{self.config.paths.task}/{uid}/documents"
+        body = self.http.get(path, raw=True)
+        return [json.loads(line) for line in body.split("\n") if line.strip()]
 
     def cancel_tasks(
         self, parameters: MutableMapping[str, Any], *, metadata: str | None = None
