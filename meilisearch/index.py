@@ -28,6 +28,7 @@ from meilisearch.models.index import (
     IndexStats,
     LocalizedAttributes,
     Pagination,
+    PersonalizeSearch,
     PrefixSearch,
     ProximityPrecision,
     SizeFormat,
@@ -360,7 +361,12 @@ class Index:
         return IndexStats(**stats)
 
     @version_error_hint_message
-    def search(self, query: str, opt_params: Mapping[str, Any] | None = None) -> dict[str, Any]:
+    def search(
+        self,
+        query: str,
+        opt_params: Mapping[str, Any] | None = None,
+        personalize: PersonalizeSearch | dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """Search in the index.
 
         https://www.meilisearch.com/docs/reference/api/search
@@ -385,6 +391,16 @@ class Index:
               experimental feature. Create the client with
               custom_headers={"Meili-Include-Metadata": "true"} to include
               metadata.inlineRuleConditionOutcomes in the response.
+        personalize (optional):
+            Personalization context for the search. Either a ``PersonalizeSearch``
+            instance or a dictionary with a ``userContext`` key. Requires
+            Meilisearch 1.47.0 (or later) and the ``personalization``
+            experimental feature enabled on the server. It is serialized into
+            the ``personalize`` request field:
+
+            .. code-block:: python
+
+                index.search("query", personalize={"userContext": "The user prefers..."})
 
         Returns
         -------
@@ -402,7 +418,12 @@ class Index:
         if opt_params is None:
             opt_params = {}
 
-        body = {"q": query, **opt_params}
+        if personalize is not None:
+            if isinstance(personalize, PersonalizeSearch):
+                personalize = personalize.model_dump(by_alias=True)
+            body = {"q": query, "personalize": personalize, **opt_params}
+        else:
+            body = {"q": query, **opt_params}
 
         return self.http.post(
             f"{self.config.paths.index}/{self.uid}/{self.config.paths.search}",

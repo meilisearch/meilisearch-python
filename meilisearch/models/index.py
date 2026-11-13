@@ -25,6 +25,15 @@ class FieldDistribution:
         return iter(self.__dict__.items())
 
 
+class PersonalizeSearch(CamelBase):
+    """Personalised search parameters for the search endpoint.
+
+    https://www.meilisearch.com/docs/capabilities/personalization/getting_started/personalized_search
+    """
+
+    user_context: str
+
+
 class SizeFormat(str, Enum):
     RAW = "raw"
     HUMAN = "human"
