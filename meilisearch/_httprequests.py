@@ -44,6 +44,7 @@ class HttpRequests:
         content_type: str | None = None,
         *,
         serializer: type[json.JSONEncoder] | None = None,
+        raw: bool = False,
     ) -> Any:
         if content_type:
             self.headers["Content-Type"] = content_type
@@ -77,6 +78,8 @@ class HttpRequests:
                 request = http_method(
                     request_path, timeout=self.config.timeout, headers=self.headers, data=data
                 )
+            if raw:
+                return self.__validate_raw(request)
             return self.__validate(request)
 
         except requests.exceptions.Timeout as err:
@@ -94,8 +97,8 @@ class HttpRequests:
 
             raise MeilisearchCommunicationError(str(err)) from err
 
-    def get(self, path: str) -> Any:
-        return self.send_request(requests.get, path)
+    def get(self, path: str, *, raw: bool = False) -> Any:
+        return self.send_request(requests.get, path, raw=raw)
 
     def post(
         self,
@@ -229,6 +232,14 @@ class HttpRequests:
         if request.content == b"":
             return request
         return request.json()
+
+    @staticmethod
+    def __validate_raw(request: requests.Response) -> str:
+        try:
+            request.raise_for_status()
+            return request.text
+        except requests.exceptions.HTTPError as err:
+            raise MeilisearchApiError(str(err), request) from err
 
     @staticmethod
     def __validate(request: requests.Response) -> Any:

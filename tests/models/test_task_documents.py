@@ -1,7 +1,6 @@
 from unittest.mock import MagicMock
 
 from meilisearch.config import Config
-from meilisearch.models.document import DocumentsResults
 from meilisearch.task import TaskHandler
 
 
@@ -11,34 +10,19 @@ def _make_handler() -> TaskHandler:
     return handler
 
 
-def test_get_task_documents_no_params():
+def test_get_task_documents():
     handler = _make_handler()
-    handler.http.get.return_value = {
-        "results": [{"id": 1, "title": "foo"}],
-        "offset": 0,
-        "limit": 20,
-        "total": 1,
-    }
+    handler.http.get.return_value = '{"id":1,"title":"foo"}\n{"id":2,"title":"bar"}\n'
 
     result = handler.get_task_documents(1)
 
-    handler.http.get.assert_called_once_with("tasks/1/documents")
-    assert isinstance(result, DocumentsResults)
-    assert result.total == 1
-    assert result.limit == 20
-    assert result.offset == 0
-    assert dict(result.results[0]) == {"id": 1, "title": "foo"}
+    handler.http.get.assert_called_once_with("tasks/1/documents", raw=True)
+    assert result == [{"id": 1, "title": "foo"}, {"id": 2, "title": "bar"}]
 
 
-def test_get_task_documents_with_params():
+def test_get_task_documents_empty_body():
     handler = _make_handler()
-    handler.http.get.return_value = {
-        "results": [],
-        "offset": 0,
-        "limit": 5,
-        "total": 0,
-    }
+    handler.http.get.return_value = ""
 
-    handler.get_task_documents(2, {"limit": 5, "offset": 10})
-
-    handler.http.get.assert_called_once_with("tasks/2/documents?limit=5&offset=10")
+    assert handler.get_task_documents(2) == []
+    handler.http.get.assert_called_once_with("tasks/2/documents", raw=True)

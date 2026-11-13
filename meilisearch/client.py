@@ -17,7 +17,6 @@ from meilisearch.errors import (
     MeilisearchError,
 )
 from meilisearch.index import Index
-from meilisearch.models.document import DocumentsResults
 from meilisearch.models.index import SizeFormat
 from meilisearch.models.key import Key, KeysResults
 from meilisearch.models.search_rule import SearchRule, SearchRulesResults
@@ -961,10 +960,12 @@ class Client:
         """
         return self.task_handler.get_task(uid)
 
-    def get_task_documents(
-        self, uid: int, parameters: MutableMapping[str, Any] | None = None
-    ) -> DocumentsResults:
+    def get_task_documents(self, uid: int) -> list[dict[str, Any]]:
         """Get the documents processed by one task.
+
+        The endpoint returns the task's documents as newline-delimited JSON
+        (``application/x-ndjson``), so each non-empty line is decoded as one
+        document.
 
         https://www.meilisearch.com/docs/reference/api/async-task-management/get-tasks-documents
 
@@ -972,22 +973,18 @@ class Client:
         ----------
         uid:
             Identifier of the task.
-        parameters (optional):
-            Dictionary of query parameters to paginate the results
-            (``limit``, ``offset``, ``fields``).
 
         Returns
         -------
         documents:
-            DocumentsResults instance containing the list of documents and
-            pagination metadata (``offset``, ``limit``, ``total``).
+            List of documents processed by the task.
 
         Raises
         ------
         MeilisearchApiError
             An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
         """
-        return self.task_handler.get_task_documents(uid, parameters=parameters)
+        return self.task_handler.get_task_documents(uid)
 
     def cancel_tasks(
         self, parameters: MutableMapping[str, Any], *, metadata: str | None = None
