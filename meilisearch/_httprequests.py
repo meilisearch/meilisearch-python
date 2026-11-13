@@ -237,7 +237,7 @@ class HttpRequests:
     def __validate_raw(request: requests.Response) -> str:
         try:
             request.raise_for_status()
-            return request.text
+            return request.content.decode("utf-8")
         except requests.exceptions.HTTPError as err:
             raise MeilisearchApiError(str(err), request) from err
 

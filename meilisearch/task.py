@@ -150,7 +150,7 @@ class TaskHandler:
         """
         path = f"{self.config.paths.task}/{uid}/documents"
         body = self.http.get(path, raw=True)
-        return [json.loads(line) for line in body.splitlines() if line.strip()]
+        return [json.loads(line) for line in body.split("\n") if line.strip()]
 
     def cancel_tasks(
         self, parameters: MutableMapping[str, Any], *, metadata: str | None = None

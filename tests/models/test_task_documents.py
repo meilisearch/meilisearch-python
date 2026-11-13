@@ -26,3 +26,13 @@ def test_get_task_documents_empty_body():
 
     assert handler.get_task_documents(2) == []
     handler.http.get.assert_called_once_with("tasks/2/documents", raw=True)
+
+
+def test_get_task_documents_keeps_unicode_line_separators():
+    handler = _make_handler()
+    handler.http.get.return_value = '{"id":1,"title":"a\u2028b"}\n{"id":2,"title":"caf\u00e9"}\n'
+
+    assert handler.get_task_documents(3) == [
+        {"id": 1, "title": "a\u2028b"},
+        {"id": 2, "title": "caf\u00e9"},
+    ]
