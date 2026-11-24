@@ -42,6 +42,7 @@ class Config:
         embedders = "embedders"
         search_cutoff_ms = "search-cutoff-ms"
         prefix_search = "prefix-search"
+        chat = "chat"
         proximity_precision = "proximity-precision"
         localized_attributes = "localized-attributes"
         fields = "fields"

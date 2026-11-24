@@ -2515,6 +2515,73 @@ class Index:
 
         return TaskInfo(**task)
 
+    # CHAT SETTINGS
+
+    def get_chat_settings(self) -> dict[str, Any]:
+        """Get the chat settings of an index.
+
+        These settings describe the index to the LLM used by conversational search.
+        https://www.meilisearch.com/docs/reference/api/settings/get-chat
+
+        Returns
+        -------
+        settings:
+            Dictionary containing the chat settings of the index.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        return self.http.get(self.__settings_url_for(self.config.paths.chat))
+
+    def update_chat_settings(self, body: Mapping[str, Any]) -> TaskInfo:
+        """Update the chat settings of the index.
+
+        Updating chat settings requires the `chatCompletions` experimental feature.
+        https://www.meilisearch.com/docs/reference/api/settings/update-chat
+
+        Parameters
+        ----------
+        body:
+            Dictionary containing the chat settings, for example `description`,
+            `documentTemplate`, `documentTemplateMaxBytes` and `searchParameters`.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.patch(path=self.__settings_url_for(self.config.paths.chat), body=body)
+
+        return TaskInfo(**task)
+
+    def reset_chat_settings(self) -> TaskInfo:
+        """Reset the chat settings of the index to default values.
+
+        https://www.meilisearch.com/docs/reference/api/settings/reset-chat
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.delete(self.__settings_url_for(self.config.paths.chat))
+
+        return TaskInfo(**task)
+
     # PROXIMITY PRECISION SETTINGS
 
     def get_proximity_precision(self) -> ProximityPrecision:
