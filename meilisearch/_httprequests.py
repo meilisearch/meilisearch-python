@@ -65,14 +65,7 @@ class HttpRequests:
                     data=body,
                 )
             else:
-                serialize_body = isinstance(body, dict) or body
-                data = (
-                    json.dumps(body, cls=serializer)
-                    if isinstance(body, bool) or serialize_body
-                    else ""
-                    if body == ""
-                    else "null"
-                )
+                data = "" if body == "" else json.dumps(body, cls=serializer)
 
                 request = http_method(
                     request_path, timeout=self.config.timeout, headers=self.headers, data=data
