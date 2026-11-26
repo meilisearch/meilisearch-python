@@ -100,3 +100,13 @@ def test_reset_settings(new_settings, empty_index):
     assert response["stopWords"] == []
     assert response["synonyms"] == {}
     assert response["embedders"] == {}
+
+
+def test_update_word_position_via_general_settings(empty_index):
+    """Tests updating wordPosition via general settings endpoint."""
+    index = empty_index()
+    response = index.update_settings({"wordPosition": {"enabled": False}})
+    update = index.wait_for_task(response.task_uid)
+    assert update.status == "succeeded"
+    response = index.get_settings()
+    assert response["wordPosition"] == {"enabled": False}

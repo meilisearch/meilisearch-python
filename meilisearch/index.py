@@ -32,6 +32,7 @@ from meilisearch.models.index import (
     ProximityPrecision,
     SizeFormat,
     TypoTolerance,
+    WordPosition,
 )
 from meilisearch.models.task import Task, TaskInfo, TaskResults
 from meilisearch.task import TaskHandler
@@ -1280,6 +1281,7 @@ class Index:
             - 'searchCutoffMs': Maximum search time in milliseconds
             - 'proximityPrecision': Precision for proximity ranking
             - 'localizedAttributes': Settings for localized attributes
+            - 'wordPosition': Settings for word position computation during indexing
             - 'foreignKeys': List of foreign key relationships to other indexes
 
             More information:
@@ -2640,6 +2642,73 @@ class Index:
         )
 
         return TaskInfo(**task)
+
+    # WORD POSITION SETTINGS
+
+    def get_word_position_settings(self) -> WordPosition:
+        """Get the word position settings of the index.
+
+        Returns
+        -------
+        settings:
+            The word position settings of the index.
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        word_position = self.http.get(self.__settings_url_for(self.config.paths.word_position))
+
+        return WordPosition(**word_position)
+
+    def update_word_position_settings(self, body: Mapping[str, Any] | None) -> TaskInfo:
+        """Update the word position settings of the index.
+
+        Parameters
+        ----------
+        body: dict
+            Dictionary containing the word position settings.
+            https://www.meilisearch.com/docs/reference/api/settings#update-wordposition
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.patch(self.__settings_url_for(self.config.paths.word_position), body)
+
+        return TaskInfo(**task)
+
+    def reset_word_position_settings(self) -> TaskInfo:
+        """Reset the word position settings of the index to default values.
+
+        Returns
+        -------
+        task_info:
+            TaskInfo instance containing information about a task to track the progress of an asynchronous process.
+            https://www.meilisearch.com/docs/reference/api/tasks#get-one-task
+
+        Raises
+        ------
+        MeilisearchApiError
+            An error containing details about why Meilisearch can't process your request. Meilisearch error codes are described here: https://www.meilisearch.com/docs/reference/errors/error_codes#meilisearch-errors
+        """
+        task = self.http.delete(
+            self.__settings_url_for(self.config.paths.word_position),
+        )
+
+        return TaskInfo(**task)
+
+    get_word_position = get_word_position_settings
+    update_word_position = update_word_position_settings
+    reset_word_position = reset_word_position_settings
 
     def get_fields(
         self,
