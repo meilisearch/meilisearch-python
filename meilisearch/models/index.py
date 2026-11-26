@@ -96,3 +96,7 @@ class EmbedderDistribution(CamelBase):
 class LocalizedAttributes(CamelBase):
     attribute_patterns: list[str]
     locales: list[str]
+
+
+class WordPosition(CamelBase):
+    enabled: bool | None = True

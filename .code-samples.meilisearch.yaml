@@ -662,3 +662,10 @@ post_render_template_1: |-
       'inline': {'id': 'this document'}
     }
   )
+get_word_position_settings_1: |-
+  client.index('books').get_word_position_settings()
+update_word_position_settings_1: |-
+  client.index('books').update_word_position_settings({'enabled': False})
+reset_word_position_settings_1: |-
+  client.index('books').reset_word_position_settings()
+
